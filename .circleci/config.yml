@@ -79,8 +79,8 @@ jobs:
       - deploy:
           working_directory: ~/agile_architects_intra
           environment: develop
-          fingerprint: 41:38:9f:62:3a:1b:4f:c7:f3:5b:46:93:35:60:a8:51
-          key_filename: id_rsa_41389f623a1b4fc7f35b46933560a851
+          fingerprint: 49:07:e3:ef:41:45:f2:c6:96:47:88:9f:c0:56:03:5d
+          key_filename: id_rsa_4907e3ef4145f2c69647889fc056035d
           ssh_connection: deploy@dwik.se
           deploy_directory: /var/www/applications/agile_architects_intra
   deploy-staging:
@@ -91,8 +91,8 @@ jobs:
       - deploy:
           working_directory: ~/agile_architects_intra
           environment: staging
-          fingerprint: 41:38:9f:62:3a:1b:4f:c7:f3:5b:46:93:35:60:a8:51
-          key_filename: id_rsa_41389f623a1b4fc7f35b46933560a851
+          fingerprint: 49:07:e3:ef:41:45:f2:c6:96:47:88:9f:c0:56:03:5d
+          key_filename: id_rsa_4907e3ef4145f2c69647889fc056035d
           ssh_connection: deploy@dwik.se
           deploy_directory: /var/www/applications/agile_architects_intra
   deploy-production:
@@ -103,8 +103,8 @@ jobs:
       - deploy:
           working_directory: ~/agile_architects_intra
           environment: production
-          fingerprint: 41:38:9f:62:3a:1b:4f:c7:f3:5b:46:93:35:60:a8:51
-          key_filename: id_rsa_41389f623a1b4fc7f35b46933560a851
+          fingerprint: 49:07:e3:ef:41:45:f2:c6:96:47:88:9f:c0:56:03:5d
+          key_filename: id_rsa_4907e3ef4145f2c69647889fc056035d
           ssh_connection: deploy@dwik.se
           deploy_directory: /var/www/applications/agile_architects_intra
 workflows:
