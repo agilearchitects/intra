@@ -19,7 +19,7 @@
               </div>
               <div class="d-flex">
                 <div>
-                  <layout-button-component type="submit">{{ $t('login.sbmit') }}</layout-button-component>
+                  <layout-button-component type="submit">{{ $t('login.submit') }}</layout-button-component>
                 </div>
                 <div class="form-group custom-control custom-checkbox ml-3 pt-2">
                   <checkbox-component
@@ -61,9 +61,9 @@ export type loginForm = {
   components: { LayoutButtonComponent, InputComponent, CheckboxComponent }
 })
 export default class LoginComponent extends Vue {
-  @Action("auth/login") login: loginAction;
-  @Getter("auth/token") token: string;
-  @Getter("auth/user") user: User;
+  @Action("auth/login") login!: loginAction;
+  @Getter("auth/token") token!: string;
+  @Getter("auth/user") user!: User;
 
   public form: loginForm = {
     email: "",
@@ -73,7 +73,7 @@ export default class LoginComponent extends Vue {
 
   public submit(email: string, password: string) {
     this.login(LoginDTO.parse({ email, password })).then(() => {
-      this.$router.push("/timer");
+      this.$router.push("/start");
     });
   }
 }

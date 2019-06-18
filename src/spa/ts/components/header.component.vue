@@ -13,7 +13,7 @@
         <a class="navbar-brand d-lg-none" href="#">{{ $t('title') }}</a>
         <div class="collapse navbar-collapse no-transition" ref="navbarContent">
           <template v-for="(menu, index) in menus">
-            <ul class="navbar-nav" :class="{ 'mr-auto': index == 0 }" :key="`menu_${index}`">
+            <ul class="navbar-nav" :class="{ 'mr-auto': index === 0 }" :key="`menu_${index}`">
               <li
                 class="nav-item"
                 :class="{ 'dropdown': menuItem.menu, 'show': menuItem.menu && matches(menuItem.route), 'nav-divider': menuItem.divider !== undefined }"
@@ -105,7 +105,7 @@ interface IMenuItemWithShow extends IMenuItem {
 
 @Component
 export default class HeaderComponent extends Vue {
-  @Getter("menus") menus: IMenuItem[][];
+  @Getter("menus") menus!: IMenuItem[][];
   public dev: boolean = false;
 
   public get navBar(): HTMLElement {
@@ -172,7 +172,16 @@ export default class HeaderComponent extends Vue {
 @import "~bootstrap/scss/_mixins";
 @import "../../scss/variables";
 @import "~bootstrap/scss/_variables";
+@import "~bootstrap/scss/_grid";
 
+.container-custom {
+  @extend .container;
+  @include media-breakpoint-down(md) {
+    margin-right: 0px;
+    margin-left: 0px;
+    min-width: 100%;
+  }
+}
 .navbar {
   .navbar-collapse.show {
     @include media-breakpoint-down(md) {

@@ -2,8 +2,17 @@ export default {
   "title": process.env.TITLE,
   "menu": {
     "start": "Start",
+    "wiki": "Wiki",
     "login": "Logga in",
     "logout": "Logga ut"
+  },
+  "wiki": {
+    "wiki": "Wiki",
+    "board": {
+      "board": "Styrelsen",
+      "members": "Medlemmar",
+      "aoa": "Bolagsordning"
+    }
   },
   "login": {
     "email": "E-postadress",

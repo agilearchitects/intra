@@ -2,15 +2,9 @@
   <div v-if="loading">
     <h1>Loading...</h1>
   </div>
-  <div class="container-fluid p-0 d-flex flex-column" style="min-height: 100%;" v-else>
-    <header-component></header-component>
-    <div class="flex-grow-1">
-      <router-view></router-view>
-    </div>
-    <footer-component></footer-component>
-  </div>
+  <router-view v-else></router-view>
 </template>
-<script lang = "ts" >
+<script lang = "ts">
 // Libs
 import { Vue, Component } from "vue-property-decorator";
 import { State, Action, Getter } from "vuex-class";
@@ -18,18 +12,12 @@ import { State, Action, Getter } from "vuex-class";
 import { broadcast } from "../utils/broadcast";
 import { subscribeActionCallback, IErrorPayload } from "../store/error.store";
 
-// Components
-import HeaderComponent from "./header.component.vue";
-import FooterComponent from "./footer.component.vue";
-
-@Component({
-  components: { HeaderComponent, FooterComponent }
-})
+@Component
 export default class IndexComponent extends Vue {
-  @Action("error/subscribe") errorSubscribe: subscribeActionCallback;
-  @Action("api/getBaseUrl") getBaseUrl: () => Promise<void>;
-  @Action("auth/setAxiosHeaders") setAxiosHeaders: () => any;
-  @Action("auth/setAxiosInterceptors") setAxiosInterceptors: () => any;
+  @Action("error/subscribe") errorSubscribe!: subscribeActionCallback;
+  @Action("api/getBaseUrl") getBaseUrl!: () => Promise<void>;
+  @Action("auth/setAxiosHeaders") setAxiosHeaders!: () => void;
+  @Action("auth/setAxiosInterceptors") setAxiosInterceptors!: () => void;
 
   public loading: boolean = false;
 

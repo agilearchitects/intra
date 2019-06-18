@@ -17,7 +17,7 @@ export class <%= changeCase.pascalCase(name) %>DTO extends DTO<I<%= changeCase.p
       ...(object.bar ? { projects: object.bar.map((bar: I<%= changeCase.pascalCase(name) %>JSON) => <%= changeCase.pascalCase(name) %>DTO.parse(bar)) } : null),
     });
   }
-  public id: number;
+  public id!: number;
   public foo?: <%= changeCase.pascalCase(name) %>DTO;
   public bar?: <%= changeCase.pascalCase(name) %>DTO[];
 

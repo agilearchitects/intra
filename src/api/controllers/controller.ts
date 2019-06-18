@@ -21,7 +21,7 @@ export interface IResponseBody {
   [key: string]: string | number | boolean | null | IResponseBody[] | IResponseBody[];
 }
 
-export interface IRequest<B extends IRequestBody = any, P extends IRequestParams = any, Q extends IRequestQuery = any> extends Request {
+export interface IRequest<B extends IRequestBody | any = any, P extends IRequestParams = any, Q extends IRequestQuery = any> extends Request {
   body: B;
   params: P;
   query: Q;

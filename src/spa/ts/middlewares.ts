@@ -7,7 +7,7 @@ export default {
   // Middleware for authenticated users
   auth: ((to, from, next) => {
     // Users not authenticated will be redirected to 404
-    next(!appStore.getters["auth/isAuth"] ? { path: "/error/404" } : undefined);
+    next(!appStore.getters["auth/isAuth"] ? { name: "login" } : undefined);
   }) as NavigationGuard,
   errorCode: ((to, from, next) => {
     const errorCode = parseInt(to.params.code, 10);

@@ -1,0 +1,132 @@
+version: 2.1
+executors:
+  build:
+    parameters:
+      working_directory:
+        type: string
+    docker:
+      - image: circleci/node:12.3.1
+    working_directory: << parameters.working_directory >>
+  deploy:
+    parameters:
+      working_directory:
+        type: string
+    machine:
+      enabled: true
+    working_directory: << parameters.working_directory >>
+commands:
+  build:
+    steps:
+      - checkout
+      - restore_cache:
+          key: cache-{{ checksum "yarn.lock" }}
+      - run:
+          name: install
+          command: yarn
+      - save_cache:
+          key: cache-{{ checksum "yarn.lock" }}
+          paths:
+            - ~/.cache/yarn
+      - run:
+          name: build
+          command: yarn build
+      - persist_to_workspace:
+          root: ./
+          paths:
+            - build
+            - node_modules
+            - storage/email-templates
+  deploy:
+    parameters:
+      environment:
+        type: enum
+        enum: [production, staging, develop]
+        default: develop
+      fingerprint:
+        type: string
+      key_filename:
+        type: string
+      ssh_connection:
+        type: string
+      deploy_directory:
+        type: string
+      working_directory:
+        type: string
+    steps:
+      - attach_workspace:
+          at: .
+      - add_ssh_keys:
+          fingerprints:
+            - << parameters.fingerprint >>
+      - run:
+          name: Deploy over SSH
+          command: |
+            ssh -i ~/.ssh/<< parameters.key_filename >> << parameters.ssh_connection >> 'mkdir << parameters.deploy_directory >>/<< parameters.environment >>/storage/uploads -p'
+            rsync -i ~/.ssh/<< parameters.key_filename >> -r << parameters.working_directory >>/build << parameters.working_directory >>/node_modules << parameters.ssh_connection >>:<< parameters.deploy_directory >>/<< parameters.environment >>
+            rsync -i ~/.ssh/<< parameters.key_filename >> -r << parameters.working_directory >>/storage/email-templates/*.ejs << parameters.ssh_connection >>:<< parameters.deploy_directory >>/<< parameters.environment >>/storage/email-templates
+jobs:
+  build:
+    executor:
+      name: build
+      working_directory: ~/agile_architects_intra
+    steps:
+      - build
+  deploy-develop:
+    executor:
+      name: deploy
+      working_directory: ~/agile_architects_intra
+    steps:
+      - deploy:
+          working_directory: ~/agile_architects_intra
+          environment: develop
+          fingerprint: 49:07:e3:ef:41:45:f2:c6:96:47:88:9f:c0:56:03:5d
+          key_filename: id_rsa_4907e3ef4145f2c69647889fc056035d
+          ssh_connection: deploy@dwik.se
+          deploy_directory: /var/www/applications/agile_architects_intra
+  deploy-staging:
+    executor:
+      name: deploy
+      working_directory: ~/agile_architects_intra
+    steps:
+      - deploy:
+          working_directory: ~/agile_architects_intra
+          environment: staging
+          fingerprint: 49:07:e3:ef:41:45:f2:c6:96:47:88:9f:c0:56:03:5d
+          key_filename: id_rsa_4907e3ef4145f2c69647889fc056035d
+          ssh_connection: deploy@dwik.se
+          deploy_directory: /var/www/applications/agile_architects_intra
+  deploy-production:
+    executor:
+      name: deploy
+      working_directory: ~/agile_architects_intra
+    steps:
+      - deploy:
+          working_directory: ~/agile_architects_intra
+          environment: production
+          fingerprint: 49:07:e3:ef:41:45:f2:c6:96:47:88:9f:c0:56:03:5d
+          key_filename: id_rsa_4907e3ef4145f2c69647889fc056035d
+          ssh_connection: deploy@dwik.se
+          deploy_directory: /var/www/applications/agile_architects_intra
+workflows:
+  version: 2.1
+  build-and-deploy:
+    jobs:
+      - build
+      - deploy-develop:
+          requires:
+            - build
+          filters:
+            branches:
+              only: develop
+      - deploy-staging:
+          requires:
+            - build
+          filters:
+            branches:
+              only: /^releases\/.+$/
+      - deploy-production:
+          requires:
+            - build
+          filters:
+            branches:
+              only: master

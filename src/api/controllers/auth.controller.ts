@@ -14,7 +14,11 @@ import ValidationModule from "../modules/validation.module";
 
 // Models
 import { IAttemptResult, UserEntity } from "../entities/user.entity";
-import { controller } from "./controller";
+import { controller, controllerError } from "./controller";
+
+import { LogModule } from "../modules/log.module";
+
+const LOG = new LogModule("controller.auth");
 
 export class AuthController extends ServiceModule {
   // Protect controller with validation middleware. Validating email and password
@@ -28,7 +32,7 @@ export class AuthController extends ServiceModule {
       UserEntity.attempt(data.email, data.password).then((result: IAttemptResult) => handler.response<IAuthResponseJSON>().json({
         token: result.token,
         user: UserDTO.parse({ id: result.user.id, email: result.user.email }).serialize(),
-      })).catch((error: any) => handler.error(500));
+      })).catch((error: any) => controllerError(LOG, handler.response(), "Error logging in", error));
     });
   }
 
@@ -37,7 +41,7 @@ export class AuthController extends ServiceModule {
       const data = handler.body<ICreateUserJSON>();
       UserEntity.create(data).save().then(() => {
         handler.response().send("User Created!");
-      }).catch((error: any) => handler.error(500));
+      }).catch((error: any) => controllerError(LOG, handler.response(), "Error creating user", error));
     });
   }
 }

@@ -64,6 +64,6 @@
   },
   "include": [
     "src/api/**/*.ts",
-    "src/shared/**/*.ts"
+    "src/shared/**/*.ts",
   ]
 }

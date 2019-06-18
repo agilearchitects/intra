@@ -35,6 +35,9 @@
           {{ $t('contact.label.on_facebook') }}
         </a>
       </strong>
+      <div v-if="isAdmin" class="mt-3">
+        <toggle-component id="editMode" :value="editMode" v-on:input="updateEditMode">Edit mode</toggle-component>
+      </div>
     </div>
   </div>
 </template>
@@ -42,11 +45,16 @@
 import { State, Action, Getter, Mutation } from "vuex-class";
 import { Vue, Component, Watch } from "vue-property-decorator";
 import { MutationMethod } from "vuex";
-@Component
+
+import ToggleComponent from "./layout/toggle.component.vue";
+
+@Component({
+  components: { ToggleComponent }
+})
 export default class FooterComponent extends Vue {
-  @Getter("auth/isAdmin") isAdmin: boolean;
-  @Getter("auth/getEditMode") editMode: boolean;
-  @Mutation("auth/setEditMode") setEditMode: MutationMethod;
+  @Getter("auth/isAdmin") isAdmin!: boolean;
+  @Getter("auth/getEditMode") editMode!: boolean;
+  @Mutation("auth/setEditMode") setEditMode!: MutationMethod;
 
   public updateEditMode(value: boolean) {
     this.setEditMode(value);

@@ -7,7 +7,7 @@
       "build/api/entities/**/*.js"
    ],
    "migrations": [
-      "build/storage/migrations/**/*.js"
+      "build/migrations/**/*.js"
    ],
    "subscribers": [
       "build/api/subscriber/**/*.js"

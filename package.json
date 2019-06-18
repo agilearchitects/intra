@@ -2,6 +2,7 @@
   "scripts": {
     "build-api": "tsc",
     "watch-api": "tsc --watch",
+    "build-migrations": "tsc storage/migrations/*.ts -outDir ./build/migrations",
     "serve-spa": "parcel src/spa/index.html --out-dir build/spa",
     "build-spa": "parcel build src/spa/index.html --out-dir build/spa && yarn cp-spa",
     "cp-spa": "cp -r node_modules/tinymce/plugins build/spa/ && cp -r node_modules/tinymce/skins build/spa/ && cp -r node_modules/tinymce/themes build/spa/",
@@ -13,6 +14,7 @@
   },
   "dependencies": {
     "@fortawesome/fontawesome-free": "^5.9.0",
+    "@tinymce/tinymce-vue": "^2.1.0",
     "@types/axios": "^0.14.0",
     "@types/bcrypt": "^3.0.0",
     "@types/bluebird": "^3.5.27",
