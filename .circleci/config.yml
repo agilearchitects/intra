@@ -70,7 +70,6 @@ commands:
             ssh -i ~/.ssh/<< parameters.key_filename >> << parameters.ssh_connection >> 'mkdir << parameters.deploy_directory >>/<< parameters.environment >>/storage/uploads -p'
             rsync -i ~/.ssh/<< parameters.key_filename >> -r << parameters.working_directory >>/build << parameters.working_directory >>/node_modules << parameters.ssh_connection >>:<< parameters.deploy_directory >>/<< parameters.environment >>
             rsync -i ~/.ssh/<< parameters.key_filename >> -r << parameters.working_directory >>/storage/email-templates/*.ejs << parameters.ssh_connection >>:<< parameters.deploy_directory >>/<< parameters.environment >>/storage/email-templates
-            rsync -i ~/.ssh/<< parameters.key_filename >> -r << parameters.working_directory >>/storage/email-templates/*.ejs << parameters.ssh_connection >>:<< parameters.deploy_directory >>/<< parameters.environment >>/storage/email-templates
 jobs:
   build:
     executor:
