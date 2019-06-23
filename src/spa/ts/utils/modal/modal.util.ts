@@ -1,10 +1,10 @@
 import Promise = require("bluebird");
-import Vue, { PluginObject } from "vue";
+import Vue from "vue";
 
 import { i18n } from "../../locale";
 import { appStore as store } from "../../store/app.store";
 
-import ModalComponent from "./modal.component.vue";
+import ModalComponent from "./modal.component";
 // global.Promise = Promise;
 
 export enum modalSize {

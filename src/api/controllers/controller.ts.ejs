@@ -8,7 +8,7 @@ export class <%= changeCase.pascalCase(name) %>Controller extends ServiceModule 
   public index(): RequestHandler {
     return controller((handler) => {
       handler.response<{ foo: string}>().json({ foo: "bar" });
-    };
+    });
   }
 }
 

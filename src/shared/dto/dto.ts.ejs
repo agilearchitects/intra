@@ -6,7 +6,7 @@ export interface I<%= changeCase.pascalCase(name) %><A, B> {
   bar?: B[];
 }
 
-export interface I<%= changeCase.pascalCase(name) %>DTO extends I<%= changeCase.pascalCase(name) %><I<%= changeCase.pascalCase(name) %>DTO, I<%= changeCase.pascalCase(name) %>DTO> { }
+export interface I<%= changeCase.pascalCase(name) %>DTO extends I<%= changeCase.pascalCase(name) %><<%= changeCase.pascalCase(name) %>DTO, <%= changeCase.pascalCase(name) %>DTO> { }
 export interface I<%= changeCase.pascalCase(name) %>JSON extends I<%= changeCase.pascalCase(name) %><I<%= changeCase.pascalCase(name) %>JSON, I<%= changeCase.pascalCase(name) %>JSON> { }
 
 export class <%= changeCase.pascalCase(name) %>DTO extends DTO<I<%= changeCase.pascalCase(name) %>DTO> implements I<%= changeCase.pascalCase(name) %>DTO {

@@ -16,12 +16,12 @@
             <ul class="navbar-nav" :class="{ 'mr-auto': index === 0 }" :key="`menu_${index}`">
               <li
                 class="nav-item"
-                :class="{ 'dropdown': menuItem.menu, 'show': menuItem.menu && matches(menuItem.route), 'nav-divider': menuItem.divider !== undefined }"
+                :class="{ 'dropdown': menuItem.children, 'show': menuItem.children && matches(menuItem.route), 'nav-divider': menuItem.divider !== undefined }"
                 v-for="(menuItem, subIndex) in menu"
                 :key="`menuItem_${index}_${subIndex}`"
               >
                 <template v-if="menuItem.divider === undefined">
-                  <template v-if="menuItem.menu">
+                  <template v-if="menuItem.children">
                     <a
                       class="nav-link dropdown-toggle d-lg-none"
                       :class="{ 'router-link-active': matches(menuItem.route) }"
@@ -34,7 +34,7 @@
                       :class="{ 'show': matches(menuItem.route)}"
                       aria-labelledby="navbarDropdown"
                     >
-                      <template v-for="(menuItem, subSubIndex) in menuItem.menu">
+                      <template v-for="(menuItem, subSubIndex) in menuItem.children">
                         <div
                           v-if="menuItem.divider"
                           class="dropdown-divider"
@@ -50,8 +50,8 @@
                             :to="menuItem.route"
                           >{{ menuItem.title }}</router-link>
                         </span>
-                        <template v-if="menuItem.menu">
-                          <template v-for="(subMenuItem, subSubSubIndex) in menuItem.menu">
+                        <template v-if="menuItem.children">
+                          <template v-for="(subMenuItem, subSubSubIndex) in menuItem.children">
                             <div
                               v-if="subMenuItem.divider"
                               class="dropdown-divider"
@@ -64,7 +64,7 @@
                             >
                               <router-link
                                 class="dropdown-item pl-4"
-                                :class="{ 'dropdown-last': subSubSubIndex === menuItem.menu.length - 1 }"
+                                :class="{ 'dropdown-last': subSubSubIndex === menuItem.children.length - 1 }"
                                 :to="subMenuItem.route"
                               >{{ subMenuItem.title }}</router-link>
                             </span>
@@ -76,7 +76,7 @@
                   <span v-on:click="triggerNavbarToggler">
                     <router-link
                       class="nav-link"
-                      :class="{ 'd-none d-lg-block': menuItem.menu }"
+                      :class="{ 'd-none d-lg-block': menuItem.children }"
                       :to="menuItem.route"
                     >
                       {{ menuItem.title }}
@@ -157,13 +157,13 @@ export default class HeaderComponent extends Vue {
 
   public toggleEvent() {
     this.triggerNavbarToggler();
-    /*setTimeout(() => {
+    setTimeout(() => {
       if ((this.$refs.navbarContent as Element).classList.contains("show")) {
         document.body.classList.add("overflow-hidden-md");
       } else {
         document.body.classList.remove("overflow-hidden-md");
       }
-    }, 10);*/
+    }, 10);
   }
 }
 </script>
@@ -177,6 +177,7 @@ export default class HeaderComponent extends Vue {
 .container-custom {
   @extend .container;
   @include media-breakpoint-down(md) {
+    padding: 0px;
     margin-right: 0px;
     margin-left: 0px;
     min-width: 100%;
@@ -185,7 +186,7 @@ export default class HeaderComponent extends Vue {
 .navbar {
   .navbar-collapse.show {
     @include media-breakpoint-down(md) {
-      overflow-y: scroll;
+      overflow-y: auto;
       height: 100vh;
     }
   }

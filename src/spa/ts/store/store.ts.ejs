@@ -9,13 +9,13 @@ export const <%= changeCase.camelCase(name) %>Store: Module<I<%= changeCase.pasc
   namespaced: true,
   state: {
     // State
-  } as IAuthState,
+  } as I<%= changeCase.pascalCase(name) %>State,
   actions: {
-    exampleAction: (({ commit, dispatch }, payload: string)): Promise<void> => {
+    exampleAction: ({ commit, dispatch }, payload: string): Promise<void> => {
       return new Promise((resolve, reject) => {
         resolve();
       }
-    }
+    },
   } as ActionTree<I<%= changeCase.pascalCase(name) %>State, IAppState>,
   mutations: {
     setValue: (state, payload: string) => {

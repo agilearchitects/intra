@@ -33,13 +33,13 @@ export enum ButtonStyle {
   components: { ButtonComponent }
 })
 export default class LayoutButtonComponent extends Vue {
-  @Prop({ type: Boolean, default: false }) loading: boolean;
-  @Prop({ type: Boolean, default: false }) disabled: boolean;
-  @Prop({ default: undefined }) route: Route;
-  @Prop({ type: String, default: "button" }) type: string;
-  @Prop({ type: String, default: ButtonType.CONTAINED }) buttonType: ButtonType;
+  @Prop({ type: Boolean, default: false }) loading!: boolean;
+  @Prop({ type: Boolean, default: false }) disabled!: boolean;
+  @Prop({ default: undefined }) route!: Route;
+  @Prop({ type: String, default: "button" }) type!: string;
+  @Prop({ type: String, default: ButtonType.CONTAINED }) buttonType!: ButtonType;
   @Prop({ type: String, default: ButtonStyle.PRIMARY })
-  buttonStyle: ButtonStyle;
+  buttonStyle!: ButtonStyle;
 
   public click() {
     this.$emit("click");

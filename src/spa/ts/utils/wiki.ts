@@ -10,6 +10,14 @@ export const wiki: IWiki[] = [
       { name: "members" },
       { name: "aoa" },
     ]
+  },
+  {
+    name: "channels",
+    children: [
+      { name: "email" },
+      { name: "chat" },
+      { name: "files" },
+    ]
   }
 ];
 

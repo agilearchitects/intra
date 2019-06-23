@@ -2,3 +2,15 @@ html, body {
   height: 100%;
   margin: 0px;
 }
+
+.overflow-hidden-md {
+  @include media-breakpoint-down(md) {
+    overflow: hidden;
+  }
+}
+
+.cursor {
+  &-pointer {
+    cursor: pointer;
+  }
+}

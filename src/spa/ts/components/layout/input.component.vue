@@ -2,7 +2,7 @@
   <div class="mdo-form-group">
     <label
       class="mdo-form-group__label"
-      v-bind:class="{ 'mdo-form-group__label--active': isActive, 'mdo-form-group__label--gray': disabled }"
+      v-bind:class="{ 'mdo-form-group__label--active': isActive, 'mdo-form-group__label--not-empty': !empty || placeholder !== '', 'mdo-form-group__label--gray': disabled }"
       v-on:click="focusInput"
     >
       {{ label }}
@@ -12,10 +12,12 @@
       v-if="type === inputType.TEXTAREA"
       class="mdo-form-group__control"
       :id="id"
+      :name="name"
+      :placeholder="placeholder"
       ref="input"
       v-on:input="onInput"
       v-on:focus="active = true"
-      v-on:blur="active = false"
+      v-on:blur="active = false; $emit('blur', $event)"
       rows="1"
       :disabled="disabled"
     />
@@ -24,10 +26,12 @@
       class="mdo-form-group__control"
       :id="id"
       :type="type"
+      :name="name"
+      :placeholder="placeholder"
       ref="input"
       v-on:input="onInput"
       v-on:focus="active = true"
-      v-on:blur="active = false"
+      v-on:blur="active = false; $emit('blur', $event)"
       v-on:keyup="$emit('keyup', $event)"
       :disabled="disabled"
     >
@@ -41,12 +45,14 @@ export enum inputType {
 }
 @Component
 export default class InputComponent extends Vue {
-  @Prop(String) label: string;
-  @Prop(String) value: string;
-  @Prop(String) id: string;
-  @Prop({ type: Boolean, default: false }) disabled: boolean;
-  @Prop({ type: Boolean, default: false }) required: boolean;
-  @Prop({ default: inputType.TEXT }) type: inputType;
+  @Prop(String) label!: string;
+  @Prop(String) value!: string;
+  @Prop(String) id!: string;
+  @Prop({ type: Boolean, default: false }) disabled!: boolean;
+  @Prop({ type: Boolean, default: false }) required!: boolean;
+  @Prop({ default: inputType.TEXT }) type!: inputType;
+  @Prop({ default: "" }) name!: string;
+  @Prop({ type: String, default: "" }) placeholder!: string;
 
   @Watch("value") onValueChange(value: string) {
     (this.$refs.input as any).value = value;
@@ -55,8 +61,9 @@ export default class InputComponent extends Vue {
   public inputType: typeof inputType = inputType;
   public active: boolean = false;
   public get isActive(): boolean {
-    return !this.empty || this.active;
+    return this.active;
   }
+
   public get empty(): boolean {
     return this.value === "" || this.value === null || this.value === undefined;
   }
@@ -67,7 +74,7 @@ export default class InputComponent extends Vue {
 
   public onInput() {
     this.$emit("input", (this.$refs.input as any).value);
-    if (inputType.TEXTAREA) {
+    if (this.type === inputType.TEXTAREA) {
       const textarea = this.$refs.input as HTMLTextAreaElement;
       const computedStyle = window.getComputedStyle(textarea);
       textarea.style.height = "inherit";
@@ -103,6 +110,10 @@ export default class InputComponent extends Vue {
     color: color("gray");
     &--active {
       color: theme-color("primary");
+      transform: translateY(-14px) scale(0.8);
+      transform-origin: 0 0;
+    }
+    &--not-empty {
       transform: translateY(-14px) scale(0.8);
       transform-origin: 0 0;
     }

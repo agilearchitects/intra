@@ -1,8 +1,9 @@
-import { Column, Entity, ManyToMany } from "typeorm";
+import { Column, Entity, ManyToMany, OneToMany } from "typeorm";
 import { hashService } from "../services/hash.service";
 import { jwtService } from "../services/jwt.service";
 import { Entity as AppEntity } from "./entity";
 import { GroupEntity } from "./group.entity";
+import { TimeEntity } from "./time.entity";
 
 export interface IAttemptResult { token: string; user: UserEntity; }
 
@@ -61,4 +62,7 @@ export class UserEntity extends AppEntity {
 
     @ManyToMany((type: any) => GroupEntity, (group: GroupEntity) => group.users)
     public groups!: GroupEntity[];
+
+    @OneToMany((type: any) => TimeEntity, (time: TimeEntity) => time.user)
+    public times!: TimeEntity[];
 }

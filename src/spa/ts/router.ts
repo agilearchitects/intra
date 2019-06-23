@@ -1,4 +1,4 @@
-import VueRouter, { Route } from "vue-router";
+import VueRouter, { Route, RouteConfig } from "vue-router";
 
 import { wikiToRouting, wiki, IWikiRouting } from "./utils/wiki";
 
@@ -11,10 +11,26 @@ import PageComponent from "./components/page.component";
 import StartComponent from "./components/start.component";
 import TextComponent from "./components/text.component";
 import WikiComponent from "./components/wiki.component";
+import TimeReportComponent from "./components/time-report.component";
+import TimeResultComponent from "./components/time-result.component";
 
-const prefixWith = (path: string, routes: Route[]): Route[] =>
+const prefixWith = (path: string, routes: RouteConfig[]): RouteConfig[] =>
   routes.map((route: Route) => { route.path = `${path}/${route.path}`; return route; });
-console.log(wikiToRouting(wiki, "wiki"))
+
+const wikiRoutingToTextComponentRouting = (wiki: IWikiRouting[]): RouteConfig[] => {
+  return wiki.map((wiki: IWikiRouting) => ({
+    path: wiki.path,
+    name: wiki.name,
+    ...(wiki.children !== undefined ? {
+      component: WikiComponent,
+      children: wikiRoutingToTextComponentRouting(wiki.children),
+    } : {
+        component: TextComponent,
+        props: { name: wiki.name },
+      })
+  }))
+}
+
 const router = new VueRouter({
   mode: "history",
   routes: [
@@ -22,11 +38,13 @@ const router = new VueRouter({
       path: "/", component: PageComponent, children: [
         { path: "start", name: "start", component: StartComponent },
         {
-          path: "wiki", name: "wiki", component: WikiComponent, children: wikiToRouting(wiki, "wiki").map((wiki: IWikiRouting) => ({
-            ...wiki,
-            component: TextComponent,
-            props: { name: wiki.name }
-          }))
+          path: "wiki", name: "wiki", component: WikiComponent, children: wikiRoutingToTextComponentRouting(wikiToRouting(wiki, "wiki"))
+        },
+        {
+          path: "time", name: "time", component: { render(c) { return c('router-view') } }, children: [
+            { path: "report", name: "time.report", component: TimeReportComponent },
+            { path: "result", name: "time.result", component: TimeResultComponent },
+          ]
         },
         { path: "/logout", name: "logout", beforeEnter: guard([middlewares.logout]) },
       ],

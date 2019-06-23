@@ -30,7 +30,7 @@
     <div class="d-md-none w-100"></div>
     <div class="flex-fill flex-md-grow-0">
       <strong>
-        <a href="https://www.facebook.com/brfpalett/" target="_blank">
+        <a href="https://www.facebook.com/Agile-Architects-2337030853201165/" target="_blank">
           <i class="fab fa-facebook-square"></i>
           {{ $t('contact.label.on_facebook') }}
         </a>
