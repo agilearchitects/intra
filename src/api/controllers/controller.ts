@@ -1,9 +1,9 @@
 import { Request, NextFunction, RequestHandler, Response } from "express";
 import { LogModule } from "../modules/log.module";
 
-export const controllerError = (log: LogModule, response: Response, message: string, error?: any): void => {
+export const controllerError = (log: LogModule, response: Response, message: string, error?: any, code: number = 500): void => {
   log.error({ title: message, ...(error !== undefined ? { data: { error } } : undefined) });
-  response.sendStatus(500);
+  response.sendStatus(code);
 };
 
 
@@ -56,7 +56,7 @@ export class Controller {
     return this._response as IResponse<T>;
   }
 
-  public error(code: number, message?: string) {
+  public sendStatus(code: number, message?: string) {
     if (message === undefined) {
       this._response.sendStatus(code);
     } else {

@@ -1,9 +1,11 @@
 <template>
   <div class="container-fluid p-0 d-flex flex-column" style="min-height: 100%;">
     <header-component></header-component>
-    <div class="container d-flex align-items-start pt-4 flex-grow-1">
-      <sidebar-component></sidebar-component>
-      <router-view></router-view>
+    <div class="container">
+      <div class="d-flex align-items-start pt-4 flex-grow-1">
+        <sidebar-component></sidebar-component>
+        <router-view></router-view>
+      </div>
     </div>
     <footer-component></footer-component>
   </div>

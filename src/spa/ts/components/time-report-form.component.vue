@@ -52,6 +52,9 @@
         :label="$t('time.comment')"
       ></input-component>
     </div>
+    <div class="d-flex justify-content-end">
+      <button-component button-style="danger" v-on:click="remove">Ta bort</button-component>
+    </div>
   </modal-form-component>
 </template>
 <script lang="ts">
@@ -63,6 +66,7 @@ import { Moment, default as moment } from "moment";
 import ModalFormComponent from "./modal-form.component.vue";
 import InputComponent from "./layout/input.component.vue";
 import SelectComponent from "./layout/select.component.vue";
+import ButtonComponent from "./layout/button.component.vue";
 
 // Store
 import {
@@ -113,10 +117,15 @@ class ProjectViewModel {
 }
 
 @Component({
-  components: { ModalFormComponent, InputComponent, SelectComponent }
+  components: {
+    ModalFormComponent,
+    InputComponent,
+    SelectComponent,
+    ButtonComponent
+  }
 })
 export default class TimeReportFormComponent extends Vue {
-  @Prop({ default: {} }) data!: { timeId?: number; date?: Moment };
+  @Prop({ default: {} }) data!: { timeId?: number; date: Moment };
   @Action("time/show") timeShowAction!: timeShowAction;
   @Action("time/create") timeCreateAction!: timeCreateAction;
   @Action("time/update") timeUpdateAction!: timeUpdateAction;
@@ -131,9 +140,7 @@ export default class TimeReportFormComponent extends Vue {
     return this.data.timeId;
   }
   private get date(): Moment {
-    return !this.edit && this.data.date !== undefined
-      ? this.data.date
-      : this.time.from;
+    return this.data.date;
   }
 
   public get edit(): boolean {
@@ -168,7 +175,11 @@ export default class TimeReportFormComponent extends Vue {
     undefined,
     undefined,
     undefined,
-    moment(new Date()),
+    moment(
+      `${this.date.format("YYYY-MM-DD")} ${moment(new Date()).format("HH:mm")}`,
+      "YYYY-MM-DD HH:mm",
+      true
+    ),
     undefined,
     ""
   );
@@ -284,7 +295,6 @@ export default class TimeReportFormComponent extends Vue {
   }
 
   public save() {
-    console.log("SAVE", this.time);
     if (this.time === null || this.time.projectId === undefined) {
       return;
     }
@@ -321,7 +331,28 @@ export default class TimeReportFormComponent extends Vue {
           comment: this.time.comment,
           userId: this.user.id
         })
-      );
+      )
+        .then(() => {
+          this.saving = false;
+          this.$emit("close");
+        })
+        .catch(() => {
+          alert("Something went wrong. Please try again");
+        });
+    }
+  }
+
+  public remove() {
+    if (this.time.id !== undefined && confirm("Är du säker?")) {
+      this.saving = true;
+      this.timeDeleteAction(this.time.id)
+        .then(() => {
+          this.saving = false;
+          this.$emit("close");
+        })
+        .catch(() => {
+          alert("Something went wrong. Please try again");
+        });
     }
   }
 }

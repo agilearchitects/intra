@@ -11,6 +11,7 @@ import timeController from "./controllers/time.controller";
 
 // Middlewares
 import { middlewares } from "./middlewares";
+import { controller } from "./controllers/controller";
 
 const router: Router = Router();
 
@@ -29,6 +30,7 @@ router.group("", [middlewares.auth()], (router: Router) => {
     router.post("", timeController.create());
     router.put("/:id", timeController.update());
     router.delete("/:id", timeController.delete());
+    router.put("/stop/:id", controller(timeController.stop));
   });
   router.group("/text", [], (router: Router) => {
     router.get("", textController.index());
