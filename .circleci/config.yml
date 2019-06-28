@@ -31,10 +31,10 @@ commands:
           name: build
           command: yarn build
       - run:
-          name: build
+          name: build-migrations
           command: yarn build-migrations
       - run:
-          name: build
+          name: build-tinymce
           command: yarn cp-spa
       - persist_to_workspace:
           root: ./
