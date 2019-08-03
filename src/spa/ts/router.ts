@@ -29,7 +29,7 @@ const wikiRoutingToTextComponentRouting = (wiki: IWikiRouting[]): RouteConfig[] 
         props: { name: wiki.name },
       })
   }))
-}
+};
 
 const router = new VueRouter({
   mode: "history",
