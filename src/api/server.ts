@@ -14,11 +14,11 @@ createConnection().then((_) => {
         `^https?:\\/\\/${configService.get("SPA_HOST", "api.test.test")
           .replace(/\./g, "\\.")}(:\\d+$|$)`)
     },
-  } as IAPIApp, {
+  } as IAPIApp, ...(configService.get("ENV", "development") === "local" ? [{
     domain: configService.get("SPA_HOST", "www.test.test"),
     staticPath: "build/spa",
     apiBaseUrl: configService.get("API_HOST", "api..test.test"),
 
-  } as ISPAApp], parseInt(configService.get("PORT", "1234"), 10));
+  } as ISPAApp] : [])], parseInt(configService.get("PORT", "1234"), 10));
   server.start();
 }).catch((error) => console.log(error));
