@@ -32,7 +32,7 @@
     >
       <div class="pr-2 nowrap">
         <strong>{{ time.project.name }}</strong>
-        <br>
+        <br />
         <span>{{ time.customer.name }}</span>
       </div>
       <p class="flex-fill px-2">
@@ -111,8 +111,8 @@ class TimeViewModel {
     this.duration = moment.duration(
       (this.to !== undefined ? this.to : moment()).diff(this.from)
     );
-    this._hours = Math.round(this.duration.asHours());
-    this._minutes = Math.round(this.duration.asMinutes() % 60);
+    this._hours = Math.floor(this.duration.asHours());
+    this._minutes = Math.floor(this.duration.asMinutes() % 60);
   }
 }
 
