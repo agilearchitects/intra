@@ -6,6 +6,7 @@ import { apiStore } from "./api.store";
 import { authStore } from "./auth.store";
 import { errorStore } from "./error.store";
 import { menuStore } from "./menu.store";
+import { projectStore } from "./project.store";
 import { textStore } from "./text.store";
 import { timeStore } from "./time.store";
 import { tinyMCEStore } from "./tinymce.store";
@@ -18,6 +19,7 @@ const MODULES = {
   customer: customerStore,
   error: errorStore,
   menu: menuStore,
+  project: projectStore,
   text: textStore,
   time: timeStore,
   tinyMCE: tinyMCEStore,
