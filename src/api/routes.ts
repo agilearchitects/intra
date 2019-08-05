@@ -2,12 +2,14 @@
 import { Router } from "express";
 import fileUpload from "express-fileupload";
 import "./modules/router.module";
+
 // Controllers
 import authController from "./controllers/auth.controller";
 import customerController from "./controllers/customer.controller";
 import resourceController from "./controllers/resource.controller";
 import textController from "./controllers/text.controller";
 import timeController from "./controllers/time.controller";
+import projectController from "./controllers/project.controller";
 
 // Middlewares
 import { middlewares } from "./middlewares";
@@ -23,7 +25,12 @@ router.group("/auth", [], (router: Router) => {
 router.group("", [middlewares.auth()], (router: Router) => {
   router.group("/customer", [], (router: Router) => {
     router.get("", customerController.index());
+    router.post("", customerController.create());
   });
+  router.group("/project", [], (router: Router) => {
+    router.post("", projectController.create());
+  });
+
   router.group("/time", [], (router: Router) => {
     router.get("", timeController.index());
     router.get("/:id", timeController.show());
