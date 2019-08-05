@@ -34,6 +34,10 @@
         <strong>{{ time.project.name }}</strong>
         <br />
         <span>{{ time.customer.name }}</span>
+        <template v-if="!time.isActive">
+          <br />
+          <i class="text-muted">{{ time.timeFormatted }}</i>
+        </template>
       </div>
       <p class="flex-fill px-2">
         <i>{{ time.comment }}</i>
@@ -105,6 +109,9 @@ class TimeViewModel {
     } else {
       return "-";
     }
+  }
+  public get timeFormatted(): string {
+    return `${this.fromFormatted} ${this.toFormatted}`;
   }
 
   public setDuration() {
@@ -189,24 +196,28 @@ export default class TimeReportComponent extends Vue {
 
   public getReports() {
     this.timeIndexAction({ date: this.date }).then((times: TimeDTO[]) => {
-      this.times = times.map(
-        (time: TimeDTO) =>
-          new TimeViewModel(
-            time.id,
-            time.project !== undefined
-              ? { id: time.project.id, name: time.project.name }
-              : { id: 0, name: "" },
-            time.project !== undefined && time.project.customer !== undefined
-              ? {
-                  id: time.project.customer.id,
-                  name: time.project.customer.name
-                }
-              : { id: 0, name: "" },
-            moment(time.from),
-            time.to !== undefined ? moment(time.to) : undefined,
-            time.comment
-          )
-      );
+      this.times = times
+        .map(
+          (time: TimeDTO) =>
+            new TimeViewModel(
+              time.id,
+              time.project !== undefined
+                ? { id: time.project.id, name: time.project.name }
+                : { id: 0, name: "" },
+              time.project !== undefined && time.project.customer !== undefined
+                ? {
+                    id: time.project.customer.id,
+                    name: time.project.customer.name
+                  }
+                : { id: 0, name: "" },
+              moment(time.from),
+              time.to !== undefined ? moment(time.to) : undefined,
+              time.comment
+            )
+        )
+        .sort((a: TimeViewModel, b: TimeViewModel) =>
+          a.to !== undefined && a.from.toDate() > a.from.toDate() ? -1 : 1
+        );
     });
   }
 
