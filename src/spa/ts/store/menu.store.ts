@@ -23,7 +23,8 @@ export const menuStore: Module<IMenuState, IAppState> = {
           { route: { name: "time.report" }, title: i18n.t("menu.time.report") },
           { route: { name: "time.result" }, title: i18n.t("menu.time.result") },
         ]
-      }
+      },
+      { route: { name: "crm" }, title: i18n.t("menu.crm") },
     ],
     leftMenu: (state, getters): IMenuItem[] => [
       { route: { name: "start" }, title: i18n.t("menu.start") },
@@ -37,6 +38,7 @@ export const menuStore: Module<IMenuState, IAppState> = {
             { route: { name: "time.result" }, title: i18n.t("menu.time.result") },
           ]
         },
+        { route: { name: "crm" }, title: i18n.t("menu.crm") },
         { divider: true },
         { route: { name: "logout" }, title: i18n.t("menu.logout") },
       ] : [

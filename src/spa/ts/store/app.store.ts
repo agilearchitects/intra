@@ -36,7 +36,7 @@ export const appStore = new Vuex.Store<IAppState>({
 export const apiIndex = <T>(url: string, dispatch: Dispatch, name?: string): Promise<T[]> => {
   return new Promise((resolve, reject) => {
     Axios.get<T[]>(url).then((response: AxiosResponse<T[]>) => resolve(response.data)).catch((error: any) => {
-      error.dispatch("error/submit", { message: `Index ${name || ""} request failed`, error }, { root: true });
+      dispatch("error/submit", { message: `Index ${name || ""} request failed`, error }, { root: true });
       reject();
     });
   });
@@ -45,7 +45,7 @@ export const apiIndex = <T>(url: string, dispatch: Dispatch, name?: string): Pro
 export const apiShow = <T>(url: string, dispatch: Dispatch, name?: string): Promise<T> => {
   return new Promise((resolve, reject) => {
     Axios.get<T>(url).then((response: AxiosResponse<T>) => resolve(response.data)).catch((error: any) => {
-      error.dispatch("error/submit", { message: `Show ${name || ""} request failed`, error }, { root: true });
+      dispatch("error/submit", { message: `Show ${name || ""} request failed`, error }, { root: true });
       reject();
     });
   });
@@ -54,7 +54,7 @@ export const apiShow = <T>(url: string, dispatch: Dispatch, name?: string): Prom
 export const apiCreate = (url: string, payload: any, dispatch: Dispatch, name?: string): Promise<void> => {
   return new Promise((resolve, reject) => {
     Axios.post(url, payload).then(() => resolve()).catch((error: any) => {
-      error.dispatch("error/submit", { message: `Create ${name || ""} request failed`, error }, { root: true });
+      dispatch("error/submit", { message: `Create ${name || ""} request failed`, error }, { root: true });
       reject();
     });
   });
@@ -63,7 +63,7 @@ export const apiCreate = (url: string, payload: any, dispatch: Dispatch, name?: 
 export const apiUpdate = (url: string, payload: any, dispatch: Dispatch, name?: string): Promise<void> => {
   return new Promise((resolve, reject) => {
     Axios.put(url, payload).then(() => resolve()).catch((error: any) => {
-      error.dispatch("error/submit", { message: `Update ${name || ""} request failed`, error }, { root: true });
+      dispatch("error/submit", { message: `Update ${name || ""} request failed`, error }, { root: true });
       reject();
     });
   });
@@ -72,7 +72,7 @@ export const apiUpdate = (url: string, payload: any, dispatch: Dispatch, name?: 
 export const apiDelete = (url: string, dispatch: Dispatch, name?: string): Promise<void> => {
   return new Promise((resolve, reject) => {
     Axios.delete(url).then(() => resolve()).catch((error: any) => {
-      error.dispatch("error/submit", { message: `Deleter ${name || ""} request failed`, error }, { root: true });
+      dispatch("error/submit", { message: `Deleter ${name || ""} request failed`, error }, { root: true });
       reject();
     });
   });

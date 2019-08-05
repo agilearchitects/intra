@@ -8,6 +8,7 @@ export default {
       "report": "Rapportera",
       "result": "Resultat"
     },
+    "crm": "CRM",
     "login": "Logga in",
     "logout": "Logga ut"
   },

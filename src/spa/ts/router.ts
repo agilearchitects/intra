@@ -13,6 +13,8 @@ import TextComponent from "./components/text.component";
 import WikiComponent from "./components/wiki.component";
 import TimeReportComponent from "./components/time-report.component";
 import TimeResultComponent from "./components/time-result.component";
+import CrmComponent from "./components/crm.component";
+import { CreateElement } from "vue";
 
 const prefixWith = (path: string, routes: RouteConfig[]): RouteConfig[] =>
   routes.map((route: Route) => { route.path = `${path}/${route.path}`; return route; });
@@ -41,11 +43,12 @@ const router = new VueRouter({
           path: "wiki", name: "wiki", component: WikiComponent, children: wikiRoutingToTextComponentRouting(wikiToRouting(wiki, "wiki"))
         },
         {
-          path: "time", name: "time", component: { render(c) { return c('router-view') } }, children: [
+          path: "time", name: "time", component: { render: (c: CreateElement) => c('router-view') }, children: [
             { path: "report", name: "time.report", component: TimeReportComponent },
             { path: "result", name: "time.result", component: TimeResultComponent },
           ]
         },
+        { path: "crm", name: "crm", component: CrmComponent },
         { path: "/logout", name: "logout", beforeEnter: guard([middlewares.logout]) },
       ],
       beforeEnter: guard([middlewares.auth])
