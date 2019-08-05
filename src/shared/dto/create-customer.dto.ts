@@ -1,11 +1,11 @@
 import DTO from "./dto";
 
-export interface ICreateCustomer<A, B> {
+export interface ICreateCustomer {
   name: string
 }
 
-export interface ICreateCustomerDTO extends ICreateCustomer<ICreateCustomerDTO, ICreateCustomerDTO> { }
-export interface ICreateCustomerJSON extends ICreateCustomer<ICreateCustomerJSON, ICreateCustomerJSON> { }
+export interface ICreateCustomerDTO extends ICreateCustomer { }
+export interface ICreateCustomerJSON extends ICreateCustomer { }
 
 export class CreateCustomerDTO extends DTO<ICreateCustomerDTO> implements ICreateCustomerDTO {
   public static parse(object: ICreateCustomerJSON): CreateCustomerDTO {
