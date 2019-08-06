@@ -2,7 +2,7 @@
   <div>
     <div class="container text-center my-4 d-none d-lg-block">
       <router-link :to="{ name: 'start' }" class="navbar-brand p-0">
-        <img src="../../resources/img/logo.png" style="height: 40px;">
+        <img src="../../resources/img/logo.png" style="height: 40px;" />
       </router-link>
     </div>
     <nav class="navbar navbar-expand-lg" ref="navbar">
@@ -125,9 +125,7 @@ export default class HeaderComponent extends Vue {
           this.navBar.parentElement.nextElementSibling !== null
         ) {
           (this.navBar.parentElement
-            .nextElementSibling as HTMLElement).style.paddingTop = `${
-            this.navBar.offsetHeight
-          }px`;
+            .nextElementSibling as HTMLElement).style.paddingTop = `${this.navBar.offsetHeight}px`;
         }
       } else {
         this.navBar.classList.remove("nav-fixed-top");
@@ -153,10 +151,15 @@ export default class HeaderComponent extends Vue {
   public triggerNavbarToggler() {
     (this.$refs.navbarContent as Element).classList.toggle("show");
     //$(".navbar-toggler").trigger("click");
+    this.checkOverflow();
   }
 
   public toggleEvent() {
     this.triggerNavbarToggler();
+    this.checkOverflow();
+  }
+
+  private checkOverflow() {
     setTimeout(() => {
       if ((this.$refs.navbarContent as Element).classList.contains("show")) {
         document.body.classList.add("overflow-hidden-md");
