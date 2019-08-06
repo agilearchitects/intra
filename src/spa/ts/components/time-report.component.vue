@@ -128,6 +128,7 @@ import TimeReportFormComponent from "./time-report-form.component.vue";
 import { Action } from "vuex-class";
 import { timeIndexAction, timeStopAction } from "../store/time.store";
 import { TimeDTO } from "../../../shared/dto/time.dto";
+import { StopTimeDTO } from "../../../shared/dto/stop-time.dto";
 
 @Component({
   components: { ButtonComponent }
@@ -233,7 +234,12 @@ export default class TimeReportComponent extends Vue {
   }
 
   public stop(timeId: number) {
-    this.timeStopAction(timeId)
+    this.timeStopAction(
+      StopTimeDTO.parse({
+        id: timeId,
+        to: moment().format("YYYY-MM-DD HH:mm:ss")
+      })
+    )
       .then(() => this.getReports())
       .catch(() => alert("Something went wrong. Try again"));
   }

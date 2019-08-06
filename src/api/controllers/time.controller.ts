@@ -10,13 +10,14 @@ import { IUpdateTimeJSON } from "../../shared/dto/update-time.dto";
 import { Between } from "typeorm";
 import { ITimeJSON } from "../../shared/dto/time.dto";
 import moment, { Moment } from "moment";
+import { IStopTimeJSON } from "../../shared/dto/stop-time.dto";
 
 const LOG = new LogModule("controller.time");
 
 export class TimeController extends ServiceModule {
   public index(): RequestHandler {
     return controller((handler) => {
-      const query = handler.query<{ date?: string, all?: string }>();
+      const query = handler.query<{ date?: string, year?: string, month?: string, week?: string, all?: string }>();
       TimeEntity.find({
         where: {
           // Only get provided date
@@ -24,6 +25,21 @@ export class TimeController extends ServiceModule {
             from: Between(
               moment(query.date, "YYYY-MM-DD", true).format("YYYY-MM-DD 00:00:00"),
               moment(query.date, "YYYY-MM-DD", true).format("YYYY-MM-DD 23:59:59"))
+          } : undefined),
+          ...(query.year !== undefined && query.month !== undefined ? {
+            from: Between(
+              moment(`${query.year}-${query.month}`, "YYYY-MM", true).format("YYYY-MM-01 00:00:00"),
+              moment(`${query.year}-${query.month}`, "YYYY-MM", true).endOf("month").format("YYYY-MM-DD 23:59:59"))
+          } : undefined),
+          ...(query.year !== undefined && query.week !== undefined ? {
+            from: Between(
+              moment(`${query.year}-${query.week}`, "YYYY w", true).startOf("week").format("YYYY-MM-DD 00:00:00"),
+              moment(`${query.year}-${query.week}`, "YYYY w", true).endOf("week").format("YYYY-MM-DD 23:59:59"))
+          } : undefined),
+          ...(query.year !== undefined && query.month === undefined && query.week === undefined ? {
+            from: Between(
+              moment(query.year, "YYYY", true).format("YYYY-01-01 00:00:00"),
+              moment(query.year, "YYYY", true).format("YYYY-12-31 23:59:59"))
           } : undefined),
           // If query "all" is not provided only fetch entities belonging to current user
           ...(query.all === undefined ? { user: handler.request.user } : undefined),
@@ -144,7 +160,8 @@ export class TimeController extends ServiceModule {
 
   public stop(handler: Controller) {
     const params: { id: string } = handler.params<{ id: string }>();
-    TimeEntity.update({ id: parseInt(params.id, 10), to: null }, { to: new Date() })
+    const body = handler.body<IStopTimeJSON>();
+    TimeEntity.update({ id: parseInt(params.id, 10), to: null }, { to: body.to })
       .then(() => handler.sendStatus(200))
       .catch((error: any) => {
         LOG.error({ title: "Unable to stop timer", data: { error } });
