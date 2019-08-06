@@ -14,16 +14,40 @@ export default {
   },
   "wiki": {
     "wiki": "Wiki",
+    "agile_architects": {
+      "agile_architects": "Agile Architects",
+      "mentality": "Mentalitet",
+      "communication": "Kommunikation",
+      "transparency": "Öppenhet"
+    },
     "board": {
       "board": "Styrelsen",
       "members": "Medlemmar",
       "aoa": "Bolagsordning"
+    },
+    "accounting": {
+      "accounting": "Bokföring",
+      "bokio": "Bokio",
+      "expenses": "Utlägg",
+      "purchase": "Inköp",
     },
     "channels": {
       "channels": "Kanaler",
       "email": "E-post",
       "chat": "Chat",
       "files": "Filer"
+    },
+    "staff": {
+      "staff": "Personal",
+      "onboarding": "Onboarding",
+      "offboarding": "Offboarding"
+    },
+    "development": {
+      "development": "Utveckling",
+      "git": "GIT",
+      "devops": "DevOps",
+      "scrum": "Scrum",
+      "documentation": "Dokumentation"
     }
   },
   "login": {

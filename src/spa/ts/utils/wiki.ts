@@ -5,10 +5,26 @@ export interface IWikiRoute { route: { name: string }, title: string, children?:
 export interface IWikiRouting { path: string, name: string, children?: IWikiRouting[] }
 export const wiki: IWiki[] = [
   {
+    name: "agile_architects",
+    children: [
+      { name: "mentality" },
+      { name: "communication" },
+      { name: "transparency" }
+    ]
+  },
+  {
     name: "board",
     children: [
       { name: "members" },
       { name: "aoa" },
+    ]
+  },
+  {
+    name: "accounting",
+    children: [
+      { name: "bokio" },
+      { name: "expenses" },
+      { name: "purchase" }
     ]
   },
   {
@@ -17,6 +33,22 @@ export const wiki: IWiki[] = [
       { name: "email" },
       { name: "chat" },
       { name: "files" },
+    ]
+  },
+  {
+    name: "staff",
+    children: [
+      { name: "onboarding" },
+      { name: "offboarding" }
+    ]
+  },
+  {
+    name: "development",
+    children: [
+      { name: "git" },
+      { name: "devops" },
+      { name: "scrum" },
+      { name: "documentation" },
     ]
   }
 ];
