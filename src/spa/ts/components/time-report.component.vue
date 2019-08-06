@@ -7,7 +7,7 @@
         </button-component>
       </div>
       <div>
-        <div class="d-flex align-items-start" style="height: 100%">
+        <div class="d-flex align-items-start">
           <button-component v-on:click="previousDay">
             <i class="fas fa-chevron-left"></i>
           </button-component>
