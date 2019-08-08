@@ -11,7 +11,7 @@ import { StopTimeDTO } from "../../../shared/dto/stop-time.dto";
 
 export interface ITimeState { } // tslint:disable-line:no-empty-interface
 
-export type timeIndexAction = (payload?: { date?: Date, all?: boolean }) => Promise<TimeDTO[]>;
+export type timeIndexAction = (payload?: { date?: Date, year?: string, month?: string, week?: string, all?: boolean }) => Promise<TimeDTO[]>;
 export type timeShowAction = (payload: number) => Promise<TimeDTO>;
 export type timeCreateAction = (payload: CreateTimeDTO) => Promise<void>;
 export type timeUpdateAction = (payload: UpdateTimeDTO) => Promise<void>;
@@ -30,11 +30,11 @@ export const timeStore: Module<ITimeState, IAppState> = {
         if (payload.date !== undefined) {
           query.push(`date=${moment(payload.date).format("YYYY-MM-DD")}`);
         } else if (payload.year !== undefined) {
-          query.push(`year=${moment(payload.date).format("YYYY")}`);
+          query.push(`year=${moment(payload.year).format("YYYY")}`);
           if (payload.month !== undefined) {
-            query.push(`month=${moment(payload.date).format("MM")}`);
+            query.push(`month=${moment(payload.month, "M").format("MM")}`);
           } else if (payload.week !== undefined) {
-            query.push(`week=${moment(payload.date).format("w")}`);
+            query.push(`week=${moment(payload.week, "w").format("w")}`);
           }
         }
         if (payload.all !== undefined && payload.all === true) {

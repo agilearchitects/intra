@@ -18,6 +18,11 @@ export class TimeController extends ServiceModule {
   public index(): RequestHandler {
     return controller((handler) => {
       const query = handler.query<{ date?: string, year?: string, month?: string, week?: string, all?: string }>();
+      if (query.year !== undefined && query.week !== undefined) {
+        console.log(`${query.year}-${query.week}`)
+        const start = moment(`${query.year} ${query.week}`, "YYYY W", true).startOf("isoWeek").format("YYYY-MM-DD 00:00:00");
+        const end = moment(`${query.year} ${query.week}`, "YYYY W", true).endOf("isoWeek").format("YYYY-MM-DD 23:59:59");
+      }
       TimeEntity.find({
         where: {
           // Only get provided date
@@ -33,8 +38,8 @@ export class TimeController extends ServiceModule {
           } : undefined),
           ...(query.year !== undefined && query.week !== undefined ? {
             from: Between(
-              moment(`${query.year}-${query.week}`, "YYYY w", true).startOf("week").format("YYYY-MM-DD 00:00:00"),
-              moment(`${query.year}-${query.week}`, "YYYY w", true).endOf("week").format("YYYY-MM-DD 23:59:59"))
+              moment(`${query.year} ${query.week}`, "YYYY W", true).startOf("isoWeek").format("YYYY-MM-DD 00:00:00"),
+              moment(`${query.year} ${query.week}`, "YYYY W", true).endOf("isoWeek").format("YYYY-MM-DD 23:59:59"))
           } : undefined),
           ...(query.year !== undefined && query.month === undefined && query.week === undefined ? {
             from: Between(
