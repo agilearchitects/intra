@@ -31,6 +31,11 @@ export default {
       "expenses": "Utlägg",
       "purchase": "Inköp",
     },
+    "contracts": {
+      "contracts": "Avtal",
+      "banking": "Bank",
+      "insurance": "Försäkringar"
+    },
     "channels": {
       "channels": "Kanaler",
       "email": "E-post",

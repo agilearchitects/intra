@@ -28,6 +28,13 @@ export const wiki: IWiki[] = [
     ]
   },
   {
+    name: "contracts",
+    children: [
+      { name: "banking" },
+      { name: "insurance" }
+    ]
+  },
+  {
     name: "channels",
     children: [
       { name: "email" },
