@@ -13,6 +13,8 @@ import TextComponent from "./components/text.component";
 import WikiComponent from "./components/wiki.component";
 import TimeReportComponent from "./components/time-report.component";
 import TimeResultComponent from "./components/time-result.component";
+import TimeResultWeekComponent from "./components/time-result-week.component";
+import TimeResultMonthComponent from "./components/time-result-month.component";
 import CrmComponent from "./components/crm.component";
 import { CreateElement } from "vue";
 
@@ -45,7 +47,12 @@ const router = new VueRouter({
         {
           path: "time", name: "time", component: { render: (c: CreateElement) => c('router-view') }, children: [
             { path: "report", name: "time.report", component: TimeReportComponent },
-            { path: "result", name: "time.result", component: TimeResultComponent },
+            {
+              path: "result", name: "time.result", component: TimeResultComponent, children: [
+                { path: "week", name: "time.result.week", component: TimeResultWeekComponent },
+                { path: "month", name: "time.result.month", component: TimeResultMonthComponent },
+              ]
+            },
           ]
         },
         { path: "crm", name: "crm", component: CrmComponent },
