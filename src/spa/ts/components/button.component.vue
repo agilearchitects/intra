@@ -26,10 +26,10 @@ import { Route } from "vue-router";
 
 @Component
 export default class ButtonComponent extends Vue {
-  @Prop({ type: Boolean, default: false }) loading!: boolean;
-  @Prop({ type: Boolean, default: false }) disabled!: boolean;
-  @Prop({ default: undefined }) route!: Route;
-  @Prop({ type: String, default: "button" }) type!: string;
+  @Prop({ type: Boolean, default: false }) loading: boolean;
+  @Prop({ type: Boolean, default: false }) disabled: boolean;
+  @Prop({ default: undefined }) route: Route;
+  @Prop({ type: String, default: "button" }) type: string;
 
   public click() {
     this.$emit("click");

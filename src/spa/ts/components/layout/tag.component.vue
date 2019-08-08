@@ -7,13 +7,10 @@
     >{{ label }}</label>
 
     <template v-for="(option, index) in valueList">
-      <a
-        href
+      <div
         class="mdo-form-tags__value"
-        :data-index="index"
+        :class="{'mdo-form-tags__value--selected': selectedValueIndex === index}"
         :key="option.value"
-        v-on:keydown="ValueKeyDown"
-        v-on:click.prevent
       >
         {{ option.text }}
         <i
@@ -21,7 +18,7 @@
           v-on:mousedown.prevent
           v-on:click="removeValue(index)"
         ></i>
-      </a>
+      </div>
     </template>
     <input
       ref="input"
@@ -31,7 +28,7 @@
       v-on:focus="active = true"
       v-on:blur="blur"
       v-on:keydown="keyDown"
-    />
+    >
     <ul class="mdo-form-tags__options" :class="{'mdo-form-tags__options--open': active}">
       <li
         v-for="(option, index) in filteredOptions"
@@ -53,10 +50,10 @@ export interface IOption {
 }
 @Component
 export default class TagComponent extends Vue {
-  @Prop(String) label!: string;
-  @Prop({ default: [] }) value!: string[];
-  @Prop({ default: [] }) options!: IOption[];
-  @Prop({ type: Boolean, default: false }) allowAdd!: boolean;
+  @Prop(String) label: string;
+  @Prop({ default: [] }) value: string[];
+  @Prop({ default: [] }) options: IOption[];
+  @Prop({ type: Boolean, default: false }) allowAdd: boolean;
   @Watch("input") onInputChange(value: string, oldValue: string) {
     if (value !== oldValue) {
       this.selectedValueIndex = -1;
@@ -116,6 +113,24 @@ export default class TagComponent extends Vue {
     }
   }
 
+  public selectNextValue() {
+    if (this.selectedValueIndex === -1) {
+      return;
+    }
+    if (this.selectedValueIndex + 1 < this.valueList.length) {
+      this.selectedValueIndex++;
+    } else {
+      this.selectedValueIndex = -1;
+    }
+  }
+  public selectPreviousValue() {
+    if (this.selectedValueIndex === -1) {
+      this.selectedValueIndex = this.valueList.length - 1;
+    } else if (this.selectedValueIndex - 1 >= 0) {
+      this.selectedValueIndex--;
+    }
+  }
+
   public addToValues() {
     if (
       this.selectedOption !== undefined &&
@@ -133,6 +148,7 @@ export default class TagComponent extends Vue {
     }
 
     this.input = "";
+    this.selectedValueIndex = -1;
     this.selectedOptionIndex = -1;
   }
   public removeFromValues() {
@@ -155,6 +171,8 @@ export default class TagComponent extends Vue {
   }
   public addValue(index: number) {
     this.$emit("input", [...this.value, this.filteredOptions[index].value]);
+    //(this.$refs.input as any).focus();
+    //this.active = true;
   }
 
   public keyDown(event: KeyboardEvent): void {
@@ -165,137 +183,18 @@ export default class TagComponent extends Vue {
       case "ArrowDown":
         this.selectNextOption();
         break;
+      case "ArrowLeft":
+        this.selectPreviousValue();
+        break;
+      case "ArrowRight":
+        this.selectNextValue();
+        break;
       case "Enter":
         this.addToValues();
         break;
-    }
-  }
-
-  public ValueKeyDown(event: KeyboardEvent): void {
-    console.log(event);
-    if (event.target !== null) {
-      const targert = event.target as HTMLElement;
-      if (event.key === "ArrowRight") {
-        if (targert.nextElementSibling !== null) {
-          (targert.nextElementSibling as HTMLLinkElement).focus();
-        }
-      } else if (event.key === "ArrowLeft") {
-        if (targert.previousElementSibling !== null) {
-          (targert.previousElementSibling as HTMLLinkElement).focus();
-        }
-      } else if (event.key === "Backspace") {
-        this.removeValue(parseInt(`${targert.getAttribute("data-index")}`, 10));
-        this.focusInput();
-      }
+      case "Backspace":
+        this.removeFromValues();
     }
   }
 }
 </script>
-<style lang="scss" scoped>
-@import "~bootstrap/scss/_functions";
-@import "../../../scss/variables";
-@import "~bootstrap/scss/_variables";
-
-.mdo-form-tags {
-  margin-top: 1rem;
-  margin-bottom: 1.5rem;
-  padding-top: 0.5rem;
-  padding-bottom: 0.5rem;
-  min-height: 3rem;
-  display: flex;
-  flex-wrap: wrap;
-  position: relative;
-  border-bottom: 1px solid color("gray");
-  &__label {
-    position: absolute;
-    font-size: 1rem;
-    cursor: text;
-    transition: transform 0.2s ease-out, color 0.2s ease-out,
-      -webkit-transform 0.2s ease-out;
-    transform-origin: 0% 100%;
-    text-align: initial;
-    transform: translateY(12px);
-    color: color("gray");
-    &--active {
-      color: theme-color("primary");
-      transform: translateY(-14px) scale(0.8);
-      transform-origin: 0 0;
-    }
-    &--gray {
-      color: color("gray");
-    }
-  }
-  &--active {
-    border-bottom: 1px solid theme-color("primary");
-    box-shadow: 0 1px 0 0 theme-color("primary");
-  }
-  &__times {
-    position: relative;
-    top: 1px;
-    cursor: pointer;
-  }
-  &__input {
-    font-size: 16px;
-    flex-grow: 2;
-    border: 0px;
-    width: 10px;
-    height: 32px;
-    margin-top: 10px;
-    box-shadow: none;
-    box-sizing: content-box;
-    align-self: flex-end;
-    &:focus {
-      border: 0px;
-      outline: none;
-    }
-  }
-  &__value {
-    height: 32px;
-    font-size: 13px;
-    font-weight: 500;
-    color: rgba(0, 0, 0, 0.6);
-    line-height: 32px;
-    padding: 0 12px;
-    border-radius: 16px;
-    background-color: gray("200");
-    margin-right: 5px;
-    margin-top: 0.5rem;
-    align-self: center;
-    &:focus {
-      background-color: gray("500");
-      border: 0px;
-      box-shadow: 0px;
-      outline: 0px;
-    }
-    &:hover {
-      text-decoration: none;
-    }
-  }
-  &__options {
-    width: 100%;
-    margin: 0px;
-    padding: 0px;
-    box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.14),
-      0 3px 1px -2px rgba(0, 0, 0, 0.12), 0 1px 5px 0 rgba(0, 0, 0, 0.2);
-    background-color: color("white");
-    list-style-type: none;
-    position: absolute;
-    top: 50px;
-    z-index: 10000;
-    display: none;
-    &--open {
-      display: block;
-    }
-  }
-  &__option {
-    padding: 0px 15px;
-    height: 50px;
-    line-height: 50px;
-    cursor: pointer;
-    &--selected,
-    &:hover {
-      background-color: gray("300");
-    }
-  }
-}
-</style>

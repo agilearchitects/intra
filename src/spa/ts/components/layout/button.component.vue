@@ -37,8 +37,7 @@ export default class LayoutButtonComponent extends Vue {
   @Prop({ type: Boolean, default: false }) disabled!: boolean;
   @Prop({ default: undefined }) route!: Route;
   @Prop({ type: String, default: "button" }) type!: string;
-  @Prop({ type: String, default: ButtonType.CONTAINED })
-  buttonType!: ButtonType;
+  @Prop({ type: String, default: ButtonType.CONTAINED }) buttonType!: ButtonType;
   @Prop({ type: String, default: ButtonStyle.PRIMARY })
   buttonStyle!: ButtonStyle;
 
@@ -57,6 +56,7 @@ export default class LayoutButtonComponent extends Vue {
   &:hover {
     text-decoration: none;
   }
+  background-color: transparent;
   border-radius: 2px;
   border: 0px;
   line-height: 36px;
@@ -64,20 +64,10 @@ export default class LayoutButtonComponent extends Vue {
   transition: 0.3s;
   text-transform: uppercase;
   cursor: pointer;
-  position: relative;
   &:not(&--text) {
-    &:after {
-      content: "";
-      box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.14),
-        0 3px 1px -2px rgba(0, 0, 0, 0.12), 0 1px 5px 0 rgba(0, 0, 0, 0.2);
-      position: absolute;
-      top: 0px;
-      left: 0px;
-      bottom: 0px;
-      right: 0px;
-      z-index: -1;
-    }
-    &:hover:after {
+    box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.14),
+      0 3px 1px -2px rgba(0, 0, 0, 0.12), 0 1px 5px 0 rgba(0, 0, 0, 0.2);
+    &:hover {
       box-shadow: 0 3px 3px 0 rgba(0, 0, 0, 0.14),
         0 1px 7px 0 rgba(0, 0, 0, 0.12), 0 3px 1px -1px rgba(0, 0, 0, 0.2);
     }
