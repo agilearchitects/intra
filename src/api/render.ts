@@ -7,7 +7,7 @@ import { createConnection, Not } from "typeorm";
 
 import { CustomerEntity } from "./entities/customer.entity";
 import { ProjectEntity } from "./entities/project.entity";
-console.log("DIR", __dirname);
+
 const GENERATORS: { [key: string]: { templatePath: string, outputPath: string } } = {
   controller: {
     templatePath: "../../src/api/controllers/controller.ts.ejs",
