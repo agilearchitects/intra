@@ -4,6 +4,7 @@ executors:
     parameters:
       working_directory:
         type: string
+        default: "~/build"
     docker:
       - image: circleci/node:12.3.1
     working_directory: << parameters.working_directory >>
@@ -11,6 +12,7 @@ executors:
     parameters:
       working_directory:
         type: string
+        default: "~/build"
     machine:
       enabled: true
     working_directory: << parameters.working_directory >>
@@ -33,9 +35,6 @@ commands:
       - run:
           name: build-migrations
           command: yarn build-migrations
-      - run:
-          name: build-tinymce
-          command: yarn cp-spa
       - persist_to_workspace:
           root: ./
           paths:
@@ -50,14 +49,19 @@ commands:
         default: develop
       fingerprint:
         type: string
+        default: $FINGERPRINT
       key_filename:
         type: string
+        default: $KEY_FILENAME
       ssh_connection:
         type: string
+        default: $SSH_CONNECTION
       deploy_directory:
         type: string
+        default: $DEPLOY_PATH
       working_directory:
         type: string
+        default: "~/build"
     steps:
       - attach_workspace:
           at: .
@@ -67,52 +71,33 @@ commands:
       - run:
           name: Deploy over SSH
           command: |
-            ssh -i ~/.ssh/<< parameters.key_filename >> << parameters.ssh_connection >> 'mkdir << parameters.deploy_directory >>/<< parameters.environment >>/storage/uploads -p'
+            ssh -i ~/.ssh/<< parameters.key_filename >> << parameters.ssh_connection >> 'mkdir << parameters.deploy_directory >>/<< parameters.environment >>/storage -p'
             rsync -i ~/.ssh/<< parameters.key_filename >> -r << parameters.working_directory >>/build << parameters.working_directory >>/node_modules << parameters.ssh_connection >>:<< parameters.deploy_directory >>/<< parameters.environment >>
             rsync -i ~/.ssh/<< parameters.key_filename >> -r << parameters.working_directory >>/storage/email-templates/*.ejs << parameters.ssh_connection >>:<< parameters.deploy_directory >>/<< parameters.environment >>/storage/email-templates
 jobs:
   build:
     executor:
       name: build
-      working_directory: ~/aai
     steps:
       - build
   deploy-develop:
     executor:
       name: deploy
-      working_directory: ~/aai
     steps:
       - deploy:
-          working_directory: ~/aai
           environment: develop
-          fingerprint: 49:07:e3:ef:41:45:f2:c6:96:47:88:9f:c0:56:03:5d
-          key_filename: id_rsa_4907e3ef4145f2c69647889fc056035d
-          ssh_connection: deploy@dwik.se
-          deploy_directory: ~/applications/aai
   deploy-staging:
     executor:
       name: deploy
-      working_directory: ~/aai
     steps:
       - deploy:
-          working_directory: ~/aai
           environment: staging
-          fingerprint: 49:07:e3:ef:41:45:f2:c6:96:47:88:9f:c0:56:03:5d
-          key_filename: id_rsa_4907e3ef4145f2c69647889fc056035d
-          ssh_connection: deploy@dwik.se
-          deploy_directory: ~/applications/aai
   deploy-production:
     executor:
       name: deploy
-      working_directory: ~/aai
     steps:
       - deploy:
-          working_directory: ~/aai
           environment: production
-          fingerprint: 49:07:e3:ef:41:45:f2:c6:96:47:88:9f:c0:56:03:5d
-          key_filename: id_rsa_4907e3ef4145f2c69647889fc056035d
-          ssh_connection: deploy@dwik.se
-          deploy_directory: ~/applications/aai
 workflows:
   version: 2.1
   build-and-deploy:
