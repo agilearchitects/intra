@@ -1,6 +1,7 @@
 // Libs
 import { RequestHandler } from "express";
 import { ServiceModule } from "simplyserveme";
+import moment from "moment";
 
 // DTO's
 import { IAuthResponseJSON } from "../../shared/dto/auth-response.dto";
@@ -17,6 +18,12 @@ import { IAttemptResult, UserEntity } from "../entities/user.entity";
 import { controller, controllerError } from "./controller";
 
 import { LogModule } from "../modules/log.module";
+import { IPasswordResetJSON } from "../../shared/dto/password-reset.dto";
+import { TokenEntity } from "../entities/token.entity";
+import { jwtService } from "../services/jwt.service";
+import { mailgunService } from "../services/mailgun.service";
+import { templateService } from "../services/template.service";
+import { configService } from "../services/config.service";
 
 const LOG = new LogModule("controller.auth");
 
@@ -33,6 +40,36 @@ export class AuthController extends ServiceModule {
         token: result.token,
         user: UserDTO.parse({ id: result.user.id, email: result.user.email }).serialize(),
       })).catch((error: any) => controllerError(LOG, handler.response(), "Error logging in", error));
+    });
+  }
+
+  public refreshToken(): RequestHandler {
+    return controller((handler) => {
+
+    });
+  }
+
+  public requestPasswordReset(): RequestHandler {
+    return controller((handler) => {
+      // Creates token
+      const token = jwtService.sign({ userId: handler.request.user.id }, { expiresIn: "24 hours" });
+
+      // Add token to DB
+      TokenEntity.create({
+        token, type: "password_reset",
+        expires: moment(jwtService.decode(token).exp, "X").toDate(),
+      }).save().then((token: TokenEntity) => {
+        const email = templateService.email("password-reset", { link: `https://${configService.get("SPA_HOST")}/password_reset?token=${token}` });
+        mailgunService.send(configService.get("NOREPLY_EMAIL"), handler.request.user.email, email.subject, email.message).then(() => {
+          handler.sendStatus(200);
+        }).catch(() => handler.sendStatus(500));
+      });
+    });
+  }
+
+  public resetPassword(): RequestHandler {
+    return controller((handler) => {
+
     });
   }
 

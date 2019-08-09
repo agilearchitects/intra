@@ -33,7 +33,7 @@ export class UserEntity extends AppEntity {
         token: string,
     ): Promise<UserEntity> {
         return new Promise((resolve, reject) => {
-            const decodedToken = jwtService.decode(token) as { userId: string };
+            const decodedToken = jwtService.decode(token).payload as { userId: string };
             if (decodedToken.userId) {
                 this.findOne(parseInt(decodedToken.userId, 10)).then((user: UserEntity | undefined) => {
                     if (user !== undefined) { resolve(user); return; }

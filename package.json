@@ -10,7 +10,8 @@
     "serve": "nodemon ./build/api/server.js",
     "watch": "concurrently \"yarn run serve\" \"yarn run watch-api\" \"yarn run watch-spa\"",
     "build": "yarn build-api && yarn build-spa",
-    "prepare": "yarn build"
+    "prepare": "yarn build",
+    "render": "ts-node ./render.ts"
   },
   "dependencies": {
     "@fortawesome/fontawesome-free": "^5.9.0",
@@ -59,6 +60,7 @@
     "vue-hot-reload-api": "^2.3.3",
     "vue-i18n": "^8.11.2",
     "vue-property-decorator": "^8.2.1",
+    "vue-recaptcha": "^1.2.0",
     "vue-router": "^3.0.6",
     "vuex": "^3.1.1",
     "vuex-class": "^0.3.2",

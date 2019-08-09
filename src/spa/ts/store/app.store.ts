@@ -74,8 +74,17 @@ export const apiUpdate = (url: string, payload: any, dispatch: Dispatch, name?: 
 export const apiDelete = (url: string, dispatch: Dispatch, name?: string): Promise<void> => {
   return new Promise((resolve, reject) => {
     Axios.delete(url).then(() => resolve()).catch((error: any) => {
-      dispatch("error/submit", { message: `Deleter ${name || ""} request failed`, error }, { root: true });
+      dispatch("error/submit", { message: `Delete ${name || ""} request failed`, error }, { root: true });
       reject();
+    });
+  });
+}
+
+export const apiPost = (url: string, payload: any, dispatch: Dispatch): Promise<void> => {
+  return new Promise((resolve, reject) => {
+    Axios.post(url, payload).then(() => resolve()).catch((error: any) => {
+      dispatch("error/submit", { message: "request failed", error }, { root: true });
+      reject(error);
     });
   });
 }

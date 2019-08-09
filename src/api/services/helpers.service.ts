@@ -15,7 +15,7 @@ export type InstanceTypeType<T extends new (...args: any[]) => any> = T extends 
 
 export class HelperService extends ServiceModule {
 
-    public toJson(object: any): JSON {
+    public toJson(object: any): any {
         return JSON.parse(JSON.stringify(object));
     }
 

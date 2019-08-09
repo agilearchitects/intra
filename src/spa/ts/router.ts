@@ -8,6 +8,7 @@ import { default as middlewares, guard } from "./middlewares";
 import ErrorComponent from "./components/error.component";
 import LoginComponent from "./components/login.component";
 import PageComponent from "./components/page.component";
+import PasswordResetComponent from "./components/password-reset.component";
 import StartComponent from "./components/start.component";
 import TextComponent from "./components/text.component";
 import WikiComponent from "./components/wiki.component";
@@ -61,6 +62,7 @@ const router = new VueRouter({
       beforeEnter: guard([middlewares.auth])
     },
     { path: "/login", name: "login", component: LoginComponent, beforeEnter: guard([middlewares.guest]) },
+    { path: "/password_reset", name: "password_reset", component: PasswordResetComponent, beforeEnter: guard([middlewares.guest]) },
     { path: "/error/:code", name: "error", component: ErrorComponent, beforeEnter: guard([middlewares.errorCode]) },
     { path: "*", beforeEnter: guard([middlewares.invalidRoute]) },
   ],

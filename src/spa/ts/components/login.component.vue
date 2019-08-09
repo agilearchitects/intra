@@ -3,15 +3,21 @@
     <div class="row justify-content-center">
       <div class="col-lg-5">
         <div class="card">
-          <h5 class="card-header">Login</h5>
+          <h5 class="card-header">{{ $t("login.login") }}</h5>
           <div class="card-body">
             <form v-on:submit.prevent="submit(form.email, form.password)">
               <div class="form-group">
-                <input-component v-model="form.email" id="loginEmail" :label="$t('login.email')"/>
+                <input-component
+                  :warning="loginError"
+                  v-model="form.email"
+                  id="loginEmail"
+                  :label="$t('login.email')"
+                />
               </div>
               <div class="form-group">
                 <input-component
                   v-model="form.password"
+                  :warning="loginError"
                   id="loginPassword"
                   type="password"
                   :label="$t('login.password')"
@@ -28,6 +34,9 @@
                     label="Remember Me"
                   ></checkbox-component>
                 </div>
+              </div>
+              <div class="flex">
+                <router-link :to="{ name: 'password_reset' }">{{ $t("login.forgot_password") }}</router-link>
               </div>
             </form>
           </div>
@@ -70,11 +79,16 @@ export default class LoginComponent extends Vue {
     password: "",
     remember: false
   };
+  public loginError: boolean = false;
 
   public submit(email: string, password: string) {
-    this.login(LoginDTO.parse({ email, password })).then(() => {
-      this.$router.push("/start");
-    });
+    this.login(LoginDTO.parse({ email, password }))
+      .then(() => {
+        this.$router.push("/start");
+      })
+      .catch(() => {
+        this.loginError = true;
+      });
   }
 }
 </script>

@@ -3,12 +3,12 @@ import { ServiceModule } from "simplyserveme";
 import { configService } from "./config.service";
 
 type jwtSignFunctionType = (payload: any, key: string, { expiresIn }: { expiresIn: string }) => string | void;
-type jwtDecodeFunctionType = (token: string, key: string) => { payload: object, [key: string]: any } | string | void;
+type jwtDecodeFunctionType = (token: string, key: string) => { payload: object, iat: number, exp: number } | string | void;
 
 export class JWTService extends ServiceModule {
     constructor(
         private readonly expiresIn = "7 days",
-        private readonly key = configService.get("TOKEN", "EBdVaKyseI"),
+        private readonly key = configService.get("TOKEN", Math.random().toString()),
         private readonly jwtSignFunction: jwtSignFunctionType = jsonwebtoken.sign,
         private readonly jwtDecodeFunction: jwtDecodeFunctionType = jsonwebtoken.verify,
     ) {
@@ -21,12 +21,12 @@ export class JWTService extends ServiceModule {
         return token;
     }
 
-    public decode(token: string, key?: string): object {
+    public decode(token: string, key?: string): { payload: object, iat: number, exp: number } {
         try {
             const decodedToken = this.jwtDecodeFunction(token, key || this.key);
             if (typeof decodedToken !== "object") { throw new Error("Unable to decode"); }
 
-            return decodedToken.payload;
+            return decodedToken;
 
         } catch (e) {
             throw new Error(e);

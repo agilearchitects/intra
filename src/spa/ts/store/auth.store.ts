@@ -3,8 +3,9 @@ import { ActionTree, GetterTree, Module, MutationTree } from "vuex";
 import { broadcast } from "../utils/broadcast";
 
 import { IAuthResponseJSON } from "../../../shared/dto/auth-response.dto";
+import { PasswordResetDTO } from "../../../shared/dto/password-reset.dto";
 import { LoginDTO } from "../../../shared/dto/login.dto";
-import { IAppState } from "./app.store";
+import { IAppState, apiPost } from "./app.store";
 
 export interface IAuthState {
   token: string | null;
@@ -18,6 +19,7 @@ export interface IUSer {
 }
 
 export type loginAction = (login: LoginDTO) => Promise<void>;
+export type passwordResetAction = (passwordReset: PasswordResetDTO) => Promise<void>;
 
 export const authStore: Module<IAuthState, IAppState> = {
   actions: {
@@ -33,6 +35,9 @@ export const authStore: Module<IAuthState, IAppState> = {
           reject();
         });
       });
+    },
+    passwordReset: ({ dispatch }, payload: PasswordResetDTO): Promise<void> => {
+      return apiPost("/auth/password_reset", payload.serialize(), dispatch);
     },
     logout: ({ commit, dispatch }): void => {
       commit("removeToken");

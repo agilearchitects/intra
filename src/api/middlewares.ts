@@ -53,6 +53,21 @@ export class Middlewares extends ServiceModule {
         };
     }
 
+    public userByEmail(): RequestHandler {
+        return (request: Request, response: Response, next: NextFunction): void => {
+            if (request.query.email) {
+                UserEntity.findOne({ where: { email: request.query.email } }).then((user?: UserEntity) => {
+                    if (user !== undefined) {
+                        request.user = user;
+                        next();
+                    } else {
+                        response.sendStatus(401);
+                    }
+                }).catch(() => response.sendStatus(500));
+            }
+        }
+    }
+
     public guest(): RequestHandler {
         return (request: Request, response: Response, next: NextFunction): void => {
             if (!request.headers.authorization) {

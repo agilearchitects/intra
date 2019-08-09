@@ -1,5 +1,5 @@
 <template>
-  <div class="mdo-form-group">
+  <div class="mdo-form-group" :class="{ 'mdo-form-group--warning': warning }">
     <label
       class="mdo-form-group__label"
       v-bind:class="{ 'mdo-form-group__label--active': isActive, 'mdo-form-group__label--not-empty': !empty || placeholder !== '', 'mdo-form-group__label--gray': disabled }"
@@ -34,7 +34,9 @@
       v-on:blur="active = false; $emit('blur', $event)"
       v-on:keyup="$emit('keyup', $event)"
       :disabled="disabled"
-    >
+    />
+    <small v-if="hasHelp" class="mdo-form-group__help">{{ helpText }}</small>
+    <small v-if="warning" class="mdo-form-group__warning">{{ warningText }}</small>
   </div>
 </template>
 <script lang="ts">
@@ -53,6 +55,9 @@ export default class InputComponent extends Vue {
   @Prop({ default: inputType.TEXT }) type!: inputType;
   @Prop({ default: "" }) name!: string;
   @Prop({ type: String, default: "" }) placeholder!: string;
+  @Prop({ type: Boolean, default: false }) warning!: boolean;
+  @Prop({ type: String, default: "" }) warningText!: string;
+  @Prop({ type: String, default: "" }) helpText!: string;
 
   @Watch("value") onValueChange(value: string) {
     (this.$refs.input as any).value = value;
@@ -68,7 +73,13 @@ export default class InputComponent extends Vue {
     return this.value === "" || this.value === null || this.value === undefined;
   }
 
+  public get hasHelp(): boolean {
+    return this.helpText !== "";
+  }
+
   public mounted() {
+    // Listner for focus event on component to set focus on input
+    this.$on("focus", () => this.focusInput());
     (this.$refs.input as any).value = this.value;
   }
 
@@ -121,6 +132,10 @@ export default class InputComponent extends Vue {
       color: color("gray");
     }
   }
+  &--warning &__label {
+    color: theme-color("warning");
+  }
+
   &__caret {
     position: absolute;
     right: 0px;
@@ -153,6 +168,19 @@ export default class InputComponent extends Vue {
     &:disabled {
       color: gray;
     }
+  }
+  &--warning &__control {
+    border-bottom: 1px solid theme-color("warning");
+    box-shadow: 0 1px 0 0 theme-color("warning");
+  }
+  &__help,
+  &__warning {
+    line-height: 1.75rem;
+  }
+  &__help {
+  }
+  &__warning {
+    color: theme-color("warning");
   }
 }
 select.mdo-form-group__control {

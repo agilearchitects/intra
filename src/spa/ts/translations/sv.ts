@@ -51,9 +51,17 @@ export default {
     }
   },
   "login": {
+    "login": "@:menu.login",
     "email": "E-postadress",
     "password": "Lösenord",
-    "submit": "Logga in"
+    "submit": "Logga in",
+    "forgot_password": "Glömt lösenord?"
+  },
+  "password_reset": {
+    "text": "Fyll i e-postadress för användare du vill återställa lösenord för.",
+    "password_reset": "Återställ lösenord",
+    "submit": "Återställ",
+    "success": "Länk för att återställa ditt lösenord har skickats till {email}"
   },
   "contact": {
     "header": "Kontakta oss",

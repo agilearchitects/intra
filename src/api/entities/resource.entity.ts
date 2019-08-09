@@ -7,7 +7,7 @@ export class ResourceEntity extends AppEntity {
     unique: true,
   })
   public filename!: string;
-  // fwe
+
   @Column()
   public title!: string;
 }
