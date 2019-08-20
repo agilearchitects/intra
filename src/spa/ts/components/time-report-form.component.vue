@@ -11,8 +11,9 @@
       <select-component
         class="flex-fill"
         name="customer"
-        v-model="selectedCustomer"
-        :options="customerSelect"
+        v-on:input="selectCustomerChange"
+        v-model="time.customerId"
+        :options="customerOptions"
         :label="$t('time.customer')"
       ></select-component>
     </div>
@@ -20,8 +21,8 @@
       <select-component
         class="flex-fill"
         name="project"
-        v-model="selectedProject"
-        :options="projectSelect"
+        v-model="time.projectId"
+        :options="projectOptions"
         :label="$t('time.project')"
       ></select-component>
     </div>
@@ -89,8 +90,8 @@ import { UpdateTimeDTO } from "../../../shared/dto/update-time.dto";
 class TimeReportFormViewModel {
   public constructor(
     public id: number | undefined,
-    public projectId: number | undefined,
-    public customerId: number | undefined,
+    public projectId: string,
+    public customerId: string,
     public from: Moment,
     public to: Moment | undefined,
     public comment: string
@@ -132,9 +133,6 @@ export default class TimeReportFormComponent extends Vue {
   @Action("time/delete") timeDeleteAction!: timeDeleteAction;
   @Action("customer/index") customerIndexAction!: customerIndexAction;
   @Getter("auth/user") user!: IUSer;
-  @Watch("selectedProject") onSelectedProjectChange(value: string) {
-    this.time.projectId = parseInt(value, 10);
-  }
 
   private get timeId(): number | undefined {
     return this.data.timeId;
@@ -147,18 +145,17 @@ export default class TimeReportFormComponent extends Vue {
     return this.timeId !== undefined;
   }
 
-  public get customerSelect(): Array<{ value: string; text: string }> {
+  public get customerOptions(): Array<{ value: string; text: string }> {
     return this.customers.map((customer: CustomerViewModel) => ({
       value: customer.id.toString(),
       text: customer.name
     }));
   }
 
-  public get projectSelect(): Array<{ value: string; text: string }> {
-    if (this.selectedCustomer !== null) {
+  public get projectOptions(): Array<{ value: string; text: string }> {
       const selectedCustomer = this.customers.find(
         (customer: CustomerViewModel) =>
-          customer.id === parseInt(this.selectedCustomer, 10)
+          customer.id === parseInt(this.time.customerId, 10)
       );
       if (selectedCustomer !== undefined) {
         return selectedCustomer.projects.map((project: ProjectViewModel) => ({
@@ -166,15 +163,18 @@ export default class TimeReportFormComponent extends Vue {
           text: project.name
         }));
       }
-    }
 
     return [];
   }
 
+  public selectCustomerChange(value: string): void {
+    this.time.projectId = this.projectOptions.length ? this.projectOptions[0].value : "0";
+  }
+
   public time: TimeReportFormViewModel = new TimeReportFormViewModel(
     undefined,
-    undefined,
-    undefined,
+    "",
+    "",
     moment(
       `${this.date.format("YYYY-MM-DD")} ${moment(new Date()).format("HH:mm")}`,
       "YYYY-MM-DD HH:mm",
@@ -185,8 +185,6 @@ export default class TimeReportFormComponent extends Vue {
   );
 
   public customers: CustomerViewModel[] = [];
-  public selectedCustomer: string = "0";
-  public selectedProject: string = "0";
 
   public loading: boolean = false;
   public saving: boolean = false;
@@ -209,34 +207,29 @@ export default class TimeReportFormComponent extends Vue {
     });
   }
 
+  // Get time report
   public getTime(id: number): Promise<void> {
     return new Promise((resolve, reject) =>
       this.timeShowAction(id)
         .then((time: TimeDTO) => {
           this.time = new TimeReportFormViewModel(
             time.id,
-            time.project !== undefined ? time.project.id : undefined,
+            time.project !== undefined ? time.project.id.toString() : "",
             time.project !== undefined && time.project.customer !== undefined
-              ? time.project.customer.id
-              : undefined,
+              ? time.project.customer.id.toString()
+              : "undefined",
             moment(time.from),
             time.to !== undefined ? moment(time.to) : undefined,
-            time.comment
+            time.comment || ""
           );
-          this.selectedCustomer =
-            this.time.customerId !== undefined
-              ? this.time.customerId.toString()
-              : "0";
-          this.selectedProject =
-            this.time.projectId !== undefined
-              ? this.time.projectId.toString()
-              : "0";
+
           resolve();
         })
         .catch((error: any) => reject(error))
     );
   }
 
+  // Get all customers to be able to populate dropdown list
   public getCustomers(): Promise<void> {
     return new Promise((resolve, reject) => {
       this.customerIndexAction()
@@ -252,12 +245,15 @@ export default class TimeReportFormComponent extends Vue {
                   }))
                 : []
           }));
-          this.selectedCustomer =
+
+          // Set selected customer and project i dropdown menus
+          this.time.customerId =
             this.customers.length > 0 ? this.customers[0].id.toString() : "0";
-          this.selectedProject =
+          this.time.projectId =
             this.customers.length > 0 && this.customers[0].projects.length > 0
               ? this.customers[0].projects[0].id.toString()
               : "0";
+          
           resolve();
         })
         .catch((error: any) => reject(error));
@@ -303,7 +299,7 @@ export default class TimeReportFormComponent extends Vue {
     if (!this.edit) {
       this.timeCreateAction(
         CreateTimeDTO.parse({
-          projectId: this.time.projectId,
+          projectId: parseInt(this.time.projectId, 10),
           from: this.time.from.format("YYYY-MM-DD HH:mm:ss").toString(),
           ...(this.time.to !== undefined
             ? { to: this.time.to.format("YYYY-MM-DD HH:mm:ss").toString() }
@@ -323,7 +319,7 @@ export default class TimeReportFormComponent extends Vue {
       this.timeUpdateAction(
         UpdateTimeDTO.parse({
           id: this.time.id as number,
-          projectId: this.time.projectId,
+          projectId: parseInt(this.time.projectId, 10),
           from: this.time.from.format("YYYY-MM-DD HH:mm:ss").toString(),
           ...(this.time.to !== undefined
             ? { to: this.time.to.format("YYYY-MM-DD HH:mm:ss").toString() }
