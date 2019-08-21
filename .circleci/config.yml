@@ -65,7 +65,8 @@ commands:
     steps:
       - attach_workspace:
           at: .
-      - add_ssh_keys: null
+      - add_ssh_keys:
+          fingerprints:
       - run:
           name: Deploy over SSH
           command: |
