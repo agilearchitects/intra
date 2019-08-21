@@ -66,8 +66,6 @@ commands:
       - attach_workspace:
           at: .
       - add_ssh_keys:
-          fingerprints:
-            - << parameters.fingerprint >>
       - run:
           name: Deploy over SSH
           command: |
