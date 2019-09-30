@@ -5,14 +5,17 @@
     ],
     "jsRules": {},
     "rules": {
-        "object-literal-sort-keys": false,
-        "no-shadowed-variable": false,
-        "ordered-imports": true,
-        "variable-name": {
+        "max-line-length": {
             "options": [
-                "allow-leading-underscore"
+                255
             ]
         },
+        "no-shadowed-variable": false,
+        "variable-name": {
+            "options": "allow-leading-underscore"
+        },
+        "object-literal-sort-keys": false,
+        "whitespace": false
     },
     "rulesDirectory": []
 }

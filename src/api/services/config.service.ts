@@ -2,13 +2,11 @@
 import * as dotenv from "dotenv";
 import * as fs from "fs";
 import * as path from "path";
-import { ServiceModule } from "simplyserveme";
 
-export class ConfigService extends ServiceModule {
+export class ConfigService {
   private vars: { [key: string]: string } = {};
 
   public constructor() {
-    super();
     const configPath = path.resolve(".env");
     if (fs.existsSync(configPath)) {
       this.vars = dotenv.parse(fs.readFileSync(configPath));
@@ -22,4 +20,4 @@ export class ConfigService extends ServiceModule {
   }
 }
 
-export const configService: ConfigService = ConfigService.getInstance<ConfigService>();
+export const configService: ConfigService = new ConfigService();

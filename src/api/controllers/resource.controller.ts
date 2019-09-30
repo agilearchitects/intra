@@ -2,18 +2,17 @@
 import { RequestHandler } from "express";
 import * as path from "path";
 
-import { ServiceModule } from "simplyserveme";
-import { controller, Controller } from "./controller";
 import { ResourceEntity } from "../entities/resource.entity";
 import { LogModule } from "../modules/log.module";
 import { configService } from "../services/config.service";
+import { controller, Controller } from "./controller";
 import { controllerError } from "./controller";
 
 const STORAGE_PATH = path.resolve("./storage/uploads");
 
 const LOG = new LogModule("controller.file");
 
-export class ResourceController extends ServiceModule {
+export class ResourceController {
   public upload(): RequestHandler {
     return controller((handler: Controller) => {
       if (handler.request.files !== undefined && handler.request.files.file !== undefined && !(handler.request.files.file instanceof Array)) {
@@ -65,5 +64,5 @@ export class ResourceController extends ServiceModule {
   }
 }
 
-const resourceController: ResourceController = ResourceController.getInstance<ResourceController>();
+const resourceController: ResourceController = new ResourceController();
 export default resourceController;

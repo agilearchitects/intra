@@ -1,14 +1,13 @@
 // Libs
 import { RequestHandler } from "express";
-import { ServiceModule } from "simplyserveme";
 
-import { controller, Controller } from "./controller";
-import { CustomerEntity } from "../entities/customer.entity";
-import { ICustomerJSON } from "../../shared/dto/customer.dto";
-import { ProjectEntity } from "../entities/project.entity";
 import { ICreateCustomerJSON } from "../../shared/dto/create-customer.dto";
+import { ICustomerJSON } from "../../shared/dto/customer.dto";
+import { CustomerEntity } from "../entities/customer.entity";
+import { ProjectEntity } from "../entities/project.entity";
+import { controller, Controller } from "./controller";
 
-export class CustomerController extends ServiceModule {
+export class CustomerController {
   public index(): RequestHandler {
     return controller((handler) => {
       CustomerEntity.find({ relations: ["projects"] }).then((customers: CustomerEntity[]) => {
@@ -18,8 +17,8 @@ export class CustomerController extends ServiceModule {
           ...(customer.projects.length > 0 ? {
             projects: customer.projects.map((project: ProjectEntity) => ({
               id: project.id,
-              name: project.name
-            }))
+              name: project.name,
+            })),
           } : undefined),
         })));
       });
@@ -35,5 +34,5 @@ export class CustomerController extends ServiceModule {
   }
 }
 
-const customerController: CustomerController = CustomerController.getInstance<CustomerController>();
+const customerController: CustomerController = new CustomerController();
 export default customerController;

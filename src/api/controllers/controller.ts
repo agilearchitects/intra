@@ -1,11 +1,10 @@
-import { Request, NextFunction, RequestHandler, Response } from "express";
+import { NextFunction, Request, RequestHandler, Response } from "express";
 import { LogModule } from "../modules/log.module";
 
 export const controllerError = (log: LogModule, response: Response, message: string, error?: any, code: number = 500): void => {
   log.error({ title: message, ...(error !== undefined ? { data: { error } } : undefined) });
   response.sendStatus(code);
 };
-
 
 export interface IRequestBody {
   [key: string]: string | number | boolean | null | IRequestBody[] | IRequestBody[];

@@ -6,14 +6,14 @@ import "./modules/router.module";
 // Controllers
 import authController from "./controllers/auth.controller";
 import customerController from "./controllers/customer.controller";
+import projectController from "./controllers/project.controller";
 import resourceController from "./controllers/resource.controller";
 import textController from "./controllers/text.controller";
 import timeController from "./controllers/time.controller";
-import projectController from "./controllers/project.controller";
 
 // Middlewares
-import { middlewares } from "./middlewares";
 import { controller } from "./controllers/controller";
+import { middlewares } from "./middlewares";
 
 const router: Router = Router();
 

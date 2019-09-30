@@ -2,11 +2,10 @@
 import Axios from "axios";
 import { NextFunction, Request, RequestHandler, Response } from "express";
 
+import ValidationErrorModule from "./modules/validation-error.module";
 import { IValidationInput, validate } from "./modules/validation.module";
-import ValidationErrorModule from "./modules/validation-error.module"
 
 // Models
-import { ServiceModule } from "simplyserveme";
 import { UserEntity } from "./entities/user.entity";
 import { LogModule } from "./modules/log.module";
 import { configService } from "./services/config.service";
@@ -29,10 +28,10 @@ export const middleware = (middlewares: RequestHandler | RequestHandler[]) =>
         };
     };
 
-export class Middlewares extends ServiceModule {
+export class Middlewares {
     public constructor(
         private log: LogModule = new LogModule("middleware"),
-    ) { super(); }
+    ) { }
     public auth(checkOnly: boolean = false): RequestHandler {
         return (request: Request, response: Response, next: NextFunction): void => {
             // Check for authorization header
@@ -65,7 +64,7 @@ export class Middlewares extends ServiceModule {
                     }
                 }).catch(() => response.sendStatus(500));
             }
-        }
+        };
     }
 
     public guest(): RequestHandler {
@@ -85,9 +84,17 @@ export class Middlewares extends ServiceModule {
                 return Object.assign({}, ...Object.keys(validation).map((key: string) => {
                     const returnValue: { [key: string]: any } = {};
                     const temp = validation[key];
-                    const scopedRequestData: any = requestData !== undefined && requestData[key] !== undefined ? requestData[key] : undefined;
+                    const scopedRequestData: any =
+                        requestData !== undefined && requestData[key] !== undefined
+                            ? requestData[key]
+                            : undefined;
                     if (!(temp instanceof Array) && typeof temp !== "function") {
-                        returnValue[key] = getAsObject(temp, requestData !== undefined && requestData[key] !== undefined ? requestData[key] : undefined);
+                        returnValue[key] = getAsObject(
+                            temp,
+                            requestData !== undefined && requestData[key] !== undefined
+                                ? requestData[key]
+                                : undefined,
+                        );
                     } else {
                         returnValue[key] = scopedRequestData;
                     }
@@ -113,7 +120,13 @@ export class Middlewares extends ServiceModule {
             if (token !== "" && request.query.token && request.query.token === token) {
                 next();
             } else {
-                this.log.info({ title: "Token middleware validation failed", data: { ip: request.ip, headers: request.headers } });
+                this.log.info({
+                    title: "Token middleware validation failed",
+                    data: {
+                        ip: request.ip,
+                        headers: request.headers,
+                    },
+                });
                 response.sendStatus(400);
             }
         };
@@ -127,11 +140,17 @@ export class Middlewares extends ServiceModule {
                 response: token,
                 remoteip: request.ip,
             }).then(() => next()).catch((error: any) => {
-                this.log.error(({ title: "ReCaptcha middleware failed", data: { ip: request.ip, headers: request.headers } }));
+                this.log.error(({
+                    title: "ReCaptcha middleware failed",
+                    data: {
+                        ip: request.ip,
+                        headers: request.headers,
+                    },
+                }));
                 response.sendStatus(500);
             });
         };
     }
 }
 
-export const middlewares: Middlewares = Middlewares.getInstance<Middlewares>();
+export const middlewares = new Middlewares();

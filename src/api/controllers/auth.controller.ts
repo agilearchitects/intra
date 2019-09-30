@@ -1,6 +1,8 @@
 // Libs
+import { JWTService } from "@agilearchitects/jwt";
+import { MailingunService } from "@agilearchitects/mailingun";
+import { TemplateService } from "@agilearchitects/templategenerator";
 import { RequestHandler } from "express";
-import { ServiceModule } from "simplyserveme";
 import moment from "moment";
 
 // DTO's
@@ -17,17 +19,20 @@ import ValidationModule from "../modules/validation.module";
 import { IAttemptResult, UserEntity } from "../entities/user.entity";
 import { controller, controllerError } from "./controller";
 
-import { LogModule } from "../modules/log.module";
-import { IPasswordResetJSON } from "../../shared/dto/password-reset.dto";
+import { dpService } from "@agilearchitects/tdi";
 import { TokenEntity } from "../entities/token.entity";
-import { jwtService } from "../services/jwt.service";
-import { mailgunService } from "../services/mailgun.service";
-import { templateService } from "../services/template.service";
+import { LogModule } from "../modules/log.module";
 import { configService } from "../services/config.service";
 
 const LOG = new LogModule("controller.auth");
 
-export class AuthController extends ServiceModule {
+export class AuthController {
+  public constructor(
+    private readonly jwtService: JWTService = dpService.container("service.jwt"),
+    private readonly mailingunService: MailingunService = dpService.container("service.mailingun"),
+    private readonly templateService: TemplateService = dpService.container("service.template"),
+  ) { }
+
   // Protect controller with validation middleware. Validating email and password
   @middleware(middlewares.validation({ email: [ValidationModule.required, ValidationModule.email], password: ValidationModule.required }))
   /**
@@ -45,22 +50,31 @@ export class AuthController extends ServiceModule {
 
   public refreshToken(): RequestHandler {
     return controller((handler) => {
-
+      //
     });
   }
 
   public requestPasswordReset(): RequestHandler {
     return controller((handler) => {
       // Creates token
-      const token = jwtService.sign({ userId: handler.request.user.id }, { expiresIn: "24 hours" });
+      const token = this.jwtService.sign({ userId: handler.request.user.id }, { expiresIn: "24 hours" });
 
       // Add token to DB
       TokenEntity.create({
         token, type: "password_reset",
-        expires: moment(jwtService.decode(token).exp, "X").toDate(),
-      }).save().then((token: TokenEntity) => {
-        const email = templateService.email("password-reset", { link: `https://${configService.get("SPA_HOST")}/password_reset?token=${token}` });
-        mailgunService.send(configService.get("NOREPLY_EMAIL"), handler.request.user.email, email.subject, email.message).then(() => {
+        expires: moment(this.jwtService.decode(token).exp, "X").toDate(),
+      }).save().then(async (token: TokenEntity) => {
+        const email = await this.templateService.email(
+          "password-reset",
+          {
+            link: `https://${configService.get("SPA_HOST")}/password_reset?token=${token}`,
+          });
+        this.mailingunService.send(
+          configService.get("NOREPLY_EMAIL"),
+          handler.request.user.email,
+          email.subject,
+          email.message,
+        ).then(() => {
           handler.sendStatus(200);
         }).catch(() => handler.sendStatus(500));
       });
@@ -69,7 +83,7 @@ export class AuthController extends ServiceModule {
 
   public resetPassword(): RequestHandler {
     return controller((handler) => {
-
+      //
     });
   }
 
@@ -83,5 +97,5 @@ export class AuthController extends ServiceModule {
   }
 }
 
-const authController: AuthController = AuthController.getInstance<AuthController>();
+const authController: AuthController = new AuthController();
 export default authController;

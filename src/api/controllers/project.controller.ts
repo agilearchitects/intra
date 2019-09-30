@@ -1,14 +1,12 @@
 // Libs
 import { RequestHandler } from "express";
-import { ServiceModule } from "simplyserveme";
 
-import { controller, Controller } from "./controller";
 import { ICreateProjectJSON } from "../../shared/dto/create-project.dto";
 import { CustomerEntity } from "../entities/customer.entity";
-import { reject } from "bluebird";
 import { ProjectEntity } from "../entities/project.entity";
+import { controller, Controller } from "./controller";
 
-export class ProjectController extends ServiceModule {
+export class ProjectController {
   public index(): RequestHandler {
     return controller((handler) => {
       handler.response<{ foo: string }>().json({ foo: "bar" });
@@ -31,5 +29,5 @@ export class ProjectController extends ServiceModule {
   }
 }
 
-const projectController: ProjectController = ProjectController.getInstance<ProjectController>();
+const projectController: ProjectController = new ProjectController();
 export default projectController;

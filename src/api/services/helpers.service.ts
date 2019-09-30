@@ -2,7 +2,6 @@ import BluebirdPromise from "bluebird";
 import * as fs from "fs";
 import * as _ from "lodash";
 import * as readline from "readline";
-import { ServiceModule } from "simplyserveme";
 
 // Obtain the parameters of a function type in a tuple
 export type ParametersType<T extends (...args: any[]) => any> = T extends (...args: infer P) => any ? P : never;
@@ -13,7 +12,7 @@ export type ReturnTypeType<T extends (...args: any[]) => any> = T extends (...ar
 // Obtain the return type of a constructor function type
 export type InstanceTypeType<T extends new (...args: any[]) => any> = T extends new (...args: any[]) => infer R ? R : any; // tslint:disable-line:max-line-length
 
-export class HelperService extends ServiceModule {
+export class HelperService {
 
     public toJson(object: any): any {
         return JSON.parse(JSON.stringify(object));
@@ -203,4 +202,4 @@ export class HelperService extends ServiceModule {
     }
 }
 
-export const helperService: HelperService = HelperService.getInstance<HelperService>();
+export const helperService: HelperService = new HelperService();

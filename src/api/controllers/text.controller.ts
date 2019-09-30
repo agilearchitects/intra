@@ -1,5 +1,4 @@
 import { Request, RequestHandler, Response } from "express";
-import { ServiceModule } from "simplyserveme";
 import { ITextJSON, TextDTO } from "../../shared/dto/text.dto";
 import { TextEntity } from "../entities/text.entity";
 import { LogModule } from "../modules/log.module";
@@ -7,7 +6,7 @@ import { controllerError, IRequest } from "./controller";
 
 const LOG = new LogModule("controller.text");
 
-export class TextController extends ServiceModule {
+export class TextController {
   public index(): RequestHandler {
     return (request: Request, response: Response): void => {
       TextEntity.find().then((texts: TextEntity[]) => {
@@ -53,5 +52,5 @@ export class TextController extends ServiceModule {
   }
 }
 
-const textController: TextController = TextController.getInstance<TextController>();
+const textController: TextController = new TextController();
 export default textController;

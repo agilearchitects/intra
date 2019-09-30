@@ -1,25 +1,23 @@
 // Libs
-import { RequestHandler, response, Handler } from "express";
-import { ServiceModule } from "simplyserveme";
+import { RequestHandler } from "express";
 
-import { controller, controllerError, Controller } from "./controller";
+import moment, { Moment } from "moment";
+import { Between } from "typeorm";
 import { ICreateTimeJSON } from "../../shared/dto/create-time.dto";
+import { IStopTimeJSON } from "../../shared/dto/stop-time.dto";
+import { ITimeJSON } from "../../shared/dto/time.dto";
+import { IUpdateTimeJSON } from "../../shared/dto/update-time.dto";
 import { TimeEntity } from "../entities/time.entity";
 import { LogModule } from "../modules/log.module";
-import { IUpdateTimeJSON } from "../../shared/dto/update-time.dto";
-import { Between } from "typeorm";
-import { ITimeJSON } from "../../shared/dto/time.dto";
-import moment, { Moment } from "moment";
-import { IStopTimeJSON } from "../../shared/dto/stop-time.dto";
+import { controller, Controller, controllerError } from "./controller";
 
 const LOG = new LogModule("controller.time");
 
-export class TimeController extends ServiceModule {
+export class TimeController {
   public index(): RequestHandler {
     return controller((handler) => {
       const query = handler.query<{ date?: string, year?: string, month?: string, week?: string, all?: string }>();
       if (query.year !== undefined && query.week !== undefined) {
-        console.log(`${query.year}-${query.week}`)
         const start = moment(`${query.year} ${query.week}`, "YYYY W", true).startOf("isoWeek").format("YYYY-MM-DD 00:00:00");
         const end = moment(`${query.year} ${query.week}`, "YYYY W", true).endOf("isoWeek").format("YYYY-MM-DD 23:59:59");
       }
@@ -29,28 +27,28 @@ export class TimeController extends ServiceModule {
           ...(query.date !== undefined ? {
             from: Between(
               moment(query.date, "YYYY-MM-DD", true).format("YYYY-MM-DD 00:00:00"),
-              moment(query.date, "YYYY-MM-DD", true).format("YYYY-MM-DD 23:59:59"))
+              moment(query.date, "YYYY-MM-DD", true).format("YYYY-MM-DD 23:59:59")),
           } : undefined),
           ...(query.year !== undefined && query.month !== undefined ? {
             from: Between(
               moment(`${query.year}-${query.month}`, "YYYY-MM", true).format("YYYY-MM-01 00:00:00"),
-              moment(`${query.year}-${query.month}`, "YYYY-MM", true).endOf("month").format("YYYY-MM-DD 23:59:59"))
+              moment(`${query.year}-${query.month}`, "YYYY-MM", true).endOf("month").format("YYYY-MM-DD 23:59:59")),
           } : undefined),
           ...(query.year !== undefined && query.week !== undefined ? {
             from: Between(
               moment(`${query.year} ${query.week}`, "YYYY W", true).startOf("isoWeek").format("YYYY-MM-DD 00:00:00"),
-              moment(`${query.year} ${query.week}`, "YYYY W", true).endOf("isoWeek").format("YYYY-MM-DD 23:59:59"))
+              moment(`${query.year} ${query.week}`, "YYYY W", true).endOf("isoWeek").format("YYYY-MM-DD 23:59:59")),
           } : undefined),
           ...(query.year !== undefined && query.month === undefined && query.week === undefined ? {
             from: Between(
               moment(query.year, "YYYY", true).format("YYYY-01-01 00:00:00"),
-              moment(query.year, "YYYY", true).format("YYYY-12-31 23:59:59"))
+              moment(query.year, "YYYY", true).format("YYYY-12-31 23:59:59")),
           } : undefined),
           // If query "all" is not provided only fetch entities belonging to current user
           ...(query.all === undefined ? { user: handler.request.user } : undefined),
         },
         relations: ["project", "project.customer"],
-        order: { from: "DESC" }
+        order: { from: "DESC" },
       }).then((times: TimeEntity[]) => {
         handler.response<ITimeJSON[]>().json(times.map((time: TimeEntity) => {
           return {
@@ -63,9 +61,9 @@ export class TimeController extends ServiceModule {
                   customer: {
                     id: time.project.customer.id,
                     name: time.project.customer.name,
-                  }
+                  },
                 } : undefined),
-              }
+              },
             } : undefined),
             from: moment(time.from).format("YYYY-MM-DD HH:mm:ss"),
             ...(time.to !== null ? { to: moment(time.to).format("YYYY-MM-DD HH:mm:ss") } : undefined),
@@ -93,9 +91,9 @@ export class TimeController extends ServiceModule {
                   customer: {
                     id: time.project.customer.id,
                     name: time.project.customer.name,
-                  }
+                  },
                 } : undefined),
-              }
+              },
             } : undefined),
             from: moment(time.from).format("YYYY-MM-DD HH:mm:ss"),
             ...(time.to !== null ? { to: moment(time.to).format("YYYY-MM-DD HH:mm:ss") } : undefined),
@@ -105,8 +103,8 @@ export class TimeController extends ServiceModule {
           handler.response().sendStatus(404);
           LOG.warning({ title: `No time entity with id "${parseInt(handler.params<{ id: string }>().id, 10)}" could be found` });
         }
-      })
-    })
+      });
+    });
   }
 
   public create(): RequestHandler {
@@ -120,7 +118,7 @@ export class TimeController extends ServiceModule {
           ...(body.to !== undefined ? { to: this.setToDate(moment(body.from), moment(body.to)).toDate() } : undefined),
           comment: body.comment,
           user: handler.request.user,
-          projectId: body.projectId
+          projectId: body.projectId,
         }).save().then(() => handler.response().sendStatus(200))
           .catch((error: any) => controllerError(LOG, handler.response(), "Time could not be saved", error));
       };
@@ -149,7 +147,7 @@ export class TimeController extends ServiceModule {
         from: moment(body.from).toDate(),
         ...(body.to !== undefined ? { to: this.setToDate(moment(body.from), moment(body.to)).toDate() } : undefined),
         comment: body.comment,
-        projectId: body.projectId
+        projectId: body.projectId,
       }).then(() => handler.response().sendStatus(200))
         .catch((error: any) => controllerError(LOG, handler.response(), "Error saving time", error));
     });
@@ -184,5 +182,5 @@ export class TimeController extends ServiceModule {
   }
 }
 
-const timeController: TimeController = TimeController.getInstance<TimeController>();
+const timeController: TimeController = new TimeController();
 export default timeController;

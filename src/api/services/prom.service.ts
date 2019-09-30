@@ -1,5 +1,4 @@
 import BluebirdPromise from "bluebird";
-import { ServiceModule } from "simplyserveme";
 
 // Setting bluebird config
 BluebirdPromise.config({
@@ -17,7 +16,7 @@ export interface IPromOutput {
     rejects: number;
 }
 
-export class PromService extends ServiceModule {
+export class PromService {
     public sequence(
         promises: Array<() => BluebirdPromise<any>> = [],
         {
@@ -30,8 +29,11 @@ export class PromService extends ServiceModule {
             breakOnResolve?: boolean,
             breakOnReject?: boolean,
             resolveOutput?: IPromOutput,
-        } = {}): BluebirdPromise<IPromOutput> {
-        return new BluebirdPromise((resolve: (thenableOrResult?: any | PromiseLike<any>) => void, reject: (error?: any) => void, onCancel?: (callback: () => void) => void) => {
+        } = {}): BluebirdPromise< IPromOutput> {
+        return new BluebirdPromise((
+            resolve: (thenableOrResult?: any | PromiseLike<any>) => void,
+            reject: (error?: any) => void, onCancel?: (callback: () => void) => void,
+        ) => {
             /*Recursive mode execute each promise in order. Next promise is not
             executed before the previous one has resolved (or rejected)*/
             if (useMode === promMode.recursive) {
@@ -43,7 +45,15 @@ export class PromService extends ServiceModule {
                     spliced promise array*/
                     if (promises.length) {
                         // Execute and resolve output
-                        const p = this.sequence(promises, { useMode, breakOnResolve, breakOnReject, resolveOutput }).then((result: any) => resolve(resolveOutput));
+                        const p = this.sequence(
+                            promises,
+                            {
+                                useMode,
+                                breakOnResolve,
+                                breakOnReject,
+                                resolveOutput,
+                            },
+                        ).then((result: any) => resolve(resolveOutput));
                         // Chaining down onCancel emitter
                         if (onCancel !== undefined) {
                             onCancel(() => p.cancel());
@@ -96,7 +106,7 @@ export class PromService extends ServiceModule {
 
                 /*Container for all executed promises. Used for when sequence
                 need to halt and end each promise already initiated*/
-                const executedPromises: Array<BluebirdPromise<any>> = [];
+                const executedPromises: Array< BluebirdPromise< any>> = [];
 
                 // Handler for onCancel event
                 if (onCancel !== undefined) {
@@ -150,7 +160,7 @@ export class PromService extends ServiceModule {
             }
         });
     }
-    public wait(wait: number): BluebirdPromise<void> {
+    public wait(wait: number): BluebirdPromise< void> {
         return new BluebirdPromise((resolve, reject) => {
             setTimeout(() => {
                 resolve();
@@ -188,4 +198,4 @@ export class PromService extends ServiceModule {
     }
 }
 
-export const promService: PromService = PromService.getInstance<PromService>();
+export const promService: PromService = new PromService();
