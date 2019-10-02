@@ -11,8 +11,10 @@ import resourceController from "./controllers/resource.controller";
 import textController from "./controllers/text.controller";
 import timeController from "./controllers/time.controller";
 
+// Modules
+import { controller } from "./modules/controller-handler.module";
+
 // Middlewares
-import { controller } from "./controllers/controller";
 import { middlewares } from "./middlewares";
 
 const router: Router = Router();
@@ -37,7 +39,7 @@ router.group("", [middlewares.auth()], (router: Router) => {
     router.post("", timeController.create());
     router.put("/:id", timeController.update());
     router.delete("/:id", timeController.delete());
-    router.put("/stop/:id", controller(timeController.stop));
+    router.put("/stop/:id", timeController.stop());
   });
   router.group("/text", [], (router: Router) => {
     router.get("", textController.index());

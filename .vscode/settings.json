@@ -1,0 +1,10 @@
+{
+  "sqltools.connections": [
+    {
+      "askForPassword": true,
+      "database": "./storage/db.sqlite",
+      "dialect": "SQLite",
+      "name": "local"
+    }
+  ]
+}

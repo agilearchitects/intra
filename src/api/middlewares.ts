@@ -1,20 +1,29 @@
 // Libs
+import { AuthService, IUserPayloadDTO, UserPayloadDTO, UserService } from "@agilearchitects/authenticaton";
 import Axios from "axios";
-import { NextFunction, Request, RequestHandler, Response } from "express";
+import { RequestHandler, Response, response } from "express";
 
+// Services
+import {
+    authService as authServiceInstance,
+    userService as userServiceInstance,
+} from "../bootstrap";
+import { configService } from "./services/config.service";
+
+// Entites
+import { UserEntity } from "./entities/user.entity";
+
+// Modules
+import { controller, ControllerHandler } from "./modules/controller-handler.module";
+import { LogModule } from "./modules/log.module";
 import ValidationErrorModule from "./modules/validation-error.module";
 import { IValidationInput, validate } from "./modules/validation.module";
-
-// Models
-import { UserEntity } from "./entities/user.entity";
-import { LogModule } from "./modules/log.module";
-import { configService } from "./services/config.service";
 
 // Add User to express request interface
 declare global {
     namespace Express {
         interface Request { // tslint:disable-line:interface-name
-            user: UserEntity;
+            user: IUserPayloadDTO;
         }
     }
 }
@@ -32,54 +41,65 @@ export class Middlewares {
     public constructor(
         private log: LogModule = new LogModule("middleware"),
     ) { }
-    public auth(checkOnly: boolean = false): RequestHandler {
-        return (request: Request, response: Response, next: NextFunction): void => {
-            // Check for authorization header
-            if (request.headers.authorization) {
-                // Extract token from header
-                const token = (request.headers.authorization as string).substr(8, request.headers.authorization.length);
-                // Decode token
-                UserEntity.check(token).then((user: UserEntity) => {
-                    request.user = user;
-                    next();
-                }).catch((error: any) => response.sendStatus(401));
-            } else if (checkOnly) {
-                // Continue request if only checking if authenticated
-                next();
-            } else {
-                response.sendStatus(400);
+    public auth(
+        checkOnly: boolean = false,
+        authService: AuthService = authServiceInstance,
+    ): RequestHandler {
+        return controller(async (handler: ControllerHandler) => {
+            try {
+                // Check for authorization header
+                if (handler.request.headers.authorization) {
+                    const token = (handler.request.headers.authorization as string).substr(8, handler.request.headers.authorization.length);
+                    handler.request.user = await authService.auth(token);
+                    handler.next();
+                } else if (checkOnly) {
+                    handler.next();
+                } else {
+                    handler.sendStatus(401);
+                }
+            } catch (error) {
+                this.logError(handler.response(), "auth middleware failed", error);
+                throw error;
             }
-        };
+        });
     }
 
-    public userByEmail(): RequestHandler {
-        return (request: Request, response: Response, next: NextFunction): void => {
-            if (request.query.email) {
-                UserEntity.findOne({ where: { email: request.query.email } }).then((user?: UserEntity) => {
-                    if (user !== undefined) {
-                        request.user = user;
-                        next();
-                    } else {
-                        response.sendStatus(401);
-                    }
-                }).catch(() => response.sendStatus(500));
+    public userByEmail(
+        userService: UserService<UserEntity> = userServiceInstance,
+    ): RequestHandler {
+        return controller(async (handler: ControllerHandler) => {
+            try {
+                const query = handler.query<{ email: string }>();
+                const user = await userService.getUserByEmail(query.email, null, null);
+                if (user !== undefined) {
+                    handler.request.user = UserPayloadDTO.parse({ id: user.id, email: user.email });
+                    handler.next();
+                } else {
+                    handler.sendStatus(401);
+                }
+            } catch (error) {
+                this.logError(handler.response(), "User by email middleware failed");
+                throw error;
             }
-        };
+        });
     }
 
     public guest(): RequestHandler {
-        return (request: Request, response: Response, next: NextFunction): void => {
-            if (!request.headers.authorization) {
-                next();
-            } else {
-                response.sendStatus(400);
+        return controller(async (handler: ControllerHandler) => {
+            try {
+                if (handler.request.headers !== undefined && handler.request.headers.authorization === undefined) {
+                    handler.next();
+                } else {
+                    handler.sendStatus(400);
+                }
+            } catch (error) {
+                this.logError(handler.response(), "Guest middleware failed", error);
             }
-        };
+        });
     }
 
     public validation(validation: IValidationInput): RequestHandler {
-        return (request: Request, response: Response, next: NextFunction): void => {
-
+        return controller(async (handler: ControllerHandler) => {
             const getAsObject = (validation: IValidationInput, requestData: any): any => {
                 return Object.assign({}, ...Object.keys(validation).map((key: string) => {
                     const returnValue: { [key: string]: any } = {};
@@ -101,55 +121,54 @@ export class Middlewares {
                     return returnValue;
                 }));
             };
-            const requestData = request.method === "GET" ? request.query : request.body;
+            const requestData = handler.request.method === "GET" ? handler.query() : handler.body();
             const data = getAsObject(validation, requestData);
-            validate(data, validation, request, response)
-                .then((result: boolean | ValidationErrorModule) => {
-                    if (typeof result === "boolean") {
-                        if (result) { next(); } else { response.status(400).json({ message: "Validation failed" }); }
-                    } else {
-                        response.status(400).json({ validationError: result });
-                    }
-                }).catch((error: any) => response.sendStatus(500));
-        };
+            const result: boolean | ValidationErrorModule = await validate(data, validation, handler.request, handler.response());
+            if (typeof result === "boolean") {
+                if (result) { handler.next(); } else { handler.response().status(400).json({ message: "Validation failed" }); }
+            } else {
+                handler.response().status(400).json({ validationError: result });
+            }
+        });
     }
 
     public token(): RequestHandler {
-        return (request: Request, response: Response, next: NextFunction): void => {
-            const token = configService.get("TOKEN", "");
-            if (token !== "" && request.query.token && request.query.token === token) {
-                next();
-            } else {
-                this.log.info({
-                    title: "Token middleware validation failed",
-                    data: {
-                        ip: request.ip,
-                        headers: request.headers,
-                    },
-                });
-                response.sendStatus(400);
+        return controller(async (handler: ControllerHandler) => {
+            try {
+                const token = configService.get("TOKEN", "");
+                const query = handler.query<{ token: string }>();
+                if (token !== "" && query.token && query.token === token) {
+                    handler.next();
+                } else {
+                    handler.sendStatus(401);
+                }
+            } catch (error) {
+                this.logError(handler.response(), "Token middleware validation failed", { ip: handler.request.ip, headers: handler.request.headers });
+                throw error;
             }
-        };
+        });
     }
 
     public reCaptchaToken(): RequestHandler {
-        return (request: Request, response: Response, next: NextFunction): void => {
-            const token = request.headers.recaptcha;
-            Axios.post("https://www.google.com/recaptcha/api/siteverify", {
-                secret: configService.get("GOOGLE_RECAPTCHA_SECRET"),
-                response: token,
-                remoteip: request.ip,
-            }).then(() => next()).catch((error: any) => {
-                this.log.error(({
-                    title: "ReCaptcha middleware failed",
-                    data: {
-                        ip: request.ip,
-                        headers: request.headers,
-                    },
-                }));
-                response.sendStatus(500);
-            });
-        };
+        return controller(async (handler: ControllerHandler) => {
+            try {
+                const token = handler.request.headers.recaptcha;
+                await Axios.post("https://www.google.com/recaptcha/api/siteverify", {
+                    secret: configService.get("GOOGLE_RECAPTCHA_SECRET"),
+                    response: token,
+                    remoteip: handler.request.ip,
+                });
+                handler.next();
+            } catch (error) {
+                this.logError(handler.response(), "ReCaptcha middleware failed", { ip: handler.request.ip, headers: handler.request.headers });
+                throw error;
+            }
+        });
+    }
+
+    private logError(response: Response, message: string, error?: any, code: number = 500): void {
+        this.log.error(message, ...(error !== undefined ? [{ error: JSON.stringify(error) }] : []));
+        response.sendStatus(code);
     }
 }
 

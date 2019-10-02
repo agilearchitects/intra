@@ -1,7 +1,7 @@
-import { Column, Entity, OneToMany, ManyToOne } from "typeorm";
+import { Column, Entity, ManyToOne, OneToMany } from "typeorm";
+import { CustomerEntity } from "./customer.entity";
 import { Entity as AppEntity } from "./entity";
 import { TimeEntity } from "./time.entity";
-import { CustomerEntity } from "./customer.entity";
 
 @Entity()
 export class ProjectEntity extends AppEntity {

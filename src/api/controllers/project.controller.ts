@@ -1,30 +1,40 @@
 // Libs
 import { RequestHandler } from "express";
 
+// DTO's
 import { ICreateProjectJSON } from "../../shared/dto/create-project.dto";
+
+// Entities
 import { CustomerEntity } from "../entities/customer.entity";
 import { ProjectEntity } from "../entities/project.entity";
-import { controller, Controller } from "./controller";
 
-export class ProjectController {
+// Modules
+import { controller, ControllerHandler } from "../modules/controller-handler.module";
+
+// Base controller
+import { Controller } from "./controller";
+
+export class ProjectController extends Controller {
   public index(): RequestHandler {
-    return controller((handler) => {
-      handler.response<{ foo: string }>().json({ foo: "bar" });
+    return controller(async (handler: ControllerHandler) => {
+      try {
+        handler.response<{ foo: string }>().json({ foo: "bar" });
+      } catch (error) {
+        throw error;
+      }
     });
   }
   public create(): RequestHandler {
-    return controller((handler: Controller) => {
-      const body = handler.body<ICreateProjectJSON>();
-      CustomerEntity.findOne(body.customerId).then((customer?: CustomerEntity) => {
-        if (customer !== undefined) {
-          ProjectEntity.create({ name: body.name, customer })
-            .save()
-            .then(() => handler.sendStatus(200))
-            .catch((error: any) => handler.sendStatus(500));
-        } else {
-          handler.sendStatus(500);
-        }
-      }).catch((error: any) => handler.sendStatus(500));
+    return controller(async (handler: ControllerHandler) => {
+      try {
+        const body = handler.body<ICreateProjectJSON>();
+        const customer = await CustomerEntity.findOneOrFail(body.customerId);
+        await ProjectEntity.create({ name: body.name, customer }).save();
+        handler.sendStatus(200);
+      } catch (error) {
+        this.logError(handler.response(), "Error creating project", error);
+        throw error;
+      }
     });
   }
 }

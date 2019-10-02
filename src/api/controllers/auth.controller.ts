@@ -1,37 +1,38 @@
 // Libs
-import { JWTService } from "@agilearchitects/jwt";
-import { MailingunService } from "@agilearchitects/mailingun";
-import { TemplateService } from "@agilearchitects/templategenerator";
+import { AuthService, ILoginDTO, ILoginPayloadDTO, UserService } from "@agilearchitects/authenticaton";
+import { HashtiService } from "@agilearchitects/hashti";
 import { RequestHandler } from "express";
-import moment from "moment";
 
 // DTO's
 import { IAuthResponseJSON } from "../../shared/dto/auth-response.dto";
 import { ICreateUserJSON } from "../../shared/dto/create-user.dto";
-import { ILoginJSON } from "../../shared/dto/login.dto";
-import { UserDTO } from "../../shared/dto/user.dto";
+
+// Services
+import {
+  authService as authServiceInstance,
+  hashtiService as hashtiServiceInstance,
+  userService as userServiceInstance,
+} from "../../bootstrap";
 
 // Middleware
 import { middleware, middlewares } from "../middlewares";
 import ValidationModule from "../modules/validation.module";
 
+// Entites
+import { UserEntity } from "../entities/user.entity";
+
 // Models
-import { IAttemptResult, UserEntity } from "../entities/user.entity";
-import { controller, controllerError } from "./controller";
+import { controller, ControllerHandler } from "../modules/controller-handler.module";
 
-import { dpService } from "@agilearchitects/tdi";
-import { TokenEntity } from "../entities/token.entity";
-import { LogModule } from "../modules/log.module";
-import { configService } from "../services/config.service";
+// Base controller
+import { Controller } from "./controller";
 
-const LOG = new LogModule("controller.auth");
-
-export class AuthController {
+export class AuthController extends Controller {
   public constructor(
-    private readonly jwtService: JWTService = dpService.container("service.jwt"),
-    private readonly mailingunService: MailingunService = dpService.container("service.mailingun"),
-    private readonly templateService: TemplateService = dpService.container("service.template"),
-  ) { }
+    private readonly authService: AuthService = authServiceInstance,
+    private readonly userService: UserService<UserEntity> = userServiceInstance,
+    private readonly hashtiService: HashtiService = hashtiServiceInstance,
+  ) { super(); }
 
   // Protect controller with validation middleware. Validating email and password
   @middleware(middlewares.validation({ email: [ValidationModule.required, ValidationModule.email], password: ValidationModule.required }))
@@ -39,60 +40,30 @@ export class AuthController {
    * Login controller. Attemps login using the authservice, providing email and password from request body
    */
   public login(): RequestHandler {
-    return controller((handler) => {
-      const data = handler.body<ILoginJSON>();
-      UserEntity.attempt(data.email, data.password).then((result: IAttemptResult) => handler.response<IAuthResponseJSON>().json({
-        token: result.token,
-        user: UserDTO.parse({ id: result.user.id, email: result.user.email }).serialize(),
-      })).catch((error: any) => controllerError(LOG, handler.response(), "Error logging in", error));
-    });
-  }
+    return controller(async (handler) => {
+      try {
+        const data = handler.body<ILoginDTO>();
+        const loginPayload: ILoginPayloadDTO = await this.authService.login(data);
+        handler.response<IAuthResponseJSON>().json(loginPayload);
+      } catch (error) {
+        this.logError(handler.response(), "Error logging in", error);
+        throw error;
 
-  public refreshToken(): RequestHandler {
-    return controller((handler) => {
-      //
-    });
-  }
-
-  public requestPasswordReset(): RequestHandler {
-    return controller((handler) => {
-      // Creates token
-      const token = this.jwtService.sign({ userId: handler.request.user.id }, { expiresIn: "24 hours" });
-
-      // Add token to DB
-      TokenEntity.create({
-        token, type: "password_reset",
-        expires: moment(this.jwtService.decode(token).exp, "X").toDate(),
-      }).save().then(async (token: TokenEntity) => {
-        const email = await this.templateService.email(
-          "password-reset",
-          {
-            link: `https://${configService.get("SPA_HOST")}/password_reset?token=${token}`,
-          });
-        this.mailingunService.send(
-          configService.get("NOREPLY_EMAIL"),
-          handler.request.user.email,
-          email.subject,
-          email.message,
-        ).then(() => {
-          handler.sendStatus(200);
-        }).catch(() => handler.sendStatus(500));
-      });
-    });
-  }
-
-  public resetPassword(): RequestHandler {
-    return controller((handler) => {
-      //
+      }
     });
   }
 
   public create(): RequestHandler {
-    return controller((handler) => {
-      const data = handler.body<ICreateUserJSON>();
-      UserEntity.create(data).save().then(() => {
-        handler.response().send("User Created!");
-      }).catch((error: any) => controllerError(LOG, handler.response(), "Error creating user", error));
+    return controller(async (handler: ControllerHandler) => {
+      try {
+        const data = handler.body<ICreateUserJSON>();
+        data.password = this.hashtiService.create(data.password);
+        await this.userService.create(data.email, data.password, true, false);
+        handler.sendStatus(200);
+      } catch (error) {
+        this.logError(handler.response(), "Error creating user", error);
+        throw error;
+      }
     });
   }
 }

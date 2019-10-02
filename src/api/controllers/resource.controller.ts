@@ -2,64 +2,75 @@
 import { RequestHandler } from "express";
 import * as path from "path";
 
+// Entites
 import { ResourceEntity } from "../entities/resource.entity";
-import { LogModule } from "../modules/log.module";
+
+// Modules
+import { controller, ControllerHandler } from "../modules/controller-handler.module";
+
+// Services
 import { configService } from "../services/config.service";
-import { controller, Controller } from "./controller";
-import { controllerError } from "./controller";
 
-const STORAGE_PATH = path.resolve("./storage/uploads");
+// Base controller
+import { Controller } from "./controller";
 
-const LOG = new LogModule("controller.file");
+export class ResourceController extends Controller {
+  public constructor(
+    private readonly storagePath: string = "./storage/uploads",
+  ) { super(); }
 
-export class ResourceController {
   public upload(): RequestHandler {
-    return controller((handler: Controller) => {
-      if (handler.request.files !== undefined && handler.request.files.file !== undefined && !(handler.request.files.file instanceof Array)) {
-        const uploadedFile = handler.request.files.file;
-        const newFilename = uploadedFile.md5;
-        // Check for file in DB
-        ResourceEntity.findOne({ where: { filename: newFilename } }).then((resource: ResourceEntity | undefined) => {
-          if (resource !== undefined) {
-            responsCall(resource);
-          } else {
-            ResourceEntity.create({ filename: newFilename, title: uploadedFile.name }).save().then((resource: ResourceEntity) => {
-              // Move file
-              uploadedFile.mv(path.resolve(STORAGE_PATH, newFilename)).then(() => {
-                responsCall(resource);
-              }).catch((error: any) => resource.remove().finally(() => controllerError(LOG, handler.response(), "Error moving file uploaded", error)));
-            });
-          }
-        });
+    return controller(async (handler: ControllerHandler) => {
+      try {
         const responsCall = (resource: ResourceEntity) => {
           const protocol = `${handler.request.protocol}://`;
-          let port = configService.get("PORT", "80");
+          let port = configService.get("PORT", "1234");
           port = port !== "80" ? `:${port}` : "";
           handler.response<{ location: string }>().json({ location: `${protocol}${configService.get("API_HOST", "")}${port}/resource/${resource.id}` });
         };
-      } else {
-        handler.response().sendStatus(500);
+        if (handler.request.files !== undefined && handler.request.files.file !== undefined && !(handler.request.files.file instanceof Array)) {
+          const uploadedFile = handler.request.files.file;
+          const newFilename = uploadedFile.md5;
+          // Check for file in DB
+          let resource = await ResourceEntity.findOne({ where: { filename: newFilename } });
+          if (resource === undefined) {
+            resource = await ResourceEntity.create({ filename: newFilename, title: uploadedFile.name });
+          }
+          responsCall(resource);
+          if (resource !== undefined) {
+            responsCall(resource);
+          }
+        }
+        handler.sendStatus(500, "Error while parsing file input");
+      } catch (error) {
+        this.logError(handler.response(), "Error moving file uploaded", error);
+        throw error;
       }
+
     });
   }
   public show(): RequestHandler {
-    return controller((handler: Controller) => {
+    return controller(async (handler: ControllerHandler) => {
       // Get file entity using ID param
-      ResourceEntity.findOne(parseInt(handler.params<{ id: string }>().id, 10)).then((resource: ResourceEntity | undefined) => {
+      try {
+        const resource = await ResourceEntity.findOne(parseInt(handler.params<{ id: string }>().id, 10));
         if (resource === undefined) {
           handler.response().sendStatus(404);
-          return;
+        } else {
+          handler.response().sendFile(path.resolve(this.storagePath, resource.filename), {
+            headers: {
+              "content-disposition": `attachment; filename="${resource.title}"`,
+            },
+          }, (error: any) => {
+            if (error) {
+              this.logError(handler.response(), "Resource could not be found", error);
+            }
+          });
         }
-        handler.response().sendFile(path.resolve(STORAGE_PATH, resource.filename), {
-          headers: {
-            "content-disposition": `attachment; filename="${resource.title}"`,
-          },
-        }, (error: any) => {
-          if (error) {
-            controllerError(LOG, handler.response(), "Resource could not be found", error);
-          }
-        });
-      }).catch((error: any) => controllerError(LOG, handler.response(), "Error fetching resource from DB", error));
+      } catch (error) {
+        this.logError(handler.response(), "Error fetching resource from DB", error);
+        throw error;
+      }
     });
   }
 }
