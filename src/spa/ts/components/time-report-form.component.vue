@@ -89,7 +89,7 @@ import { IUserDTO } from "../../../shared/dto/user.dto";
 import { ProjectDTO } from "../../../shared/dto/project.dto";
 import { UpdateTimeDTO } from "../../../shared/dto/update-time.dto";
 
-class TimeReportFormViewModel {
+export class TimeReportFormViewModel {
   public constructor(
     public id: number | undefined,
     public projectId: string,
@@ -107,7 +107,7 @@ class TimeReportFormViewModel {
   }
 }
 
-class CustomerViewModel {
+export class CustomerViewModel {
   public constructor(
     public id: number,
     public name: string,
@@ -115,7 +115,7 @@ class CustomerViewModel {
   ) {}
 }
 
-class ProjectViewModel {
+export class ProjectViewModel {
   public constructor(public id: number, public name: string) {}
 }
 
@@ -198,14 +198,16 @@ export default class TimeReportFormComponent extends Vue {
     this.load();
   }
 
-  public load() {
+  public async load() {
     this.loading = true;
-    Promise.all([
-      this.getCustomers(),
-      ...(this.timeId !== undefined ? [this.getTime(this.timeId)] : [])
-    ]).finally(() => {
+    try {
+      await this.getCustomers();
+      if (this.timeId !== undefined) {
+        this.getTime(this.timeId);
+      }
+    } finally {
       this.loading = false;
-    });
+    }
   }
 
   // Get time report

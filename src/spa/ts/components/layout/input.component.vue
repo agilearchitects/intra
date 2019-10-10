@@ -177,8 +177,8 @@ export default class InputComponent extends Vue {
   &__warning {
     line-height: 1.75rem;
   }
-  &__help {
-  }
+  /*&__help {
+  }*/
   &__warning {
     color: theme-color("warning");
   }

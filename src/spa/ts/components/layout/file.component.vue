@@ -8,7 +8,7 @@
         v-on:input="fileChange"
         :accept="accept"
         :multiple="multiple"
-      >
+      />
       <layout-button-component class="mb-4">Välj</layout-button-component>
     </div>
     <div class="mdo-form-group flex-fill ml-3">
@@ -21,7 +21,7 @@
         ref="input"
         :value="inputValue"
         :disabled="true"
-      >
+      />
     </div>
   </div>
 </template>
@@ -36,10 +36,10 @@ export interface IFileInput {
   components: { LayoutButtonComponent }
 })
 export default class FileComponent extends Vue {
-  @Prop({ type: String, default: "" }) label: string;
+  @Prop({ type: String, default: "" }) label!: string;
   @Prop({ type: Array, default: undefined }) value?: IFileInput[];
-  @Prop({ type: String, default: "*" }) accept: string;
-  @Prop({ type: Boolean, default: false }) multiple: boolean;
+  @Prop({ type: String, default: "*" }) accept!: string;
+  @Prop({ type: Boolean, default: false }) multiple!: boolean;
 
   public files: string[] = [];
   public touched: boolean = false;

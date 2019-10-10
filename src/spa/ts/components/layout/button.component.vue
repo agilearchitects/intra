@@ -37,7 +37,8 @@ export default class LayoutButtonComponent extends Vue {
   @Prop({ type: Boolean, default: false }) disabled!: boolean;
   @Prop({ default: undefined }) route!: Route;
   @Prop({ type: String, default: "button" }) type!: string;
-  @Prop({ type: String, default: ButtonType.CONTAINED }) buttonType!: ButtonType;
+  @Prop({ type: String, default: ButtonType.CONTAINED })
+  buttonType!: ButtonType;
   @Prop({ type: String, default: ButtonStyle.PRIMARY })
   buttonStyle!: ButtonStyle;
 
@@ -78,8 +79,9 @@ export default class LayoutButtonComponent extends Vue {
     color: gray("500") !important;
     cursor: default;
   }
-  &--text {
-  }
+  /*&--text {
+    
+  }*/
   &--text,
   &--outlined {
     &.mdo-btn--secondary {
@@ -132,7 +134,7 @@ export default class LayoutButtonComponent extends Vue {
   &.btn-text {
     background: none;
   }
-  &.btn-outline {
-  }
+  /*&.btn-outline {
+  }*/
 }
 </style>

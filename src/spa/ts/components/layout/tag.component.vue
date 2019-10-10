@@ -28,7 +28,7 @@
       v-on:focus="active = true"
       v-on:blur="blur"
       v-on:keydown="keyDown"
-    >
+    />
     <ul class="mdo-form-tags__options" :class="{'mdo-form-tags__options--open': active}">
       <li
         v-for="(option, index) in filteredOptions"
@@ -43,17 +43,16 @@
 </template>
 <script lang="ts">
 import { Vue, Component, Prop, Watch } from "vue-property-decorator";
-import { setTimeout } from "timers";
 export interface IOption {
   value: string;
   text: string;
 }
 @Component
 export default class TagComponent extends Vue {
-  @Prop(String) label: string;
-  @Prop({ default: [] }) value: string[];
-  @Prop({ default: [] }) options: IOption[];
-  @Prop({ type: Boolean, default: false }) allowAdd: boolean;
+  @Prop(String) label!: string;
+  @Prop({ default: [] }) value!: string[];
+  @Prop({ default: [] }) options!: IOption[];
+  @Prop({ type: Boolean, default: false }) allowAdd!: boolean;
   @Watch("input") onInputChange(value: string, oldValue: string) {
     if (value !== oldValue) {
       this.selectedValueIndex = -1;

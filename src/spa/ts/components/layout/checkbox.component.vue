@@ -6,7 +6,7 @@
       :id="id"
       ref="checkbox"
       :disabled="disabled"
-    >
+    />
     <label class="custom-control-label" :for="id">
       <template v-if="label != ''">{{ label }}</template>
       <slot v-else name="label"></slot>
@@ -17,11 +17,11 @@
 import { Vue, Component, Prop, Watch } from "vue-property-decorator";
 @Component
 export default class CheckboxComponent extends Vue {
-  @Prop({ default: false }) value: boolean;
-  @Prop({ default: "" }) label: string;
-  @Prop({ default: false }) indeterminate: boolean;
-  @Prop({ default: false }) disabled: boolean;
-  @Prop(String) id: string;
+  @Prop({ default: false }) value!: boolean;
+  @Prop({ default: "" }) label!: string;
+  @Prop({ default: false }) indeterminate!: boolean;
+  @Prop({ default: false }) disabled!: boolean;
+  @Prop(String) id!: string;
   @Watch("value")
   onValueChange() {
     $(`#${this.id}`).prop("checked", this.value);

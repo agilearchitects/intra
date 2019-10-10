@@ -64,7 +64,7 @@ import {
   modalSize
 } from "../utils/modal/modal.util";
 
-class TimeViewModel {
+export class TimeViewModel {
   public constructor(
     public id: number,
     public project: { id: number; name: string },

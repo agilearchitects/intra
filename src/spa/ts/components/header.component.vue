@@ -96,7 +96,6 @@
 import { Vue, Component, Watch } from "vue-property-decorator";
 import { IMenuItem, MenuService } from "../services/menu.service";
 import { RouteRecord, Route } from "vue-router";
-import { setTimeout } from "timers";
 import { menuService as menuServiceInstance } from "../bootstrap";
 
 interface IMenuItemWithShow extends IMenuItem {

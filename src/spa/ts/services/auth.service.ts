@@ -80,4 +80,8 @@ export class AuthService {
     this.storageService.set("user", undefined);
     this.apiService.removeDefaultHeaders("Authorization");
   }
+
+  public setEditMode(value: boolean) {
+    this.storageService.set("editMode", value);
+  }
 }

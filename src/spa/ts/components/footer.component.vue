@@ -61,7 +61,7 @@ export default class FooterComponent extends Vue {
   }
 
   public updateEditMode(value: boolean) {
-    this.authService.editMode = value;
+    this.authService.setEditMode(value);
   }
 
   public stripPhoneFormat(phone: string) {

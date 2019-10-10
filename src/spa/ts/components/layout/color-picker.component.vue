@@ -6,7 +6,7 @@
         <slot></slot>
       </layout-button-component>
       <!-- This will be the content of the popover -->
-      <chrome-picker slot="popover" :value="value" v-on:input="onInput"/>
+      <chrome-picker slot="popover" :value="value" v-on:input="onInput" />
     </v-popover>
   </div>
 </template>
@@ -14,7 +14,7 @@
 import { Chrome as ChromePicker } from "vue-color";
 import { Vue, Component, Prop, Watch } from "vue-property-decorator";
 import LayoutButtonComponent from "../layout/button.component.vue";
-interface IColorPicker {
+export interface IColorPicker {
   hsl: { h: number; s: number; l: number; a: number };
   hex: string;
   hex8: string;
@@ -39,9 +39,9 @@ export enum colorPickerFormat {
   }
 })
 export default class ColorPickerComponent extends Vue {
-  @Prop(String) label: string;
-  @Prop({ default: "#000" }) value: string;
-  @Prop({ default: colorPickerFormat.HEX }) format: colorPickerFormat;
+  @Prop(String) label!: string;
+  @Prop({ default: "#000" }) value!: string;
+  @Prop({ default: colorPickerFormat.HEX }) format!: colorPickerFormat;
 
   public onInput(value: IColorPicker) {
     this.$emit(
@@ -50,18 +50,12 @@ export default class ColorPickerComponent extends Vue {
         switch (this.format) {
           case colorPickerFormat.HEX:
             return value.hex;
-            break;
           case colorPickerFormat.HEX8:
             return value.hex8;
-            break;
           case colorPickerFormat.RGB:
             return `rgb(${value.rgba.r}, ${value.rgba.g}, ${value.rgba.b})`;
-            break;
           case colorPickerFormat.RGBA:
-            return `rgb(${value.rgba.r}, ${value.rgba.g}, ${value.rgba.b}, ${
-              value.rgba.a
-            })`;
-            break;
+            return `rgb(${value.rgba.r}, ${value.rgba.g}, ${value.rgba.b}, ${value.rgba.a})`;
         }
       })()
     );

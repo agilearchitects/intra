@@ -39,7 +39,7 @@ import {
   projectService as projectServiceInstance
 } from "../bootstrap";
 
-class CustomerViewModel {
+export class CustomerViewModel {
   public constructor(public id: number, public name: string) {}
 }
 
@@ -66,11 +66,13 @@ export default class CreateProjectFormComponent extends Vue {
     this.load();
   }
 
-  public load() {
+  public async load() {
     this.loading = true;
-    Promise.all([this.getCustomers()]).finally(() => {
+    try {
+      await this.getCustomers();
+    } finally {
       this.loading = false;
-    });
+    }
   }
 
   public get customerSelect(): Array<{ value: string; text: string }> {

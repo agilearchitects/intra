@@ -23,7 +23,7 @@ import loading from "./utils/loading/loading.plugin";
 Vue.use(loading);
 
 // Index component
-import IndexComponent from "./components/index.component";
+import IndexComponent from "./components/index.component.vue";
 
 // Router
 import router from "./router";
