@@ -29,11 +29,14 @@
 </template>
 <script lang="ts">
 import { Vue, Component } from "vue-property-decorator";
-import { Getter } from "vuex-class";
-import { ITree } from "../store/menu.store";
+import { ITree, MenuService } from "../services/menu.service";
+import { menuService as menuServiceInstance } from "../bootstrap";
 @Component
 export default class SidebarComponent extends Vue {
-  @Getter("tree") root!: ITree[];
+  private menuService: MenuService = menuServiceInstance;
+  public get root(): ITree[] {
+    return this.menuService.tree;
+  }
   public get tree(): ITree[] {
     const tree = this.root.find(
       (tree: ITree) =>

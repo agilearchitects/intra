@@ -1,47 +1,45 @@
-import DTO from "./dto";
-import { UserDTO, IUserJSON } from "./user.dto";
 import moment = require("moment");
-import { ProjectDTO, IProjectJSON } from "./project.dto";
+import { IProjectDTO, ProjectDTO } from "./project.dto";
+import { IUserDTO, UserDTO } from "./user.dto";
 
-export interface ITime<A, B, C, D> {
+export interface ITimeDTO {
   id: number;
-  project?: D;
-  from: A;
-  to?: B;
+  project?: IProjectDTO;
+  from: string;
+  to?: string;
   comment: string;
-  user?: C;
+  user?: IUserDTO;
 }
 
-export interface ITimeDTO extends ITime<Date, Date, UserDTO, ProjectDTO> { }
-export interface ITimeJSON extends ITime<string, string, IUserJSON, IProjectJSON> { }
-
-export class TimeDTO extends DTO<ITimeDTO> implements ITimeDTO {
-  public static parse(object: ITimeJSON): TimeDTO {
-    return new TimeDTO({
-      id: object.id,
-      ...(object.project ? { project: ProjectDTO.parse(object.project) } : null),
-      from: moment(object.from).toDate(),
-      ...(object.to !== undefined ? { to: moment(object.to).toDate() } : undefined),
-      comment: object.comment,
-      ...(object.user ? { user: UserDTO.parse(object.user) } : null),
-    });
+export class TimeDTO implements ITimeDTO {
+  public static parse(object: ITimeDTO): TimeDTO {
+    return new TimeDTO(
+      object.id,
+      object.project ? ProjectDTO.parse(object.project) : undefined,
+      object.from,
+      object.to !== undefined ? object.to : undefined,
+      object.comment,
+      object.user ? UserDTO.parse(object.user) : undefined,
+    );
   }
-  public id!: number;
-  public customer!: string;
-  public project?: ProjectDTO;
-  public from!: Date;
-  public to?: Date;
-  public comment!: string;
-  public user!: UserDTO;
 
-  public serialize(): ITimeJSON {
+  public constructor(
+    public readonly id: number,
+    public readonly project: ProjectDTO | undefined,
+    public readonly from: string,
+    public readonly to: string | undefined,
+    public readonly comment: string,
+    public readonly user: UserDTO | undefined,
+  ) { }
+
+  public serialize(): ITimeDTO {
     return {
       id: this.id,
-      ...(this.project ? { project: this.project.serialize() } : null),
-      from: moment(this.from).format("YYYY-MM-DD HH:mm:ss"),
-      ...(this.to !== undefined ? { to: moment(this.to).format("YYYY-MM-DD HH:mm:ss") } : undefined),
+      ...(this.project ? { project: this.project.serialize() } : undefined),
+      from: this.from,
+      ...(this.to !== undefined ? { to: this.to } : undefined),
       comment: this.comment,
-      user: this.user.serialize(),
+      ...(this.user !== undefined ? { user: this.user.serialize() } : undefined),
     };
   }
 }

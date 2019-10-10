@@ -25,15 +25,13 @@ Vue.use(loading);
 // Index component
 import IndexComponent from "./components/index.component";
 
-// Router and store
+// Router
 import router from "./router";
-import { appStore as store } from "./store/app.store";
 
 import { i18n } from "./locale";
 const app = new Vue({
   el: "#app",
   render: (h) => h(IndexComponent),
   router,
-  store,
   i18n,
 });

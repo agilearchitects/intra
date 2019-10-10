@@ -17,17 +17,27 @@
   </modal-form-component>
 </template>
 <script lang="ts">
+// Libs
 import { Vue, Component } from "vue-property-decorator";
-import { Action } from "vuex-class";
 
-import { projectCreateAction } from "../store/project.store";
+// DTO's
+import { CreateProjectDTO } from "../../../shared/dto/create-project.dto";
+import { CustomerDTO } from "../../../shared/dto/customer.dto";
 
+// Services
+import { CustomerService } from "../services/customer.service";
+import { ProjectService } from "../services/project.service";
+
+// Components
 import ModalFormComponent from "./modal-form.component.vue";
 import InputComponent from "./layout/input.component.vue";
 import SelectComponent from "./layout/select.component.vue";
-import { CreateProjectDTO } from "../../../shared/dto/create-project.dto";
-import { customerIndexAction } from "../store/customer.store";
-import { CustomerDTO } from "../../../shared/dto/customer.dto";
+
+// Bootstrap
+import {
+  customerService as customerServiceInstance,
+  projectService as projectServiceInstance
+} from "../bootstrap";
 
 class CustomerViewModel {
   public constructor(public id: number, public name: string) {}
@@ -37,8 +47,8 @@ class CustomerViewModel {
   components: { ModalFormComponent, InputComponent, SelectComponent }
 })
 export default class CreateProjectFormComponent extends Vue {
-  @Action("project/create") projectCreateAction!: projectCreateAction;
-  @Action("customer/index") customerIndexAction!: customerIndexAction;
+  public customerService: CustomerService = customerServiceInstance;
+  public projectService: ProjectService = projectServiceInstance;
 
   public name: string = "";
 
@@ -72,7 +82,8 @@ export default class CreateProjectFormComponent extends Vue {
 
   public getCustomers(): Promise<void> {
     return new Promise((resolve, reject) => {
-      this.customerIndexAction()
+      this.customerService
+        .index()
         .then((customers: CustomerDTO[]) => {
           this.customers = customers.map((customer: CustomerDTO) => ({
             id: customer.id,
@@ -88,12 +99,13 @@ export default class CreateProjectFormComponent extends Vue {
 
   public save() {
     this.saving = true;
-    this.projectCreateAction(
-      CreateProjectDTO.parse({
-        name: this.name,
-        customerId: parseInt(this.selectedCustomer, 10)
-      })
-    )
+    this.projectService
+      .create(
+        CreateProjectDTO.parse({
+          name: this.name,
+          customerId: parseInt(this.selectedCustomer, 10)
+        })
+      )
       .then(() => {
         this.saving = false;
         this.$emit("close");

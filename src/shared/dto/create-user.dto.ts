@@ -1,25 +1,23 @@
-import DTO from "./dto";
-
-export interface ICreateUser {
+export interface ICreateUserDTO {
   email: string;
   password: string;
 }
-export interface ICreateUserDTO extends ICreateUser { } // tslint:disable-line:no-empty-interface
-export interface ICreateUserJSON extends ICreateUser { } // tslint:disable-line:no-empty-interface
 
-export class CreateUserDTO extends DTO<ICreateUserDTO> implements ICreateUserDTO {
+export class CreateUserDTO implements ICreateUserDTO {
 
-  public static parse(object: ICreateUserJSON): CreateUserDTO {
-    return new CreateUserDTO({
-      email: object.email,
-      password: object.password,
-    });
+  public static parse(object: ICreateUserDTO): CreateUserDTO {
+    return new CreateUserDTO(
+      object.email,
+      object.password,
+    );
   }
 
-  public email!: string;
-  public password!: string;
+  public constructor(
+    public readonly email: string,
+    public readonly password: string,
+  ) { }
 
-  public serialize(): ICreateUserJSON {
+  public serialize(): ICreateUserDTO {
     return {
       email: this.email,
       password: this.password,

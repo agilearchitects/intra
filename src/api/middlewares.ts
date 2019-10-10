@@ -49,7 +49,7 @@ export class Middlewares {
             try {
                 // Check for authorization header
                 if (handler.request.headers.authorization) {
-                    const token = (handler.request.headers.authorization as string).substr(8, handler.request.headers.authorization.length);
+                    const token = (handler.request.headers.authorization as string).substr(7);
                     handler.request.user = await authService.auth(token);
                     handler.next();
                 } else if (checkOnly) {
@@ -123,11 +123,16 @@ export class Middlewares {
             };
             const requestData = handler.request.method === "GET" ? handler.query() : handler.body();
             const data = getAsObject(validation, requestData);
-            const result: boolean | ValidationErrorModule = await validate(data, validation, handler.request, handler.response());
-            if (typeof result === "boolean") {
-                if (result) { handler.next(); } else { handler.response().status(400).json({ message: "Validation failed" }); }
-            } else {
-                handler.response().status(400).json({ validationError: result });
+            try {
+                const result: boolean | ValidationErrorModule = await validate(data, validation, handler.request, handler.response());
+                if (typeof result === "boolean") {
+                    if (result) { handler.next(); } else { handler.response().status(400).json({ message: "Validation failed" }); }
+                } else {
+                    handler.response().status(400).json({ validationError: result });
+                }
+            } catch (error) {
+                this.log.error("Validation error", { error: JSON.stringify(error) });
+                handler.sendStatus(500);
             }
         });
     }

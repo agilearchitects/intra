@@ -15,25 +15,22 @@
 </template>
 <script lang="ts">
 import Editor from "@tinymce/tinymce-vue";
-import { Action, Getter } from "vuex-class";
 import { Vue, Component, Prop, Watch } from "vue-property-decorator";
-import { textShowAction, textUpdateAction } from "../store/text.store";
-import { TextDTO } from "../../../shared/dto/text.dto";
-import { ITinyMCESettings } from "../store/tinymce.store";
+import { TextDTO, ITextDTO } from "../../../shared/dto/text.dto";
+import { ITinyMCESettings, init as tinyMCEInit } from "../utils/tinymce";
+import { AuthService } from "../services/auth.service";
+import {
+  authService as authServiceInstance,
+  textService as textServiceInstance
+} from "../bootstrap";
+import { TextService } from "../services/text.service";
 
 @Component({
   components: { tinyMce: Editor }
 })
 export default class TextComponent extends Vue {
-  @Getter("auth/getEditMode") editMode!: boolean;
-  @Getter("auth/isAdmin") isAdmin!: boolean;
-  @Getter("tinyMCE/init") tinyMCEInit!: (
-    buttons?: string,
-    setup?: (editor: any) => void
-  ) => ITinyMCESettings;
-  @Action("text/show") textShowAction!: textShowAction;
-  @Action("text/update") textUpdateAction!: textUpdateAction;
-
+  private readonly authService: AuthService = authServiceInstance;
+  private readonly textService: TextService = textServiceInstance;
   @Prop(String) name!: string;
   @Watch("name") onNameChange() {
     this.getText();
@@ -47,7 +44,7 @@ export default class TextComponent extends Vue {
   public loading: boolean = false;
   public tinyMCEInitWith!: ITinyMCESettings;
 
-  public text: TextDTO | null = null;
+  public text: ITextDTO | null = null;
   public saving: boolean = false;
 
   public created() {
@@ -56,7 +53,7 @@ export default class TextComponent extends Vue {
 
   public mounted() {
     this.getText();
-    this.tinyMCEInitWith = this.tinyMCEInit("saveButton | ", (editor: any) => {
+    this.tinyMCEInitWith = tinyMCEInit("saveButton | ", (editor: any) => {
       editor.ui.registry.addButton("SaveButton", {
         text: "Save",
         onAction: () => {
@@ -70,11 +67,11 @@ export default class TextComponent extends Vue {
 
   public getText() {
     this.loading = true;
-    this.textShowAction(this.textName).then((text: TextDTO) => {
+    this.textService.show(this.textName).then((text: TextDTO) => {
       this.loading = false;
-      this.text = text;
-      if (text.content === "") {
-        text.content = "<i>Saknar innehåll</i>";
+      this.text = text.serialize();
+      if (this.text.content === "") {
+        this.text.content = "<i>Saknar innehåll</i>";
       }
     });
   }
@@ -84,7 +81,8 @@ export default class TextComponent extends Vue {
       return;
     }
     this.saving = true;
-    this.textUpdateAction(this.text)
+    this.textService
+      .update(TextDTO.parse(this.text))
       .then(() => {
         alert("Text sparad");
         this.saving = false;

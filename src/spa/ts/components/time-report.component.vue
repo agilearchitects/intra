@@ -125,17 +125,17 @@ class TimeViewModel {
 
 import ButtonComponent from "./layout/button.component.vue";
 import TimeReportFormComponent from "./time-report-form.component.vue";
-import { Action } from "vuex-class";
-import { timeIndexAction, timeStopAction } from "../store/time.store";
 import { TimeDTO } from "../../../shared/dto/time.dto";
 import { StopTimeDTO } from "../../../shared/dto/stop-time.dto";
+import { TimeService } from "../services/time.service";
+import { timeService as timeServiceInstance } from "../bootstrap";
+import { TimeQueryDTO } from "../../../shared/dto/time-query.dto";
 
 @Component({
   components: { ButtonComponent }
 })
 export default class TimeReportComponent extends Vue {
-  @Action("time/index") timeIndexAction!: timeIndexAction;
-  @Action("time/stop") timeStopAction!: timeStopAction;
+  private readonly timeService: TimeService = timeServiceInstance;
 
   @Watch("date") onDateChange() {
     this.getReports();
@@ -195,31 +195,33 @@ export default class TimeReportComponent extends Vue {
     this.date = new Date();
   }
 
-  public getReports() {
-    this.timeIndexAction({ date: this.date }).then((times: TimeDTO[]) => {
-      this.times = times
-        .map(
-          (time: TimeDTO) =>
-            new TimeViewModel(
-              time.id,
-              time.project !== undefined
-                ? { id: time.project.id, name: time.project.name }
-                : { id: 0, name: "" },
-              time.project !== undefined && time.project.customer !== undefined
-                ? {
-                    id: time.project.customer.id,
-                    name: time.project.customer.name
-                  }
-                : { id: 0, name: "" },
-              moment(time.from),
-              time.to !== undefined ? moment(time.to) : undefined,
-              time.comment
-            )
-        )
-        .sort((a: TimeViewModel, b: TimeViewModel) =>
-          a.to !== undefined && a.from.toDate() > a.from.toDate() ? -1 : 1
-        );
-    });
+  public async getReports() {
+    this.times = (await this.timeService.index(
+      TimeQueryDTO.parse({
+        date: moment(this.date).format("YYYY-MM-DD")
+      })
+    ))
+      .map(
+        (time: TimeDTO) =>
+          new TimeViewModel(
+            time.id,
+            time.project !== undefined
+              ? { id: time.project.id, name: time.project.name }
+              : { id: 0, name: "" },
+            time.project !== undefined && time.project.customer !== undefined
+              ? {
+                  id: time.project.customer.id,
+                  name: time.project.customer.name
+                }
+              : { id: 0, name: "" },
+            moment(time.from),
+            time.to !== undefined ? moment(time.to) : undefined,
+            time.comment
+          )
+      )
+      .sort((a: TimeViewModel, b: TimeViewModel) =>
+        a.to !== undefined && a.from.toDate() > a.from.toDate() ? -1 : 1
+      );
   }
 
   private openModal(timeId?: number) {
@@ -233,15 +235,18 @@ export default class TimeReportComponent extends Vue {
     });
   }
 
-  public stop(timeId: number) {
-    this.timeStopAction(
-      StopTimeDTO.parse({
-        id: timeId,
-        to: moment().format("YYYY-MM-DD HH:mm:ss")
-      })
-    )
-      .then(() => this.getReports())
-      .catch(() => alert("Something went wrong. Try again"));
+  public async stop(timeId: number) {
+    try {
+      await this.timeService.stop(
+        StopTimeDTO.parse({
+          id: timeId,
+          to: moment().format("YYYY-MM-DD HH:mm:ss")
+        })
+      );
+      this.getReports();
+    } catch (error) {
+      alert("Something went wrong. Try again");
+    }
   }
 }
 </script>

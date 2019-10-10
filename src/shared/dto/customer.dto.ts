@@ -1,28 +1,27 @@
-import DTO from "./dto";
-import { ProjectDTO, IProjectJSON } from "./project.dto";
+import { IProjectDTO, ProjectDTO } from "./project.dto";
 
-export interface ICustomer<A> {
+export interface ICustomerDTO {
   id: number;
   name: string;
-  projects?: A[];
+  projects?: IProjectDTO[];
 }
 
-export interface ICustomerDTO extends ICustomer<ProjectDTO> { }
-export interface ICustomerJSON extends ICustomer<IProjectJSON> { }
-
-export class CustomerDTO extends DTO<ICustomerDTO> implements ICustomerDTO {
-  public static parse(object: ICustomerJSON): CustomerDTO {
-    return new CustomerDTO({
-      id: object.id,
-      name: object.name,
-      ...(object.projects ? { projects: object.projects.map((project: IProjectJSON) => ProjectDTO.parse(project)) } : null),
-    });
+export class CustomerDTO implements ICustomerDTO {
+  public static parse(object: ICustomerDTO): CustomerDTO {
+    return new CustomerDTO(
+      object.id,
+      object.name,
+      (object.projects !== undefined ? object.projects.map((project: IProjectDTO) => ProjectDTO.parse(project)) : undefined),
+    );
   }
-  public id!: number;
-  public name!: string;
-  public projects?: ProjectDTO[];
 
-  public serialize(): ICustomerJSON {
+  public constructor(
+    public readonly id: number,
+    public readonly name: string,
+    public readonly projects?: ProjectDTO[],
+  ) { }
+
+  public serialize(): ICustomerDTO {
     return {
       id: this.id,
       name: this.name,

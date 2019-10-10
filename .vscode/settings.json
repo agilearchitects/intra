@@ -1,10 +1,7 @@
 {
-  "sqltools.connections": [
-    {
-      "askForPassword": true,
-      "database": "./storage/db.sqlite",
-      "dialect": "SQLite",
-      "name": "local"
-    }
-  ]
+  "mochaExplorer.files": "src/**/*.spec.ts",
+  "mochaExplorer.require": "ts-node/register",
+  "mochaExplorer.mochaPath": "node_modules/mocha",
+  "tslint.nodePath": "./node_modules/tslint/bin",
+  "tslint.exclude": "src/**/*.spec.ts"
 }

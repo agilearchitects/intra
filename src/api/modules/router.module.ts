@@ -15,7 +15,7 @@ const oldRouter = express.Router;
 // @ts-ignore
 Router = (...args: any[]) => {
   const router = oldRouter(...args);
-  router.group = function (prefix, middlewares, group) { // tslint:disable-line:only-arrow-functions
+  router.group = function (prefix, middlewares, group) {
     const router = Router({ mergeParams: true });
     group(router);
     this.use(prefix, middlewares, router);

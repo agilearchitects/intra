@@ -1,29 +1,26 @@
-import { stringify } from "querystring";
-import DTO from "./dto";
-
-export interface IText {
+export interface ITextDTO {
   id: number;
   name: string;
   content: string;
 }
 
-export interface ITextDTO extends IText { } // tslint:disable-line:no-empty-interface
-export interface ITextJSON extends IText { } // tslint:disable-line:no-empty-interface
+export class TextDTO implements ITextDTO {
 
-export class TextDTO extends DTO<ITextDTO> implements ITextDTO {
-
-  public static parse(object: ITextJSON): TextDTO {
-    return new TextDTO({
-      id: object.id,
-      name: object.name,
-      content: object.content,
-    });
+  public static parse(object: ITextDTO): TextDTO {
+    return new TextDTO(
+      object.id,
+      object.name,
+      object.content,
+    );
   }
-  public id!: number;
-  public name!: string;
-  public content!: string;
 
-  public serialize(): ITextJSON {
+  public constructor(
+    public readonly id: number,
+    public readonly name: string,
+    public readonly content: string,
+  ) { }
+
+  public serialize(): ITextDTO {
     return {
       id: this.id,
       name: this.name,

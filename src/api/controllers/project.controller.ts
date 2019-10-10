@@ -2,7 +2,7 @@
 import { RequestHandler } from "express";
 
 // DTO's
-import { ICreateProjectJSON } from "../../shared/dto/create-project.dto";
+import { ICreateProjectDTO } from "../../shared/dto/create-project.dto";
 
 // Entities
 import { CustomerEntity } from "../entities/customer.entity";
@@ -27,7 +27,7 @@ export class ProjectController extends Controller {
   public create(): RequestHandler {
     return controller(async (handler: ControllerHandler) => {
       try {
-        const body = handler.body<ICreateProjectJSON>();
+        const body = handler.body<ICreateProjectDTO>();
         const customer = await CustomerEntity.findOneOrFail(body.customerId);
         await ProjectEntity.create({ name: body.name, customer }).save();
         handler.sendStatus(200);

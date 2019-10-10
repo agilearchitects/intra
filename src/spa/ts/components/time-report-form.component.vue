@@ -60,8 +60,14 @@
 </template>
 <script lang="ts">
 import { Vue, Component, Prop, Watch } from "vue-property-decorator";
-import { Action, Getter } from "vuex-class";
 import { Moment, default as moment } from "moment";
+
+// Bootstrap
+import {
+  authService as authServiceInstance,
+  customerService as customerServiceInstance,
+  timeService as timeServiceInstance
+} from "../bootstrap";
 
 // Components
 import ModalFormComponent from "./modal-form.component.vue";
@@ -69,21 +75,17 @@ import InputComponent from "./layout/input.component.vue";
 import SelectComponent from "./layout/select.component.vue";
 import ButtonComponent from "./layout/button.component.vue";
 
-// Store
-import {
-  timeCreateAction,
-  timeUpdateAction,
-  timeShowAction,
-  timeDeleteAction
-} from "../store/time.store";
-import { customerIndexAction } from "../store/customer.store";
+// Services
+import { TimeService } from "../services/time.service";
+import { CustomerService } from "../services/customer.service";
+import { AuthService } from "../services/auth.service";
 
 // DTO's
 import { UserDTO } from "../../../shared/dto/user.dto";
 import { TimeDTO } from "../../../shared/dto/time.dto";
 import { CreateTimeDTO } from "../../../shared/dto/create-time.dto";
 import { CustomerDTO } from "../../../shared/dto/customer.dto";
-import { IUSer } from "../store/auth.store";
+import { IUserDTO } from "../../../shared/dto/user.dto";
 import { ProjectDTO } from "../../../shared/dto/project.dto";
 import { UpdateTimeDTO } from "../../../shared/dto/update-time.dto";
 
@@ -126,13 +128,10 @@ class ProjectViewModel {
   }
 })
 export default class TimeReportFormComponent extends Vue {
+  private readonly timeService: TimeService = timeServiceInstance;
+  private readonly customerService: CustomerService = customerServiceInstance;
+  private readonly authService: AuthService = authServiceInstance;
   @Prop({ default: {} }) data!: { timeId?: number; date: Moment };
-  @Action("time/show") timeShowAction!: timeShowAction;
-  @Action("time/create") timeCreateAction!: timeCreateAction;
-  @Action("time/update") timeUpdateAction!: timeUpdateAction;
-  @Action("time/delete") timeDeleteAction!: timeDeleteAction;
-  @Action("customer/index") customerIndexAction!: customerIndexAction;
-  @Getter("auth/user") user!: IUSer;
 
   private get timeId(): number | undefined {
     return this.data.timeId;
@@ -153,22 +152,24 @@ export default class TimeReportFormComponent extends Vue {
   }
 
   public get projectOptions(): Array<{ value: string; text: string }> {
-      const selectedCustomer = this.customers.find(
-        (customer: CustomerViewModel) =>
-          customer.id === parseInt(this.time.customerId, 10)
-      );
-      if (selectedCustomer !== undefined) {
-        return selectedCustomer.projects.map((project: ProjectViewModel) => ({
-          value: project.id.toString(),
-          text: project.name
-        }));
-      }
+    const selectedCustomer = this.customers.find(
+      (customer: CustomerViewModel) =>
+        customer.id === parseInt(this.time.customerId, 10)
+    );
+    if (selectedCustomer !== undefined) {
+      return selectedCustomer.projects.map((project: ProjectViewModel) => ({
+        value: project.id.toString(),
+        text: project.name
+      }));
+    }
 
     return [];
   }
 
   public selectCustomerChange(value: string): void {
-    this.time.projectId = this.projectOptions.length ? this.projectOptions[0].value : "0";
+    this.time.projectId = this.projectOptions.length
+      ? this.projectOptions[0].value
+      : "0";
   }
 
   public time: TimeReportFormViewModel = new TimeReportFormViewModel(
@@ -208,56 +209,45 @@ export default class TimeReportFormComponent extends Vue {
   }
 
   // Get time report
-  public getTime(id: number): Promise<void> {
-    return new Promise((resolve, reject) =>
-      this.timeShowAction(id)
-        .then((time: TimeDTO) => {
-          this.time = new TimeReportFormViewModel(
-            time.id,
-            time.project !== undefined ? time.project.id.toString() : "",
-            time.project !== undefined && time.project.customer !== undefined
-              ? time.project.customer.id.toString()
-              : "undefined",
-            moment(time.from),
-            time.to !== undefined ? moment(time.to) : undefined,
-            time.comment || ""
-          );
-
-          resolve();
-        })
-        .catch((error: any) => reject(error))
+  public async getTime(id: number): Promise<void> {
+    const time: TimeDTO = await this.timeService.show(id);
+    this.time = new TimeReportFormViewModel(
+      time.id,
+      time.project !== undefined ? time.project.id.toString() : "",
+      time.project !== undefined && time.project.customer !== undefined
+        ? time.project.customer.id.toString()
+        : "undefined",
+      moment(time.from),
+      time.to !== undefined ? moment(time.to) : undefined,
+      time.comment || ""
     );
   }
 
   // Get all customers to be able to populate dropdown list
-  public getCustomers(): Promise<void> {
-    return new Promise((resolve, reject) => {
-      this.customerIndexAction()
-        .then((customers: CustomerDTO[]) => {
-          this.customers = customers.map((customer: CustomerDTO) => ({
-            id: customer.id,
-            name: customer.name,
-            projects:
-              customer.projects !== undefined
-                ? customer.projects.map((project: ProjectDTO) => ({
-                    id: project.id,
-                    name: project.name
-                  }))
-                : []
-          }));
+  public async getCustomers(): Promise<void> {
+    const customers = await this.customerService.index();
 
-          // Set selected customer and project i dropdown menus
-          this.time.customerId =
-            this.customers.length > 0 ? this.customers[0].id.toString() : "0";
-          this.time.projectId =
-            this.customers.length > 0 && this.customers[0].projects.length > 0
-              ? this.customers[0].projects[0].id.toString()
-              : "0";
-          
-          resolve();
-        })
-        .catch((error: any) => reject(error));
-    });
+    this.customers = customers.map((customer: CustomerDTO) => ({
+      id: customer.id,
+      name: customer.name,
+      projects:
+        customer.projects !== undefined
+          ? customer.projects.map((project: ProjectDTO) => ({
+              id: project.id,
+              name: project.name
+            }))
+          : []
+    }));
+
+    // Set selected customer and project i dropdown menus
+    this.time.customerId =
+      this.customers.length > 0 ? this.customers[0].id.toString() : "0";
+    this.time.projectId =
+      this.customers.length > 0 && this.customers[0].projects.length > 0
+        ? this.customers[0].projects[0].id.toString()
+        : "0";
+
+    return;
   }
 
   public updateFromOrTo($event: Event, type: "from" | "to") {
@@ -290,65 +280,55 @@ export default class TimeReportFormComponent extends Vue {
     }
   }
 
-  public save() {
+  public async save(): Promise<void> {
     if (this.time === null || this.time.projectId === undefined) {
       return;
     }
-
-    this.saving = true;
-    if (!this.edit) {
-      this.timeCreateAction(
-        CreateTimeDTO.parse({
-          projectId: parseInt(this.time.projectId, 10),
-          from: this.time.from.format("YYYY-MM-DD HH:mm:ss").toString(),
-          ...(this.time.to !== undefined
-            ? { to: this.time.to.format("YYYY-MM-DD HH:mm:ss").toString() }
-            : undefined),
-          comment: this.time.comment,
-          userId: this.user.id
-        })
-      )
-        .then(() => {
-          this.saving = false;
-          this.$emit("close");
-        })
-        .catch(() => {
-          alert("Something went wrong. Please try again");
-        });
-    } else {
-      this.timeUpdateAction(
-        UpdateTimeDTO.parse({
-          id: this.time.id as number,
-          projectId: parseInt(this.time.projectId, 10),
-          from: this.time.from.format("YYYY-MM-DD HH:mm:ss").toString(),
-          ...(this.time.to !== undefined
-            ? { to: this.time.to.format("YYYY-MM-DD HH:mm:ss").toString() }
-            : undefined),
-          comment: this.time.comment,
-          userId: this.user.id
-        })
-      )
-        .then(() => {
-          this.saving = false;
-          this.$emit("close");
-        })
-        .catch(() => {
-          alert("Something went wrong. Please try again");
-        });
+    try {
+      this.saving = true;
+      if (!this.edit) {
+        await this.timeService.create(
+          CreateTimeDTO.parse({
+            projectId: parseInt(this.time.projectId, 10),
+            from: this.time.from.format("YYYY-MM-DD HH:mm:ss").toString(),
+            ...(this.time.to !== undefined
+              ? { to: this.time.to.format("YYYY-MM-DD HH:mm:ss").toString() }
+              : undefined),
+            comment: this.time.comment,
+            userId: this.authService.user!.id
+          })
+        );
+      } else {
+        await this.timeService.update(
+          UpdateTimeDTO.parse({
+            id: this.time.id as number,
+            projectId: parseInt(this.time.projectId, 10),
+            from: this.time.from.format("YYYY-MM-DD HH:mm:ss").toString(),
+            ...(this.time.to !== undefined
+              ? { to: this.time.to.format("YYYY-MM-DD HH:mm:ss").toString() }
+              : undefined),
+            comment: this.time.comment,
+            userId: this.authService.user!.id
+          })
+        );
+      }
+      this.saving = false;
+      this.$emit("close");
+    } catch (error) {
+      alert("Something went wrong. Please try again");
     }
   }
 
-  public remove() {
+  public async remove() {
     if (this.time.id !== undefined && confirm("Är du säker?")) {
       this.saving = true;
-      this.timeDeleteAction(this.time.id)
-        .then(() => {
-          this.saving = false;
-          this.$emit("close");
-        })
-        .catch(() => {
-          alert("Something went wrong. Please try again");
-        });
+      try {
+        await this.timeService.delete(this.time.id);
+        this.saving = false;
+        this.$emit("close");
+      } catch (error) {
+        alert("Something went wrong. Please try again");
+      }
     }
   }
 }

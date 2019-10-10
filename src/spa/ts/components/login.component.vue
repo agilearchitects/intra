@@ -46,19 +46,20 @@
   </div>
 </template>
 <script lang="ts">
+// Libs
 import { Vue, Component } from "vue-property-decorator";
 import { Route } from "vue-router";
-import { State, Action, Getter } from "vuex-class";
-import { loginAction } from "../store/auth.store";
-import { LoginDTO } from "../../../shared/dto/login.dto";
+
+// Services
+import { AuthService } from "../services/auth.service";
+
+// Components
 import LayoutButtonComponent from "./layout/button.component.vue";
 import InputComponent from "./layout/input.component.vue";
 import CheckboxComponent from "./layout/checkbox.component.vue";
 
-export interface User {
-  emaiL: string;
-  id: number;
-}
+// Bootstrap
+import { authService as authServiceInstance } from "../bootstrap";
 
 export type loginForm = {
   email: string;
@@ -70,25 +71,22 @@ export type loginForm = {
   components: { LayoutButtonComponent, InputComponent, CheckboxComponent }
 })
 export default class LoginComponent extends Vue {
-  @Action("auth/login") login!: loginAction;
-  @Getter("auth/token") token!: string;
-  @Getter("auth/user") user!: User;
+  private readonly authService: AuthService = authServiceInstance;
 
   public form: loginForm = {
-    email: "",
-    password: "",
+    email: "test@test.test",
+    password: "test",
     remember: false
   };
   public loginError: boolean = false;
 
-  public submit(email: string, password: string) {
-    this.login(LoginDTO.parse({ email, password }))
-      .then(() => {
-        this.$router.push("/start");
-      })
-      .catch(() => {
-        this.loginError = true;
-      });
+  public async submit(email: string, password: string) {
+    try {
+      await this.authService.login(email, password);
+      this.$router.push("/start");
+    } catch (error) {
+      this.loginError = true;
+    }
   }
 }
 </script>

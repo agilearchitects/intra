@@ -4,7 +4,6 @@ import { ServerModule } from "@agilearchitects/simplyserve";
 import { boot, envService } from "./bootstrap";
 
 // Routes
-import { UserEntity } from "./api/entities/user.entity";
 import { router } from "./api/routes";
 
 (async () => {
@@ -22,7 +21,7 @@ import { router } from "./api/routes";
     ...(env === "local" ? [{
       domain: spaHost,
       staticPath: "build/spa",
-      apiBaseUrl: apiHost,
+      apiBaseUrl: `http://${apiHost}:${port}`,
     }] : []),
   ], port).start();
   if (["local", "dev"].indexOf(env) !== -1) {

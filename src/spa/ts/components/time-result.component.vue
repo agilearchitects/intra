@@ -9,30 +9,31 @@
 </template>
 <script lang="ts">
 import { Vue, Component } from "vue-property-decorator";
-import { Action } from "vuex-class";
 
-import { TimeDTO } from "../../../shared/dto/time.dto";
-
-import { timeIndexAction } from "../store/time.store";
+import { TimeDTO, ITimeDTO } from "../../../shared/dto/time.dto";
 
 import NavComponent from "./layout/nav.component.vue";
+import { TimeService } from "../services/time.service";
+import { timeService as timeServiceInstance } from "../bootstrap";
+import { TimeQueryDTO } from "../../../shared/dto/time-query.dto";
 
 @Component({
   components: { NavComponent }
 })
 export default class TimeResultComponent extends Vue {
-  @Action("time/index") timeIndexAction!: timeIndexAction;
+  private readonly timeService: TimeService = timeServiceInstance;
 
-  public times: TimeDTO[] = [];
+  public times: ITimeDTO[] = [];
   public mounted() {
     this.getTimes();
   }
-  public getTimes() {
-    this.timeIndexAction({ year: "2019", week: "32" }).then(
-      (times: TimeDTO[]) => {
-        this.times = times;
-      }
-    );
+  public async getTimes() {
+    this.times = (await this.timeService.index(
+      TimeQueryDTO.parse({
+        year: "2019",
+        week: "32"
+      })
+    )).map((time: TimeDTO) => time.serialize());
   }
 }
 </script>

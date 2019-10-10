@@ -9,27 +9,35 @@
   </modal-form-component>
 </template>
 <script lang="ts">
+// Libs
 import { Vue, Component } from "vue-property-decorator";
-import { Action } from "vuex-class";
 
-import { customerCreateAction } from "../store/customer.store";
+// Services
+import { CustomerService } from "../services/customer.service";
 
+// DTO's
+import { CreateCustomerDTO } from "../../../shared/dto/create-customer.dto";
+
+// Components
 import ModalFormComponent from "./modal-form.component.vue";
 import InputComponent from "./layout/input.component.vue";
-import { CreateCustomerDTO } from "../../../shared/dto/create-customer.dto";
+
+// Bootstrap
+import { customerService as customerServiceInstance } from "../bootstrap";
+
 @Component({
   components: { ModalFormComponent, InputComponent }
 })
 export default class CreateCustomerFormComponent extends Vue {
-  @Action("customer/create") customerCreateAction!: customerCreateAction;
-
+  public customerService: CustomerService = customerServiceInstance;
   public name: string = "";
 
   public saving: boolean = false;
 
   public save() {
     this.saving = true;
-    this.customerCreateAction(CreateCustomerDTO.parse({ name: this.name }))
+    this.customerService
+      .create(CreateCustomerDTO.parse({ name: this.name }))
       .then(() => {
         this.saving = false;
         this.$emit("close");

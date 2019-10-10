@@ -4,10 +4,10 @@ import moment, { Moment } from "moment";
 import { Between } from "typeorm";
 
 // DTO's
-import { ICreateTimeJSON } from "../../shared/dto/create-time.dto";
-import { IStopTimeJSON } from "../../shared/dto/stop-time.dto";
-import { ITimeJSON } from "../../shared/dto/time.dto";
-import { IUpdateTimeJSON } from "../../shared/dto/update-time.dto";
+import { ICreateTimeDTO } from "../../shared/dto/create-time.dto";
+import { IStopTimeDTO } from "../../shared/dto/stop-time.dto";
+import { ITimeDTO } from "../../shared/dto/time.dto";
+import { IUpdateTimeDTO } from "../../shared/dto/update-time.dto";
 
 // Entites
 import { TimeEntity } from "../entities/time.entity";
@@ -60,7 +60,7 @@ export class TimeController extends Controller {
           order: { from: "DESC" },
         });
 
-        handler.response<ITimeJSON[]>().json(times.map((time: TimeEntity) => {
+        handler.response<ITimeDTO[]>().json(times.map((time: TimeEntity) => {
           return {
             id: time.id,
             ...(time.project !== null ? {
@@ -94,7 +94,7 @@ export class TimeController extends Controller {
           where: { id: parseInt(handler.params<{ id: string }>().id, 10) },
           relations: ["project", "project.customer"],
         });
-        handler.response<ITimeJSON>().json({
+        handler.response<ITimeDTO>().json({
           id: time.id,
           ...(time.project !== undefined ? {
             project: {
@@ -122,19 +122,19 @@ export class TimeController extends Controller {
   public create(): RequestHandler {
     return controller(async (handler: ControllerHandler) => {
       try {
-        const data = handler.body<ICreateTimeJSON>();
-        if (data.to === undefined) {
-          const times: TimeEntity[] = await TimeEntity.find({ where: { userId: handler.request.user.id, to: null } });
-          if (times.length > 0) {
-            await TimeEntity.update(times.map((time: TimeEntity) => time.id), { to: new Date() });
-          }
+        const body = handler.body<ICreateTimeDTO>();
+        // If timer has no end date (ongoing timer)
+        if (body.to === undefined) {
+          // Stop all ongoing timers
+          TimeEntity.update({ user: { id: handler.request.user.id }, to: null }, { to: moment(body.from).toDate() });
 
+          // Create timer
           await TimeEntity.create({
-            from: moment(data.from).toDate(),
-            ...(data.to !== undefined ? { to: this.setToDate(moment(data.from), moment(data.to)).toDate() } : undefined),
-            comment: data.comment,
+            from: moment(body.from).toDate(),
+            ...(body.to !== undefined ? { to: this.setToDate(moment(body.from), moment(body.to)).toDate() } : undefined),
+            comment: body.comment,
             user: handler.request.user,
-            projectId: data.projectId,
+            projectId: body.projectId,
           }).save();
 
           handler.sendStatus(200);
@@ -149,7 +149,7 @@ export class TimeController extends Controller {
   public update(): RequestHandler {
     return controller(async (handler: ControllerHandler) => {
       try {
-        const body = handler.body<IUpdateTimeJSON>();
+        const body = handler.body<IUpdateTimeDTO>();
         await TimeEntity.update(parseInt(handler.params<{ id: string }>().id, 10), {
           from: moment(body.from).toDate(),
           ...(body.to !== undefined ? { to: this.setToDate(moment(body.from), moment(body.to)).toDate() } : undefined),
@@ -181,8 +181,8 @@ export class TimeController extends Controller {
     return controller(async (handler: ControllerHandler) => {
       try {
         const params: { id: string } = handler.params<{ id: string }>();
-        const body = handler.body<IStopTimeJSON>();
-        await TimeEntity.update({ id: parseInt(params.id, 10), to: null }, { to: body.to });
+        const body = handler.body<IStopTimeDTO>();
+        await TimeEntity.update({ id: parseInt(params.id, 10), to: null }, { to: moment(body.to).toDate() });
         handler.sendStatus(200);
       } catch (error) {
         this.logError(handler.response(), "Unable to stop time", error);

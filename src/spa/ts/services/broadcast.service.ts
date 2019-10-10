@@ -1,8 +1,7 @@
-export class Broadcast {
-  public static getInstance(): Broadcast { return this.instance || (this.instance = new this()); }
-  private static instance: Broadcast;
+export type observer<T> = (payload: T) => void;
 
-  private observers: { [key: string]: Function[] | null } = {};
+export class BroadcastService {
+  private observers: { [key: string]: Array<observer<any>> | null } = {};
 
   public subscribe<T>(name: string) {
     let index: number;
@@ -18,19 +17,17 @@ export class Broadcast {
     };
 
     return {
-      then: (callback: (payload: T) => void) => {
+      then: (callback: observer<T>) => {
         this.observers[name][index] = callback;
         return { unsubscribe };
       }, unsubscribe,
     };
   }
-  public emit(name: string, payload?: any) {
+  public emit<T = any>(name: string, payload?: T) {
     if (this.observers[name]) {
-      this.observers[name].forEach((observer: Function) => {
+      this.observers[name].forEach((observer: observer<T>) => {
         observer(payload);
       });
     }
   }
 }
-
-export let broadcast = Broadcast.getInstance();

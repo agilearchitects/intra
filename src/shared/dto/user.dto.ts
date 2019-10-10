@@ -1,24 +1,22 @@
-import DTO from "./dto";
-
-export interface IUSer {
+export interface IUserDTO {
   id: number;
   email: string;
 }
-export interface IUserDTO extends IUSer { } // tslint:disable-line:no-empty-interface
-export interface IUserJSON extends IUSer { } // tslint:disable-line:no-empty-interface
 
-export class UserDTO extends DTO<IUserDTO> implements IUserDTO {
-
-  public static parse(object: IUserJSON): UserDTO {
-    return new UserDTO({
-      id: object.id,
-      email: object.email,
-    });
+export class UserDTO implements IUserDTO {
+  public static parse(object: IUserDTO): UserDTO {
+    return new UserDTO(
+      object.id,
+      object.email,
+    );
   }
-  public id!: number;
-  public email!: string;
 
-  public serialize(): IUserJSON {
+  public constructor(
+    public readonly id: number,
+    public readonly email: string,
+  ) { }
+
+  public serialize(): IUserDTO {
     return {
       id: this.id,
       email: this.email,

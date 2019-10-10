@@ -1,28 +1,25 @@
-import moment from "moment";
-import DTO from "./dto";
-
-export interface IStopTime<A> {
+export interface IStopTimeDTO {
   id: number;
-  to: A;
+  to: string;
 }
 
-export interface IStopTimeDTO extends IStopTime<Date> { }
-export interface IStopTimeJSON extends IStopTime<string> { }
-
-export class StopTimeDTO extends DTO<IStopTimeDTO> implements IStopTimeDTO {
-  public static parse(object: IStopTimeJSON): StopTimeDTO {
-    return new StopTimeDTO({
-      id: object.id,
-      to: moment(object.to).toDate(),
-    });
+export class StopTimeDTO implements IStopTimeDTO {
+  public static parse(object: IStopTimeDTO): StopTimeDTO {
+    return new StopTimeDTO(
+      object.id,
+      object.to,
+    );
   }
-  public id!: number;
-  public to!: Date;
 
-  public serialize(): IStopTimeJSON {
+  public constructor(
+    public readonly id: number,
+    public readonly to: string,
+  ) { }
+
+  public serialize(): IStopTimeDTO {
     return {
       id: this.id,
-      to: moment(this.to).format("YYYY-MM-DD HH:mm:ss"),
+      to: this.to,
     };
   }
 }

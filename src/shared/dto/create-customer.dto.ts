@@ -1,21 +1,18 @@
-import DTO from "./dto";
-
-export interface ICreateCustomer {
-  name: string
+export interface ICreateCustomerDTO {
+  name: string;
 }
 
-export interface ICreateCustomerDTO extends ICreateCustomer { }
-export interface ICreateCustomerJSON extends ICreateCustomer { }
-
-export class CreateCustomerDTO extends DTO<ICreateCustomerDTO> implements ICreateCustomerDTO {
-  public static parse(object: ICreateCustomerJSON): CreateCustomerDTO {
-    return new CreateCustomerDTO({
-      name: object.name,
-    });
+export class CreateCustomerDTO implements ICreateCustomerDTO {
+  public static parse(object: ICreateCustomerDTO): CreateCustomerDTO {
+    return new CreateCustomerDTO(
+      object.name,
+    );
   }
-  public name!: string;
+  public constructor(
+    public readonly name: string,
+  ) { }
 
-  public serialize(): ICreateCustomerJSON {
+  public serialize(): ICreateCustomerDTO {
     return {
       name: this.name,
     };

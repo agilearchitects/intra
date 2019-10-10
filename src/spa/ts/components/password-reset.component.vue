@@ -30,14 +30,21 @@
   </div>
 </template>
 <script lang="ts">
+// Libs
 import { Vue, Component } from "vue-property-decorator";
-import { Action } from "vuex-class";
 
-import { loginAction, passwordResetAction } from "../store/auth.store";
+// Services
+import { AuthService } from "../services/auth.service";
+
+// DTO's
 import { PasswordResetDTO } from "../../../shared/dto/password-reset.dto";
 
+// Components
 import LayoutButtonComponent from "./layout/button.component.vue";
 import InputComponent from "./layout/input.component.vue";
+
+// Bootstrap
+import { authService as authServiceInstance } from "../bootstrap";
 
 export interface IPasswordResetForm {
   email: string;
@@ -47,7 +54,7 @@ export interface IPasswordResetForm {
   components: { LayoutButtonComponent, InputComponent }
 })
 export default class PasswordResetComponent extends Vue {
-  @Action("auth/passwordReset") passwordResetAction!: passwordResetAction;
+  private readonly authService: AuthService = authServiceInstance;
 
   public get valid(): boolean {
     return this.form.email != "";
@@ -59,7 +66,8 @@ export default class PasswordResetComponent extends Vue {
   public resetError: boolean = false;
 
   public submit(email: string) {
-    this.passwordResetAction(PasswordResetDTO.parse({ email }))
+    this.authService
+      .passwordReset()
       .then(() => {
         this.resetError = false;
       })

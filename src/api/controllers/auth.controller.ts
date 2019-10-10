@@ -4,8 +4,7 @@ import { HashtiService } from "@agilearchitects/hashti";
 import { RequestHandler } from "express";
 
 // DTO's
-import { IAuthResponseJSON } from "../../shared/dto/auth-response.dto";
-import { ICreateUserJSON } from "../../shared/dto/create-user.dto";
+import { ICreateUserDTO } from "../../shared/dto/create-user.dto";
 
 // Services
 import {
@@ -44,7 +43,7 @@ export class AuthController extends Controller {
       try {
         const data = handler.body<ILoginDTO>();
         const loginPayload: ILoginPayloadDTO = await this.authService.login(data);
-        handler.response<IAuthResponseJSON>().json(loginPayload);
+        handler.response<ILoginPayloadDTO>().json(loginPayload);
       } catch (error) {
         this.logError(handler.response(), "Error logging in", error);
         throw error;
@@ -56,7 +55,7 @@ export class AuthController extends Controller {
   public create(): RequestHandler {
     return controller(async (handler: ControllerHandler) => {
       try {
-        const data = handler.body<ICreateUserJSON>();
+        const data = handler.body<ICreateUserDTO>();
         data.password = this.hashtiService.create(data.password);
         await this.userService.create(data.email, data.password, true, false);
         handler.sendStatus(200);

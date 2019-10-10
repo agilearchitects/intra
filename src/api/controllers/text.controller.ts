@@ -8,7 +8,7 @@ import { TextEntity } from "../entities/text.entity";
 import { controller, ControllerHandler } from "../modules/controller-handler.module";
 
 // DTO's
-import { ITextJSON, TextDTO } from "../../shared/dto/text.dto";
+import { ITextDTO, TextDTO } from "../../shared/dto/text.dto";
 
 // Base controller
 import { Controller } from "./controller";
@@ -18,7 +18,7 @@ export class TextController extends Controller {
     return controller(async (handler: ControllerHandler) => {
       try {
         const texts = await TextEntity.find();
-        handler.response<ITextJSON[]>().json(texts.map((text: TextEntity) => TextDTO.parse({
+        handler.response<ITextDTO[]>().json(texts.map((text: TextEntity) => TextDTO.parse({
           id: text.id,
           name: text.name,
           content: text.content,
@@ -37,7 +37,7 @@ export class TextController extends Controller {
         if (text === undefined) {
           text = await TextEntity.create({ name: textName, content: "" }).save();
         }
-        handler.response<ITextJSON>().json(TextDTO.parse({
+        handler.response<ITextDTO>().json(TextDTO.parse({
           id: text.id,
           name: text.name,
           content: text.content,

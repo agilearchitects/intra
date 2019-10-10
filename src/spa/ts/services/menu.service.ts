@@ -1,42 +1,54 @@
-import { Location } from "vue-router";
-import { ActionTree, GetterTree, Module, MutationTree } from "vuex";
-
+// Libs
 import { TranslateResult } from "vue-i18n";
+import { Location } from "vue-router";
+
+// Locale
 import { i18n } from "../locale";
-import { IAppState } from "./app.store";
-import { wikiToRoute, wiki } from "../utils/wiki";
+
+// Modules
+import { wiki, wikiToRoute } from "../../resources/wiki";
+
+// Services
+import { AuthService } from "./auth.service";
+
+// Bootstrap
+import { authService as authServiceInstance } from "../bootstrap";
 
 export interface ITree { route: Location; title: TranslateResult; children?: ITree[]; }
 export interface IMenuItem { route?: Location; title?: TranslateResult; children?: IMenuItem[]; divider?: boolean; }
 
-export interface IMenuState { } // tslint:disable-line:no-empty-interface
+export class MenuService {
+  public constructor(
+    private readonly authService: AuthService,
+  ) { }
 
-
-
-export const menuStore: Module<IMenuState, IAppState> = {
-  getters: {
-    tree: (state, getters): ITree[] => [
+  public get tree(): ITree[] {
+    return [
       { route: { name: "start" }, title: i18n.t("menu.start") },
       { route: { name: "wiki" }, title: i18n.t("menu.wiki"), children: wikiToRoute(wiki, "wiki") },
       {
         route: { name: "time" }, title: i18n.t("menu.time.time"), children: [
           { route: { name: "time.report" }, title: i18n.t("menu.time.report") },
           { route: { name: "time.result" }, title: i18n.t("menu.time.result") },
-        ]
+        ],
       },
       { route: { name: "crm" }, title: i18n.t("menu.crm") },
-    ],
-    leftMenu: (state, getters): IMenuItem[] => [
+    ];
+  }
+  public get leftMenu(): IMenuItem[] {
+    return [
       { route: { name: "start" }, title: i18n.t("menu.start") },
       { route: { name: "wiki" }, title: i18n.t("menu.wiki"), children: wikiToRoute(wiki, "wiki") },
-    ],
-    rightMenu: (state, getters): IMenuItem[] => [
-      ...getters["auth/isAuth"] ? [
+    ];
+  }
+  public get rightMenu(): IMenuItem[] {
+    return [
+      ...this.authService.isAdmin ? [
         {
           route: { name: "time" }, title: i18n.t("menu.time.time"), children: [
             { route: { name: "time.report" }, title: i18n.t("menu.time.report") },
             { route: { name: "time.result" }, title: i18n.t("menu.time.result") },
-          ]
+          ],
         },
         { route: { name: "crm" }, title: i18n.t("menu.crm") },
         { divider: true },
@@ -44,9 +56,9 @@ export const menuStore: Module<IMenuState, IAppState> = {
       ] : [
           { route: { name: "login" }, title: i18n.t("menu.login") },
         ],
-    ],
-    menus: (state, getters): IMenuItem[][] => {
-      return [getters.leftMenu, getters.rightMenu];
-    },
-  } as GetterTree<IMenuState, IAppState>,
-};
+    ];
+  }
+  public get menus(): IMenuItem[][] {
+    return [this.leftMenu, this.rightMenu];
+  }
+}

@@ -1,21 +1,19 @@
-import DTO from "./dto";
-
-export interface IPasswordReset {
+export interface IPasswordResetDTO {
   email: string;
 }
 
-export interface IPasswordResetDTO extends IPasswordReset { }
-export interface IPasswordResetJSON extends IPasswordReset { }
-
-export class PasswordResetDTO extends DTO<IPasswordResetDTO> implements IPasswordResetDTO {
-  public static parse(object: IPasswordResetJSON): PasswordResetDTO {
-    return new PasswordResetDTO({
-      email: object.email,
-    });
+export class PasswordResetDTO implements IPasswordResetDTO {
+  public static parse(object: IPasswordResetDTO): PasswordResetDTO {
+    return new PasswordResetDTO(
+      object.email,
+    );
   }
-  public email!: string;
 
-  public serialize(): IPasswordResetJSON {
+  public constructor(
+    public readonly email: string,
+  ) { }
+
+  public serialize(): IPasswordResetDTO {
     return {
       email: this.email,
     };

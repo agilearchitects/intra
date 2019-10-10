@@ -1,13 +1,13 @@
 import Vue from "vue";
-import VueRouter, { Location, NavigationGuard, RawLocation, Route } from "vue-router";
-import { appStore } from "./store/app.store";
+import { NavigationGuard, RawLocation, Route } from "vue-router";
+import { authService } from "./bootstrap";
 export type navigationGuardNext = (to?: RawLocation | false | ((vm: Vue) => any) | void) => void;
 
 export default {
   // Middleware for authenticated users
   auth: ((to, from, next) => {
     // Users not authenticated will be redirected to 404
-    next(!appStore.getters["auth/isAuth"] ? { name: "login" } : undefined);
+    next(!authService.isAuth ? { name: "login" } : undefined);
   }) as NavigationGuard,
   errorCode: ((to, from, next) => {
     const errorCode = parseInt(to.params.code, 10);
@@ -15,11 +15,11 @@ export default {
   }) as NavigationGuard,
   guest: ((to, from, next) => {
     // Users authenticated will be redirected to 404
-    next(appStore.getters["auth/isAuth"] ? { path: "/error/404" } : undefined);
+    next(authService.isAuth ? { path: "/error/404" } : undefined);
   }) as NavigationGuard,
   logout: ((to, from, next) => {
     // Logout
-    appStore.dispatch("auth/logout");
+    authService.logout();
     // Navigate to start page
     next({ name: "start" });
   }) as NavigationGuard,

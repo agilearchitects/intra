@@ -6,9 +6,9 @@
       <h5>{{ $t('title') }}</h5>
       <small>
         {{ $t('contact.address') }}
-        <br>
+        <br />
         ${{ $t('contact.zip') }} {{ $t('contact.city') }}
-        <br>
+        <br />
       </small>
     </div>
     <div class="d-sm-none d-md-none w-100"></div>
@@ -20,7 +20,7 @@
         <a
           :href="`mailto:${$t('contact.email')}`"
         >{{ $t('contact.email') }}</a>
-        <br>
+        <br />
         {{ $t('contact.label.phone') }}
         <a
           :href="`tel:${stripPhoneFormat($t('contact.phone'))}`"
@@ -42,9 +42,9 @@
   </div>
 </template>
 <script lang="ts">
-import { State, Action, Getter, Mutation } from "vuex-class";
 import { Vue, Component, Watch } from "vue-property-decorator";
-import { MutationMethod } from "vuex";
+import { AuthService } from "../services/auth.service";
+import { authService as authServiceInstance } from "../bootstrap";
 
 import ToggleComponent from "./layout/toggle.component.vue";
 
@@ -52,12 +52,16 @@ import ToggleComponent from "./layout/toggle.component.vue";
   components: { ToggleComponent }
 })
 export default class FooterComponent extends Vue {
-  @Getter("auth/isAdmin") isAdmin!: boolean;
-  @Getter("auth/getEditMode") editMode!: boolean;
-  @Mutation("auth/setEditMode") setEditMode!: MutationMethod;
+  private authService: AuthService = authServiceInstance;
+  public get isAdmin(): boolean {
+    return this.authService.isAdmin;
+  }
+  public get editMode(): boolean {
+    return this.authService.editMode;
+  }
 
   public updateEditMode(value: boolean) {
-    this.setEditMode(value);
+    this.authService.editMode = value;
   }
 
   public stripPhoneFormat(phone: string) {

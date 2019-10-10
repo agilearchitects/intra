@@ -41,7 +41,6 @@ export const authService = new AuthService(
   hashtiService,
 );
 
-
 export const boot = async () => {
   await createConnection();
 };

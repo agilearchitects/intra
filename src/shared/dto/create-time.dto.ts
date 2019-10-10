@@ -1,39 +1,37 @@
 import moment from "moment";
-import DTO from "./dto";
 
-export interface ICreateTime<A, B> {
+export interface ICreateTimeDTO {
   projectId: number;
-  from: A;
-  to?: B;
+  from: string;
+  to?: string | undefined;
   comment: string;
   userId: number;
 }
 
-export interface ICreateTimeDTO extends ICreateTime<Date, Date> { }
-export interface ICreateTimeJSON extends ICreateTime<string, string> { }
-
-export class CreateTimeDTO extends DTO<ICreateTimeDTO> implements ICreateTimeDTO {
-  public static parse(object: ICreateTimeJSON): CreateTimeDTO {
-    return new CreateTimeDTO({
-      projectId: object.projectId,
-      from: moment(object.from).toDate(),
-      ...(object.to !== undefined ? { to: moment(object.to).toDate() } : undefined),
-      comment: object.comment,
-      userId: object.userId,
-    });
+export class CreateTimeDTO implements ICreateTimeDTO {
+  public static parse(object: ICreateTimeDTO): CreateTimeDTO {
+    return new CreateTimeDTO(
+      object.projectId,
+      object.from,
+      (object.to !== undefined ? object.to : undefined),
+      object.comment,
+      object.userId,
+    );
   }
 
-  public projectId!: number;
-  public from!: Date;
-  public to?: Date;
-  public comment!: string;
-  public userId!: number;
+  public constructor(
+    public readonly projectId: number,
+    public readonly from: string,
+    public readonly to: string | undefined,
+    public readonly comment: string,
+    public readonly userId: number,
+  ) { }
 
-  public serialize(): ICreateTimeJSON {
+  public serialize(): ICreateTimeDTO {
     return {
       projectId: this.projectId,
-      from: moment(this.from).format("YYYY-MM-DD HH:mm:ss"),
-      ...(this.to !== undefined ? { to: moment(this.to).format("YYYY-MM-DD HH:mm:ss") } : undefined),
+      from: this.from,
+      ...(this.to !== undefined ? { to: this.to } : undefined),
       comment: this.comment,
       userId: this.userId,
     };

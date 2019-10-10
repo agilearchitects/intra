@@ -94,10 +94,10 @@
 </template>
 <script lang="ts">
 import { Vue, Component, Watch } from "vue-property-decorator";
-import { State, Action, Getter } from "vuex-class";
-import { IMenuItem } from "../store/menu.store";
+import { IMenuItem, MenuService } from "../services/menu.service";
 import { RouteRecord, Route } from "vue-router";
 import { setTimeout } from "timers";
+import { menuService as menuServiceInstance } from "../bootstrap";
 
 interface IMenuItemWithShow extends IMenuItem {
   show: boolean;
@@ -105,7 +105,10 @@ interface IMenuItemWithShow extends IMenuItem {
 
 @Component
 export default class HeaderComponent extends Vue {
-  @Getter("menus") menus!: IMenuItem[][];
+  private readonly menuService: MenuService = menuServiceInstance;
+  public get menus(): IMenuItem[][] {
+    return this.menuService.menus;
+  }
   public dev: boolean = false;
 
   public get navBar(): HTMLElement {
@@ -149,9 +152,12 @@ export default class HeaderComponent extends Vue {
   }
 
   public triggerNavbarToggler() {
-    (this.$refs.navbarContent as Element).classList.toggle("show");
-    //$(".navbar-toggler").trigger("click");
-    this.checkOverflow();
+    const ref = this.$refs.navbarContent as Element | undefined;
+    if (ref !== undefined) {
+      ref.classList.toggle("show");
+      //$(".navbar-toggler").trigger("click");
+      this.checkOverflow();
+    }
   }
 
   public toggleEvent() {

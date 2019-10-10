@@ -2,8 +2,8 @@
 import { RequestHandler } from "express";
 
 // DTO's
-import { ICreateCustomerJSON } from "../../shared/dto/create-customer.dto";
-import { ICustomerJSON } from "../../shared/dto/customer.dto";
+import { ICreateCustomerDTO } from "../../shared/dto/create-customer.dto";
+import { ICustomerDTO } from "../../shared/dto/customer.dto";
 
 // Entities
 import { CustomerEntity } from "../entities/customer.entity";
@@ -20,7 +20,7 @@ export class CustomerController extends Controller {
     return controller(async (handler: ControllerHandler) => {
       try {
         const customers: CustomerEntity[] = await CustomerEntity.find({ relations: ["projects"] });
-        handler.response<ICustomerJSON[]>().json(customers.map((customer: CustomerEntity) => ({
+        handler.response<ICustomerDTO[]>().json(customers.map((customer: CustomerEntity) => ({
           id: customer.id,
           name: customer.name,
           ...(customer.projects.length > 0 ? {
@@ -39,7 +39,7 @@ export class CustomerController extends Controller {
   public create(): RequestHandler {
     return controller(async (handler: ControllerHandler) => {
       try {
-        await CustomerEntity.create(handler.body<ICreateCustomerJSON>()).save();
+        await CustomerEntity.create(handler.body<ICreateCustomerDTO>()).save();
         handler.sendStatus(200);
       } catch (error) {
         this.logError(handler.response(), "Error creating customer", error);

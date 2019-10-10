@@ -1,7 +1,7 @@
 import { Column, Entity, ManyToOne } from "typeorm";
 import { Entity as AppEntity } from "./entity";
-import { UserEntity } from "./user.entity";
 import { ProjectEntity } from "./project.entity";
+import { UserEntity } from "./user.entity";
 
 @Entity()
 export class TimeEntity extends AppEntity {

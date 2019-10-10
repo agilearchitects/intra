@@ -1,44 +1,39 @@
-import moment from "moment";
-import DTO from "./dto";
-
-
-export interface IUpdateTime<A, B> {
+export interface IUpdateTimeDTO {
   id: number;
   projectId: number;
-  from: A;
-  to?: B;
+  from: string;
+  to?: string;
   comment: string;
   userId: number;
 }
 
-export interface IUpdateTimeDTO extends IUpdateTime<Date, Date> { }
-export interface IUpdateTimeJSON extends IUpdateTime<string, string> { }
-
-export class UpdateTimeDTO extends DTO<IUpdateTimeDTO> implements IUpdateTimeDTO {
-  public static parse(object: IUpdateTimeJSON): UpdateTimeDTO {
-    return new UpdateTimeDTO({
-      id: object.id,
-      projectId: object.projectId,
-      from: moment(object.from).toDate(),
-      ...(object.to !== undefined ? { to: moment(object.to).toDate() } : undefined),
-      comment: object.comment,
-      userId: object.userId,
-    });
+export class UpdateTimeDTO implements IUpdateTimeDTO {
+  public static parse(object: IUpdateTimeDTO): UpdateTimeDTO {
+    return new UpdateTimeDTO(
+      object.id,
+      object.projectId,
+      object.from,
+      object.to !== undefined ? object.to : undefined,
+      object.comment,
+      object.userId,
+    );
   }
 
-  public id!: number;
-  public projectId!: number;
-  public from!: Date;
-  public to?: Date;
-  public comment!: string;
-  public userId!: number;
+  public constructor(
+    public readonly id: number,
+    public readonly projectId: number,
+    public readonly from: string,
+    public readonly to: string | undefined,
+    public readonly comment: string,
+    public readonly userId: number,
+  ) { }
 
-  public serialize(): IUpdateTimeJSON {
+  public serialize(): IUpdateTimeDTO {
     return {
       id: this.id,
       projectId: this.projectId,
-      from: moment(this.from).format("YYYY-MM-DD HH:mm:ss"),
-      ...(this.to !== undefined ? { to: moment(this.to).format("YYYY-MM-DD HH:mm:ss") } : undefined),
+      from: this.from,
+      ...(this.to !== undefined ? { to: this.to } : undefined),
       comment: this.comment,
       userId: this.userId,
     };

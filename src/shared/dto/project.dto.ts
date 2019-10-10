@@ -1,32 +1,31 @@
-import DTO from "./dto";
-import { ICustomerDTO, ICustomerJSON, CustomerDTO } from "./customer.dto";
-import { ITimeDTO, ITimeJSON, TimeDTO } from "./time.dto";
+import { CustomerDTO, ICustomerDTO } from "./customer.dto";
+import { ITimeDTO, TimeDTO } from "./time.dto";
 
-export interface IProject<A, B> {
+export interface IProjectDTO {
   id: number;
   name: string;
-  customer?: A;
-  times?: B[];
+  customer?: ICustomerDTO;
+  times?: ITimeDTO[];
 }
 
-export interface IProjectDTO extends IProject<CustomerDTO, TimeDTO> { }
-export interface IProjectJSON extends IProject<ICustomerJSON, ITimeJSON> { }
-
-export class ProjectDTO extends DTO<IProjectDTO> implements IProjectDTO {
-  public static parse(object: IProjectJSON): ProjectDTO {
-    return new ProjectDTO({
-      id: object.id,
-      name: object.name,
-      ...(object.customer ? { customer: CustomerDTO.parse(object.customer) } : null),
-      ...(object.times ? { times: object.times.map((time: ITimeJSON) => TimeDTO.parse(time)) } : null),
-    });
+export class ProjectDTO implements IProjectDTO {
+  public static parse(object: IProjectDTO): ProjectDTO {
+    return new ProjectDTO(
+      object.id,
+      object.name,
+      (object.customer ? CustomerDTO.parse(object.customer) : undefined),
+      (object.times ? object.times.map((time: ITimeDTO) => TimeDTO.parse(time)) : undefined),
+    );
   }
-  public id!: number;
-  public name!: string;
-  public customer?: CustomerDTO;
-  public times?: TimeDTO[];
 
-  public serialize(): IProjectJSON {
+  public constructor(
+    public readonly id: number,
+    public readonly name: string,
+    public readonly customer?: CustomerDTO,
+    public readonly times?: TimeDTO[],
+  ) { }
+
+  public serialize(): IProjectDTO {
     return {
       id: this.id,
       name: this.name,
