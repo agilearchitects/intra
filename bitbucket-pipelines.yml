@@ -21,5 +21,6 @@ pipelines:
           script:
             - mkdir -p ~/.ssh
             - echo $SSH_KEY >> ~/.ssh/id_rsa
+            - chmod 400 ~/.ssh/id_rsa
             - ssh deploy@82.102.2.5 ~/export_db.sh aai staging
             - rsync -azr -e "ssh -i ~/.ssh/id_rsa" --progress build node_modules storage deploy@82.102.2.5:\~applications/aai/staging --exclude="storage/db.sqlite"
