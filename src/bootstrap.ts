@@ -7,6 +7,9 @@ import { MailingunService } from "@agilearchitects/mailingun";
 import { TemplateService } from "@agilearchitects/templategenerator";
 import { createConnection } from "typeorm";
 
+// TypeORM
+import { defaultConnectionConfig } from "./typeorm";
+
 // Entites
 import { BannedTokenEntity } from "./api/entities/banned-token.entity";
 import { UserEntity } from "./api/entities/user.entity";
@@ -42,5 +45,5 @@ export const authService = new AuthService(
 );
 
 export const boot = async () => {
-  await createConnection();
+  await createConnection({ ...defaultConnectionConfig });
 };

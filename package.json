@@ -1,4 +1,8 @@
 {
+  "engines": {
+    "node": "~12.8.0"
+  },
+  "version": "0.0.1",
   "scripts": {
     "build-api": "tsc",
     "watch-api": "tsc --watch",
@@ -10,7 +14,6 @@
     "serve": "nodemon ./build/server.js",
     "watch": "concurrently \"yarn run serve\" \"yarn run watch-api\" \"yarn run watch-spa\"",
     "build": "yarn build-api && yarn build-spa",
-    "prepare": "yarn build",
     "render": "ts-node ./render.ts",
     "test": "mocha --recursive src/**/*.spec.ts --require ts-node/register --timeout 999999",
     "lint": "tslint --config tslint.json --project tsconfig.json"
