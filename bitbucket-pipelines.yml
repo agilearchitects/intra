@@ -20,6 +20,7 @@ pipelines:
           image: bitbucketpipelines/rsync-deploy:0.3.2
           script:
             - mkdir -p ~/.ssh
+            - echo $SSH_KEY
             - echo $SSH_KEY >> ~/.ssh/id_rsa
             - chmod 400 ~/.ssh/id_rsa
             - ssh deploy@82.102.2.5 ~/export_db.sh aai staging
