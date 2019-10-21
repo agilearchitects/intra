@@ -19,5 +19,5 @@ pipelines:
           name: Deploy
           image: bitbucketpipelines/rsync-deploy:0.3.2
           script:
-            - ssh deploy@82.102.2.5 ~/export_db.sh aai staging
-            - rsync -azr --progress build node_modules storage deploy@82.102.2.5:\~applications/aai/staging --exclude="storage/db.sqlite"
+            - ssh $DEPLOY_USER@$DEPLOY_HOST ~/export_db.sh aai staging
+            - rsync -azr --progress build node_modules storage $DEPLOY_USER@$DEPLOY_HOST:$DEPLOY_PATH/staging --exclude="storage/db.sqlite"
