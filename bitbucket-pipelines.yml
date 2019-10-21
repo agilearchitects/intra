@@ -1,0 +1,25 @@
+pipelines:
+  default:
+    - step:
+        name: Build and test
+        image: node:12.8.0
+        caches:
+          - node
+        script:
+          - yarn
+          - yarn lint
+          # - yarn test
+        artifacts:
+          - build/**
+          - storage/**
+          - node_modules/**
+  branches:
+    staging:
+      - step:
+          name: Deploy
+          image: bitbucketpipelines/rsync-deploy:0.3.2
+          script:
+            - mkdir -p ~/.ssh
+            - echo $SSH_KEY >> ~/.ssh/id_rsa
+            - ssh deploy@82.102.2.5 ~/export_db.sh aai staging
+            - rsync -azr -e "ssh -i ~/.ssh/id_rsa" --progress build node_modules storage deploy@82.102.2.5:\~applications/aai/staging --exclude="storage/db.sqlite"
