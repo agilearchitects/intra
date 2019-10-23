@@ -7,6 +7,7 @@ import { ErrorService } from "./services/error.service";
 import { MenuService } from "./services/menu.service";
 import { ProjectService } from "./services/project.service";
 import { StorageService } from "./services/storage.service";
+import { TagService } from "./services/tag.service";
 import { TextService } from "./services/text.service";
 import { TimeService } from "./services/time.service";
 
@@ -18,6 +19,7 @@ export const textService = new TextService(apiService);
 export const timeService = new TimeService(apiService);
 export const errorService = new ErrorService(broadcastService);
 export const customerService = new CustomerService(apiService, errorService);
+export const tagService = new TagService(apiService, errorService);
 export const authService = new AuthService(apiService, errorService, storageService);
 export const menuService = new MenuService(authService);
 (window as any).authService = authService;

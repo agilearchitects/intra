@@ -16,70 +16,112 @@ import { TimeEntity } from "../entities/time.entity";
 import { controller, ControllerHandler } from "../modules/controller-handler.module";
 
 // Base controller
+import { CustomerDTO, ICustomerDTO } from "../../shared/dto/customer.dto";
+import { ITagDTO, TagDTO } from "../../shared/dto/tag.dto";
+import { ITimeQueryDTO } from "../../shared/dto/time-query.dto";
+import { CustomerEntity } from "../entities/customer.entity";
+import { ProjectEntity } from "../entities/project.entity";
+import { TagEntity } from "../entities/tag.entity";
 import { Controller } from "./controller";
 
 export class TimeController extends Controller {
   public index(): RequestHandler {
     return controller(async (handler: ControllerHandler) => {
       try {
-        const query = handler.query<{ date?: string, year?: string, month?: string, week?: string, all?: string }>();
-        let start: string;
-        let end: string;
-        if (query.year !== undefined && query.week !== undefined) {
-          start = moment(`${query.year} ${query.week}`, "YYYY W", true).startOf("isoWeek").format("YYYY-MM-DD 00:00:00");
-          end = moment(`${query.year} ${query.week}`, "YYYY W", true).endOf("isoWeek").format("YYYY-MM-DD 23:59:59");
+        const query = handler.query<ITimeQueryDTO>();
+        if (query.groupBy === "customer") {
+          let queryBuild = CustomerEntity.createQueryBuilder("customer")
+            .innerJoinAndSelect("customer.projects", "project", "project.customerId = customer.id")
+            .innerJoinAndSelect("project.times", "time", "time.projectId = project.id")
+            .innerJoinAndSelect("time.tags", "tags");
+          if (query.year !== undefined && query.month !== undefined) {
+            queryBuild = queryBuild.where("time.from BETWEEN :from AND :to", {
+              from: moment(`${query.year}-${query.month}`, "YYYY-MM", true).format("YYYY-MM-01 00:00:00"),
+              to: moment(`${query.year}-${query.month}`, "YYYY-MM", true).endOf("month").format("YYYY-MM-DD 23:59:59"),
+            });
+          } else if (query.year !== undefined && query.week !== undefined) {
+            queryBuild = queryBuild.where("time.from BETWEEN :from AND :to", {
+              from: moment(`${query.year} ${query.week}`, "YYYY W", true).startOf("isoWeek").format("YYYY-MM-DD 00:00:00"),
+              to: moment(`${query.year} ${query.week}`, "YYYY W", true).endOf("isoWeek").format("YYYY-MM-DD 23:59:59"),
+            });
+          } else if (query.year !== undefined && query.month === undefined && query.week === undefined) {
+            queryBuild = queryBuild.where("time.from BETWEEN :from AND :to", {
+              from: moment(query.year, "YYYY", true).format("YYYY-01-01 00:00:00"),
+              to: moment(query.year, "YYYY", true).format("YYYY-12-31 23:59:59"),
+            });
+          } else if (query.all) {
+            queryBuild = queryBuild.where("time.userId = :id", { id: handler.request.user.id });
+          }
+          const customers: CustomerEntity[] = await queryBuild.getMany();
+
+          handler.response<ICustomerDTO[]>().json(customers.map((customer: CustomerEntity) => ({
+            id: customer.id,
+            name: customer.name,
+            projects: customer.projects.map((project: ProjectEntity) => ({
+              id: project.id,
+              name: project.name,
+              times: project.times.map((time: TimeEntity) => ({
+                id: time.id,
+                from: moment(time.from).format("YYYY-MM-DD HH:mm:ss"),
+                ...(time.to !== null ? { to: moment(time.to).format("YYYY-MM-DD HH:mm:ss") } : undefined),
+                tags: time.tags.map((tag: TagEntity) => TagDTO.parse({ id: tag.id, name: tag.name }).serialize()),
+                comment: time.comment,
+              })),
+            })),
+          })));
+        } else {
+          const times: TimeEntity[] = await TimeEntity.find({
+            where: {
+              // Only get provided date
+              ...(query.date !== undefined ? {
+                from: Between(
+                  moment(query.date, "YYYY-MM-DD", true).format("YYYY-MM-DD 00:00:00"),
+                  moment(query.date, "YYYY-MM-DD", true).format("YYYY-MM-DD 23:59:59")),
+              } : undefined),
+              ...(query.year !== undefined && query.month !== undefined ? {
+                from: Between(
+                  moment(`${query.year}-${query.month}`, "YYYY-MM", true).format("YYYY-MM-01 00:00:00"),
+                  moment(`${query.year}-${query.month}`, "YYYY-MM", true).endOf("month").format("YYYY-MM-DD 23:59:59")),
+              } : undefined),
+              ...(query.year !== undefined && query.week !== undefined ? {
+                from: Between(
+                  moment(`${query.year} ${query.week}`, "YYYY W", true).startOf("isoWeek").format("YYYY-MM-DD 00:00:00"),
+                  moment(`${query.year} ${query.week}`, "YYYY W", true).endOf("isoWeek").format("YYYY-MM-DD 23:59:59")),
+              } : undefined),
+              ...(query.year !== undefined && query.month === undefined && query.week === undefined ? {
+                from: Between(
+                  moment(query.year, "YYYY", true).format("YYYY-01-01 00:00:00"),
+                  moment(query.year, "YYYY", true).format("YYYY-12-31 23:59:59")),
+              } : undefined),
+              // If query "all" is not provided only fetch entities belonging to current user
+              ...(query.all === undefined ? { user: handler.request.user } : undefined),
+            },
+            relations: ["project", "project.customer", "tags"],
+            order: { from: "DESC", to: "ASC" },
+          });
+
+          handler.response<ITimeDTO[]>().json(times.map((time: TimeEntity) => {
+            return {
+              id: time.id,
+              ...(time.project !== null ? {
+                project: {
+                  id: time.project.id,
+                  name: time.project.name,
+                  ...(time.project.customer !== null ? {
+                    customer: {
+                      id: time.project.customer.id,
+                      name: time.project.customer.name,
+                    },
+                  } : undefined),
+                },
+              } : undefined),
+              from: moment(time.from).format("YYYY-MM-DD HH:mm:ss"),
+              ...(time.to !== null ? { to: moment(time.to).format("YYYY-MM-DD HH:mm:ss") } : undefined),
+              tags: time.tags.map((tag: TagEntity) => TagDTO.parse({ id: tag.id, name: tag.name }).serialize()),
+              comment: time.comment,
+            };
+          }));
         }
-
-        const times: TimeEntity[] = await TimeEntity.find({
-          where: {
-            // Only get provided date
-            ...(query.date !== undefined ? {
-              from: Between(
-                moment(query.date, "YYYY-MM-DD", true).format("YYYY-MM-DD 00:00:00"),
-                moment(query.date, "YYYY-MM-DD", true).format("YYYY-MM-DD 23:59:59")),
-            } : undefined),
-            ...(query.year !== undefined && query.month !== undefined ? {
-              from: Between(
-                moment(`${query.year}-${query.month}`, "YYYY-MM", true).format("YYYY-MM-01 00:00:00"),
-                moment(`${query.year}-${query.month}`, "YYYY-MM", true).endOf("month").format("YYYY-MM-DD 23:59:59")),
-            } : undefined),
-            ...(query.year !== undefined && query.week !== undefined ? {
-              from: Between(
-                moment(`${query.year} ${query.week}`, "YYYY W", true).startOf("isoWeek").format("YYYY-MM-DD 00:00:00"),
-                moment(`${query.year} ${query.week}`, "YYYY W", true).endOf("isoWeek").format("YYYY-MM-DD 23:59:59")),
-            } : undefined),
-            ...(query.year !== undefined && query.month === undefined && query.week === undefined ? {
-              from: Between(
-                moment(query.year, "YYYY", true).format("YYYY-01-01 00:00:00"),
-                moment(query.year, "YYYY", true).format("YYYY-12-31 23:59:59")),
-            } : undefined),
-            // If query "all" is not provided only fetch entities belonging to current user
-            ...(query.all === undefined ? { user: handler.request.user } : undefined),
-          },
-          relations: ["project", "project.customer"],
-          order: { from: "DESC" },
-        });
-
-        handler.response<ITimeDTO[]>().json(times.map((time: TimeEntity) => {
-          return {
-            id: time.id,
-            ...(time.project !== null ? {
-              project: {
-                id: time.project.id,
-                name: time.project.name,
-                ...(time.project.customer !== null ? {
-                  customer: {
-                    id: time.project.customer.id,
-                    name: time.project.customer.name,
-                  },
-                } : undefined),
-              },
-            } : undefined),
-            from: moment(time.from).format("YYYY-MM-DD HH:mm:ss"),
-            ...(time.to !== null ? { to: moment(time.to).format("YYYY-MM-DD HH:mm:ss") } : undefined),
-            comment: time.comment,
-          };
-        }));
       } catch (error) {
         this.logError(handler.response(), "Error getting times");
         throw error;
@@ -92,7 +134,7 @@ export class TimeController extends Controller {
       try {
         const time: TimeEntity = await TimeEntity.findOneOrFail({
           where: { id: parseInt(handler.params<{ id: string }>().id, 10) },
-          relations: ["project", "project.customer"],
+          relations: ["project", "project.customer", "tags"],
         });
         handler.response<ITimeDTO>().json({
           id: time.id,
@@ -110,6 +152,7 @@ export class TimeController extends Controller {
           } : undefined),
           from: moment(time.from).format("YYYY-MM-DD HH:mm:ss"),
           ...(time.to !== null ? { to: moment(time.to).format("YYYY-MM-DD HH:mm:ss") } : undefined),
+          ...(time.tags !== null ? { tags: time.tags.map((tag: TagEntity) => TagDTO.parse({ id: tag.id, name: tag.name }).serialize()) } : undefined),
           comment: time.comment,
         });
       } catch (error) {
@@ -125,8 +168,21 @@ export class TimeController extends Controller {
         const body = handler.body<ICreateTimeDTO>();
         // If timer has no end date (ongoing timer)
         if (body.to === undefined) {
-          // Stop all ongoing timers
-          TimeEntity.update({ user: { id: handler.request.user.id }, to: null }, { to: moment(body.from).toDate() });
+          const currentTimers = await TimeEntity.find({
+            where: {
+              user: { id: handler.request.user.id },
+              to: null,
+              from: Between(
+                moment(body.from).format("YYYY-MM-DD 00:00:00"),
+                moment(body.from).format("YYYY-MM-DD 23:59:59"),
+              ),
+            },
+          });
+
+          if (currentTimers.length > 0) {
+            // Stop all ongoing timers
+            TimeEntity.update(currentTimers.map((time: TimeEntity) => time.id), { to: moment(body.from).toDate() });
+          }
 
           // Create timer
           await TimeEntity.create({
@@ -135,6 +191,16 @@ export class TimeController extends Controller {
             comment: body.comment,
             user: handler.request.user,
             projectId: body.projectId,
+            ...(body.tags !== undefined ? {
+              tags: await Promise.all(body.tags.map((tag: string | number) => {
+                if (typeof tag === "string") {
+                  // Create tag if id is not present
+                  return TagEntity.create({ name: tag });
+                }
+                // Return tag with id if present
+                return TagEntity.findOneOrFail(tag);
+              })),
+            } : undefined),
           }).save();
 
           handler.sendStatus(200);
@@ -150,12 +216,24 @@ export class TimeController extends Controller {
     return controller(async (handler: ControllerHandler) => {
       try {
         const body = handler.body<IUpdateTimeDTO>();
-        await TimeEntity.update(parseInt(handler.params<{ id: string }>().id, 10), {
-          from: moment(body.from).toDate(),
-          ...(body.to !== undefined ? { to: this.setToDate(moment(body.from), moment(body.to)).toDate() } : undefined),
-          comment: body.comment,
-          projectId: body.projectId,
-        });
+        const time = await TimeEntity.findOneOrFail(parseInt(handler.params<{ id: string }>().id, 10));
+
+        if (body.to !== undefined) {
+          time.to = this.setToDate(moment(body.from), moment(body.to)).toDate();
+        }
+        time.comment = body.comment;
+        time.projectId = body.projectId;
+        if (body.tags !== undefined) {
+          time.tags = await Promise.all(body.tags.map((tag: string | number) => {
+            if (typeof tag === "string") {
+              // Create tag if id is not present
+              return TagEntity.create({ name: tag });
+            }
+            // Return tag with id if present
+            return TagEntity.findOneOrFail(tag);
+          }));
+        }
+        await time.save();
 
         handler.sendStatus(200);
       } catch (error) {

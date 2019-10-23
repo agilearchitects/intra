@@ -7,18 +7,11 @@
         </button-component>
       </div>
       <div>
-        <div class="d-flex align-items-start">
-          <button-component v-on:click="previousDay">
-            <i class="fas fa-chevron-left"></i>
-          </button-component>
-          <div
-            class="time-report__date-placeholder cursor-pointer"
-            v-on:click="setToday"
-          >{{ dateFormat }}</div>
-          <button-component v-on:click="nextDay">
-            <i class="fas fa-chevron-right"></i>
-          </button-component>
-        </div>
+        <time-date-component
+          v-on:next="nextDay"
+          v-on:previous="previousDay"
+          v-on:today="setToday"
+        >{{ dateFormat }}</time-date-component>
         <div class="mt-2 text-right">
           <strong>Totalt: {{ totalTime }}</strong>
         </div>
@@ -64,6 +57,11 @@ import {
   modalSize
 } from "../utils/modal/modal.util";
 
+export interface ITagViewModel {
+  id: number;
+  name: string;
+}
+
 export class TimeViewModel {
   public constructor(
     public id: number,
@@ -71,6 +69,7 @@ export class TimeViewModel {
     public customer: { id: number; name: string },
     public from: Moment,
     public to: Moment | undefined,
+    public tags: ITagViewModel[],
     public comment: string
   ) {
     this.setDuration();
@@ -130,9 +129,11 @@ import { StopTimeDTO } from "../../../shared/dto/stop-time.dto";
 import { TimeService } from "../services/time.service";
 import { timeService as timeServiceInstance } from "../bootstrap";
 import { TimeQueryDTO } from "../../../shared/dto/time-query.dto";
+import { TagDTO } from "../../../shared/dto/tag.dto";
+import TimeDateComponent from "./time-date.component.vue";
 
 @Component({
-  components: { ButtonComponent }
+  components: { ButtonComponent, TimeDateComponent }
 })
 export default class TimeReportComponent extends Vue {
   private readonly timeService: TimeService = timeServiceInstance;
@@ -216,6 +217,9 @@ export default class TimeReportComponent extends Vue {
               : { id: 0, name: "" },
             moment(time.from),
             time.to !== undefined ? moment(time.to) : undefined,
+            time.tags !== undefined
+              ? time.tags.map((tag: TagDTO) => ({ id: tag.id, name: tag.name }))
+              : [],
             time.comment
           )
       )

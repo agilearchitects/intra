@@ -45,6 +45,15 @@
       ></input-component>
     </div>
     <div class="d-flex">
+      <tag-component
+        class="flex-fill"
+        :options="tagOptions"
+        :allowAdd="true"
+        v-model="time.tags"
+        :label="$t('time.tag')"
+      ></tag-component>
+    </div>
+    <div class="d-flex">
       <input-component
         type="textarea"
         name="comment"
@@ -66,7 +75,8 @@ import { Moment, default as moment } from "moment";
 import {
   authService as authServiceInstance,
   customerService as customerServiceInstance,
-  timeService as timeServiceInstance
+  timeService as timeServiceInstance,
+  tagService as tagServiceInstance
 } from "../bootstrap";
 
 // Components
@@ -74,11 +84,13 @@ import ModalFormComponent from "./modal-form.component.vue";
 import InputComponent from "./layout/input.component.vue";
 import SelectComponent from "./layout/select.component.vue";
 import ButtonComponent from "./layout/button.component.vue";
+import TagComponent from "./layout/tag.component.vue";
 
 // Services
 import { TimeService } from "../services/time.service";
 import { CustomerService } from "../services/customer.service";
 import { AuthService } from "../services/auth.service";
+import { TagService } from "../services/tag.service";
 
 // DTO's
 import { UserDTO } from "../../../shared/dto/user.dto";
@@ -88,6 +100,8 @@ import { CustomerDTO } from "../../../shared/dto/customer.dto";
 import { IUserDTO } from "../../../shared/dto/user.dto";
 import { ProjectDTO } from "../../../shared/dto/project.dto";
 import { UpdateTimeDTO } from "../../../shared/dto/update-time.dto";
+import { TagDTO } from "../../../shared/dto/tag.dto";
+import { CreateTagDTO } from "../../../shared/dto/create-tag.dto";
 
 export class TimeReportFormViewModel {
   public constructor(
@@ -96,6 +110,7 @@ export class TimeReportFormViewModel {
     public customerId: string,
     public from: Moment,
     public to: Moment | undefined,
+    public tags: Array<string | number>,
     public comment: string
   ) {}
 
@@ -119,18 +134,24 @@ export class ProjectViewModel {
   public constructor(public id: number, public name: string) {}
 }
 
+export class TagViewModel {
+  public constructor(public id: number, public name: string) {}
+}
+
 @Component({
   components: {
     ModalFormComponent,
     InputComponent,
     SelectComponent,
-    ButtonComponent
+    ButtonComponent,
+    TagComponent
   }
 })
 export default class TimeReportFormComponent extends Vue {
   private readonly timeService: TimeService = timeServiceInstance;
   private readonly customerService: CustomerService = customerServiceInstance;
   private readonly authService: AuthService = authServiceInstance;
+  private readonly tagService: TagService = tagServiceInstance;
   @Prop({ default: {} }) data!: { timeId?: number; date: Moment };
 
   private get timeId(): number | undefined {
@@ -182,10 +203,18 @@ export default class TimeReportFormComponent extends Vue {
       true
     ),
     undefined,
+    [],
     ""
   );
 
   public customers: CustomerViewModel[] = [];
+  public tags: TagViewModel[] = [];
+  public get tagOptions(): Array<{ value: number; text: string }> {
+    return this.tags.map((tag: TagViewModel) => ({
+      value: tag.id,
+      text: tag.name
+    }));
+  }
 
   public loading: boolean = false;
   public saving: boolean = false;
@@ -201,6 +230,7 @@ export default class TimeReportFormComponent extends Vue {
   public async load() {
     this.loading = true;
     try {
+      await this.getTags();
       await this.getCustomers();
       if (this.timeId !== undefined) {
         this.getTime(this.timeId);
@@ -221,6 +251,7 @@ export default class TimeReportFormComponent extends Vue {
         : "undefined",
       moment(time.from),
       time.to !== undefined ? moment(time.to) : undefined,
+      time.tags !== undefined ? time.tags.map((tag: TagDTO) => tag.id) : [],
       time.comment || ""
     );
   }
@@ -250,6 +281,14 @@ export default class TimeReportFormComponent extends Vue {
         : "0";
 
     return;
+  }
+
+  public async getTags(): Promise<void> {
+    const tags: TagDTO[] = await this.tagService.index();
+    this.tags = tags.map((tag: TagDTO) => ({
+      id: tag.id,
+      name: tag.name
+    }));
   }
 
   public updateFromOrTo($event: Event, type: "from" | "to") {
@@ -297,6 +336,7 @@ export default class TimeReportFormComponent extends Vue {
               ? { to: this.time.to.format("YYYY-MM-DD HH:mm:ss").toString() }
               : undefined),
             comment: this.time.comment,
+            tags: this.time.tags,
             userId: this.authService.user!.id
           })
         );
@@ -310,6 +350,7 @@ export default class TimeReportFormComponent extends Vue {
               ? { to: this.time.to.format("YYYY-MM-DD HH:mm:ss").toString() }
               : undefined),
             comment: this.time.comment,
+            tags: this.time.tags,
             userId: this.authService.user!.id
           })
         );

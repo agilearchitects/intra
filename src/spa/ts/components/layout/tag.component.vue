@@ -44,16 +44,16 @@
 <script lang="ts">
 import { Vue, Component, Prop, Watch } from "vue-property-decorator";
 export interface IOption {
-  value: string;
+  value: any;
   text: string;
 }
 @Component
 export default class TagComponent extends Vue {
   @Prop(String) label!: string;
-  @Prop({ default: [] }) value!: string[];
+  @Prop({ default: [], type: Array }) value!: any[];
   @Prop({ default: [] }) options!: IOption[];
   @Prop({ type: Boolean, default: false }) allowAdd!: boolean;
-  @Watch("input") onInputChange(value: string, oldValue: string) {
+  @Watch("input") onInputChange(value: any, oldValue: any) {
     if (value !== oldValue) {
       this.selectedValueIndex = -1;
       this.selectedOptionIndex = value !== "" ? 0 : -1;
@@ -67,7 +67,7 @@ export default class TagComponent extends Vue {
 
   public get valueList(): IOption[] {
     return this.value.map(
-      (value: string) =>
+      (value: any) =>
         this.options.find((option: IOption) => option.value === value) || {
           value,
           text: value
@@ -77,11 +77,11 @@ export default class TagComponent extends Vue {
   public get filteredOptions(): IOption[] {
     return this.options.filter(
       (option: IOption) =>
-        option.text.match(new RegExp(`^${this.input}`, "i")) &&
+        option.text.match(new RegExp(`${this.input}`, "i")) &&
         this.value.indexOf(option.value) == -1
     );
   }
-  public get selectedValue(): string | undefined {
+  public get selectedValue(): any | undefined {
     return this.value[this.selectedValueIndex];
   }
   public get selectedOption(): IOption | undefined {
@@ -130,25 +130,28 @@ export default class TagComponent extends Vue {
     }
   }
 
-  public addToValues() {
+  public addToValues(): boolean {
+    let returnValue = false;
     if (
       this.selectedOption !== undefined &&
       this.value.indexOf(this.selectedOption.value) === -1
     ) {
       this.$emit("input", [...this.value, this.selectedOption.value]);
+      returnValue = true;
     } else if (
       this.input !== "" &&
       this.allowAdd &&
       this.value.indexOf(this.input) === -1
     ) {
       this.$emit("input", [...this.value, this.input]);
-    } else {
-      return;
+      returnValue = true;
     }
 
     this.input = "";
     this.selectedValueIndex = -1;
     this.selectedOptionIndex = -1;
+
+    return returnValue;
   }
   public removeFromValues() {
     if (this.input !== "") {
@@ -189,7 +192,9 @@ export default class TagComponent extends Vue {
         this.selectNextValue();
         break;
       case "Enter":
-        this.addToValues();
+        if (this.addToValues()) {
+          event.preventDefault();
+        }
         break;
       case "Backspace":
         this.removeFromValues();
@@ -197,3 +202,105 @@ export default class TagComponent extends Vue {
   }
 }
 </script>
+<style lang="scss" scoped>
+@import "~bootstrap/scss/_functions";
+@import "../../../scss/variables";
+@import "~bootstrap/scss/_variables";
+
+.mdo-form-tags {
+  margin-top: 1rem;
+  margin-bottom: 1.5rem;
+  padding-top: 0.5rem;
+  padding-bottom: 0.5rem;
+  min-height: 3rem;
+  display: flex;
+  flex-wrap: wrap;
+  position: relative;
+  border-bottom: 1px solid color("gray");
+  &__label {
+    position: absolute;
+    font-size: 1rem;
+    cursor: text;
+    transition: transform 0.2s ease-out, color 0.2s ease-out,
+      -webkit-transform 0.2s ease-out;
+    transform-origin: 0% 100%;
+    text-align: initial;
+    transform: translateY(12px);
+    color: color("gray");
+    &--active {
+      color: theme-color("primary");
+      transform: translateY(-14px) scale(0.8);
+      transform-origin: 0 0;
+    }
+    &--gray {
+      color: color("gray");
+    }
+  }
+  &--active {
+    border-bottom: 1px solid theme-color("primary");
+    box-shadow: 0 1px 0 0 theme-color("primary");
+  }
+  &__times {
+    position: relative;
+    top: 1px;
+    cursor: pointer;
+  }
+  &__input {
+    font-size: 16px;
+    flex-grow: 2;
+    border: 0px;
+    width: 10px;
+    height: 32px;
+    margin-top: 10px;
+    box-shadow: none;
+    box-sizing: content-box;
+    align-self: flex-end;
+    &:focus {
+      border: 0px;
+      outline: none;
+    }
+  }
+  &__value {
+    height: 32px;
+    font-size: 13px;
+    font-weight: 500;
+    color: rgba(0, 0, 0, 0.6);
+    line-height: 32px;
+    padding: 0 12px;
+    border-radius: 16px;
+    background-color: gray("200");
+    margin-right: 5px;
+    margin-top: 0.5rem;
+    align-self: center;
+    &--selected {
+      background-color: gray("500");
+    }
+  }
+  &__options {
+    width: 100%;
+    margin: 0px;
+    padding: 0px;
+    box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.14),
+      0 3px 1px -2px rgba(0, 0, 0, 0.12), 0 1px 5px 0 rgba(0, 0, 0, 0.2);
+    background-color: color("white");
+    list-style-type: none;
+    position: absolute;
+    top: 50px;
+    z-index: 10000;
+    display: none;
+    &--open {
+      display: block;
+    }
+  }
+  &__option {
+    padding: 0px 15px;
+    height: 50px;
+    line-height: 50px;
+    cursor: pointer;
+    &--selected,
+    &:hover {
+      background-color: gray("300");
+    }
+  }
+}
+</style>

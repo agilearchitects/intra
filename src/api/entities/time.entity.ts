@@ -1,6 +1,7 @@
-import { Column, Entity, ManyToOne } from "typeorm";
+import { Column, Entity, JoinTable, ManyToMany, ManyToOne } from "typeorm";
 import { Entity as AppEntity } from "./entity";
 import { ProjectEntity } from "./project.entity";
+import { TagEntity } from "./tag.entity";
 import { UserEntity } from "./user.entity";
 
 @Entity()
@@ -22,4 +23,8 @@ export class TimeEntity extends AppEntity {
 
   @Column({ nullable: true })
   public projectId!: number;
+
+  @ManyToMany((type: any) => TagEntity, (tag: TagEntity) => tag.times, { cascade: true })
+  @JoinTable()
+  public tags!: TagEntity[];
 }

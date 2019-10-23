@@ -7,6 +7,7 @@ import { CustomerEntity } from "./api/entities/customer.entity";
 import { GroupEntity } from "./api/entities/group.entity";
 import { ProjectEntity } from "./api/entities/project.entity";
 import { ResourceEntity } from "./api/entities/resource.entity";
+import { TagEntity } from "./api/entities/tag.entity";
 import { TextEntity } from "./api/entities/text.entity";
 import { TimeEntity } from "./api/entities/time.entity";
 import { TokenEntity } from "./api/entities/token.entity";
@@ -24,6 +25,7 @@ export const defaultConnectionConfig: ConnectionOptions = {
     ProjectEntity,
     ResourceEntity,
     TextEntity,
+    TagEntity,
     TimeEntity,
     TokenEntity,
     UserEntity,

@@ -1,3 +1,5 @@
+import { ITagDTO, TagDTO } from "./tag.dto";
+
 export interface IUpdateTimeDTO {
   id: number;
   projectId: number;
@@ -5,6 +7,7 @@ export interface IUpdateTimeDTO {
   to?: string;
   comment: string;
   userId: number;
+  tags?: Array<string | number>;
 }
 
 export class UpdateTimeDTO implements IUpdateTimeDTO {
@@ -16,6 +19,7 @@ export class UpdateTimeDTO implements IUpdateTimeDTO {
       object.to !== undefined ? object.to : undefined,
       object.comment,
       object.userId,
+      object.tags,
     );
   }
 
@@ -26,6 +30,7 @@ export class UpdateTimeDTO implements IUpdateTimeDTO {
     public readonly to: string | undefined,
     public readonly comment: string,
     public readonly userId: number,
+    public readonly tags?: Array<string | number>,
   ) { }
 
   public serialize(): IUpdateTimeDTO {
@@ -36,6 +41,7 @@ export class UpdateTimeDTO implements IUpdateTimeDTO {
       ...(this.to !== undefined ? { to: this.to } : undefined),
       comment: this.comment,
       userId: this.userId,
+      ...(this.tags !== undefined ? { tags: this.tags } : undefined),
     };
   }
 }

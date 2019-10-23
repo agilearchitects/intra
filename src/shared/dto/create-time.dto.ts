@@ -1,11 +1,10 @@
-import moment from "moment";
-
 export interface ICreateTimeDTO {
   projectId: number;
   from: string;
   to?: string | undefined;
   comment: string;
   userId: number;
+  tags?: Array<string | number>;
 }
 
 export class CreateTimeDTO implements ICreateTimeDTO {
@@ -16,6 +15,7 @@ export class CreateTimeDTO implements ICreateTimeDTO {
       (object.to !== undefined ? object.to : undefined),
       object.comment,
       object.userId,
+      object.tags,
     );
   }
 
@@ -25,6 +25,7 @@ export class CreateTimeDTO implements ICreateTimeDTO {
     public readonly to: string | undefined,
     public readonly comment: string,
     public readonly userId: number,
+    public readonly tags?: Array<string | number>,
   ) { }
 
   public serialize(): ICreateTimeDTO {
@@ -34,6 +35,7 @@ export class CreateTimeDTO implements ICreateTimeDTO {
       ...(this.to !== undefined ? { to: this.to } : undefined),
       comment: this.comment,
       userId: this.userId,
+      ...(this.tags !== undefined ? { tags: this.tags } : undefined),
     };
   }
 }

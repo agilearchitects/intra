@@ -12,6 +12,7 @@ import { UpdateTimeDTO } from "../../../shared/dto/update-time.dto";
 import { IDictionary } from "../../../shared/index";
 
 // Services
+import { CustomerDTO, ICustomerDTO } from "../../../shared/dto/customer.dto";
 import { APIService } from "../../../shared/services/api.service";
 
 
@@ -19,13 +20,16 @@ export class TimeService {
   public constructor(
     private readonly apiService: APIService,
   ) { }
-  public async index(timeQuery: TimeQueryDTO): Promise<TimeDTO[]> {
+  public async index(timeQuery: TimeQueryDTO): Promise<TimeDTO[] | CustomerDTO[]> {
     // Parse any empty
     const query: IDictionary<string> = Object.keys(timeQuery).reduce((previousValue: {}, key: string) => {
       return { ...previousValue, ...(timeQuery[key] !== undefined ? { [key]: timeQuery[key] } : undefined) };
     }, {});
-
-    return (await this.apiService.get<ITimeDTO[]>("/time", query)).body.map((time: ITimeDTO) => TimeDTO.parse(time));
+    if (timeQuery.groupBy === "customer") {
+      return (await this.apiService.get<ICustomerDTO[]>("/time", query)).body.map((customer: ICustomerDTO) => CustomerDTO.parse(customer));
+    } else {
+      return (await this.apiService.get<ITimeDTO[]>("/time", query)).body.map((time: ITimeDTO) => TimeDTO.parse(time));
+    }
   }
   public async show(timeId: number): Promise<TimeDTO> {
     return TimeDTO.parse((await this.apiService.get<ITimeDTO>(`/time/${timeId}`)).body);

@@ -8,11 +8,9 @@ import authController from "./controllers/auth.controller";
 import customerController from "./controllers/customer.controller";
 import projectController from "./controllers/project.controller";
 import resourceController from "./controllers/resource.controller";
+import tagController from "./controllers/tag.controller";
 import textController from "./controllers/text.controller";
 import timeController from "./controllers/time.controller";
-
-// Modules
-import { controller } from "./modules/controller-handler.module";
 
 // Middlewares
 import { middlewares } from "./middlewares";
@@ -41,6 +39,8 @@ router.group("", [middlewares.auth()], (router: Router) => {
     router.delete("/:id", timeController.delete());
     router.put("/stop/:id", timeController.stop());
   });
+
+  router.get("/tag", tagController.index());
   router.group("/text", [], (router: Router) => {
     router.get("", textController.index());
     router.get("/:name", textController.show());
