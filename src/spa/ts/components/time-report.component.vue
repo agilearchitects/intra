@@ -197,11 +197,11 @@ export default class TimeReportComponent extends Vue {
   }
 
   public async getReports() {
-    this.times = (await this.timeService.index(
+    this.times = ((await this.timeService.index(
       TimeQueryDTO.parse({
         date: moment(this.date).format("YYYY-MM-DD")
       })
-    ))
+    )) as TimeDTO[])
       .map(
         (time: TimeDTO) =>
           new TimeViewModel(

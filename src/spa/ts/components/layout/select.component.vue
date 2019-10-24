@@ -5,7 +5,11 @@
     >{{ label }}</label>
     <i class="mdo-form-group__caret fas fa-caret-down"></i>
     <select class="mdo-form-group__control" v-on:input="onSelect" ref="select">
-      <option v-for="option in options" :key="option.value" :value="option.value">{{ option.text }}</option>
+      <option
+        v-for="(option, index) in options"
+        :key="index"
+        :value="option.value"
+      >{{ option.text }}</option>
     </select>
   </div>
 </template>
@@ -14,9 +18,9 @@ import { Vue, Component, Prop, Watch } from "vue-property-decorator";
 @Component
 export default class SelectComponent extends Vue {
   @Prop(String) label!: string;
-  @Prop(String) value!: string;
-  @Prop() options!: ({ value: any; text: string })[];
-  @Watch("value") onValueChange(value: string, oldValue: string) {
+  @Prop() value!: string;
+  @Prop() options!: ({ value: string; text: string })[];
+  @Watch("value") onValueChange(value: any, oldValue: any) {
     (this.$refs.select as any).value = value;
   }
 

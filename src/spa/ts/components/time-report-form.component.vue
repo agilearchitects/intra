@@ -101,7 +101,6 @@ import { IUserDTO } from "../../../shared/dto/user.dto";
 import { ProjectDTO } from "../../../shared/dto/project.dto";
 import { UpdateTimeDTO } from "../../../shared/dto/update-time.dto";
 import { TagDTO } from "../../../shared/dto/tag.dto";
-import { CreateTagDTO } from "../../../shared/dto/create-tag.dto";
 
 export class TimeReportFormViewModel {
   public constructor(
@@ -165,14 +164,20 @@ export default class TimeReportFormComponent extends Vue {
     return this.timeId !== undefined;
   }
 
-  public get customerOptions(): Array<{ value: string; text: string }> {
+  public get customerOptions(): Array<{
+    value: string;
+    text: string;
+  }> {
     return this.customers.map((customer: CustomerViewModel) => ({
       value: customer.id.toString(),
       text: customer.name
     }));
   }
 
-  public get projectOptions(): Array<{ value: string; text: string }> {
+  public get projectOptions(): Array<{
+    value: string;
+    text: string;
+  }> {
     const selectedCustomer = this.customers.find(
       (customer: CustomerViewModel) =>
         customer.id === parseInt(this.time.customerId, 10)
@@ -188,15 +193,14 @@ export default class TimeReportFormComponent extends Vue {
   }
 
   public selectCustomerChange(value: string): void {
-    this.time.projectId = this.projectOptions.length
-      ? this.projectOptions[0].value
-      : "0";
+    this.time.projectId =
+      this.projectOptions.length > 0 ? this.projectOptions[0].value : "0";
   }
 
   public time: TimeReportFormViewModel = new TimeReportFormViewModel(
     undefined,
-    "",
-    "",
+    "0",
+    "0",
     moment(
       `${this.date.format("YYYY-MM-DD")} ${moment(new Date()).format("HH:mm")}`,
       "YYYY-MM-DD HH:mm",
@@ -245,10 +249,10 @@ export default class TimeReportFormComponent extends Vue {
     const time: TimeDTO = await this.timeService.show(id);
     this.time = new TimeReportFormViewModel(
       time.id,
-      time.project !== undefined ? time.project.id.toString() : "",
+      time.project !== undefined ? time.project.id.toString() : "0",
       time.project !== undefined && time.project.customer !== undefined
         ? time.project.customer.id.toString()
-        : "undefined",
+        : "0",
       moment(time.from),
       time.to !== undefined ? moment(time.to) : undefined,
       time.tags !== undefined ? time.tags.map((tag: TagDTO) => tag.id) : [],
