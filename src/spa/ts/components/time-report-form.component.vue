@@ -237,7 +237,7 @@ export default class TimeReportFormComponent extends Vue {
       await this.getTags();
       await this.getCustomers();
       if (this.timeId !== undefined) {
-        this.getTime(this.timeId);
+        await this.getTime(this.timeId);
       }
     } finally {
       this.loading = false;
