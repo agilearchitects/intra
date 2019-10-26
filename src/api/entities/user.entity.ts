@@ -1,22 +1,21 @@
 // Libs
 import { IUserModel, UserModel } from "@agilearchitects/authenticaton";
-import { HashtiService } from "@agilearchitects/hashti";
-import { Column, Entity, ManyToMany, OneToMany } from "typeorm";
+import { Column, Entity, FindConditions, IsNull, ManyToMany, ManyToOne, Not, OneToMany } from "typeorm";
 import { Entity as AppEntity } from "./entity";
-
-// Services
-import {
-    hashtiService as hashServiceInstance,
-} from "../../bootstrap";
 
 // Entites
 import { GroupEntity } from "./group.entity";
 import { TimeEntity } from "./time.entity";
+import { UserProjectEntity } from "./user-project.entity";
 
 export interface IAttemptResult { token: string; user: UserEntity; }
 
 @Entity()
 export class UserEntity extends AppEntity implements IUserModel {
+    public static activeWhere(): FindConditions<UserEntity> {
+        return { activated: Not(IsNull()), banned: IsNull() };
+    }
+
     @Column()
     public email!: string;
 
@@ -34,6 +33,9 @@ export class UserEntity extends AppEntity implements IUserModel {
 
     @OneToMany((type: any) => TimeEntity, (time: TimeEntity) => time.user)
     public times!: TimeEntity[];
+
+    @OneToMany((type: any) => UserProjectEntity, (userProject: UserProjectEntity) => userProject.user)
+    public userProjects!: UserProjectEntity[];
 
     public constructor() { super(); }
 }

@@ -6,11 +6,13 @@ import { default as middlewares, guard } from "./middlewares";
 
 // Components
 import { CreateElement } from "vue";
+import CreateProjectComponent from "./components/create-project.component";
 import CrmComponent from "./components/crm.component";
 import ErrorComponent from "./components/error.component";
 import LoginComponent from "./components/login.component";
 import PageComponent from "./components/page.component";
 import PasswordResetComponent from "./components/password-reset.component";
+import ProjectComponent from "./components/project.component";
 import StartComponent from "./components/start.component";
 import TextComponent from "./components/text.component";
 import TimeReportComponent from "./components/time-report.component";
@@ -54,6 +56,8 @@ const router = new VueRouter({
                 { path: "month", name: "time.result.month", component: TimeResultMonthComponent },
               ],
             },
+            { path: "project", name: "time.project", component: ProjectComponent },
+            { path: "project/create", name: "time.project.create", component: CreateProjectComponent },
           ],
         },
         { path: "crm", name: "crm", component: CrmComponent },

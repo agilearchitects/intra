@@ -1,6 +1,3 @@
-// Bootstrap
-import { apiService as apiServiceInstance } from "../bootstrap";
-
 // DTO's
 import { CreateTimeDTO } from "../../../shared/dto/create-time.dto";
 import { StopTimeDTO } from "../../../shared/dto/stop-time.dto";

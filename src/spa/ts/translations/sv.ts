@@ -7,6 +7,7 @@ export default {
       time: "Tidsrapportering",
       report: "Rapportera",
       result: "Resultat",
+      project: "Projekt",
     },
     crm: "CRM",
     login: "Logga in",
@@ -76,6 +77,22 @@ export default {
     email: "support@test.test",
     phone: "073 - 692 50 13",
   },
+  customer: {
+    customer: "Kund",
+    select: "Välj @:customer.customer",
+  },
+  project: {
+    project: "Projekt",
+    select: "Välj @:project.project",
+  },
+  task: {
+    task: "Uppgift",
+    select: "Välj @:task.task",
+  },
+  user: {
+    user: "Användare",
+    select: "Välj @:user.user",
+  },
   time: {
     time: "Tidrapport",
     form: {
@@ -84,11 +101,13 @@ export default {
         edit: "Redigera @:time.time",
       },
     },
-    customer: "Kund",
-    project: "projekt",
+    customer: "@:customer.customer",
+    project: "@:project.project",
+    task: "@:task.task",
     from: "Från",
     to: "Till",
     tag: "Taggar",
     comment: "Kommentar",
   },
+  empty_list: "Inga val i lista",
 };

@@ -1,11 +1,10 @@
-import moment = require("moment");
-import { IProjectDTO, ProjectDTO } from "./project.dto";
 import { ITagDTO, TagDTO } from "./tag.dto";
+import { ITaskDTO, TaskDTO } from "./task.dto";
 import { IUserDTO, UserDTO } from "./user.dto";
 
 export interface ITimeDTO {
   id: number;
-  project?: IProjectDTO;
+  task?: ITaskDTO;
   from: string;
   to?: string;
   comment: string;
@@ -17,7 +16,7 @@ export class TimeDTO implements ITimeDTO {
   public static parse(object: ITimeDTO): TimeDTO {
     return new TimeDTO(
       object.id,
-      object.project ? ProjectDTO.parse(object.project) : undefined,
+      object.task ? TaskDTO.parse(object.task) : undefined,
       object.from,
       object.to !== undefined ? object.to : undefined,
       object.comment,
@@ -28,7 +27,7 @@ export class TimeDTO implements ITimeDTO {
 
   public constructor(
     public readonly id: number,
-    public readonly project: ProjectDTO | undefined,
+    public readonly task: TaskDTO | undefined,
     public readonly from: string,
     public readonly to: string | undefined,
     public readonly comment: string,
@@ -39,7 +38,7 @@ export class TimeDTO implements ITimeDTO {
   public serialize(): ITimeDTO {
     return {
       id: this.id,
-      ...(this.project ? { project: this.project.serialize() } : undefined),
+      ...(this.task ? { task: this.task.serialize() } : undefined),
       from: this.from,
       ...(this.to !== undefined ? { to: this.to } : undefined),
       comment: this.comment,

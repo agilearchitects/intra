@@ -11,6 +11,7 @@ import resourceController from "./controllers/resource.controller";
 import tagController from "./controllers/tag.controller";
 import textController from "./controllers/text.controller";
 import timeController from "./controllers/time.controller";
+import userController from "./controllers/user.controller";
 
 // Middlewares
 import { middlewares } from "./middlewares";
@@ -28,6 +29,7 @@ router.group("", [middlewares.auth()], (router: Router) => {
     router.post("", customerController.create());
   });
   router.group("/project", [], (router: Router) => {
+    router.get("", projectController.index());
     router.post("", projectController.create());
   });
 
@@ -46,6 +48,8 @@ router.group("", [middlewares.auth()], (router: Router) => {
     router.get("/:name", textController.show());
     router.put("/:id", textController.update());
   });
+
+  router.get("/user", userController.index());
   router.group("/resource", [], (router: Router) => {
     router.post("/upload",
       fileUpload({ limits: { fileSize: 20 * 1024 * 1204 } }),

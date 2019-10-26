@@ -38,11 +38,12 @@ export class CustomerViewModel {
   ) {}
 
   public get hours(): number {
-    return this.projects.reduce(
+    const hours = this.projects.reduce(
       (previousValue: number, currentValue: ProjectViewModel) =>
         previousValue + currentValue.hours,
       0
     );
+    return Math.round(hours * 100) / 100;
   }
 }
 
@@ -54,7 +55,7 @@ export class ProjectViewModel {
   ) {}
 
   public get hours(): number {
-    return this.times.reduce(
+    const hours = this.times.reduce(
       (previousValue: number, currentValue: TimeViewModel) => {
         const duration = moment.duration(
           (currentValue.to !== undefined ? currentValue.to : moment()).diff(
@@ -65,6 +66,7 @@ export class ProjectViewModel {
       },
       0
     );
+    return Math.round(hours * 100) / 100;
   }
   public get tags(): Array<{ id: number; name: string; hours: number }> {
     const tags: Array<{ id: number; name: string; hours: number }> = [];
@@ -77,27 +79,30 @@ export class ProjectViewModel {
           tags.push({
             id: tag.id,
             name: tag.name,
-            hours: this.times.reduce(
-              (previousValue: number, currentValue: TimeViewModel) => {
-                if (
-                  currentValue.tags.findIndex(
-                    (tempTag: TagViewModel) => tempTag.id === tag.id
-                  ) !== -1
-                ) {
-                  const duration = moment.duration(
-                    (currentValue.to !== undefined
-                      ? currentValue.to
-                      : moment()
-                    ).diff(currentValue.from)
-                  );
-                  return (
-                    previousValue + Math.round(duration.asHours() * 100) / 100
-                  );
-                }
-                return previousValue;
-              },
-              0
-            )
+            hours: (() => {
+              const hours = this.times.reduce(
+                (previousValue: number, currentValue: TimeViewModel) => {
+                  if (
+                    currentValue.tags.findIndex(
+                      (tempTag: TagViewModel) => tempTag.id === tag.id
+                    ) !== -1
+                  ) {
+                    const duration = moment.duration(
+                      (currentValue.to !== undefined
+                        ? currentValue.to
+                        : moment()
+                      ).diff(currentValue.from)
+                    );
+                    return (
+                      previousValue + Math.round(duration.asHours() * 100) / 100
+                    );
+                  }
+                  return previousValue;
+                },
+                0
+              );
+              return Math.round(hours * 100) / 100;
+            })()
           });
         }
       }

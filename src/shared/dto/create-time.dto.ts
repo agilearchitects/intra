@@ -1,5 +1,5 @@
 export interface ICreateTimeDTO {
-  projectId: number;
+  taskId: number;
   from: string;
   to?: string | undefined;
   comment: string;
@@ -10,7 +10,7 @@ export interface ICreateTimeDTO {
 export class CreateTimeDTO implements ICreateTimeDTO {
   public static parse(object: ICreateTimeDTO): CreateTimeDTO {
     return new CreateTimeDTO(
-      object.projectId,
+      object.taskId,
       object.from,
       (object.to !== undefined ? object.to : undefined),
       object.comment,
@@ -20,7 +20,7 @@ export class CreateTimeDTO implements ICreateTimeDTO {
   }
 
   public constructor(
-    public readonly projectId: number,
+    public readonly taskId: number,
     public readonly from: string,
     public readonly to: string | undefined,
     public readonly comment: string,
@@ -30,7 +30,7 @@ export class CreateTimeDTO implements ICreateTimeDTO {
 
   public serialize(): ICreateTimeDTO {
     return {
-      projectId: this.projectId,
+      taskId: this.taskId,
       from: this.from,
       ...(this.to !== undefined ? { to: this.to } : undefined),
       comment: this.comment,

@@ -10,20 +10,20 @@
     <div class="d-flex">
       <select-component
         class="flex-fill"
-        name="customer"
-        v-on:input="selectCustomerChange"
-        v-model="time.customerId"
-        :options="customerOptions"
-        :label="$t('time.customer')"
+        name="project"
+        v-model="time.projectId"
+        v-on:input="selectProjectChange"
+        :options="projectOptions"
+        :label="$t('time.project')"
       ></select-component>
     </div>
     <div class="d-flex">
       <select-component
         class="flex-fill"
-        name="project"
-        v-model="time.projectId"
-        :options="projectOptions"
-        :label="$t('time.project')"
+        name="task"
+        v-model="time.taskId"
+        :options="taskOptions"
+        :label="$t('time.task')"
       ></select-component>
     </div>
     <div class="d-flex">
@@ -82,7 +82,7 @@ import {
 // Components
 import ModalFormComponent from "./modal-form.component.vue";
 import InputComponent from "./layout/input.component.vue";
-import SelectComponent from "./layout/select.component.vue";
+import SelectComponent, { IOption } from "./layout/select.component.vue";
 import ButtonComponent from "./layout/button.component.vue";
 import TagComponent from "./layout/tag.component.vue";
 
@@ -101,12 +101,13 @@ import { IUserDTO } from "../../../shared/dto/user.dto";
 import { ProjectDTO } from "../../../shared/dto/project.dto";
 import { UpdateTimeDTO } from "../../../shared/dto/update-time.dto";
 import { TagDTO } from "../../../shared/dto/tag.dto";
+import { TaskDTO } from "../../../shared/dto/task.dto";
 
 export class TimeReportFormViewModel {
   public constructor(
     public id: number | undefined,
     public projectId: string,
-    public customerId: string,
+    public taskId: string,
     public from: Moment,
     public to: Moment | undefined,
     public tags: Array<string | number>,
@@ -130,6 +131,14 @@ export class CustomerViewModel {
 }
 
 export class ProjectViewModel {
+  public constructor(
+    public id: number,
+    public name: string,
+    public tasks: TaskViewModel[]
+  ) {}
+}
+
+export class TaskViewModel {
   public constructor(public id: number, public name: string) {}
 }
 
@@ -164,43 +173,55 @@ export default class TimeReportFormComponent extends Vue {
     return this.timeId !== undefined;
   }
 
-  public get customerOptions(): Array<{
-    value: string;
-    text: string;
-  }> {
-    return this.customers.map((customer: CustomerViewModel) => ({
-      value: customer.id.toString(),
-      text: customer.name
-    }));
+  public get projectOptions(): IOption[] {
+    const tempData: IOption[] = [];
+    this.customers.forEach((customer: CustomerViewModel) => {
+      tempData.push({
+        value: "",
+        text: customer.name,
+        children: customer.projects.map((project: ProjectViewModel) => ({
+          value: project.id.toString(),
+          text: project.name
+        }))
+      });
+    });
+
+    return tempData;
   }
 
-  public get projectOptions(): Array<{
+  public get taskOptions(): Array<{
     value: string;
     text: string;
   }> {
-    const selectedCustomer = this.customers.find(
-      (customer: CustomerViewModel) =>
-        customer.id === parseInt(this.time.customerId, 10)
-    );
-    if (selectedCustomer !== undefined) {
-      return selectedCustomer.projects.map((project: ProjectViewModel) => ({
-        value: project.id.toString(),
-        text: project.name
+    let selectedProject: ProjectViewModel | undefined = undefined;
+    for (const customer of this.customers) {
+      for (const project of customer.projects) {
+        if (project.id === parseInt(this.time.projectId, 10)) {
+          selectedProject = project;
+        }
+      }
+    }
+
+    if (selectedProject !== undefined) {
+      return selectedProject.tasks.map((task: TaskViewModel) => ({
+        value: task.id.toString(),
+        text: task.name
       }));
     }
 
     return [];
   }
 
-  public selectCustomerChange(value: string): void {
-    this.time.projectId =
-      this.projectOptions.length > 0 ? this.projectOptions[0].value : "0";
+  public async selectProjectChange(value: string): Promise<void> {
+    await this.$nextTick();
+    this.time.taskId =
+      this.taskOptions.length > 0 ? this.taskOptions[0].value : "0";
   }
 
   public time: TimeReportFormViewModel = new TimeReportFormViewModel(
     undefined,
-    "0",
-    "0",
+    "",
+    "",
     moment(
       `${this.date.format("YYYY-MM-DD")} ${moment(new Date()).format("HH:mm")}`,
       "YYYY-MM-DD HH:mm",
@@ -249,10 +270,10 @@ export default class TimeReportFormComponent extends Vue {
     const time: TimeDTO = await this.timeService.show(id);
     this.time = new TimeReportFormViewModel(
       time.id,
-      time.project !== undefined ? time.project.id.toString() : "0",
-      time.project !== undefined && time.project.customer !== undefined
-        ? time.project.customer.id.toString()
-        : "0",
+      time.task !== undefined && time.task.project !== undefined
+        ? time.task.project.id.toString()
+        : "",
+      time.task !== undefined ? time.task.id.toString() : "",
       moment(time.from),
       time.to !== undefined ? moment(time.to) : undefined,
       time.tags !== undefined ? time.tags.map((tag: TagDTO) => tag.id) : [],
@@ -264,24 +285,39 @@ export default class TimeReportFormComponent extends Vue {
   public async getCustomers(): Promise<void> {
     const customers = await this.customerService.index();
 
-    this.customers = customers.map((customer: CustomerDTO) => ({
-      id: customer.id,
-      name: customer.name,
-      projects:
-        customer.projects !== undefined
-          ? customer.projects.map((project: ProjectDTO) => ({
-              id: project.id,
-              name: project.name
-            }))
-          : []
-    }));
+    this.customers = customers.map(
+      (customer: CustomerDTO) =>
+        new CustomerViewModel(
+          customer.id,
+          customer.name,
+          customer.projects !== undefined
+            ? customer.projects.map(
+                (project: ProjectDTO) =>
+                  new ProjectViewModel(
+                    project.id,
+                    project.name,
+                    project.tasks !== undefined
+                      ? project.tasks.map(
+                          (task: TaskDTO) =>
+                            new TaskViewModel(task.id, task.name)
+                        )
+                      : []
+                  )
+              )
+            : []
+        )
+    );
 
-    // Set selected customer and project i dropdown menus
-    this.time.customerId =
-      this.customers.length > 0 ? this.customers[0].id.toString() : "0";
+    // Set selected project and customer i dropdown menus
     this.time.projectId =
       this.customers.length > 0 && this.customers[0].projects.length > 0
         ? this.customers[0].projects[0].id.toString()
+        : "0";
+    this.time.taskId =
+      this.customers.length > 0 &&
+      this.customers[0].projects.length > 0 &&
+      this.customers[0].projects[0].tasks.length > 0
+        ? this.customers[0].projects[0].tasks[0].id.toString()
         : "0";
 
     return;
@@ -334,7 +370,7 @@ export default class TimeReportFormComponent extends Vue {
       if (!this.edit) {
         await this.timeService.create(
           CreateTimeDTO.parse({
-            projectId: parseInt(this.time.projectId, 10),
+            taskId: parseInt(this.time.taskId, 10),
             from: this.time.from.format("YYYY-MM-DD HH:mm:ss").toString(),
             ...(this.time.to !== undefined
               ? { to: this.time.to.format("YYYY-MM-DD HH:mm:ss").toString() }
@@ -348,7 +384,7 @@ export default class TimeReportFormComponent extends Vue {
         await this.timeService.update(
           UpdateTimeDTO.parse({
             id: this.time.id as number,
-            projectId: parseInt(this.time.projectId, 10),
+            taskId: parseInt(this.time.taskId, 10),
             from: this.time.from.format("YYYY-MM-DD HH:mm:ss").toString(),
             ...(this.time.to !== undefined
               ? { to: this.time.to.format("YYYY-MM-DD HH:mm:ss").toString() }

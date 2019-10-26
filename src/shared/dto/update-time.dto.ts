@@ -2,7 +2,7 @@ import { ITagDTO, TagDTO } from "./tag.dto";
 
 export interface IUpdateTimeDTO {
   id: number;
-  projectId: number;
+  taskId: number;
   from: string;
   to?: string;
   comment: string;
@@ -14,7 +14,7 @@ export class UpdateTimeDTO implements IUpdateTimeDTO {
   public static parse(object: IUpdateTimeDTO): UpdateTimeDTO {
     return new UpdateTimeDTO(
       object.id,
-      object.projectId,
+      object.taskId,
       object.from,
       object.to !== undefined ? object.to : undefined,
       object.comment,
@@ -25,7 +25,7 @@ export class UpdateTimeDTO implements IUpdateTimeDTO {
 
   public constructor(
     public readonly id: number,
-    public readonly projectId: number,
+    public readonly taskId: number,
     public readonly from: string,
     public readonly to: string | undefined,
     public readonly comment: string,
@@ -36,7 +36,7 @@ export class UpdateTimeDTO implements IUpdateTimeDTO {
   public serialize(): IUpdateTimeDTO {
     return {
       id: this.id,
-      projectId: this.projectId,
+      taskId: this.taskId,
       from: this.from,
       ...(this.to !== undefined ? { to: this.to } : undefined),
       comment: this.comment,

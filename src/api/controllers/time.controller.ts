@@ -6,7 +6,7 @@ import { Between } from "typeorm";
 // DTO's
 import { ICreateTimeDTO } from "../../shared/dto/create-time.dto";
 import { IStopTimeDTO } from "../../shared/dto/stop-time.dto";
-import { ITimeDTO } from "../../shared/dto/time.dto";
+import { ITimeDTO, TimeDTO } from "../../shared/dto/time.dto";
 import { IUpdateTimeDTO } from "../../shared/dto/update-time.dto";
 
 // Entites
@@ -17,11 +17,14 @@ import { controller, ControllerHandler } from "../modules/controller-handler.mod
 
 // Base controller
 import { CustomerDTO, ICustomerDTO } from "../../shared/dto/customer.dto";
+import { ProjectDTO } from "../../shared/dto/project.dto";
 import { ITagDTO, TagDTO } from "../../shared/dto/tag.dto";
+import { TaskDTO } from "../../shared/dto/task.dto";
 import { ITimeQueryDTO } from "../../shared/dto/time-query.dto";
 import { CustomerEntity } from "../entities/customer.entity";
 import { ProjectEntity } from "../entities/project.entity";
 import { TagEntity } from "../entities/tag.entity";
+import { TaskEntity } from "../entities/task.entity";
 import { Controller } from "./controller";
 
 export class TimeController extends Controller {
@@ -32,12 +35,13 @@ export class TimeController extends Controller {
         if (query.groupBy === "customer") {
           let queryBuild = CustomerEntity.createQueryBuilder("customer")
             .innerJoinAndSelect("customer.projects", "project", "project.customerId = customer.id")
-            .innerJoinAndSelect("project.times", "time", "time.projectId = project.id")
-            .innerJoinAndSelect("time.tags", "tags");
+            .innerJoinAndSelect("project.tasks", "task", "task.projectId = project.id")
+            .innerJoinAndSelect("task.times", "time", "time.taskId = task.id")
+            .leftJoinAndSelect("time.tags", "tags");
           if (query.year !== undefined && query.month !== undefined) {
             queryBuild = queryBuild.where("time.from BETWEEN :from AND :to", {
-              from: moment(`${query.year}-${query.month}`, "YYYY-MM", true).format("YYYY-MM-01 00:00:00"),
-              to: moment(`${query.year}-${query.month}`, "YYYY-MM", true).endOf("month").format("YYYY-MM-DD 23:59:59"),
+              from: moment(`${query.year}-${query.month}`, "YYYY-M", true).format("YYYY-MM-01 00:00:00"),
+              to: moment(`${query.year}-${query.month}`, "YYYY-M", true).endOf("month").format("YYYY-MM-DD 23:59:59"),
             });
           } else if (query.year !== undefined && query.week !== undefined) {
             queryBuild = queryBuild.where("time.from BETWEEN :from AND :to", {
@@ -54,21 +58,26 @@ export class TimeController extends Controller {
           }
           const customers: CustomerEntity[] = await queryBuild.getMany();
 
-          handler.response<ICustomerDTO[]>().json(customers.map((customer: CustomerEntity) => ({
+          handler.response<ICustomerDTO[]>().json(customers.map((customer: CustomerEntity) => (CustomerDTO.parse({
             id: customer.id,
             name: customer.name,
-            projects: customer.projects.map((project: ProjectEntity) => ({
+            projects: customer.projects.map((project: ProjectEntity) => ProjectDTO.parse({
               id: project.id,
               name: project.name,
-              times: project.times.map((time: TimeEntity) => ({
-                id: time.id,
-                from: moment(time.from).format("YYYY-MM-DD HH:mm:ss"),
-                ...(time.to !== null ? { to: moment(time.to).format("YYYY-MM-DD HH:mm:ss") } : undefined),
-                tags: time.tags.map((tag: TagEntity) => TagDTO.parse({ id: tag.id, name: tag.name }).serialize()),
-                comment: time.comment,
-              })),
-            })),
-          })));
+              tasks: project.tasks.map((task: TaskEntity) => TaskDTO.parse({
+                id: task.id,
+                name: task.name,
+                times: task.times.map((time: TimeEntity) => TimeDTO.parse({
+                  id: time.id,
+                  from: moment(time.from).format("YYYY-MM-DD HH:mm:ss"),
+                  ...(time.to !== null ? { to: moment(time.to).format("YYYY-MM-DD HH:mm:ss") } : undefined),
+                  tags: time.tags.map((tag: TagEntity) => TagDTO.parse({ id: tag.id, name: tag.name }).serialize()),
+                  comment: time.comment,
+                }).serialize()),
+
+              }).serialize()),
+            }).serialize()),
+          }).serialize())));
         } else {
           const times: TimeEntity[] = await TimeEntity.find({
             where: {
@@ -96,31 +105,28 @@ export class TimeController extends Controller {
               // If query "all" is not provided only fetch entities belonging to current user
               ...(query.all === undefined ? { user: handler.request.user } : undefined),
             },
-            relations: ["project", "project.customer", "tags"],
+            relations: ["task", "task.project", "task.project.customer", "tags"],
             order: { from: "DESC", to: "ASC" },
           });
-
-          handler.response<ITimeDTO[]>().json(times.map((time: TimeEntity) => {
-            return {
-              id: time.id,
-              ...(time.project !== null ? {
-                project: {
-                  id: time.project.id,
-                  name: time.project.name,
-                  ...(time.project.customer !== null ? {
-                    customer: {
-                      id: time.project.customer.id,
-                      name: time.project.customer.name,
-                    },
-                  } : undefined),
-                },
-              } : undefined),
-              from: moment(time.from).format("YYYY-MM-DD HH:mm:ss"),
-              ...(time.to !== null ? { to: moment(time.to).format("YYYY-MM-DD HH:mm:ss") } : undefined),
-              tags: time.tags.map((tag: TagEntity) => TagDTO.parse({ id: tag.id, name: tag.name }).serialize()),
-              comment: time.comment,
-            };
-          }));
+          return handler.response<ITimeDTO[]>().json(times.map((time: TimeEntity) => TimeDTO.parse({
+            id: time.id,
+            task: TaskDTO.parse({
+              id: time.task.id,
+              name: time.task.name,
+              project: ProjectDTO.parse({
+                id: time.task.project.id,
+                name: time.task.project.name,
+                customer: CustomerDTO.parse({
+                  id: time.task.project.customer.id,
+                  name: time.task.project.customer.name,
+                }).serialize(),
+              }).serialize(),
+            }).serialize(),
+            from: moment(time.from).format("YYYY-MM-DD HH:mm:ss"),
+            ...(time.to !== null ? { to: moment(time.to).format("YYYY-MM-DD HH:mm:ss") } : undefined),
+            tags: time.tags.map((tag: TagEntity) => TagDTO.parse({ id: tag.id, name: tag.name }).serialize()),
+            comment: time.comment,
+          }).serialize()));
         }
       } catch (error) {
         this.logError(handler.response(), "Error getting times");
@@ -134,27 +140,27 @@ export class TimeController extends Controller {
       try {
         const time: TimeEntity = await TimeEntity.findOneOrFail({
           where: { id: parseInt(handler.params<{ id: string }>().id, 10) },
-          relations: ["project", "project.customer", "tags"],
+          relations: ["task", "task.project", "task.project.customer", "tags"],
         });
-        handler.response<ITimeDTO>().json({
+        handler.response<ITimeDTO>().json(TimeDTO.parse({
           id: time.id,
-          ...(time.project !== undefined ? {
-            project: {
-              id: time.project.id,
-              name: time.project.name,
-              ...(time.project.customer !== undefined ? {
-                customer: {
-                  id: time.project.customer.id,
-                  name: time.project.customer.name,
-                },
-              } : undefined),
-            },
-          } : undefined),
+          task: TaskDTO.parse({
+            id: time.task.id,
+            name: time.task.name,
+            project: ProjectDTO.parse({
+              id: time.task.project.id,
+              name: time.task.project.name,
+              customer: CustomerDTO.parse({
+                id: time.task.project.customer.id,
+                name: time.task.project.customer.name,
+              }).serialize(),
+            }).serialize(),
+          }).serialize(),
           from: moment(time.from).format("YYYY-MM-DD HH:mm:ss"),
           ...(time.to !== null ? { to: moment(time.to).format("YYYY-MM-DD HH:mm:ss") } : undefined),
           ...(time.tags !== null ? { tags: time.tags.map((tag: TagEntity) => TagDTO.parse({ id: tag.id, name: tag.name }).serialize()) } : undefined),
           comment: time.comment,
-        });
+        }).serialize());
       } catch (error) {
         this.logError(handler.response(), "Error getting time", error);
         throw error;
@@ -190,7 +196,7 @@ export class TimeController extends Controller {
             ...(body.to !== undefined ? { to: this.setToDate(moment(body.from), moment(body.to)).toDate() } : undefined),
             comment: body.comment,
             user: handler.request.user,
-            projectId: body.projectId,
+            task: await TaskEntity.findOneOrFail(body.taskId),
             ...(body.tags !== undefined ? {
               tags: await Promise.all(body.tags.map((tag: string | number) => {
                 if (typeof tag === "string") {
@@ -222,7 +228,7 @@ export class TimeController extends Controller {
           time.to = this.setToDate(moment(body.from), moment(body.to)).toDate();
         }
         time.comment = body.comment;
-        time.projectId = body.projectId;
+        time.task = await TaskEntity.findOneOrFail(body.taskId);
         if (body.tags !== undefined) {
           time.tags = await Promise.all(body.tags.map((tag: string | number) => {
             if (typeof tag === "string") {

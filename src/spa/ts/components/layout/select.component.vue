@@ -1,27 +1,78 @@
 <template>
   <div class="mdo-form-group">
-    <label
-      class="mdo-form-group__label mdo-form-group__label--active mdo-form-group__label--gray"
-    >{{ label }}</label>
+    <label class="mdo-form-group__label mdo-form-group__label--active mdo-form-group__label--gray">
+      <slot name="label">{{ label }}</slot>
+    </label>
     <i class="mdo-form-group__caret fas fa-caret-down"></i>
+    <label
+      class="mdo-form-group__select-placeholder"
+      v-if="hasPlaceholder && hiddenValue === '' && !isOptionsEmpty"
+    >
+      <slot name="placeholder">{{ placeholder }}</slot>
+    </label>
+    <label class="mdo-form-group__select-placeholder" v-if="isOptionsEmpty">
+      <slot name="empty">{{ emptyLabel }}</slot>
+    </label>
     <select class="mdo-form-group__control" v-on:input="onSelect" ref="select">
-      <option
-        v-for="(option, index) in options"
-        :key="index"
-        :value="option.value"
-      >{{ option.text }}</option>
+      <option value hidden default v-if="hasPlaceholder"></option>
+      <template v-for="(option, index) in options">
+        <optgroup
+          v-if="option.children !== undefined"
+          :key="`option_${index}`"
+          :label="option.text"
+        >
+          <option
+            v-for="(option, index) in option.children"
+            :disabled="option.disabled !== undefined && option.disabled === true"
+            :key="`option_child_${index}`"
+            :value="option.value"
+          >{{ option.text }}</option>
+        </optgroup>
+        <option
+          v-else
+          :disabled="option.disabled !== undefined && option.disabled === true"
+          :key="`option_${index}`"
+          :value="option.value"
+        >{{ option.text }}</option>
+      </template>
     </select>
   </div>
 </template>
 <script lang="ts">
 import { Vue, Component, Prop, Watch } from "vue-property-decorator";
+export interface IOption {
+  value: string;
+  text: string;
+  disabled?: boolean;
+  children?: IOption[];
+}
 @Component
 export default class SelectComponent extends Vue {
   @Prop(String) label!: string;
-  @Prop() value!: string;
-  @Prop() options!: ({ value: string; text: string })[];
+  @Prop(String) placeholder?: string;
+  @Prop({ default: "", type: String }) emptyLabel?: string;
+  @Prop({ default: "", type: String }) value!: string;
+  @Prop() options!: IOption[];
   @Watch("value") onValueChange(value: any, oldValue: any) {
     (this.$refs.select as any).value = value;
+    this.hiddenValue = value;
+  }
+  @Watch("options") onOptionsChange(options: IOption[], oldOptions: IOption[]) {
+    if (
+      options.find((option: IOption) => option.value === this.value) ===
+      undefined
+    ) {
+      this.$emit("input", "");
+    }
+  }
+
+  public hiddenValue: string = "";
+
+  public get hasPlaceholder() {
+    return !!this.$slots.placeholder || this.placeholder !== undefined;
+  }
+  public get isOptionsEmpty() {
+    return this.options.length === 0;
   }
 
   public get isActive(): boolean {
@@ -29,10 +80,12 @@ export default class SelectComponent extends Vue {
   }
 
   mounted() {
+    this.hiddenValue = this.value;
     (this.$refs.select as any).value = this.value;
   }
 
   onSelect() {
+    this.hiddenValue = (this.$refs.select as any).value;
     this.$emit("input", (this.$refs.select as any).value);
   }
 }
@@ -41,7 +94,6 @@ export default class SelectComponent extends Vue {
 @import "~bootstrap/scss/_functions";
 @import "../../../scss/variables";
 @import "~bootstrap/scss/_variables";
-
 .mdo-form-group {
   margin-top: 1rem;
   margin-bottom: 1.5rem;
@@ -69,6 +121,14 @@ export default class SelectComponent extends Vue {
     position: absolute;
     right: 0px;
     bottom: 13px;
+  }
+  &__select-placeholder {
+    min-height: 3rem;
+    width: 100%;
+    color: color("gray");
+    line-height: 3rem;
+    position: absolute;
+    pointer-events: none;
   }
   #{selector-unify(&, textarea)}__control {
     padding-top: 0.5rem;

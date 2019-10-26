@@ -8,9 +8,11 @@ import { GroupEntity } from "./api/entities/group.entity";
 import { ProjectEntity } from "./api/entities/project.entity";
 import { ResourceEntity } from "./api/entities/resource.entity";
 import { TagEntity } from "./api/entities/tag.entity";
+import { TaskEntity } from "./api/entities/task.entity";
 import { TextEntity } from "./api/entities/text.entity";
 import { TimeEntity } from "./api/entities/time.entity";
 import { TokenEntity } from "./api/entities/token.entity";
+import { UserProjectEntity } from "./api/entities/user-project.entity";
 import { UserEntity } from "./api/entities/user.entity";
 
 export const defaultConnectionConfig: ConnectionOptions = {
@@ -25,10 +27,12 @@ export const defaultConnectionConfig: ConnectionOptions = {
     ProjectEntity,
     ResourceEntity,
     TextEntity,
+    TaskEntity,
     TagEntity,
     TimeEntity,
     TokenEntity,
     UserEntity,
+    UserProjectEntity,
   ],
   migrations: [
     "./migrations/*.js",
@@ -38,5 +42,11 @@ export const defaultConnectionConfig: ConnectionOptions = {
 export const runMigrations = async () => {
   const connection = await createConnection({ ...defaultConnectionConfig, logging: true });
   await connection.runMigrations({ transaction: false });
+  await connection.close();
+};
+
+export const generateMigrations = async () => {
+  const connection = await createConnection({ ...defaultConnectionConfig, logging: true });
+  await connection.migrations;
   await connection.close();
 };

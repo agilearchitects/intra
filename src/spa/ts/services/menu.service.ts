@@ -30,6 +30,7 @@ export class MenuService {
         route: { name: "time" }, title: i18n.t("menu.time.time"), children: [
           { route: { name: "time.report" }, title: i18n.t("menu.time.report") },
           { route: { name: "time.result" }, title: i18n.t("menu.time.result") },
+          { route: { name: "time.project" }, title: i18n.t("menu.time.project") },
         ],
       },
       { route: { name: "crm" }, title: i18n.t("menu.crm") },
