@@ -1,8 +1,11 @@
+import { CreateProjectUserDTO, ICreateProjectUserDTO } from "./create-project-user.dto";
+import { CreateTaskDTO, ICreateTaskDTO } from "./create-task.dto";
+
 export interface ICreateProjectDTO {
   name: string;
   customerId: number;
-  users: number[];
-  tasks: string[];
+  users: ICreateProjectUserDTO[];
+  tasks: ICreateTaskDTO[];
 }
 
 export class CreateProjectDTO implements ICreateProjectDTO {
@@ -10,16 +13,16 @@ export class CreateProjectDTO implements ICreateProjectDTO {
     return new CreateProjectDTO(
       object.name,
       object.customerId,
-      object.users,
-      object.tasks,
+      object.users.map((user: ICreateProjectUserDTO) => CreateProjectUserDTO.parse(user)),
+      object.tasks.map((task: ICreateTaskDTO) => CreateTaskDTO.parse(task)),
     );
   }
 
   public constructor(
     public readonly name: string,
     public readonly customerId: number,
-    public readonly users: number[],
-    public readonly tasks: string[],
+    public readonly users: CreateProjectUserDTO[],
+    public readonly tasks: CreateTaskDTO[],
   ) { }
 
   public serialize(): ICreateProjectDTO {

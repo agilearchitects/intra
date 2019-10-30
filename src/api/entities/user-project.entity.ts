@@ -4,9 +4,9 @@ import { ProjectEntity } from "./project.entity";
 import { UserEntity } from "./user.entity";
 
 @Entity()
-export class UserProjectEntity extends AppEntity {
+export class ProjectUserEntity extends AppEntity {
   @Column({ type: "decimal", nullable: true })
-  public price!: number;
+  public rate!: number;
 
   @ManyToOne((type: any) => UserEntity, (user: UserEntity) => user.id, { cascade: true })
   public user!: UserEntity;

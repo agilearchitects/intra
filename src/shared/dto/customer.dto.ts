@@ -25,7 +25,7 @@ export class CustomerDTO implements ICustomerDTO {
     return {
       id: this.id,
       name: this.name,
-      ...(this.projects ? { projects: this.projects.map((project: ProjectDTO) => project.serialize()) } : null),
+      ...(this.projects ? { projects: this.projects.map((project: ProjectDTO) => project.serialize()) } : undefined),
     };
   }
 }

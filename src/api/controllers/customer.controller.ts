@@ -22,7 +22,11 @@ export class CustomerController extends Controller {
   public index(): RequestHandler {
     return controller(async (handler: ControllerHandler) => {
       try {
-        const customers: CustomerEntity[] = await CustomerEntity.find({ relations: ["projects", "projects.tasks"] });
+        const customers: CustomerEntity[] = await CustomerEntity.find({
+          relations: [
+            "projects",
+            "projects.tasks"],
+        });
         handler.response<ICustomerDTO[]>().json(customers.map((customer: CustomerEntity) => CustomerDTO.parse({
           id: customer.id,
           name: customer.name,
@@ -30,9 +34,15 @@ export class CustomerController extends Controller {
             projects: customer.projects.map((project: ProjectEntity) => ProjectDTO.parse({
               id: project.id,
               name: project.name,
+              rate: project.rate,
+              priceBudget: project.priceBudget,
+              hoursBudget: project.hoursBudget,
               tasks: project.tasks.map((task: TaskEntity) => TaskDTO.parse({
                 id: task.id,
                 name: task.name,
+                rate: task.rate,
+                priceBudget: task.priceBudget,
+                hoursBudget: task.hoursBudget,
               }).serialize()),
             }).serialize()),
           } : undefined),
@@ -47,8 +57,11 @@ export class CustomerController extends Controller {
   public create(): RequestHandler {
     return controller(async (handler: ControllerHandler) => {
       try {
-        await CustomerEntity.create(handler.body<ICreateCustomerDTO>()).save();
-        handler.sendStatus(200);
+        const customer: CustomerEntity = await CustomerEntity.create(handler.body<ICreateCustomerDTO>()).save();
+        handler.response<ICustomerDTO>().json(CustomerDTO.parse({
+          id: customer.id,
+          name: customer.name,
+        }).serialize());
       } catch (error) {
         this.logError(handler.response(), "Error creating customer", error);
         handler.response().sendStatus(500);
