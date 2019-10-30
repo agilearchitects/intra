@@ -7,7 +7,7 @@
         ref="checkbox"
         class="mdo-toggle__checkbox"
         :disabled="disabled"
-      >
+      />
       <i class="b switch"></i>
       <i class="b track"></i>
     </div>
@@ -47,6 +47,10 @@ export default class ToggleComponent extends Vue {
 }
 </script>
 <style lang="scss" scoped>
+@import "~bootstrap/scss/_functions";
+@import "../../../scss/variables";
+@import "~bootstrap/scss/_variables";
+
 .mdo-toggle {
   position: relative;
   width: 40px;
@@ -72,7 +76,7 @@ export default class ToggleComponent extends Vue {
   }
 
   &__checkbox:checked ~ .track {
-    box-shadow: inset 0 0 0 20px #4bd863;
+    box-shadow: inset 0 0 0 20px theme-color("primary");
   }
 
   &__checkbox:checked ~ .switch {

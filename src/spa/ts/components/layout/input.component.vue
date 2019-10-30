@@ -33,6 +33,8 @@
       v-on:focus="active = true"
       v-on:blur="active = false; $emit('blur', $event)"
       v-on:keyup="$emit('keyup', $event)"
+      v-on:keydown="$emit('keydown', $event)"
+      v-on:keypress="$emit('keypress', $event)"
       :disabled="disabled"
     />
     <small v-if="hasHelp" class="mdo-form-group__help">{{ helpText }}</small>
@@ -48,7 +50,7 @@ export enum inputType {
 @Component
 export default class InputComponent extends Vue {
   @Prop(String) label!: string;
-  @Prop(String) value!: string;
+  @Prop({ default: "", Type: String }) value!: string;
   @Prop(String) id!: string;
   @Prop({ type: Boolean, default: false }) disabled!: boolean;
   @Prop({ type: Boolean, default: false }) required!: boolean;

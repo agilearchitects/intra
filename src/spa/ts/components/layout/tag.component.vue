@@ -28,8 +28,13 @@
       v-on:focus="active = true"
       v-on:blur="blur"
       v-on:keydown="keyDown"
+      v-on:keypress="shouldContinue"
     />
-    <ul class="mdo-form-tags__options" :class="{'mdo-form-tags__options--open': active}">
+    <ul
+      v-if="!maxReached"
+      class="mdo-form-tags__options"
+      :class="{'mdo-form-tags__options--open': active}"
+    >
       <li
         v-for="(option, index) in filteredOptions"
         class="mdo-form-tags__option"
@@ -54,6 +59,7 @@ export default class TagComponent extends Vue {
   @Prop({ default: [], type: Array }) value!: any[];
   @Prop({ default: [] }) options!: IOption[];
   @Prop({ type: Boolean, default: false }) allowAdd!: boolean;
+  @Prop({ type: Number, default: -1 }) max!: number;
   @Watch("input") onInputChange(value: any, oldValue: any) {
     if (value !== oldValue) {
       this.selectedValueIndex = -1;
@@ -87,6 +93,10 @@ export default class TagComponent extends Vue {
   }
   public get selectedOption(): IOption | undefined {
     return this.filteredOptions[this.selectedOptionIndex];
+  }
+
+  public get maxReached(): boolean {
+    return this.max !== -1 && this.max <= this.value.length;
   }
 
   public focusInput() {
@@ -132,6 +142,9 @@ export default class TagComponent extends Vue {
   }
 
   public addToValues(): boolean {
+    if (this.maxReached) {
+      return false;
+    }
     let returnValue = false;
     if (
       this.selectedOption !== undefined &&
@@ -199,6 +212,12 @@ export default class TagComponent extends Vue {
         break;
       case "Backspace":
         this.removeFromValues();
+    }
+  }
+
+  public shouldContinue($event: any) {
+    if (this.maxReached) {
+      $event.preventDefault();
     }
   }
 }
