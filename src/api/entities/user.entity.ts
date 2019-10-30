@@ -38,7 +38,7 @@ export class UserEntity extends AppEntity implements IUserModel {
     @OneToMany((type: any) => ProjectUserEntity, (projectUser: ProjectUserEntity) => projectUser.user)
     public projectUsers!: ProjectUserEntity[];
 
-    @OneToOne((type: any) => TaskUserEntity, (taskUser: TaskUserEntity) => taskUser.user)
+    @OneToMany((type: any) => TaskUserEntity, (taskUser: TaskUserEntity) => taskUser.user)
     public taskUser!: TaskUserEntity;
 
     public constructor() { super(); }

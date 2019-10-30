@@ -6,13 +6,12 @@ import { UserEntity } from "./user.entity";
 
 @Entity()
 export class TaskUserEntity extends AppEntity {
-  @Column()
+  @Column({ type: "decimal", nullable: true })
   public rate!: number;
 
   @ManyToOne((type: any) => TaskEntity, (task: TaskEntity) => task.taskUsers)
   public task!: TaskEntity;
 
-  @OneToOne((type: any) => UserEntity, (user: UserEntity) => user.taskUser)
-  @JoinColumn()
+  @ManyToOne((type: any) => UserEntity, (user: UserEntity) => user.taskUser)
   public user!: UserEntity;
 }
