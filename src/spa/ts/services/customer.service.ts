@@ -1,8 +1,5 @@
-// Bootstrap
-import { apiService as apiServiceInstance, errorService as errorServiceInstance } from "../bootstrap";
-
 // DTO's
-import { CreateCustomerDTO } from "../../../shared/dto/create-customer.dto";
+import { CreateCustomerDTO, ICreateCustomerDTO } from "../../../shared/dto/create-customer.dto";
 import { CustomerDTO, ICustomerDTO } from "../../../shared/dto/customer.dto";
 
 // Services
@@ -22,9 +19,9 @@ export class CustomerService {
       throw error;
     }
   }
-  public async create(payload: CreateCustomerDTO): Promise<void> {
+  public async create(payload: CreateCustomerDTO): Promise<CustomerDTO> {
     try {
-      await this.apiService.post("/customer", payload.serialize());
+      return CustomerDTO.parse((await this.apiService.post<ICreateCustomerDTO, ICustomerDTO>("/customer", payload.serialize())).body);
     } catch (error) {
       this.errorService.submit({ message: "Error while creating customer", error });
       throw error;
