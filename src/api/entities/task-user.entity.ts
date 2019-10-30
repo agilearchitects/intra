@@ -1,4 +1,4 @@
-import { Column, Entity, ManyToOne, OneToMany, OneToOne, JoinColumn } from "typeorm";
+import { Column, Entity, JoinColumn, ManyToOne, OneToOne } from "typeorm";
 import { TaskEntity } from "./task.entity";
 
 import { Entity as AppEntity } from "./entity";

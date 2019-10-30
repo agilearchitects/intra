@@ -50,7 +50,7 @@ export enum inputType {
 @Component
 export default class InputComponent extends Vue {
   @Prop(String) label!: string;
-  @Prop({ default: "", Type: String }) value!: string;
+  @Prop({ default: "", type: String }) value!: string;
   @Prop(String) id!: string;
   @Prop({ type: Boolean, default: false }) disabled!: boolean;
   @Prop({ type: Boolean, default: false }) required!: boolean;

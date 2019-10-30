@@ -3,7 +3,7 @@ import { IUserDTO, UserDTO } from "./user.dto";
 export interface ITaskUserDTO {
   id: number;
   user: IUserDTO;
-  rate: number;
+  rate?: number;
 }
 
 export class TaskUserDTO {
@@ -19,14 +19,14 @@ export class TaskUserDTO {
   public constructor(
     public readonly id: number,
     public readonly user: UserDTO,
-    public readonly rate: number,
+    public readonly rate?: number,
   ) { }
 
   public serialize(): ITaskUserDTO {
     return {
       id: this.id,
       user: this.user.serialize(),
-      rate: this.rate,
+      ...(this.rate !== undefined ? { rate: this.rate } : undefined),
     };
   }
 }

@@ -1,7 +1,7 @@
 export interface IProjectUserDTO {
   id: number;
   email: string;
-  rate: number;
+  rate?: number;
 }
 
 export class ProjectUserDTO {
@@ -17,14 +17,14 @@ export class ProjectUserDTO {
   public constructor(
     public readonly id: number,
     public readonly email: string,
-    public readonly rate: number,
+    public readonly rate?: number,
   ) { }
 
   public serialize(): IProjectUserDTO {
     return {
       id: this.id,
       email: this.email,
-      rate: this.rate,
+      ...(this.rate !== undefined ? { rate: this.rate } : undefined),
     };
   }
 }
