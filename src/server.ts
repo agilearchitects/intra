@@ -1,7 +1,7 @@
 // Libs
 import { ServerModule } from "@agilearchitects/simplyserve";
 
-import { boot, envService, userService, hashtiService } from "./bootstrap";
+import { boot, envService, hashtiService, userService } from "./bootstrap";
 
 // Routes
 import { UserService } from "@agilearchitects/authenticaton";
