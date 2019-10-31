@@ -118,9 +118,9 @@ export class TimeController extends Controller {
               project: ProjectDTO.parse({
                 id: time.task.project.id,
                 name: time.task.project.name,
-                rate: time.task.project.rate,
-                priceBudget: time.task.project.priceBudget,
-                hoursBudget: time.task.project.hoursBudget,
+                ...(time.task.project.rate !== null ? { rate: time.task.project.rate } : undefined),
+                ...(time.task.project.priceBudget !== null ? { priceBudget: time.task.project.priceBudget } : undefined),
+                ...(time.task.project.hoursBudget !== null ? { hoursBudget: time.task.project.hoursBudget } : undefined),
                 customer: CustomerDTO.parse({
                   id: time.task.project.customer.id,
                   name: time.task.project.customer.name,
@@ -155,9 +155,9 @@ export class TimeController extends Controller {
             project: ProjectDTO.parse({
               id: time.task.project.id,
               name: time.task.project.name,
-              rate: time.task.project.rate,
-              priceBudget: time.task.project.priceBudget,
-              hoursBudget: time.task.project.hoursBudget,
+              ...(time.task.project.rate !== null ? { rate: time.task.project.rate } : undefined),
+              ...(time.task.project.priceBudget !== null ? { priceBudget: time.task.project.priceBudget } : undefined),
+              ...(time.task.project.hoursBudget !== null ? { hoursBudget: time.task.project.hoursBudget } : undefined),
               customer: CustomerDTO.parse({
                 id: time.task.project.customer.id,
                 name: time.task.project.customer.name,

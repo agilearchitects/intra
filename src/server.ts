@@ -1,9 +1,10 @@
 // Libs
 import { ServerModule } from "@agilearchitects/simplyserve";
 
-import { boot, envService } from "./bootstrap";
+import { boot, envService, userService, hashtiService } from "./bootstrap";
 
 // Routes
+import { UserService } from "@agilearchitects/authenticaton";
 import { router } from "./api/routes";
 
 (async () => {
@@ -25,6 +26,12 @@ import { router } from "./api/routes";
     }] : []),
   ], port).start();
   if (["local", "dev"].indexOf(env) !== -1) {
+    // Create test user if not exists
+    userService.getUserByEmail("test@test.test").catch(async () => {
+      const password = hashtiService.create("test");
+      await userService.create("test@test.test", password, true, false);
+    });
+
     console.log(`Running API on http://${apiHost}:${port}`);  // tslint:disable-line: no-console
     if (env === "local") {
       console.log(`Running SPA on http://${spaHost}:${port}`);  // tslint:disable-line: no-console

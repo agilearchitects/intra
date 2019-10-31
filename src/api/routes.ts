@@ -30,6 +30,8 @@ router.group("", [middlewares.auth()], (router: Router) => {
   });
   router.group("/project", [], (router: Router) => {
     router.get("", projectController.index());
+    router.get("/:id", projectController.show());
+    router.put("/:id", projectController.update());
     router.post("", projectController.create());
   });
 

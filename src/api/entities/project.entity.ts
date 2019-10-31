@@ -10,13 +10,19 @@ export class ProjectEntity extends AppEntity {
   public name!: string;
 
   @Column({ type: "decimal", nullable: true })
-  public rate!: number;
+  public rate!: number | null;
 
   @Column({ type: "decimal", nullable: true })
-  public priceBudget!: number;
+  public priceBudget!: number | null;
 
   @Column({ type: "decimal", nullable: true })
-  public hoursBudget!: number;
+  public hoursBudget!: number | null;
+
+  @Column({ type: "date", nullable: true })
+  public start!: Date | null;
+
+  @Column({ type: "date", nullable: true })
+  public end!: Date | null;
 
   @OneToMany((type: any) => TaskEntity, (task: TaskEntity) => task.project, { cascade: true })
   public tasks!: TaskEntity[];

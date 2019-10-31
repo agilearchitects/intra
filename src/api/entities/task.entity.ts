@@ -11,13 +11,13 @@ export class TaskEntity extends AppEntity {
   public name!: string;
 
   @Column({ type: "decimal", nullable: true })
-  public rate!: number;
+  public rate!: number | null;
 
   @Column({ type: "decimal", nullable: true })
-  public priceBudget!: number;
+  public priceBudget!: number | null;
 
   @Column({ type: "decimal", nullable: true })
-  public hoursBudget!: number;
+  public hoursBudget!: number | null;
 
   @ManyToOne((type: any) => ProjectEntity, (project: ProjectEntity) => project.tasks)
   public project!: ProjectEntity;

@@ -6,20 +6,22 @@ import { default as middlewares, guard } from "./middlewares";
 
 // Components
 import { CreateElement } from "vue";
-import CreateProjectComponent from "./components/create-project.component";
-import CrmComponent from "./components/crm.component";
-import ErrorComponent from "./components/error.component";
-import LoginComponent from "./components/login.component";
-import PageComponent from "./components/page.component";
-import PasswordResetComponent from "./components/password-reset.component";
-import ProjectComponent from "./components/project.component";
-import StartComponent from "./components/start.component";
-import TextComponent from "./components/text.component";
-import TimeReportComponent from "./components/time-report.component";
-import TimeResultMonthComponent from "./components/time-result-month.component";
-import TimeResultWeekComponent from "./components/time-result-week.component";
-import TimeResultComponent from "./components/time-result.component";
-import WikiComponent from "./components/wiki.component";
+import CreateProjectComponent from "./components/create-project.component.vue";
+import CrmComponent from "./components/crm.component.vue";
+import EditProjectComponent from "./components/edit-project.component.vue";
+import ErrorComponent from "./components/error.component.vue";
+import LoginComponent from "./components/login.component.vue";
+import PageComponent from "./components/page.component.vue";
+import PasswordResetComponent from "./components/password-reset.component.vue";
+import ProjectFormComponent from "./components/project-form.component.vue";
+import ProjectComponent from "./components/project.component.vue";
+import StartComponent from "./components/start.component.vue";
+import TextComponent from "./components/text.component.vue";
+import TimeReportComponent from "./components/time-report.component.vue";
+import TimeResultMonthComponent from "./components/time-result-month.component.vue";
+import TimeResultWeekComponent from "./components/time-result-week.component.vue";
+import TimeResultComponent from "./components/time-result.component.vue";
+import WikiComponent from "./components/wiki.component.vue";
 
 const prefixWith = (path: string, routes: RouteConfig[]): RouteConfig[] =>
   routes.map((route: Route) => { route.path = `${path}/${route.path}`; return route; });
@@ -58,6 +60,7 @@ const router = new VueRouter({
             },
             { path: "project", name: "time.project", component: ProjectComponent },
             { path: "project/create", name: "time.project.create", component: CreateProjectComponent },
+            { path: "project/:id/edit", name: "time.project.edit", component: EditProjectComponent },
           ],
         },
         { path: "crm", name: "crm", component: CrmComponent },

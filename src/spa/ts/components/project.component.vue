@@ -5,7 +5,15 @@
       <button-component :route="{ name: 'time.project.create' }">Skapa project</button-component>
     </div>
     <div class="card mb-5" v-for="project in projects" :key="`project_${project.id}`">
-      <div class="card-header">{{ project.name }}</div>
+      <div class="card-header d-flex justify-content-between">
+        {{ project.name }}
+        <router-link
+          :to="{ name: 'time.project.edit', params: { id: project.id}}"
+          v-tooltip="'Redigera'"
+        >
+          <i class="fas fa-edit"></i>
+        </router-link>
+      </div>
       <div class="card-body">
         <h5 class="card-title">Special title treatment</h5>
         <p class="card-text">With supporting text below as a natural lead-in to additional content.</p>

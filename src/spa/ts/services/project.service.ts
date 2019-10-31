@@ -15,7 +15,13 @@ export class ProjectService {
   public async index(): Promise<ProjectDTO[]> {
     return (await this.apiService.get<IProjectDTO[]>("/project")).body.map((project: IProjectDTO) => ProjectDTO.parse(project));
   }
+  public async get(id: number): Promise<ProjectDTO> {
+    return ProjectDTO.parse((await this.apiService.get<IProjectDTO>(`/project/${id}`)).body);
+  }
   public async create(payload: CreateProjectDTO): Promise<void> {
     await this.apiService.post("/project", payload.serialize());
+  }
+  public async update(payload: ProjectDTO): Promise<void> {
+    await this.apiService.put(`/project/${payload.id}`, payload.serialize());
   }
 }
