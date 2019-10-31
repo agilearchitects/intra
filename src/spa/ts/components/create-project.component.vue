@@ -33,7 +33,7 @@ import { AuthService } from "../services/auth.service";
 
 // Components
 import ButtonComponent from "./layout/button.component.vue";
-import DatePickerComponent from "./layout/date-picker.component.vue";
+// import DatePickerComponent from "./layout/date-picker.component.vue";
 import ProjectFormComponent from "./project-form.component.vue";
 
 // Bootstrap
@@ -41,8 +41,8 @@ import { projectService as projectServiceInstance } from "../bootstrap";
 @Component({
   components: {
     ButtonComponent,
-    ProjectFormComponent,
-    DatePickerComponent
+    ProjectFormComponent
+    // DatePickerComponent
   }
 })
 export default class CreateProjectComponent extends Vue {
