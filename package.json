@@ -19,8 +19,10 @@
     "lint": "tslint --config tslint.json --project tsconfig.json"
   },
   "husky": {
-    "pre-commit": "yarn lint",
-    "pre-push": "yarn test || yarn lint"
+    "hooks": {
+      "pre-commit": "yarn lint",
+      "pre-push": "yarn test || yarn lint"
+    }
   },
   "dependencies": {
     "@agilearchitects/authenticaton": "^0.0.5",
