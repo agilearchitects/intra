@@ -15,6 +15,7 @@ import { controller, ControllerHandler } from "../modules/controller-handler.mod
 // Base controller
 import { ProjectDTO } from "../../shared/dto/project.dto";
 import { TaskDTO } from "../../shared/dto/task.dto";
+import { customerService } from "../bootstrap";
 import { TaskEntity } from "../entities/task.entity";
 import { Controller } from "./controller";
 
@@ -22,31 +23,12 @@ export class CustomerController extends Controller {
   public index(): RequestHandler {
     return controller(async (handler: ControllerHandler) => {
       try {
-        const customers: CustomerEntity[] = await CustomerEntity.find({
-          relations: [
-            "projects",
-            "projects.tasks"],
-        });
-        handler.response<ICustomerDTO[]>().json(customers.map((customer: CustomerEntity) => CustomerDTO.parse({
-          id: customer.id,
-          name: customer.name,
-          ...(customer.projects.length > 0 ? {
-            projects: customer.projects.map((project: ProjectEntity) => ProjectDTO.parse({
-              id: project.id,
-              name: project.name,
-              ...(project.rate !== null ? { rate: project.rate } : undefined),
-              ...(project.priceBudget !== null ? { priceBudget: project.priceBudget } : undefined),
-              ...(project.hoursBudget !== null ? { hoursBudget: project.hoursBudget } : undefined),
-              tasks: project.tasks.map((task: TaskEntity) => TaskDTO.parse({
-                id: task.id,
-                name: task.name,
-                ...(task.rate !== null ? { rate: task.rate } : undefined),
-                ...(task.priceBudget !== null ? { priceBudget: task.priceBudget } : undefined),
-                ...(task.hoursBudget !== null ? { hoursBudget: task.hoursBudget } : undefined),
-              }).serialize()),
-            }).serialize()),
-          } : undefined),
-        }).serialize()));
+        const query: { all?: string } = handler.query<{ all?: string }>();
+        if (query.all !== undefined) {
+          handler.response<ICustomerDTO[]>().json(await customerService.getEvery());
+        } else {
+          handler.response<ICustomerDTO[]>().json(await customerService.getWithUserProjects(handler.request.user.id));
+        }
       } catch (error) {
         this.logError(handler.response(), "Error getting customers", error);
         handler.response().sendStatus(500);
@@ -57,13 +39,25 @@ export class CustomerController extends Controller {
   public create(): RequestHandler {
     return controller(async (handler: ControllerHandler) => {
       try {
-        const customer: CustomerEntity = await CustomerEntity.create(handler.body<ICreateCustomerDTO>()).save();
-        handler.response<ICustomerDTO>().json(CustomerDTO.parse({
-          id: customer.id,
-          name: customer.name,
-        }).serialize());
+        const customer = handler.body<ICreateCustomerDTO>();
+        await customerService.create(customer);
+        handler.sendStatus(200);
       } catch (error) {
         this.logError(handler.response(), "Error creating customer", error);
+        handler.response().sendStatus(500);
+        throw error;
+      }
+    });
+  }
+
+  public update(): RequestHandler {
+    return controller(async (handler: ControllerHandler) => {
+      try {
+        const customer = handler.body<ICustomerDTO>();
+        await customerService.update(customer);
+        handler.sendStatus(200);
+      } catch (error) {
+        this.logError(handler.response(), "Error updating customer", error);
         handler.response().sendStatus(500);
         throw error;
       }

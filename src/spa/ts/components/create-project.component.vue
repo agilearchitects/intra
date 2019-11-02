@@ -55,6 +55,7 @@ export default class CreateProjectComponent extends Vue {
     this.saving = true;
     try {
       await this.projectService.create(createProject);
+      this.$router.push({ name: "time.project" });
     } catch {
       alert("Something went wrong. Please try again");
     }

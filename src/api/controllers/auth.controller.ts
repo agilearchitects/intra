@@ -11,7 +11,7 @@ import {
   authService as authServiceInstance,
   hashtiService as hashtiServiceInstance,
   userService as userServiceInstance,
-} from "../../bootstrap";
+} from "../bootstrap";
 
 // Middleware
 import { middleware, middlewares } from "../middlewares";

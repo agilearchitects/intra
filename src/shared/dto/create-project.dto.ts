@@ -1,5 +1,7 @@
 import { CreateProjectUserDTO, ICreateProjectUserDTO } from "./create-project-user.dto";
 import { CreateTaskDTO, ICreateTaskDTO } from "./create-task.dto";
+import { ITaskDTO, TaskDTO } from "./task.dto";
+import { IUpdateTaskDTO, UpdateTaskDTO } from "./update-task.dto";
 
 export interface ICreateProjectDTO {
   name: string;

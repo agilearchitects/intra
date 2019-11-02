@@ -24,13 +24,13 @@ export class ProjectEntity extends AppEntity {
   @Column({ type: "date", nullable: true })
   public end!: Date | null;
 
-  @OneToMany((type: any) => TaskEntity, (task: TaskEntity) => task.project, { cascade: true })
+  @OneToMany((type: any) => TaskEntity, (task: TaskEntity) => task.project, { cascade: true, onDelete: "CASCADE" })
   public tasks!: TaskEntity[];
 
   @ManyToOne((type: any) => CustomerEntity, (customer: CustomerEntity) => customer.projects)
   public customer!: CustomerEntity;
 
-  @OneToMany((type: any) => ProjectUserEntity, (projectUser: ProjectUserEntity) => projectUser.project, { cascade: true })
+  @OneToMany((type: any) => ProjectUserEntity, (projectUser: ProjectUserEntity) => projectUser.project, { cascade: true, onDelete: "CASCADE" })
   public projectUsers!: ProjectUserEntity[];
 
 

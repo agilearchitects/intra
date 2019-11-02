@@ -7,7 +7,7 @@ import { RequestHandler, Response, response } from "express";
 import {
     authService as authServiceInstance,
     userService as userServiceInstance,
-} from "../bootstrap";
+} from "./bootstrap";
 import { configService } from "./services/config.service";
 
 // Entites

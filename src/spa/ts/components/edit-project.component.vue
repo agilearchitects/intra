@@ -1,6 +1,19 @@
 <template>
   <div class="container">
-    <project-form-component :project-id="projectId" v-on:submit="save"></project-form-component>
+    <div class="d-flex justify-content-between align-items-center">
+      <button-component
+        :route="{ name: 'time.project' }"
+        buttonStyle="primary"
+        buttonType="outlined"
+      >
+        <i class="fas fa-arrow-left"></i>
+        Tillbaka
+      </button-component>
+      <h1>Redigera projekt</h1>
+    </div>
+    <div>
+      <project-form-component :project-id="projectId" v-on:submit="save"></project-form-component>
+    </div>
   </div>
 </template>
 <script lang="ts">
@@ -12,13 +25,14 @@ import { ProjectService } from "../services/project.service";
 
 // Components
 import ProjectFormComponent from "./project-form.component.vue";
+import ButtonComponent from "./layout/button.component.vue";
 
 // Bootstrap
 import { projectService as projectServiceInstance } from "../bootstrap";
 import { ProjectDTO } from "../../../shared/dto/project.dto";
 
 @Component({
-  components: { ProjectFormComponent }
+  components: { ProjectFormComponent, ButtonComponent }
 })
 export default class EditProjectComponent extends Vue {
   public projectService: ProjectService = projectServiceInstance;
@@ -35,10 +49,10 @@ export default class EditProjectComponent extends Vue {
   }
 
   public async save(project: ProjectDTO) {
-    console.log(project);
     this.saving = true;
     try {
       await this.projectService.update(project);
+      this.$router.push({ name: "time.project" });
     } catch {
       alert("Something went wrong. Please try again");
     }

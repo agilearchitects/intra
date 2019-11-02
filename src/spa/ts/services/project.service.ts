@@ -24,4 +24,7 @@ export class ProjectService {
   public async update(payload: ProjectDTO): Promise<void> {
     await this.apiService.put(`/project/${payload.id}`, payload.serialize());
   }
+  public async delete(id: number): Promise<void> {
+    await this.apiService.delete(`/project/${id}`);
+  }
 }

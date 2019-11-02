@@ -27,7 +27,19 @@ export class AuthService {
   public get editMode(): boolean { return this._editMode; }
 
   public get isAuth(): boolean { return !!this.user; }
-  public get isAdmin(): boolean { return !!this.user; }
+  public get isAdmin(): boolean {
+    if (this.user === undefined) {
+      return false;
+    }
+
+    return [
+      "test@test.test",
+      "hannes@dwik.se",
+      "hannes@agilearchitects.se",
+      "carin@dwik.se",
+      "carin.dahlberg@pontarius.com",
+    ].indexOf(this.user.email) !== -1;
+  }
 
   public constructor(
     private readonly apiService: APIService,

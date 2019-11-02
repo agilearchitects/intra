@@ -1,9 +1,11 @@
 import { CreateProjectUserDTO, ICreateProjectUserDTO } from "./create-project-user.dto";
 import { CreateProjectDTO, ICreateProjectDTO } from "./create-project.dto";
 import { CreateTaskDTO, ICreateTaskDTO } from "./create-task.dto";
+import { IUpdateTaskDTO, UpdateTaskDTO } from "./update-task.dto";
 
 export interface IUpdateProjectDTO extends ICreateProjectDTO {
   id: number;
+  tasks?: Array<ICreateTaskDTO | IUpdateTaskDTO>;
 }
 
 export class UpdateProjectDTO extends CreateProjectDTO {
@@ -19,7 +21,7 @@ export class UpdateProjectDTO extends CreateProjectDTO {
       updateProject.start,
       updateProject.end,
       updateProject.users !== undefined ? updateProject.users.map((user: ICreateProjectUserDTO) => CreateProjectUserDTO.parse(user)) : undefined,
-      updateProject.tasks !== undefined ? updateProject.tasks.map((task: ICreateTaskDTO) => CreateTaskDTO.parse(task)) : undefined,
+      updateProject.tasks !== undefined ? updateProject.tasks.map((task: ICreateTaskDTO | IUpdateTaskDTO) => "id" in task ? UpdateTaskDTO.parse(task) : CreateTaskDTO.parse(task)) : undefined,
     );
   }
 
@@ -33,7 +35,7 @@ export class UpdateProjectDTO extends CreateProjectDTO {
     start?: string,
     end?: string,
     users?: CreateProjectUserDTO[],
-    tasks?: CreateTaskDTO[],
+    public readonly tasks?: Array<CreateTaskDTO | UpdateTaskDTO>,
   ) {
     super(
       name,
@@ -44,7 +46,6 @@ export class UpdateProjectDTO extends CreateProjectDTO {
       start,
       end,
       users,
-      tasks,
     );
   }
 
@@ -52,6 +53,9 @@ export class UpdateProjectDTO extends CreateProjectDTO {
     return {
       id: this.id,
       ...super.serialize(),
+      ...(this.tasks !== undefined ? {
+        tasks: this.tasks.map((task: CreateTaskDTO | UpdateTaskDTO) => task.serialize()),
+      } : undefined),
     };
   }
 }

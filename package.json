@@ -11,12 +11,16 @@
     "build-spa": "parcel build src/spa/index.html --out-dir build/spa && yarn cp-spa",
     "cp-spa": "cp -r node_modules/tinymce/plugins build/spa/ && cp -r node_modules/tinymce/skins build/spa/ && cp -r node_modules/tinymce/themes build/spa/",
     "watch-spa": "parcel watch src/spa/index.html --out-dir build/spa",
-    "serve": "nodemon ./build/server.js",
+    "serve": "nodemon ./build/api/server.js",
     "watch": "concurrently \"yarn run serve\" \"yarn run watch-api\" \"yarn run watch-spa\"",
     "build": "yarn build-api && yarn build-spa",
     "render": "ts-node ./render.ts",
     "test": "mocha --recursive src/**/*.spec.ts --require ts-node/register --timeout 999999",
     "lint": "tslint --config tslint.json --project tsconfig.json"
+  },
+  "husky": {
+    "pre-commit": "yarn lint",
+    "pre-push": "yarn test || yarn lint"
   },
   "dependencies": {
     "@agilearchitects/authenticaton": "^0.0.5",
@@ -74,6 +78,7 @@
     "change-case": "^3.1.0",
     "concurrently": "^4.1.2",
     "ejs": "^2.7.1",
+    "husky": "^3.0.9",
     "jquery": "^3.4.1",
     "mocha": "^6.2.1",
     "nodemon": "^1.19.3",

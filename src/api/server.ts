@@ -5,7 +5,7 @@ import { boot, envService, hashtiService, userService } from "./bootstrap";
 
 // Routes
 import { UserService } from "@agilearchitects/authenticaton";
-import { router } from "./api/routes";
+import { router } from "./routes";
 
 (async () => {
   await boot();

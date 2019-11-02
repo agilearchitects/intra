@@ -204,7 +204,10 @@
         </div>
       </div>
     </div>
-    <button-component type="submit">Skapa projekt</button-component>
+    <button-component type="submit">
+      <template v-if="projectId !== undefined">Spara</template>
+      <template v-else>Skapa</template>
+    </button-component>
   </form>
 </template>
 <script lang="ts">
@@ -249,6 +252,7 @@ import { ProjectUserDTO } from "../../../shared/dto/project-user.dto";
 import { TaskDTO } from "../../../shared/dto/task.dto";
 import { TaskUserDTO } from "../../../shared/dto/task-user.dto";
 import { ProjectDTO } from "../../../shared/dto/project.dto";
+import { UpdateTaskDTO } from "../../../shared/dto/update-task.dto";
 
 class CustomerViewModel {
   public constructor(
@@ -270,6 +274,7 @@ interface IFormUser {
 }
 
 interface IFormTask {
+  id?: number;
   name: string;
   rate: string;
   priceBudget: string;
@@ -408,6 +413,7 @@ export default class ProjectFormComponent extends Vue {
       tasks:
         project.tasks !== undefined
           ? project.tasks.map((task: TaskDTO) => ({
+              id: task.id,
               name: task.name,
               rate: task.rate !== undefined ? task.rate.toString() : "",
               priceBudget:
@@ -445,7 +451,7 @@ export default class ProjectFormComponent extends Vue {
     };
   }
   public async getCustomers(): Promise<CustomerViewModel[]> {
-    return (await this.customerService.index()).map(
+    return (await this.customerService.index(true)).map(
       (customer: CustomerDTO) =>
         new CustomerViewModel(customer.id, customer.name)
     );
@@ -499,20 +505,30 @@ export default class ProjectFormComponent extends Vue {
           rate: parseInt(user.rate, 10)
         }).serialize()
       ),
-      tasks: this.form.tasks.map((task: IFormTask) =>
-        CreateTaskDTO.parse({
+      tasks: this.form.tasks.map((task: IFormTask) => {
+        const parsed = {
           name: task.name,
           rate: parseInt(task.rate, 10),
           priceBudget: parseInt(task.priceBudget, 10),
           hoursBudget: parseInt(task.hoursBudget, 10),
-          users: task.users.map((user: IFormUser) =>
-            CreateTaskUserDTO.parse({
+          users: task.users.map((user: IFormUser) => {
+            const parsed = {};
+            return CreateTaskUserDTO.parse({
               userId: user.id,
               rate: parseInt(user.rate, 10)
-            }).serialize()
-          )
-        }).serialize()
-      )
+            }).serialize();
+          })
+        };
+
+        if (task.id !== undefined) {
+          return UpdateTaskDTO.parse({
+            id: task.id,
+            ...parsed
+          }).serialize();
+        } else {
+          return CreateTaskDTO.parse(parsed).serialize();
+        }
+      })
     };
     if (this.projectId !== undefined) {
       this.$emit(

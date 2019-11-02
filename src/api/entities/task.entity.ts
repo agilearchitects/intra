@@ -22,9 +22,9 @@ export class TaskEntity extends AppEntity {
   @ManyToOne((type: any) => ProjectEntity, (project: ProjectEntity) => project.tasks)
   public project!: ProjectEntity;
 
-  @OneToMany((type: any) => TimeEntity, (time: TimeEntity) => time.task)
+  @OneToMany((type: any) => TimeEntity, (time: TimeEntity) => time.task, { onDelete: "CASCADE" })
   public times!: TimeEntity[];
 
-  @OneToMany((type: any) => TaskUserEntity, (taskUser: TaskUserEntity) => taskUser.task, { cascade: true })
+  @OneToMany((type: any) => TaskUserEntity, (taskUser: TaskUserEntity) => taskUser.task, { cascade: true, onDelete: "CASCADE" })
   public taskUsers!: TaskUserEntity[];
 }

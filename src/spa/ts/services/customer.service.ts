@@ -11,9 +11,9 @@ export class CustomerService {
     private readonly apiService: APIService,
     private readonly errorService: ErrorService,
   ) { }
-  public async index(): Promise<CustomerDTO[]> {
+  public async index(all?: true): Promise<CustomerDTO[]> {
     try {
-      return (await this.apiService.get<ICustomerDTO[]>("/customer")).body.map((customer: ICustomerDTO) => CustomerDTO.parse(customer));
+      return (await this.apiService.get<ICustomerDTO[]>("/customer", all === true ? { all: "true" } : undefined)).body.map((customer: ICustomerDTO) => CustomerDTO.parse(customer));
     } catch (error) {
       this.errorService.submit({ message: "Error while fetching customers", error });
       throw error;
