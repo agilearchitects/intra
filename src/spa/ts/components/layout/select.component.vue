@@ -2,6 +2,7 @@
   <div class="mdo-form-group">
     <label class="mdo-form-group__label mdo-form-group__label--active mdo-form-group__label--gray">
       <slot name="label">{{ label }}</slot>
+      HiddenValue: {{ hiddenValue }}
     </label>
     <i class="mdo-form-group__caret fas fa-caret-down"></i>
     <label
@@ -13,7 +14,7 @@
     <label class="mdo-form-group__select-placeholder" v-if="isOptionsEmpty">
       <slot name="empty">{{ emptyLabel }}</slot>
     </label>
-    <select class="mdo-form-group__control" v-on:input="onSelect" ref="select">
+    <select class="mdo-form-group__control" v-on:input="onInput" ref="select">
       <option value hidden default v-if="hasPlaceholder"></option>
       <template v-for="(option, index) in options">
         <optgroup
@@ -54,6 +55,7 @@ export default class SelectComponent extends Vue {
   @Prop({ default: "", type: String }) value!: string;
   @Prop() options!: IOption[];
   @Watch("value") onValueChange(value: any, oldValue: any) {
+    console.log("VALUE UPDATE", value);
     (this.$refs.select as any).value = value;
     this.hiddenValue = value;
   }
@@ -84,7 +86,7 @@ export default class SelectComponent extends Vue {
     (this.$refs.select as any).value = this.value;
   }
 
-  onSelect() {
+  onInput() {
     this.hiddenValue = (this.$refs.select as any).value;
     this.$emit("input", (this.$refs.select as any).value);
   }
@@ -95,9 +97,6 @@ export default class SelectComponent extends Vue {
 @import "../../../scss/variables";
 @import "~bootstrap/scss/_variables";
 .mdo-form-group {
-  margin-top: 1rem;
-  margin-bottom: 1.5rem;
-  position: relative;
   &__label {
     position: absolute;
     font-size: 1rem;

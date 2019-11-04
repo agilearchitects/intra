@@ -4,7 +4,6 @@ import { ServerModule } from "@agilearchitects/simplyserve";
 import { boot, envService, hashtiService, userService } from "./bootstrap";
 
 // Routes
-import { UserService } from "@agilearchitects/authenticaton";
 import { router } from "./routes";
 
 (async () => {

@@ -5,7 +5,6 @@ import { ConnectionOptions, createConnection } from "typeorm";
 import { BannedTokenEntity } from "./entities/banned-token.entity";
 import { CustomerEntity } from "./entities/customer.entity";
 import { GroupEntity } from "./entities/group.entity";
-import { ProjectUserEntity } from "./entities/project-user.entity";
 import { ProjectEntity } from "./entities/project.entity";
 import { ResourceEntity } from "./entities/resource.entity";
 import { TagEntity } from "./entities/tag.entity";
@@ -25,7 +24,6 @@ export const defaultConnectionConfig: ConnectionOptions = {
     BannedTokenEntity,
     CustomerEntity,
     GroupEntity,
-    ProjectUserEntity,
     ProjectEntity,
     ResourceEntity,
     TagEntity,

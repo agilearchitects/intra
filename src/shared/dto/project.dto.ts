@@ -1,5 +1,4 @@
 import { CustomerDTO, ICustomerDTO } from "./customer.dto";
-import { IProjectUserDTO, ProjectUserDTO } from "./project-user.dto";
 import { ITaskDTO, TaskDTO } from "./task.dto";
 
 export interface IProjectDTO {
@@ -12,7 +11,6 @@ export interface IProjectDTO {
   end?: string;
   customer?: ICustomerDTO;
   tasks?: ITaskDTO[];
-  users?: IProjectUserDTO[];
 }
 
 export class ProjectDTO implements IProjectDTO {
@@ -27,7 +25,6 @@ export class ProjectDTO implements IProjectDTO {
       object.end,
       (object.customer ? CustomerDTO.parse(object.customer) : undefined),
       (object.tasks ? object.tasks.map((task: ITaskDTO) => TaskDTO.parse(task)) : undefined),
-      (object.users ? object.users.map((user: IProjectUserDTO) => ProjectUserDTO.parse(user)) : undefined),
     );
   }
 
@@ -41,7 +38,6 @@ export class ProjectDTO implements IProjectDTO {
     public readonly end?: string,
     public readonly customer?: CustomerDTO,
     public readonly tasks?: TaskDTO[],
-    public readonly users?: ProjectUserDTO[],
   ) { }
 
   public serialize(): IProjectDTO {
@@ -55,7 +51,6 @@ export class ProjectDTO implements IProjectDTO {
       ...(this.end !== undefined ? { end: this.end } : undefined),
       ...(this.customer ? { customer: this.customer.serialize() } : null),
       ...(this.tasks ? { tasks: this.tasks.map((task: TaskDTO) => task.serialize()) } : null),
-      ...(this.users ? { users: this.users.map((user: ProjectUserDTO) => user.serialize()) } : null),
     };
   }
 }

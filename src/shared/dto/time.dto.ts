@@ -10,6 +10,7 @@ export interface ITimeDTO {
   comment: string;
   tags?: ITagDTO[];
   user?: IUserDTO;
+  rate?: number;
 }
 
 export class TimeDTO implements ITimeDTO {
@@ -22,6 +23,7 @@ export class TimeDTO implements ITimeDTO {
       object.comment,
       object.tags !== undefined ? object.tags.map((tag: ITagDTO) => TagDTO.parse(tag)) : undefined,
       object.user !== undefined ? UserDTO.parse(object.user) : undefined,
+      object.rate,
     );
   }
 
@@ -33,6 +35,7 @@ export class TimeDTO implements ITimeDTO {
     public readonly comment: string,
     public readonly tags?: TagDTO[],
     public readonly user?: UserDTO | undefined,
+    public readonly rate?: number,
   ) { }
 
   public serialize(): ITimeDTO {
@@ -44,6 +47,7 @@ export class TimeDTO implements ITimeDTO {
       comment: this.comment,
       ...(this.tags !== undefined ? { tags: this.tags.map((tag: TagDTO) => tag.serialize()) } : undefined),
       ...(this.user !== undefined ? { user: this.user.serialize() } : undefined),
+      ...(this.rate !== undefined ? { rate: this.rate } : undefined),
     };
   }
 }

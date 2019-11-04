@@ -4,6 +4,7 @@ export interface ICreateTimeDTO {
   to?: string | undefined;
   comment: string;
   userId: number;
+  rate?: number;
   tags?: Array<string | number>;
 }
 
@@ -15,6 +16,7 @@ export class CreateTimeDTO implements ICreateTimeDTO {
       (object.to !== undefined ? object.to : undefined),
       object.comment,
       object.userId,
+      object.rate,
       object.tags,
     );
   }
@@ -25,6 +27,7 @@ export class CreateTimeDTO implements ICreateTimeDTO {
     public readonly to: string | undefined,
     public readonly comment: string,
     public readonly userId: number,
+    public readonly rate?: number,
     public readonly tags?: Array<string | number>,
   ) { }
 
@@ -35,6 +38,7 @@ export class CreateTimeDTO implements ICreateTimeDTO {
       ...(this.to !== undefined ? { to: this.to } : undefined),
       comment: this.comment,
       userId: this.userId,
+      ...(this.rate !== undefined ? { rate: this.rate } : undefined),
       ...(this.tags !== undefined ? { tags: this.tags } : undefined),
     };
   }

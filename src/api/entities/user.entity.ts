@@ -5,7 +5,6 @@ import { Entity as AppEntity } from "./entity";
 
 // Entites
 import { GroupEntity } from "./group.entity";
-import { ProjectUserEntity } from "./project-user.entity";
 import { TaskUserEntity } from "./task-user.entity";
 import { TimeEntity } from "./time.entity";
 
@@ -35,11 +34,18 @@ export class UserEntity extends AppEntity implements IUserModel {
     @OneToMany((type: any) => TimeEntity, (time: TimeEntity) => time.user)
     public times!: TimeEntity[];
 
-    @OneToMany((type: any) => ProjectUserEntity, (projectUser: ProjectUserEntity) => projectUser.user)
-    public projectUsers!: ProjectUserEntity[];
-
     @OneToMany((type: any) => TaskUserEntity, (taskUser: TaskUserEntity) => taskUser.user)
-    public taskUser!: TaskUserEntity;
+    public taskUsers!: TaskUserEntity[];
+
+    public get isAdmin(): boolean {
+        return [
+            "test@test.test",
+            "hannes@dwik.se",
+            "hannes@agilearchitects.se",
+            "carin@dwik.se",
+            "carin.dahlberg@pontarius.com",
+        ].indexOf(this.email) !== -1;
+    }
 
     public constructor() { super(); }
 }

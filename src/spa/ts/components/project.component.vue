@@ -15,7 +15,7 @@
           >
             <i class="fas fa-edit"></i>
           </router-link>
-          <a href v-on:click.prevent="deleteProject(project.id)">
+          <a v-if="isAdmin" href v-on:click.prevent="deleteProject(project.id)">
             <i v-tooltip="'Ta bort'" class="fas fa-times"></i>
           </a>
         </div>
@@ -78,6 +78,7 @@ import { UserDTO } from "../../../shared/dto/user.dto";
 import ButtonComponent from "./layout/button.component.vue";
 import BarComponent, { IBarItem } from "./layout/bar.component.vue";
 import { TimeDTO } from "../../../shared/dto/time.dto";
+import { TaskUserDTO } from "../../../shared/dto/task-user.dto";
 
 class ProjectViewModel {
   public static colorMap: string[] = ["#f00", "#0f0", "#00f"];
@@ -87,11 +88,28 @@ class ProjectViewModel {
     public readonly name: string,
     public readonly customer: CustomerViewModel,
     public readonly tasks: TaskViewModel[],
-    public readonly users: UserViewModel[],
     public readonly rate?: number,
     public readonly priceBudget?: number,
     public readonly hoursBudget?: number
   ) {}
+
+  public get users(): UserViewModel[] {
+    return this.tasks.reduce(
+      (previousValue: UserViewModel[], currentValue: TaskViewModel) => {
+        return [
+          ...previousValue,
+          ...currentValue.users.filter(
+            (taskUser: UserViewModel) =>
+              previousValue.findIndex(
+                (previousTaskUser: UserViewModel) =>
+                  taskUser.id === previousTaskUser.id
+              ) === -1
+          )
+        ];
+      },
+      []
+    );
+  }
 
   public get hours(): number {
     return this.tasks.reduce(
@@ -150,10 +168,11 @@ class ProjectViewModel {
       .times.reduce((previousValue: number, currentValue: TimeViewModel) => {
         return (
           previousValue +
-          Math.round(
-            (currentValue.to!.diff(currentValue.from, "minutes") / 60) * 100
-          ) /
-            100
+          (currentValue.to !== undefined
+            ? Math.round(
+                (currentValue.to.diff(currentValue.from, "minutes") / 60) * 100
+              ) / 100
+            : 0)
         );
       }, 0);
   }
@@ -175,6 +194,15 @@ class ProjectViewModel {
       }, 0);
   }
 }
+
+class UserViewModel {
+  public constructor(
+    public readonly id: number,
+    public readonly email: string,
+    public readonly rate?: number
+  ) {}
+}
+
 class CustomerViewModel {
   public constructor(
     public readonly id: number,
@@ -187,6 +215,7 @@ class TaskViewModel {
     public readonly id: number,
     public readonly name: string,
     public readonly times: TimeViewModel[],
+    public readonly users: UserViewModel[],
     public readonly rate?: number,
     public readonly priceBudget?: number,
     public readonly hoursBudget?: number
@@ -205,13 +234,6 @@ class TaskViewModel {
       0
     );
   }
-}
-
-class UserViewModel {
-  public constructor(
-    public readonly id: number,
-    public readonly email: string
-  ) {}
 }
 
 class TimeViewModel {
@@ -264,15 +286,16 @@ export default class ProjectComponent extends Vue {
                             )
                         )
                       : [],
+                    task.users !== undefined
+                      ? task.users.map((user: TaskUserDTO) => ({
+                          id: user.user.id,
+                          email: user.user.email
+                        }))
+                      : [],
                     task.rate,
                     task.priceBudget,
                     task.hoursBudget
                   )
-              )
-            : [],
-          project.users !== undefined
-            ? project.users.map(
-                (user: UserDTO) => new UserViewModel(user.id, user.email)
               )
             : [],
           project.rate,

@@ -12,6 +12,6 @@ export class TaskUserEntity extends AppEntity {
   @ManyToOne((type: any) => TaskEntity, (task: TaskEntity) => task.taskUsers)
   public task!: TaskEntity;
 
-  @ManyToOne((type: any) => UserEntity, (user: UserEntity) => user.taskUser)
+  @ManyToOne((type: any) => UserEntity, (user: UserEntity) => user.taskUsers)
   public user!: UserEntity;
 }

@@ -8,6 +8,7 @@ export interface IUpdateTimeDTO {
   comment: string;
   userId: number;
   tags?: Array<string | number>;
+  rate?: number;
 }
 
 export class UpdateTimeDTO implements IUpdateTimeDTO {
@@ -20,6 +21,7 @@ export class UpdateTimeDTO implements IUpdateTimeDTO {
       object.comment,
       object.userId,
       object.tags,
+      object.rate,
     );
   }
 
@@ -31,6 +33,7 @@ export class UpdateTimeDTO implements IUpdateTimeDTO {
     public readonly comment: string,
     public readonly userId: number,
     public readonly tags?: Array<string | number>,
+    public readonly rate?: number,
   ) { }
 
   public serialize(): IUpdateTimeDTO {
@@ -42,6 +45,7 @@ export class UpdateTimeDTO implements IUpdateTimeDTO {
       comment: this.comment,
       userId: this.userId,
       ...(this.tags !== undefined ? { tags: this.tags } : undefined),
+      ...(this.rate !== undefined ? { rate: this.rate } : undefined),
     };
   }
 }

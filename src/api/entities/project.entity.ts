@@ -1,7 +1,6 @@
 import { Column, Entity, ManyToOne, OneToMany } from "typeorm";
 import { CustomerEntity } from "./customer.entity";
 import { Entity as AppEntity } from "./entity";
-import { ProjectUserEntity } from "./project-user.entity";
 import { TaskEntity } from "./task.entity";
 
 @Entity()
@@ -29,9 +28,4 @@ export class ProjectEntity extends AppEntity {
 
   @ManyToOne((type: any) => CustomerEntity, (customer: CustomerEntity) => customer.projects)
   public customer!: CustomerEntity;
-
-  @OneToMany((type: any) => ProjectUserEntity, (projectUser: ProjectUserEntity) => projectUser.project, { cascade: true, onDelete: "CASCADE" })
-  public projectUsers!: ProjectUserEntity[];
-
-
 }

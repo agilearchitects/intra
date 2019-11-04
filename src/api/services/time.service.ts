@@ -123,6 +123,7 @@ export class TimeService {
           return this.tagEntity.findOneOrFail(tag);
         })),
       } : undefined),
+      ...(time.rate !== undefined ? { rate: time.rate } : undefined),
     }).save();
 
     return this.parseTimeEntityToDTO(newTimer);
@@ -147,6 +148,7 @@ export class TimeService {
         return this.tagEntity.findOneOrFail(tag);
       }));
     }
+    foundTime.rate = time.rate !== undefined ? time.rate : null;
     await foundTime.save();
 
     return this.parseTimeEntityToDTO(foundTime);
@@ -183,9 +185,10 @@ export class TimeService {
         }).serialize(),
       } : undefined),
       from: moment(time.from).format(this.dateTimeFormat),
+      ...(time.rate !== null ? { rate: time.rate } : undefined),
       ...(time.to !== null ? { to: moment(time.to).format(this.dateTimeFormat) } : undefined),
       tags: time.tags.map((tag: TagEntity) => this.tagDTO.parse({ id: tag.id, name: tag.name }).serialize()),
-      comment: time.comment,
+      comment: time.comment !== null ? time.comment : "",
     }).serialize();
   }
 

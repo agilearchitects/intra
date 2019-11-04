@@ -1,9 +1,6 @@
 // Libs
 import { ILoginDTO, ILoginPayloadDTO, LoginDTO } from "@agilearchitects/authenticaton";
 
-// Bootstrap
-import { apiService as apiServiceInstance, errorService as errorServiceInstance, storageService as storageServiceInstance } from "../bootstrap";
-
 // DTO's
 import { PasswordResetDTO } from "../../../shared/dto/password-reset.dto";
 import { IUserDTO } from "../../../shared/dto/user.dto";

@@ -44,7 +44,7 @@ export class MenuService {
   }
   public get rightMenu(): IMenuItem[] {
     return [
-      ...this.authService.isAdmin ? [
+      ...this.authService.isAuth ? [
         {
           route: { name: "time" }, title: i18n.t("menu.time.time"), children: [
             { route: { name: "time.report" }, title: i18n.t("menu.time.report") },

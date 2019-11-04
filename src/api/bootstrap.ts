@@ -13,7 +13,6 @@ import { defaultConnectionConfig } from "./typeorm";
 
 // DTO's
 import { CustomerDTO } from "../shared/dto/customer.dto";
-import { ProjectUserDTO } from "../shared/dto/project-user.dto";
 import { ProjectDTO } from "../shared/dto/project.dto";
 import { TagDTO } from "../shared/dto/tag.dto";
 import { TaskUserDTO } from "../shared/dto/task-user.dto";
@@ -24,7 +23,6 @@ import { UserDTO } from "../shared/dto/user.dto";
 // Entites
 import { BannedTokenEntity } from "./entities/banned-token.entity";
 import { CustomerEntity } from "./entities/customer.entity";
-import { ProjectUserEntity } from "./entities/project-user.entity";
 import { ProjectEntity } from "./entities/project.entity";
 import { TaskUserEntity } from "./entities/task-user.entity";
 import { TaskEntity } from "./entities/task.entity";
@@ -66,7 +64,7 @@ export const authService = new AuthService(
   hashtiService,
 );
 export const customerService = new CustomerService(CustomerEntity, CustomerDTO, ProjectDTO, TaskDTO);
-export const projectService = new ProjectService("YYYY-MM-DD", CustomerEntity, ProjectEntity, ProjectUserEntity, TaskEntity, TaskUserEntity, UserEntity, CustomerDTO, ProjectDTO, ProjectUserDTO, TaskDTO, TaskUserDTO, TimeDTO, UserDTO, moment);
+export const projectService = new ProjectService("YYYY-MM-DD", CustomerEntity, ProjectEntity, TaskEntity, TaskUserEntity, TimeEntity, UserEntity, CustomerDTO, ProjectDTO, TaskDTO, TaskUserDTO, TimeDTO, UserDTO, moment);
 export const timeService = new TimeService("YYYY-MM-DD HH:mm:ss", TimeEntity, TagEntity, TaskEntity, UserEntity, CustomerDTO, ProjectDTO, TagDTO, TaskDTO, TimeDTO, moment, Between);
 
 export const boot = async () => {

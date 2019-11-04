@@ -108,9 +108,6 @@ export default class InputComponent extends Vue {
 @import "~bootstrap/scss/_variables";
 
 .mdo-form-group {
-  margin-top: 1rem;
-  margin-bottom: 1.5rem;
-  position: relative;
   &__label {
     position: absolute;
     font-size: 1rem;

@@ -1,7 +1,4 @@
-import { CreateProjectUserDTO, ICreateProjectUserDTO } from "./create-project-user.dto";
 import { CreateTaskDTO, ICreateTaskDTO } from "./create-task.dto";
-import { ITaskDTO, TaskDTO } from "./task.dto";
-import { IUpdateTaskDTO, UpdateTaskDTO } from "./update-task.dto";
 
 export interface ICreateProjectDTO {
   name: string;
@@ -11,7 +8,6 @@ export interface ICreateProjectDTO {
   hoursBudget?: number;
   start?: string;
   end?: string;
-  users?: ICreateProjectUserDTO[];
   tasks?: ICreateTaskDTO[];
 }
 
@@ -25,7 +21,6 @@ export class CreateProjectDTO implements ICreateProjectDTO {
       object.hoursBudget,
       object.start,
       object.end,
-      object.users !== undefined ? object.users.map((user: ICreateProjectUserDTO) => CreateProjectUserDTO.parse(user)) : undefined,
       object.tasks !== undefined ? object.tasks.map((task: ICreateTaskDTO) => CreateTaskDTO.parse(task)) : undefined,
     );
   }
@@ -38,7 +33,6 @@ export class CreateProjectDTO implements ICreateProjectDTO {
     public readonly hoursBudget?: number | undefined,
     public readonly start?: string,
     public readonly end?: string,
-    public readonly users?: CreateProjectUserDTO[],
     public readonly tasks?: CreateTaskDTO[],
   ) { }
 
@@ -51,9 +45,6 @@ export class CreateProjectDTO implements ICreateProjectDTO {
       ...(this.hoursBudget !== undefined ? { hoursBudget: this.hoursBudget } : undefined),
       ...(this.start !== undefined ? { start: this.start } : undefined),
       ...(this.end !== undefined ? { end: this.end } : undefined),
-      ...(this.users !== undefined ? {
-        users: this.users.map((user: CreateProjectUserDTO) => user.serialize()),
-      } : undefined),
       ...(this.tasks !== undefined ? {
         tasks: this.tasks.map((task: CreateTaskDTO) => task.serialize()),
       } : undefined),

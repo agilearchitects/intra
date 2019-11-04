@@ -22,12 +22,12 @@ export class CustomerService {
       relations: [
         "projects",
         "projects.tasks",
+        "projects.tasks.taskUsers",
+        "projects.tasks.taskUsers.user",
         "projects.tasks.times",
         "projects.tasks.times.tags",
-        "projects.projectUsers",
-        "projects.projectUsers.user",
       ],
-      where: `"CustomerEntity__projects__projectUsers__user"."id" = ${userId}`,
+      where: `"CustomerEntity__projects__tasks__taskUsers__user"."id" = ${userId}`,
     })).map((customer: CustomerEntity) => this.customerDTO.parse({
       id: customer.id,
       name: customer.name,

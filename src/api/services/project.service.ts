@@ -2,15 +2,13 @@
 import moment, { Moment } from "moment";
 
 // DTO's
-import { ICreateProjectUserDTO } from "../../shared/dto/create-project-user.dto";
 import { ICreateProjectDTO } from "../../shared/dto/create-project.dto";
 import { ICreateTaskUserDTO } from "../../shared/dto/create-task-user.dto";
 import { ICreateTaskDTO } from "../../shared/dto/create-task.dto";
 import { CustomerDTO } from "../../shared/dto/customer.dto";
-import { ProjectUserDTO } from "../../shared/dto/project-user.dto";
 import { IProjectDTO, ProjectDTO } from "../../shared/dto/project.dto";
-import { ITaskUserDTO, TaskUserDTO } from "../../shared/dto/task-user.dto";
-import { ITaskDTO, TaskDTO } from "../../shared/dto/task.dto";
+import { TaskUserDTO } from "../../shared/dto/task-user.dto";
+import { TaskDTO } from "../../shared/dto/task.dto";
 import { TimeDTO } from "../../shared/dto/time.dto";
 import { IUpdateProjectDTO } from "../../shared/dto/update-project.dto";
 import { UserDTO } from "../../shared/dto/user.dto";
@@ -18,7 +16,6 @@ import { UserDTO } from "../../shared/dto/user.dto";
 // Entities
 import { IUpdateTaskDTO } from "../../shared/dto/update-task.dto";
 import { CustomerEntity } from "../entities/customer.entity";
-import { ProjectUserEntity } from "../entities/project-user.entity";
 import { ProjectEntity } from "../entities/project.entity";
 import { TaskUserEntity } from "../entities/task-user.entity";
 import { TaskEntity } from "../entities/task.entity";
@@ -30,13 +27,12 @@ export class ProjectService {
     private readonly dateFormat = "YYYY-MM-DD",
     private readonly customerEntity: typeof CustomerEntity,
     private readonly projectEntity: typeof ProjectEntity,
-    private readonly projectUserEntity: typeof ProjectUserEntity,
     private readonly taskEntity: typeof TaskEntity,
     private readonly taskUserEntity: typeof TaskUserEntity,
+    private readonly timeEntity: typeof TimeEntity,
     private readonly userEntity: typeof UserEntity,
     private readonly customerDTO: typeof CustomerDTO,
     private readonly projectDTO: typeof ProjectDTO,
-    private readonly projectUserDTO: typeof ProjectUserDTO,
     private readonly taskDTO: typeof TaskDTO,
     private readonly taskUserDTO: typeof TaskUserDTO,
     private readonly timeDTO: typeof TimeDTO,
@@ -44,35 +40,56 @@ export class ProjectService {
     private readonly momentModule: typeof moment,
   ) { }
 
-  public async getForUser(userId: number): Promise<IProjectDTO[]> {
+  public async getForUser(userId: number, isAdmin: boolean): Promise<IProjectDTO[]> {
+    let projects: ProjectEntity[] = (await ProjectEntity.find({
+      relations: [
+        "customer",
+        "tasks",
+        "tasks.times",
+        "tasks.times.user",
+        "tasks.taskUsers",
+        "tasks.taskUsers.user",
+      ],
+      // Filter out project user is part of
+    })).filter((project: ProjectEntity) =>
+      project.tasks.findIndex((task: TaskEntity) =>
+        task.taskUsers.findIndex((taskUser: TaskUserEntity) => taskUser.user.id === userId) !== -1,
+      ) !== -1,
+    );
+    if (!isAdmin) {
+      projects = projects.map((project: ProjectEntity) => {
+        // Filter out only tasks user is part of
+        project.tasks = project.tasks.filter((task: TaskEntity) => task.taskUsers.findIndex((taskUser: TaskUserEntity) => taskUser.user.id === userId) !== -1);
+        return project;
+      });
+    }
+    return projects.map((project: ProjectEntity) => this.parseProjectEntityToDTO(project));
+  }
+
+  public async getAll(): Promise<IProjectDTO[]> {
     return (await ProjectEntity.find({
       relations: [
         "customer",
-        "projectUsers",
-        "projectUsers.user",
         "tasks",
         "tasks.times",
         "tasks.times.user",
         "tasks.taskUsers",
         "tasks.taskUsers.user",
       ],
-      where: `"ProjectEntity__projectUsers__user"."id" = ${userId}`,
     })).map((project: ProjectEntity) => this.parseProjectEntityToDTO(project));
   }
 
-  public async get(projectId: number, userId?: number): Promise<IProjectDTO> {
+  public async get(projectId: number, userId: number, isAdmin: boolean): Promise<IProjectDTO> {
     return this.parseProjectEntityToDTO((await ProjectEntity.findOneOrFail(projectId, {
       relations: [
         "customer",
-        "projectUsers",
-        "projectUsers.user",
         "tasks",
         "tasks.times",
         "tasks.times.user",
         "tasks.taskUsers",
         "tasks.taskUsers.user",
       ],
-      where: `"ProjectEntity__projectUsers__user"."id" = ${userId}`,
+      ...(isAdmin === false ? { where: `"ProjectEntity__tasks__taskUsers__user"."id" = ${userId}` } : undefined),
     })));
   }
 
@@ -86,13 +103,6 @@ export class ProjectService {
       hoursBudget: project.hoursBudget !== undefined ? project.hoursBudget : null,
       start: project.start !== undefined ? this.momentModule(project.start, this.dateFormat, true).toDate() : null,
       end: project.end !== undefined ? this.momentModule(project.end, this.dateFormat, true).toDate() : null,
-      projectUsers: project.users !== undefined ? await Promise.all(project.users.map(async (projectUser: ICreateProjectUserDTO) => {
-        const user = await this.userEntity.findOneOrFail(projectUser.userId);
-        return this.projectUserEntity.create({
-          rate: projectUser.rate !== undefined ? projectUser.rate : null,
-          user,
-        });
-      })) : [],
       tasks: project.tasks !== undefined ? await Promise.all(project.tasks.map(async (task: ICreateTaskDTO) =>
         this.taskEntity.create({
           name: task.name,
@@ -127,16 +137,6 @@ export class ProjectService {
     foundProject.hoursBudget = project.hoursBudget !== undefined ? project.hoursBudget : null;
     foundProject.start = project.start !== undefined ? this.momentModule(project.start, this.dateFormat, true).toDate() : null;
     foundProject.end = project.end !== undefined ? this.momentModule(project.end, this.dateFormat, true).toDate() : null;
-
-    // Update users
-    foundProject.projectUsers = project.users !== undefined ? await Promise.all(project.users.map(async (projectUser: ICreateProjectUserDTO) => {
-      // Lookup user
-      const user = await this.userEntity.findOneOrFail(projectUser.userId);
-      return this.projectUserEntity.create({
-        rate: projectUser.rate !== undefined ? projectUser.rate : null,
-        user,
-      });
-    })) : [];
 
     foundProject.tasks = project.tasks !== undefined ? await Promise.all(project.tasks.map(async (task: ICreateTaskDTO | IUpdateTaskDTO) => {
       if ("id" in task) {
@@ -175,20 +175,33 @@ export class ProjectService {
 
     return this.parseProjectEntityToDTO(foundProject);
   }
-  public async delete(projectId: number, userId: number): Promise<void> {
+  public async delete(projectId: number, userId: number, isAdmin: boolean): Promise<void> {
     const project = await ProjectEntity.findOneOrFail(projectId, {
       relations: [
         "customer",
-        "projectUsers",
-        "projectUsers.user",
         "tasks",
         "tasks.times",
         "tasks.times.user",
         "tasks.taskUsers",
         "tasks.taskUsers.user",
       ],
-      where: `"ProjectEntity__projectUsers__user"."id" = ${userId}`,
+      ...(isAdmin === false ? { where: `"ProjectEntity__tasks__taskUsers__user"."id" = ${userId}` } : undefined),
     });
+
+    for (const task of project.tasks) {
+      if (task.times.length > 0) {
+        // Delete time entites
+        await this.timeEntity.delete(task.times.map((time: TimeEntity) => time.id));
+      }
+      if (task.taskUsers.length > 0) {
+        // Delete task users
+        await this.taskUserEntity.delete(task.taskUsers.map((taskUser: TaskUserEntity) => taskUser.id));
+      }
+    }
+    if (project.tasks.length > 0) {
+      // Delete tasks
+      await this.taskEntity.delete(project.tasks.map((task: TaskEntity) => task.id));
+    }
     await project.remove();
   }
 
@@ -217,7 +230,7 @@ export class ProjectService {
               id: time.id,
               from: this.momentModule(time.from).format("YYYY-MM-DD HH:mm:ss"),
               ...(time.to !== null ? { to: this.momentModule(time.to).format("YYYY-MM-DD HH:mm:ss") } : undefined),
-              comment: time.comment,
+              comment: time.comment !== null ? time.comment : "",
               user: this.userDTO.parse({ id: time.user.id, email: time.user.email }).serialize(),
             }).serialize()),
           } : undefined),
@@ -233,11 +246,6 @@ export class ProjectService {
           } : undefined),
         }).serialize()),
       } : undefined),
-      users: project.projectUsers.map((projectUser: ProjectUserEntity) => this.projectUserDTO.parse({
-        id: projectUser.user.id,
-        email: projectUser.user.email,
-        ...(projectUser.rate !== null ? { rate: projectUser.rate } : undefined),
-      }).serialize()),
     }).serialize();
   }
 

@@ -69,58 +69,7 @@
       ></input-component>
     </div>
     <div class="d-flex mb-5 justify-content-between align-items-top">
-      <div class="card w-50 mr-3">
-        <div class="card-header">Användare</div>
-        <div class="card-body px-0 pt-0">
-          <table class="table table-sm table-borderless">
-            <thead>
-              <tr>
-                <th class="pr-0">Användare</th>
-                <th class="px-0">Timpris</th>
-                <th class="pl-0 align-bottom text-center">
-                  <i v-tooltip="'Ta bort'" class="fas fa-times"></i>
-                </th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr v-for="(user, index) in form.users" :key="`task_${index}`">
-                <td class="py-0 pr-0">
-                  <input-component placeholder="Aktivitet" class="m-0" v-model="user.email"></input-component>
-                </td>
-                <td class="p-0">
-                  <input-component placeholder="kr/h" class="m-0" v-model="user.rate"></input-component>
-                </td>
-                <td class="pl-0 pt-0 pb-3 align-bottom text-center">
-                  <button-component
-                    button-style="danger"
-                    button-size="small"
-                    v-tooltip="'Ta bort'"
-                    v-on:click="removeUser(index)"
-                  >
-                    <i class="fas fa-times"></i>
-                  </button-component>
-                </td>
-              </tr>
-              <tr v-if="form.users.length === 0">
-                <td colspan="5" class="p-2 text-center">
-                  <i class="text-muted">Inga användare tillagda</i>
-                </td>
-              </tr>
-            </tbody>
-          </table>
-          <div class="d-flex justify-content-between align-items-center px-3">
-            <select-component
-              :options="userOptions"
-              v-model="form.newUser"
-              placeholder="Välj användare"
-              v-on:input="addUser"
-              label="Användare"
-              class="flex-fill"
-            ></select-component>
-          </div>
-        </div>
-      </div>
-      <div class="card w-50 ml-3">
+      <div class="card flex-fill mx-0">
         <div class="card-header">Aktiviter</div>
         <div class="card-body px-0 pt-0">
           <table class="table table-sm table-borderless">
@@ -137,7 +86,7 @@
             </thead>
             <tbody>
               <template v-for="(task, index) in form.tasks">
-                <tr :key="`task_${index}_task`">
+                <tr :key="`task_${index}`">
                   <td class="py-0 pr-0">
                     <input-component placeholder="Aktivitet" class="m-0" v-model="task.name"></input-component>
                   </td>
@@ -153,7 +102,7 @@
                   <td class="pl-0 pt-0 pb-3 align-bottom text-center">
                     <button-component
                       button-style="danger"
-                      button-size="small"
+                      button-size="xs"
                       v-tooltip="'Ta bort'"
                       v-on:click="removeTask(index)"
                     >
@@ -166,8 +115,8 @@
                   <th colspan="2" class="px-0">Användare</th>
                   <th class="px-0">Timpris</th>
                 </tr>
-                <template v-for="user in task.users">
-                  <tr :key="`task_${index}_user_${user.id}`">
+                <template v-for="(user, subIndex) in task.users">
+                  <tr :key="`task_${index}_user_${subIndex}`">
                     <td></td>
                     <td colspan="2" class="p-0">
                       <input-component class="m-0" :value="user.email" :disabled="true"></input-component>
@@ -175,8 +124,31 @@
                     <td class="p-0">
                       <input-component placeholder="kr/h" class="m-0" v-model="user.rate"></input-component>
                     </td>
+                    <td class="pl-0 pt-0 pb-3 align-bottom text-center">
+                      <button-component
+                        button-style="danger"
+                        button-size="xs"
+                        v-tooltip="'Ta bort'"
+                        v-on:click="removeUser(task, subIndex)"
+                      >
+                        <i class="fas fa-times"></i>
+                      </button-component>
+                    </td>
                   </tr>
                 </template>
+                <tr :key="`task_${index}_user`">
+                  <td></td>
+                  <td colspan="3" class="p-0">
+                    <ul class="list-group m-0">
+                      <li
+                        v-for="(user, index) in task.userList"
+                        :key="`user_option_${index}`"
+                        class="list-group-item"
+                        v-on:click="addUser(task, user)"
+                      >{{ user.email }}</li>
+                    </ul>
+                  </td>
+                </tr>
               </template>
               <tr v-if="form.tasks.length === 0">
                 <td colspan="5" class="p-2 text-center">
@@ -227,9 +199,9 @@ import { UserService } from "../services/user.service";
 
 // Components
 import InputComponent from "./layout/input.component.vue";
-import SelectComponent from "./layout/select.component.vue";
+import SelectComponent, { IOption } from "./layout/select.component.vue";
 import ButtonComponent from "./layout/button.component.vue";
-import TagComponent, { IOption } from "./layout/tag.component.vue";
+import TagComponent from "./layout/tag.component.vue";
 
 // Bootstrap
 import {
@@ -268,7 +240,7 @@ class UserViewModel {
 }
 
 interface IFormUser {
-  id: number;
+  userId: number;
   email: string;
   rate: string;
 }
@@ -280,6 +252,7 @@ interface IFormTask {
   priceBudget: string;
   hoursBudget: string;
   users: IFormUser[];
+  userList: UserViewModel[];
 }
 
 interface IForm {
@@ -290,8 +263,6 @@ interface IForm {
   hoursBudget: string;
   start: string;
   end: string;
-  newUser: string;
-  users: IFormUser[];
   newTask: string;
   tasks: IFormTask[];
 }
@@ -320,14 +291,6 @@ export default class ProjectFormComponent extends Vue {
     hoursBudget: "",
     start: moment().format("YYYY-MM-DD"),
     end: "",
-    newUser: "",
-    users: [
-      {
-        id: this.authService.user!.id,
-        email: this.authService.user!.email,
-        rate: ""
-      }
-    ],
     newTask: "",
     tasks: []
   };
@@ -344,20 +307,6 @@ export default class ProjectFormComponent extends Vue {
       value: customer.id.toString(),
       text: customer.name
     }));
-  }
-
-  public get userOptions(): IOption[] {
-    return this.users
-      .filter(
-        (user: UserViewModel) =>
-          this.form.users.findIndex(
-            (formUser: IFormUser) => formUser.id === user.id
-          ) === -1
-      )
-      .map((user: UserViewModel) => ({
-        value: user.id.toString(),
-        text: user.email
-      }));
   }
 
   public created() {
@@ -400,15 +349,6 @@ export default class ProjectFormComponent extends Vue {
         project.end !== undefined
           ? moment(project.end).format("YYYY-MM-DD")
           : "",
-      newUser: "",
-      users:
-        project.users !== undefined
-          ? project.users.map((user: ProjectUserDTO) => ({
-              id: user.id,
-              email: user.email,
-              rate: user.rate !== undefined ? user.rate.toString() : ""
-            }))
-          : [],
       newTask: "",
       tasks:
         project.tasks !== undefined
@@ -425,27 +365,17 @@ export default class ProjectFormComponent extends Vue {
                   ? task.hoursBudget.toString()
                   : "",
               users:
-                project.users !== undefined
-                  ? project.users.map((user: ProjectUserDTO) => {
-                      let rate = "";
-                      if (task.users !== undefined) {
-                        const taskUser = task.users.find(
-                          (taskUser: TaskUserDTO) => taskUser.id === taskUser.id
-                        );
-                        if (
-                          taskUser !== undefined &&
-                          taskUser.rate !== undefined
-                        ) {
-                          rate = taskUser.rate.toString();
-                        }
-                      }
-                      return {
-                        id: user.id,
-                        email: user.email,
-                        rate: rate
-                      };
-                    })
-                  : []
+                task.users !== undefined
+                  ? task.users.map((taskUser: TaskUserDTO) => ({
+                      userId: taskUser.user.id,
+                      email: taskUser.user.email,
+                      rate:
+                        taskUser.rate !== undefined
+                          ? taskUser.rate.toString()
+                          : ""
+                    }))
+                  : [],
+              userList: [...this.users]
             }))
           : []
     };
@@ -499,23 +429,17 @@ export default class ProjectFormComponent extends Vue {
         : undefined),
       ...(this.form.start !== "" ? { start: this.form.start } : undefined),
       ...(this.form.end !== "" ? { end: this.form.end } : undefined),
-      users: this.form.users.map((user: IFormUser) =>
-        CreateProjectUserDTO.parse({
-          userId: user.id,
-          rate: parseInt(user.rate, 10)
-        }).serialize()
-      ),
       tasks: this.form.tasks.map((task: IFormTask) => {
         const parsed = {
           name: task.name,
           rate: parseInt(task.rate, 10),
           priceBudget: parseInt(task.priceBudget, 10),
           hoursBudget: parseInt(task.hoursBudget, 10),
-          users: task.users.map((user: IFormUser) => {
+          users: task.users.map((formUser: IFormUser) => {
             const parsed = {};
             return CreateTaskUserDTO.parse({
-              userId: user.id,
-              rate: parseInt(user.rate, 10)
+              userId: formUser.userId,
+              rate: parseInt(formUser.rate, 10)
             }).serialize();
           })
         };
@@ -543,42 +467,37 @@ export default class ProjectFormComponent extends Vue {
     }
   }
 
-  public addUser() {
-    const user = this.users.find(
-      (user: UserViewModel) => user.id === parseInt(this.form.newUser, 10)
+  private getFilteredUsers(users: IFormUser[]): UserViewModel[] {
+    return this.users.filter(
+      (user: UserViewModel) =>
+        users.findIndex(
+          (formUser: IFormUser) => user.id === formUser.userId
+        ) === -1
     );
-    if (user !== undefined) {
-      this.form.users.push({
-        id: user.id,
-        email: user.email,
-        rate: ""
-      });
-      for (const task of this.form.tasks) {
-        task.users = [
-          ...task.users,
-          { id: user.id, email: user.email, rate: "" }
-        ];
-      }
-    }
   }
 
-  public removeUser(index: number) {
-    const user = this.form.users[index];
-    this.form.users = [
-      ...this.form.users.slice(0, index),
-      ...this.form.users.slice(index + 1)
-    ];
-    for (const task of this.form.tasks) {
-      const userIndex = task.users.findIndex(
-        (taskUser: IFormUser) => taskUser.id === user.id
-      );
-      if (userIndex !== -1) {
-        task.users = [
-          ...task.users.slice(0, userIndex),
-          ...task.users.slice(userIndex + 1)
-        ];
-      }
+  public async addUser(task: IFormTask, user: UserViewModel) {
+    if (user !== undefined) {
+      task.users = [
+        ...task.users,
+        {
+          userId: user.id,
+          email: user.email,
+          rate: ""
+        }
+      ];
     }
+
+    task.userList = [...this.getFilteredUsers(task.users)];
+  }
+
+  public async removeUser(task: IFormTask, index: number) {
+    task.users = [
+      ...task.users.slice(0, index),
+      ...task.users.slice(index + 1)
+    ];
+
+    task.userList = [...this.getFilteredUsers(task.users)];
   }
 
   public addTask() {
@@ -590,11 +509,8 @@ export default class ProjectFormComponent extends Vue {
       rate: "",
       priceBudget: "",
       hoursBudget: "",
-      users: this.form.users.map((user: IFormUser) => ({
-        id: user.id,
-        email: user.email,
-        rate: user.rate
-      }))
+      users: [],
+      userList: [...this.users]
     });
     this.form.newTask = "";
   }

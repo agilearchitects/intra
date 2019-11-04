@@ -30,9 +30,10 @@ export enum ButtonStyle {
   ERROR = "error"
 }
 export enum ButtonSize {
-  SMALL = "small",
-  MEDIUM = "medium",
-  LARGE = "large"
+  XS = "xs",
+  SM = "sm",
+  MD = "md",
+  LG = "lg"
 }
 @Component({
   components: { ButtonComponent }
@@ -46,7 +47,7 @@ export default class LayoutButtonComponent extends Vue {
   buttonType!: ButtonType;
   @Prop({ type: String, default: ButtonStyle.PRIMARY })
   buttonStyle!: ButtonStyle;
-  @Prop({ type: String, default: ButtonSize.MEDIUM })
+  @Prop({ type: String, default: ButtonSize.MD })
   buttonSize!: ButtonSize;
 
   public click() {
@@ -84,16 +85,21 @@ export default class LayoutButtonComponent extends Vue {
     color: gray("500") !important;
     cursor: default;
   }
-  &--small {
+  &--xs {
     font-size: 0.7rem;
     line-height: 18px;
     padding: 0px 6px;
   }
-  &--medium {
+  &--sm {
+    font-size: 0.8rem;
+    line-height: 25px;
+    padding: 0px 10px;
+  }
+  &--md {
     line-height: 36px;
     padding: 0px 16px;
   }
-  &--large {
+  &--lg {
     font-size: 1.2rem;
     line-height: 36px;
     padding: 0px 19px;

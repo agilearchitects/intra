@@ -7,7 +7,7 @@
     v-on:submit="save"
     :loading="saving"
   >
-    <div class="d-flex">
+    <div class="d-flex align-items-end">
       <select-component
         class="flex-fill"
         name="project"
@@ -43,6 +43,8 @@
         :label="$t('time.to')"
         placeholder="HH:mm"
       ></input-component>
+      <input-component v-model="time.rate" label="pris/h" :disabled="!shoudSetRate"></input-component>
+      <checkbox-component id="set_rate" v-model="shoudSetRate" label="Avvikande timpris"></checkbox-component>
     </div>
     <div class="d-flex">
       <tag-component
@@ -85,6 +87,7 @@ import InputComponent from "./layout/input.component.vue";
 import SelectComponent, { IOption } from "./layout/select.component.vue";
 import ButtonComponent from "./layout/button.component.vue";
 import TagComponent from "./layout/tag.component.vue";
+import CheckboxComponent from "./layout/checkbox.component.vue";
 
 // Services
 import { TimeService } from "../services/time.service";
@@ -110,6 +113,7 @@ export class TimeReportFormViewModel {
     public taskId: string,
     public from: Moment,
     public to: Moment | undefined,
+    public rate: string,
     public tags: Array<string | number>,
     public comment: string
   ) {}
@@ -119,6 +123,10 @@ export class TimeReportFormViewModel {
   }
   public get toFormatted(): string {
     return this.to !== undefined ? moment(this.to).format("HH:mm") : "";
+  }
+
+  public get rateValue(): number | undefined {
+    return !isNaN(parseFloat(this.rate)) ? parseFloat(this.rate) : undefined;
   }
 }
 
@@ -152,7 +160,8 @@ export class TagViewModel {
     InputComponent,
     SelectComponent,
     ButtonComponent,
-    TagComponent
+    TagComponent,
+    CheckboxComponent
   }
 })
 export default class TimeReportFormComponent extends Vue {
@@ -228,6 +237,7 @@ export default class TimeReportFormComponent extends Vue {
       true
     ),
     undefined,
+    "",
     [],
     ""
   );
@@ -240,6 +250,7 @@ export default class TimeReportFormComponent extends Vue {
       text: tag.name
     }));
   }
+  public shoudSetRate: boolean = false;
 
   public loading: boolean = false;
   public saving: boolean = false;
@@ -276,9 +287,14 @@ export default class TimeReportFormComponent extends Vue {
       time.task !== undefined ? time.task.id.toString() : "",
       moment(time.from),
       time.to !== undefined ? moment(time.to) : undefined,
+      time.rate !== undefined ? time.rate.toString() : "",
       time.tags !== undefined ? time.tags.map((tag: TagDTO) => tag.id) : [],
       time.comment || ""
     );
+
+    if (this.time.rate !== "") {
+      this.shoudSetRate = true;
+    }
   }
 
   // Get all customers to be able to populate dropdown list
@@ -375,6 +391,9 @@ export default class TimeReportFormComponent extends Vue {
             ...(this.time.to !== undefined
               ? { to: this.time.to.format("YYYY-MM-DD HH:mm:ss").toString() }
               : undefined),
+            ...(this.shoudSetRate === true && this.time.rateValue !== undefined
+              ? { rate: this.time.rateValue }
+              : undefined),
             comment: this.time.comment,
             tags: this.time.tags,
             userId: this.authService.user!.id
@@ -388,6 +407,9 @@ export default class TimeReportFormComponent extends Vue {
             from: this.time.from.format("YYYY-MM-DD HH:mm:ss").toString(),
             ...(this.time.to !== undefined
               ? { to: this.time.to.format("YYYY-MM-DD HH:mm:ss").toString() }
+              : undefined),
+            ...(this.shoudSetRate === true && this.time.rateValue !== undefined
+              ? { rate: this.time.rateValue }
               : undefined),
             comment: this.time.comment,
             tags: this.time.tags,
