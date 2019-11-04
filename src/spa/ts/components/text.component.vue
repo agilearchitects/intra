@@ -36,6 +36,13 @@ export default class TextComponent extends Vue {
     this.getText();
   }
 
+  public get isAdmin(): boolean {
+    return this.authService.isAdmin;
+  }
+  public get editMode(): boolean {
+    return this.authService.editMode;
+  }
+
   public get textName(): string {
     return this.$route.params.name !== undefined
       ? this.$route.params.name
