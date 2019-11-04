@@ -2,7 +2,6 @@
   <div class="mdo-form-group">
     <label class="mdo-form-group__label mdo-form-group__label--active mdo-form-group__label--gray">
       <slot name="label">{{ label }}</slot>
-      HiddenValue: {{ hiddenValue }}
     </label>
     <i class="mdo-form-group__caret fas fa-caret-down"></i>
     <label
