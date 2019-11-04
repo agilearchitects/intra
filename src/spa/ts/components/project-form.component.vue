@@ -393,11 +393,11 @@ export default class ProjectFormComponent extends Vue {
   }
 
   public calculateBudget(target: "rate" | "priceBudget" | "hoursBudget"): void {
-    const rate = parseInt(this.form.rate !== "" ? this.form.rate : "0");
-    const priceBudget = parseInt(
+    const rate = parseFloat(this.form.rate !== "" ? this.form.rate : "0");
+    const priceBudget = parseFloat(
       this.form.priceBudget !== "" ? this.form.priceBudget : "0"
     );
-    const hoursBudget = parseInt(
+    const hoursBudget = parseFloat(
       this.form.hoursBudget !== "" ? this.form.hoursBudget : "0"
     );
     if (target === "rate" && hoursBudget !== 0) {
@@ -419,22 +419,22 @@ export default class ProjectFormComponent extends Vue {
       name: this.form.name,
       customerId: parseInt(this.form.customer, 10),
       ...(this.form.rate !== ""
-        ? { rate: parseInt(this.form.rate, 10) }
+        ? { rate: parseFloat(this.form.rate) }
         : undefined),
       ...(this.form.priceBudget !== ""
-        ? { priceBudget: parseInt(this.form.priceBudget, 10) }
+        ? { priceBudget: parseFloat(this.form.priceBudget) }
         : undefined),
       ...(this.form.hoursBudget !== ""
-        ? { hoursBudget: parseInt(this.form.hoursBudget, 10) }
+        ? { hoursBudget: parseFloat(this.form.hoursBudget) }
         : undefined),
       ...(this.form.start !== "" ? { start: this.form.start } : undefined),
       ...(this.form.end !== "" ? { end: this.form.end } : undefined),
       tasks: this.form.tasks.map((task: IFormTask) => {
         const parsed = {
           name: task.name,
-          rate: parseInt(task.rate, 10),
-          priceBudget: parseInt(task.priceBudget, 10),
-          hoursBudget: parseInt(task.hoursBudget, 10),
+          rate: parseFloat(task.rate),
+          priceBudget: parseFloat(task.priceBudget),
+          hoursBudget: parseFloat(task.hoursBudget),
           users: task.users.map((formUser: IFormUser) => {
             const parsed = {};
             return CreateTaskUserDTO.parse({
