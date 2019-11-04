@@ -86,7 +86,6 @@ export class ProjectController extends Controller {
         await projectService.delete(parseInt(params.id, 10), handler.request.user.id, isAdmin);
         handler.sendStatus(200);
       } catch (error) {
-        console.log(error)
         this.logError(handler.response(), "Error deleting project", error);
         handler.response().sendStatus(500);
         throw error;
