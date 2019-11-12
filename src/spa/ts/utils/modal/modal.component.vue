@@ -110,7 +110,6 @@ export default class ModalComponent extends Vue {
   &__content {
     position: absolute;
     width: 100%;
-    height: 100%;
     padding-right: 15px;
     padding-left: 15px;
     z-index: 1002;
