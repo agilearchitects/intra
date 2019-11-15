@@ -18,7 +18,7 @@ import { UserEntity } from "./entities/user.entity";
 export const defaultConnectionConfig: ConnectionOptions = {
   type: "sqlite",
   database: "storage/db.sqlite",
-  synchronize: true,
+  synchronize: false,
   logging: false,
   entities: [
     BannedTokenEntity,
@@ -42,11 +42,5 @@ export const defaultConnectionConfig: ConnectionOptions = {
 export const runMigrations = async () => {
   const connection = await createConnection({ ...defaultConnectionConfig, logging: true });
   await connection.runMigrations({ transaction: false });
-  await connection.close();
-};
-
-export const generateMigrations = async () => {
-  const connection = await createConnection({ ...defaultConnectionConfig, logging: true });
-  await connection.migrations;
   await connection.close();
 };

@@ -1,7 +1,7 @@
 // Libs
-import { AuthService, IUserPayloadDTO, UserPayloadDTO, UserService } from "@agilearchitects/authenticaton";
+import { AuthService, UserService } from "@agilearchitects/authenticaton";
 import Axios from "axios";
-import { RequestHandler, Response, response } from "express";
+import { RequestHandler, Response } from "express";
 
 // Services
 import {
@@ -14,6 +14,7 @@ import { configService } from "./services/config.service";
 import { UserEntity } from "./entities/user.entity";
 
 // Modules
+import { UserDTO } from "../shared/dto/user.dto";
 import { controller, ControllerHandler } from "./modules/controller-handler.module";
 import { LogModule } from "./modules/log.module";
 import ValidationErrorModule from "./modules/validation-error.module";
@@ -23,7 +24,7 @@ import { IValidationInput, validate } from "./modules/validation.module";
 declare global {
     namespace Express {
         interface Request { // tslint:disable-line:interface-name
-            user: IUserPayloadDTO;
+            user: UserDTO;
         }
     }
 }
@@ -50,7 +51,13 @@ export class Middlewares {
                 // Check for authorization header
                 if (handler.request.headers.authorization) {
                     const token = (handler.request.headers.authorization as string).substr(7);
-                    handler.request.user = await authService.auth(token);
+                    const user = await authService.auth(token);
+                    handler.request.user = UserDTO.parse({
+                        id: user.id,
+                        email: user.email,
+                        claims: user.claims,
+                        groups: user.groups,
+                    });
                     handler.next();
                 } else if (checkOnly) {
                     handler.next();
@@ -72,7 +79,12 @@ export class Middlewares {
                 const query = handler.query<{ email: string }>();
                 const user = await userService.getUserByEmail(query.email, null, null);
                 if (user !== undefined) {
-                    handler.request.user = UserPayloadDTO.parse({ id: user.id, email: user.email });
+                    handler.request.user = UserDTO.parse({
+                        id: user.id,
+                        email: user.email,
+                        claims: user.claims,
+                        groups: user.groups,
+                    });
                     handler.next();
                 } else {
                     handler.sendStatus(401);

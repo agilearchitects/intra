@@ -9,9 +9,9 @@ export class TaskUserEntity extends AppEntity {
   @Column({ type: "decimal", nullable: true })
   public rate!: number | null;
 
-  @ManyToOne((type: any) => TaskEntity, (task: TaskEntity) => task.taskUsers)
+  @ManyToOne((type: any) => TaskEntity, (task: TaskEntity) => task.taskUsers, { nullable: false })
   public task!: TaskEntity;
 
-  @ManyToOne((type: any) => UserEntity, (user: UserEntity) => user.taskUsers)
+  @ManyToOne((type: any) => UserEntity, (user: UserEntity) => user.taskUsers, { nullable: false })
   public user!: UserEntity;
 }

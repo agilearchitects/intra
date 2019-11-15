@@ -19,7 +19,7 @@ export class TaskEntity extends AppEntity {
   @Column({ type: "decimal", nullable: true })
   public hoursBudget!: number | null;
 
-  @ManyToOne((type: any) => ProjectEntity, (project: ProjectEntity) => project.tasks)
+  @ManyToOne((type: any) => ProjectEntity, (project: ProjectEntity) => project.tasks, { nullable: false })
   public project!: ProjectEntity;
 
   @OneToMany((type: any) => TimeEntity, (time: TimeEntity) => time.task, { onDelete: "CASCADE" })

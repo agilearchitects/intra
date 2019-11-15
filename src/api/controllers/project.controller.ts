@@ -21,14 +21,14 @@ export class ProjectController extends Controller {
     return controller(async (handler: ControllerHandler) => {
       try {
         // TODO - Better solution
-        const isAdmin: boolean = (await UserEntity.findOneOrFail(handler.request.user.id)).isAdmin;
-        if (isAdmin) {
+        const isAdmin: boolean = handler.request.user.hasClaim("admin");
+        if (handler.request.user.hasClaim("admin")) {
           handler.response<IProjectDTO[]>().json(await projectService.getAll());
         } else {
           handler.response<IProjectDTO[]>().json(await projectService.getForUser(handler.request.user.id, isAdmin));
         }
       } catch (error) {
-        this.logError(handler.response(), "Error getting projects", error);
+        this.logError(handler.response(), "Error getting projects", error.toString());
         handler.response().sendStatus(500);
         throw error;
       }
@@ -70,7 +70,7 @@ export class ProjectController extends Controller {
         await projectService.update(body);
         handler.sendStatus(200);
       } catch (error) {
-        this.logError(handler.response(), "Error creating project", error);
+        this.logError(handler.response(), "Error updating project", error);
         handler.response().sendStatus(500);
         throw error;
       }

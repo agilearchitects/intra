@@ -214,10 +214,12 @@ export class ProjectService {
       ...(project.hoursBudget !== null ? { hoursBudget: project.hoursBudget } : undefined),
       ...(project.start !== null ? { start: this.momentModule(project.start).format("YYYY-MM-DD") } : undefined),
       ...(project.end !== null ? { end: this.momentModule(project.end).format("YYYY-MM-DD") } : undefined),
-      customer: this.customerDTO.parse({
-        id: project.customer.id,
-        name: project.customer.name,
-      }).serialize(),
+      ...(project.customer !== undefined ? {
+        customer: this.customerDTO.parse({
+          id: project.customer.id,
+          name: project.customer.name,
+        }).serialize(),
+      } : undefined),
       ...(project.tasks !== undefined ? {
         tasks: project.tasks.map((task: TaskEntity) => this.taskDTO.parse({
           id: task.id,

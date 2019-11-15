@@ -26,6 +26,6 @@ export class ProjectEntity extends AppEntity {
   @OneToMany((type: any) => TaskEntity, (task: TaskEntity) => task.project, { cascade: true, onDelete: "CASCADE" })
   public tasks!: TaskEntity[];
 
-  @ManyToOne((type: any) => CustomerEntity, (customer: CustomerEntity) => customer.projects)
+  @ManyToOne((type: any) => CustomerEntity, (customer: CustomerEntity) => customer.projects, { nullable: false })
   public customer!: CustomerEntity;
 }

@@ -2,16 +2,17 @@
 # yarn lockfile v1
 
 
-"@agilearchitects/authenticaton@^0.0.5":
-  version "0.0.5"
-  resolved "https://registry.yarnpkg.com/@agilearchitects/authenticaton/-/authenticaton-0.0.5.tgz#43a35d5e3fd3af9154d372787b5198d06000fdd3"
-  integrity sha512-jIxU3emNJiN8mjz8Mv/jhr9L9TBP1V7w3zIcqDkmgKzGu/VrOEh7fYXuLNorZ+LmcQPBhpIQEVAAZZBUjuoHDQ==
+"@agilearchitects/authenticaton@^0.0.11":
+  version "0.0.11"
+  resolved "https://registry.yarnpkg.com/@agilearchitects/authenticaton/-/authenticaton-0.0.11.tgz#88d59244fec8bfba6774782fc7f1ae9a46ff0d76"
+  integrity sha512-AH0yNtCeXK7lfSk1/HekIwJQ4TkOiRsGhmO18wSDmSU9/Cz35/97lkrUeD3F+3Znu2pBD6d2Jy6ZwcTGv6rOrg==
   dependencies:
     "@agilearchitects/hashti" "^0.0.3"
     "@agilearchitects/jwt" "^0.0.6"
     "@agilearchitects/logmodule" "^0.0.2"
     "@agilearchitects/mailingun" "^0.0.6"
     "@agilearchitects/templategenerator" "^0.0.3"
+    moment "^2.24.0"
     typeorm "^0.2.19"
 
 "@agilearchitects/env@^0.0.2":

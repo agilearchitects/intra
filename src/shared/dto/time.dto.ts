@@ -1,6 +1,6 @@
+import { IUserPayloadDTO, UserPayloadDTO } from "@agilearchitects/authenticaton";
 import { ITagDTO, TagDTO } from "./tag.dto";
 import { ITaskDTO, TaskDTO } from "./task.dto";
-import { IUserDTO, UserDTO } from "./user.dto";
 
 export interface ITimeDTO {
   id: number;
@@ -9,7 +9,7 @@ export interface ITimeDTO {
   to?: string;
   comment: string;
   tags?: ITagDTO[];
-  user?: IUserDTO;
+  user?: IUserPayloadDTO;
   rate?: number;
 }
 
@@ -22,7 +22,7 @@ export class TimeDTO implements ITimeDTO {
       object.to !== undefined ? object.to : undefined,
       object.comment,
       object.tags !== undefined ? object.tags.map((tag: ITagDTO) => TagDTO.parse(tag)) : undefined,
-      object.user !== undefined ? UserDTO.parse(object.user) : undefined,
+      object.user !== undefined ? UserPayloadDTO.parse(object.user) : undefined,
       object.rate,
     );
   }
@@ -34,7 +34,7 @@ export class TimeDTO implements ITimeDTO {
     public readonly to: string | undefined,
     public readonly comment: string,
     public readonly tags?: TagDTO[],
-    public readonly user?: UserDTO | undefined,
+    public readonly user?: UserPayloadDTO | undefined,
     public readonly rate?: number,
   ) { }
 

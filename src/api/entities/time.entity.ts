@@ -15,10 +15,10 @@ export class TimeEntity extends AppEntity {
   @Column({ type: String, nullable: true })
   public comment!: string | null;
 
-  @ManyToOne((type: any) => UserEntity, (user: UserEntity) => user.times)
+  @ManyToOne((type: any) => UserEntity, (user: UserEntity) => user.times, { nullable: false })
   public user!: UserEntity;
 
-  @ManyToOne((type: any) => TaskEntity, (task: TaskEntity) => task.times)
+  @ManyToOne((type: any) => TaskEntity, (task: TaskEntity) => task.times, { nullable: false })
   public task!: TaskEntity;
 
   @Column({ type: "decimal", nullable: true })

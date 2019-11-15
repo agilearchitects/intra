@@ -29,6 +29,10 @@ import { TaskEntity } from "./entities/task.entity";
 import { UserEntity } from "./entities/user.entity";
 
 // Services
+import { ClaimService } from "@agilearchitects/authenticaton/lib/services/claim.service";
+import { GroupService } from "@agilearchitects/authenticaton/lib/services/group.service";
+import { ClaimEntity } from "./entities/claim.entity";
+import { GroupEntity } from "./entities/group.entity";
 import { TagEntity } from "./entities/tag.entity";
 import { TimeEntity } from "./entities/time.entity";
 import { CustomerService } from "./services/customer.service";
@@ -44,10 +48,10 @@ export const mailingunService = new MailingunService(
 );
 export const templateService = new TemplateService("../storage/email-templates");
 export const hashtiService = new HashtiService();
-export const userService = new UserService<UserEntity>(UserEntity);
+export const claimService = new ClaimService(ClaimEntity);
+export const groupService = new GroupService(GroupEntity, claimService);
+export const userService = new UserService<UserEntity>(UserEntity, groupService, claimService);
 export const authService = new AuthService(
-  BannedTokenEntity,
-  UserEntity,
   new AuthConfig(
     undefined,
     undefined,

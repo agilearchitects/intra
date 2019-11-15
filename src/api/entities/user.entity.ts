@@ -1,9 +1,10 @@
 // Libs
-import { IUserModel, UserModel } from "@agilearchitects/authenticaton";
-import { Column, Entity, FindConditions, IsNull, ManyToMany, ManyToOne, Not, OneToMany, OneToOne } from "typeorm";
+import { IUserModel } from "@agilearchitects/authenticaton";
+import { Column, Entity, FindConditions, IsNull, JoinTable, ManyToMany, ManyToOne, Not, OneToMany, OneToOne } from "typeorm";
 import { Entity as AppEntity } from "./entity";
 
 // Entites
+import { ClaimEntity } from "./claim.entity";
 import { GroupEntity } from "./group.entity";
 import { TaskUserEntity } from "./task-user.entity";
 import { TimeEntity } from "./time.entity";
@@ -29,13 +30,18 @@ export class UserEntity extends AppEntity implements IUserModel {
     public banned!: Date | null;
 
     @ManyToMany((type: any) => GroupEntity, (group: GroupEntity) => group.users)
-    public groups!: GroupEntity[];
+    public groups?: GroupEntity[];
+
+    @ManyToMany((type: any) => ClaimEntity, (claim: ClaimEntity) => claim.users)
+    @JoinTable()
+    public claims?: ClaimEntity[];
 
     @OneToMany((type: any) => TimeEntity, (time: TimeEntity) => time.user)
-    public times!: TimeEntity[];
+    public times?: TimeEntity[];
 
     @OneToMany((type: any) => TaskUserEntity, (taskUser: TaskUserEntity) => taskUser.user)
-    public taskUsers!: TaskUserEntity[];
+    public taskUsers?: TaskUserEntity[];
+
 
     public get isAdmin(): boolean {
         return [
