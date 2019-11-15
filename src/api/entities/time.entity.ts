@@ -1,6 +1,7 @@
-import { Column, Entity, ManyToOne } from "typeorm";
+import { Column, Entity, JoinTable, ManyToMany, ManyToOne, OneToMany } from "typeorm";
 import { Entity as AppEntity } from "./entity";
-import { ProjectEntity } from "./project.entity";
+import { TagEntity } from "./tag.entity";
+import { TaskEntity } from "./task.entity";
 import { UserEntity } from "./user.entity";
 
 @Entity()
@@ -11,15 +12,19 @@ export class TimeEntity extends AppEntity {
   @Column({ type: Date, nullable: true })
   public to!: Date | null;
 
-  @Column({ nullable: true })
-  public comment!: string;
+  @Column({ type: String, nullable: true })
+  public comment!: string | null;
 
-  @ManyToOne((type: any) => UserEntity, (user: UserEntity) => user.times)
+  @ManyToOne((type: any) => UserEntity, (user: UserEntity) => user.times, { nullable: false })
   public user!: UserEntity;
 
-  @ManyToOne((type: any) => ProjectEntity, (project: ProjectEntity) => project.times)
-  public project!: ProjectEntity;
+  @ManyToOne((type: any) => TaskEntity, (task: TaskEntity) => task.times, { nullable: false })
+  public task!: TaskEntity;
 
-  @Column({ nullable: true })
-  public projectId!: number;
+  @Column({ type: "decimal", nullable: true })
+  public rate!: number | null;
+
+  @ManyToMany((type: any) => TagEntity, (tag: TagEntity) => tag.times, { cascade: true })
+  @JoinTable()
+  public tags!: TagEntity[];
 }

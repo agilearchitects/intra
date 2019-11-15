@@ -1,16 +1,18 @@
 <template>
-  <div class="custom-control custom-checkbox">
-    <input
-      type="checkbox"
-      class="custom-control-input"
-      :id="id"
-      ref="checkbox"
-      :disabled="disabled"
-    />
-    <label class="custom-control-label" :for="id">
-      <template v-if="label != ''">{{ label }}</template>
-      <slot v-else name="label"></slot>
-    </label>
+  <div class="mdo-form-group">
+    <div class="mdo-form-group__checkbox custom-control custom-checkbox">
+      <input
+        type="checkbox"
+        class="custom-control-input"
+        :id="id"
+        ref="checkbox"
+        :disabled="disabled"
+      />
+      <label class="custom-control-label" :for="id">
+        <template v-if="label != ''">{{ label }}</template>
+        <slot v-else name="label"></slot>
+      </label>
+    </div>
   </div>
 </template>
 <script lang="ts">
@@ -44,3 +46,12 @@ export default class CheckboxComponent extends Vue {
   }
 }
 </script>
+<style lang="scss" scoped>
+.mdo-form-group {
+  display: flex;
+  &__checkbox {
+    margin-bottom: 0.5rem;
+    align-self: flex-end;
+  }
+}
+</style>

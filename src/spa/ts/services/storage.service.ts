@@ -38,6 +38,9 @@ export class StorageService {
     localStorage.setItem(this.key, JSON.stringify(this._storage));
   }
   private read(): void {
-    this._storage = JSON.parse(localStorage.getItem(this.key));
+    const storage = JSON.parse(localStorage.getItem(this.key));
+    if (storage !== null) {
+      this._storage = JSON.parse(localStorage.getItem(this.key));
+    }
   }
 }

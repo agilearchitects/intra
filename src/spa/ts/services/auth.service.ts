@@ -1,9 +1,6 @@
 // Libs
 import { ILoginDTO, ILoginPayloadDTO, LoginDTO } from "@agilearchitects/authenticaton";
 
-// Bootstrap
-import { apiService as apiServiceInstance, errorService as errorServiceInstance, storageService as storageServiceInstance } from "../bootstrap";
-
 // DTO's
 import { PasswordResetDTO } from "../../../shared/dto/password-reset.dto";
 import { IUserDTO } from "../../../shared/dto/user.dto";
@@ -27,7 +24,19 @@ export class AuthService {
   public get editMode(): boolean { return this._editMode; }
 
   public get isAuth(): boolean { return !!this.user; }
-  public get isAdmin(): boolean { return !!this.user; }
+  public get isAdmin(): boolean {
+    if (this.user === undefined) {
+      return false;
+    }
+
+    return [
+      "test@test.test",
+      "hannes@dwik.se",
+      "hannes@agilearchitects.se",
+      "carin@dwik.se",
+      "carin.dahlberg@pontarius.com",
+    ].indexOf(this.user.email) !== -1;
+  }
 
   public constructor(
     private readonly apiService: APIService,

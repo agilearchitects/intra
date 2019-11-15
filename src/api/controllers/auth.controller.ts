@@ -11,7 +11,7 @@ import {
   authService as authServiceInstance,
   hashtiService as hashtiServiceInstance,
   userService as userServiceInstance,
-} from "../../bootstrap";
+} from "../bootstrap";
 
 // Middleware
 import { middleware, middlewares } from "../middlewares";
@@ -57,7 +57,11 @@ export class AuthController extends Controller {
       try {
         const data = handler.body<ICreateUserDTO>();
         data.password = this.hashtiService.create(data.password);
-        await this.userService.create(data.email, data.password, true, false);
+        try {
+          await this.userService.resetPassword(data.email, data.password);
+        } catch {
+          await this.userService.create(data.email, data.password, true, false);
+        }
         handler.sendStatus(200);
       } catch (error) {
         this.logError(handler.response(), "Error creating user", error);

@@ -1,6 +1,6 @@
 <template>
   <button-component
-    :class="`mdo-btn mdo-btn--${buttonType} mdo-btn--${buttonStyle}`"
+    :class="`mdo-btn mdo-btn--${buttonType} mdo-btn--${buttonStyle} mdo-btn--${buttonSize}`"
     :loading="loading"
     :disabled="disabled"
     :route="route"
@@ -29,6 +29,12 @@ export enum ButtonStyle {
   WARNING = "warning",
   ERROR = "error"
 }
+export enum ButtonSize {
+  XS = "xs",
+  SM = "sm",
+  MD = "md",
+  LG = "lg"
+}
 @Component({
   components: { ButtonComponent }
 })
@@ -41,6 +47,8 @@ export default class LayoutButtonComponent extends Vue {
   buttonType!: ButtonType;
   @Prop({ type: String, default: ButtonStyle.PRIMARY })
   buttonStyle!: ButtonStyle;
+  @Prop({ type: String, default: ButtonSize.MD })
+  buttonSize!: ButtonSize;
 
   public click() {
     this.$emit("click");
@@ -60,8 +68,6 @@ export default class LayoutButtonComponent extends Vue {
   background-color: transparent;
   border-radius: 2px;
   border: 0px;
-  line-height: 36px;
-  padding: 0px 16px;
   transition: 0.3s;
   text-transform: uppercase;
   cursor: pointer;
@@ -78,6 +84,25 @@ export default class LayoutButtonComponent extends Vue {
     box-shadow: none;
     color: gray("500") !important;
     cursor: default;
+  }
+  &--xs {
+    font-size: 0.7rem;
+    line-height: 18px;
+    padding: 0px 6px;
+  }
+  &--sm {
+    font-size: 0.8rem;
+    line-height: 25px;
+    padding: 0px 10px;
+  }
+  &--md {
+    line-height: 36px;
+    padding: 0px 16px;
+  }
+  &--lg {
+    font-size: 1.2rem;
+    line-height: 36px;
+    padding: 0px 19px;
   }
   /*&--text {
     

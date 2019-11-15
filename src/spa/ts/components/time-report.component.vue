@@ -7,18 +7,11 @@
         </button-component>
       </div>
       <div>
-        <div class="d-flex align-items-start">
-          <button-component v-on:click="previousDay">
-            <i class="fas fa-chevron-left"></i>
-          </button-component>
-          <div
-            class="time-report__date-placeholder cursor-pointer"
-            v-on:click="setToday"
-          >{{ dateFormat }}</div>
-          <button-component v-on:click="nextDay">
-            <i class="fas fa-chevron-right"></i>
-          </button-component>
-        </div>
+        <time-date-component
+          v-on:next="nextDay"
+          v-on:previous="previousDay"
+          v-on:today="setToday"
+        >{{ dateFormat }}</time-date-component>
         <div class="mt-2 text-right">
           <strong>Totalt: {{ totalTime }}</strong>
         </div>
@@ -34,14 +27,27 @@
         <strong>{{ time.project.name }}</strong>
         <br />
         <span>{{ time.customer.name }}</span>
-        <template v-if="!time.isActive">
-          <br />
-          <i class="text-muted">{{ time.timeFormatted }}</i>
-        </template>
+        <br />
+        <i class="text-muted">{{ time.timeFormatted }}</i>
       </div>
-      <p class="flex-fill px-2">
-        <i>{{ time.comment }}</i>
-      </p>
+      <div class="flex-fill px-2">
+        <div class="d-block">
+          <strong>Task:</strong>
+          <i>{{ time.task.name }}</i>
+        </div>
+        <div class="d-flex align-items-center" v-if="time.tags.length > 0">
+          <strong>Tags:</strong>
+          <pill-component
+            class="mx-1"
+            v-for="tag in time.tags"
+            :key="`time_${time.id}_tag_${tag.id}`"
+          >{{ tag.name }}</pill-component>
+        </div>
+        <div>
+          <strong>Kommentar:</strong>
+          <i>{{ time.comment }}</i>
+        </div>
+      </div>
       <div class="pl-2">
         <p class="text-right nowrap">{{ time.hours }}h {{ time.minutes }}m</p>
         <div class="d-flex justify-content-end">
@@ -64,14 +70,42 @@ import {
   modalSize
 } from "../utils/modal/modal.util";
 
+class TaskViewModel {
+  public constructor(
+    public readonly id: number,
+    public readonly name: string,
+    public readonly project: ProjectViewModel
+  ) {}
+}
+
+class ProjectViewModel {
+  public constructor(
+    public readonly id: number,
+    public readonly name: string,
+    public readonly customer: CustomerViewModel
+  ) {}
+}
+
+class CustomerViewModel {
+  public constructor(
+    public readonly id: number,
+    public readonly name: string
+  ) {}
+}
+
+interface ITagViewModel {
+  id: number;
+  name: string;
+}
+
 export class TimeViewModel {
   public constructor(
-    public id: number,
-    public project: { id: number; name: string },
-    public customer: { id: number; name: string },
-    public from: Moment,
-    public to: Moment | undefined,
-    public comment: string
+    public readonly id: number,
+    public readonly task: TaskViewModel,
+    public readonly from: Moment,
+    public readonly to: Moment | undefined,
+    public readonly tags: ITagViewModel[],
+    public readonly comment: string
   ) {
     this.setDuration();
     if (this.isActive) {
@@ -79,6 +113,14 @@ export class TimeViewModel {
         this.setDuration();
       }, 1000);
     }
+  }
+
+  public get project() {
+    return this.task.project;
+  }
+
+  public get customer() {
+    return this.task.project.customer;
   }
 
   public duration: Duration = moment.duration(
@@ -111,7 +153,10 @@ export class TimeViewModel {
     }
   }
   public get timeFormatted(): string {
-    return `${this.fromFormatted} ${this.toFormatted}`;
+    if (this.to === undefined) {
+      return `${this.fromFormatted} -`;
+    }
+    return `${this.fromFormatted} - ${this.toFormatted}`;
   }
 
   public setDuration() {
@@ -130,9 +175,12 @@ import { StopTimeDTO } from "../../../shared/dto/stop-time.dto";
 import { TimeService } from "../services/time.service";
 import { timeService as timeServiceInstance } from "../bootstrap";
 import { TimeQueryDTO } from "../../../shared/dto/time-query.dto";
+import { TagDTO } from "../../../shared/dto/tag.dto";
+import TimeDateComponent from "./time-date.component.vue";
+import PillComponent from "./layout/pill.component.vue";
 
 @Component({
-  components: { ButtonComponent }
+  components: { ButtonComponent, TimeDateComponent, PillComponent }
 })
 export default class TimeReportComponent extends Vue {
   private readonly timeService: TimeService = timeServiceInstance;
@@ -196,26 +244,32 @@ export default class TimeReportComponent extends Vue {
   }
 
   public async getReports() {
-    this.times = (await this.timeService.index(
+    this.times = ((await this.timeService.index(
       TimeQueryDTO.parse({
         date: moment(this.date).format("YYYY-MM-DD")
       })
-    ))
+    )) as TimeDTO[])
       .map(
         (time: TimeDTO) =>
           new TimeViewModel(
             time.id,
-            time.project !== undefined
-              ? { id: time.project.id, name: time.project.name }
-              : { id: 0, name: "" },
-            time.project !== undefined && time.project.customer !== undefined
-              ? {
-                  id: time.project.customer.id,
-                  name: time.project.customer.name
+            {
+              id: time.task!.id,
+              name: time.task!.name,
+              project: {
+                id: time.task!.project!.id,
+                name: time.task!.project!.name,
+                customer: {
+                  id: time.task!.project!.customer!.id,
+                  name: time.task!.project!.customer!.name
                 }
-              : { id: 0, name: "" },
+              }
+            },
             moment(time.from),
             time.to !== undefined ? moment(time.to) : undefined,
+            time.tags !== undefined
+              ? time.tags.map((tag: TagDTO) => ({ id: tag.id, name: tag.name }))
+              : [],
             time.comment
           )
       )

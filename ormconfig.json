@@ -4,17 +4,13 @@
    "synchronize": false,
    "logging": false,
    "entities": [
-      "build/api/entities/**/*.js"
+      "build/api/entities/**/*.ts"
    ],
    "migrations": [
-      "build/migrations/**/*.js"
-   ],
-   "subscribers": [
-      "build/api/subscriber/**/*.js"
+      "build/storage/migrations/**/*.ts"
    ],
    "cli": {
-      "entitiesDir": "src/api/entity",
-      "migrationsDir": "storage/migrations",
-      "subscribersDir": "src/api/subscriber"
+      "entitiesDir": "build/api/entities",
+      "migrationsDir": "build/storage/migrations"
    }
 }

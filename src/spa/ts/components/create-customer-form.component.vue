@@ -24,6 +24,7 @@ import InputComponent from "./layout/input.component.vue";
 
 // Bootstrap
 import { customerService as customerServiceInstance } from "../bootstrap";
+import { CustomerDTO } from "../../../shared/dto/customer.dto";
 
 @Component({
   components: { ModalFormComponent, InputComponent }
@@ -34,17 +35,17 @@ export default class CreateCustomerFormComponent extends Vue {
 
   public saving: boolean = false;
 
-  public save() {
+  public async save() {
     this.saving = true;
-    this.customerService
-      .create(CreateCustomerDTO.parse({ name: this.name }))
-      .then(() => {
-        this.saving = false;
-        this.$emit("close");
-      })
-      .catch(() => {
-        alert("Something went wrong. Please try again");
-      });
+    try {
+      const customer: CustomerDTO = await this.customerService.create(
+        CreateCustomerDTO.parse({ name: this.name })
+      );
+      this.saving = false;
+      this.$emit("close", { result: customer });
+    } catch {
+      alert("Something went wrong. Please try again");
+    }
   }
 }
 </script>

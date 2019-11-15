@@ -2,24 +2,26 @@ pipelines:
   default:
     - step:
         name: Build and test
+        trigger: manual
         image: node:12.8.0
         caches:
           - node
         script:
           - yarn
+          - yarn build
           - yarn lint
           # - yarn test
         artifacts:
           - build/**
           - storage/**
           - node_modules/**
-  branches:
-    staging:
-      - step:
-          name: Deploy
-          deployment: staging
-          image: bitbucketpipelines/rsync-deploy:0.3.2
-          script:
-            - echo ~/.ssh/config
-            - ssh $DEPLOY_USER@$DEPLOY_HOST ~/export_db.sh aai staging
-            - rsync -azr --progress build node_modules storage $DEPLOY_USER@$DEPLOY_HOST:$DEPLOY_PATH/staging --exclude="storage/db.sqlite"
+    - step:
+        name: Deploy
+        trigger: manual
+        deployment: test
+        image: bitbucketpipelines/rsync-deploy:0.3.2
+        script:
+          - ssh deploy@82.102.2.5 \~/export_db.sh aai test
+          - rsync -azr --progress build node_modules storage deploy@82.102.2.5:\~/applications/aai/test --exclude="storage/db.sqlite"
+          - ssh deploy@82.102.2.5 "/home/deploy/.nvm/versions/node/v12.12.0/bin/node /home/deploy/.nvm/versions/node/v12.12.0/bin/pm2 restart aai.test"
+          - ssh deploy@82.102.2.5 "/home/deploy/.nvm/versions/node/v12.12.0/bin/node /home/deploy/.nvm/versions/node/v12.12.0/bin/pm2 restart ssme"

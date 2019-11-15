@@ -69,13 +69,13 @@ export class ModalInstance<T, R> {
         type, ...(payload !== undefined ? { data: payload.data, result: payload.result } : undefined), callback: () => {
           switch (type) {
             case "open":
-              this.modalComponent.open();
+              (this.modalComponent as any).open();
               break;
             case "close":
-              this.modalComponent.close();
+              (this.modalComponent as any).close();
               break;
             case "hide":
-              this.modalComponent.hide();
+              (this.modalComponent as any).hide();
           }
         },
       });

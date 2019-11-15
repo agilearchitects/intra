@@ -7,7 +7,6 @@
     @keydown.esc="clickEsc"
     ref="modalWindow"
   >
-    <div class="mdo-modal__backdrop"></div>
     <div class="mdo-modal__content d-flex align-items-center">
       <div class="mdo-modal__container" v-on:click.stop>
         <component
@@ -94,6 +93,8 @@ export default class ModalComponent extends Vue {
 .mdo-modal {
   width: 100vw;
   height: 100vh;
+  background-color: rgba(0, 0, 0, 0.5);
+  overflow-y: auto;
   position: absolute;
   top: 0px;
   left: 0px;
@@ -101,7 +102,6 @@ export default class ModalComponent extends Vue {
   &__backdrop {
     width: 100vw;
     height: 100vh;
-    background-color: rgba(0, 0, 0, 0.5);
     position: absolute;
     top: 0px;
     left: 0px;
@@ -110,7 +110,6 @@ export default class ModalComponent extends Vue {
   &__content {
     position: absolute;
     width: 100%;
-    height: 100%;
     padding-right: 15px;
     padding-left: 15px;
     z-index: 1002;
@@ -125,8 +124,7 @@ export default class ModalComponent extends Vue {
     width: 800px;
   }
   &__container {
-    margin-right: auto;
-    margin-left: auto;
+    margin: 0px auto;
     background-color: #fff;
     box-shadow: 0 24px 38px 3px rgba(0, 0, 0, 0.14),
       0 9px 46px 8px rgba(0, 0, 0, 0.12), 0 11px 15px -7px rgba(0, 0, 0, 0.2);
