@@ -1,7 +1,7 @@
 // Libs
 import {
   IUserPayloadDTO,
-  UserPayloadDTO
+  UserPayloadDTO,
 } from "@agilearchitects/authenticaton";
 import { RequestHandler } from "express";
 
@@ -11,7 +11,7 @@ import { UserEntity } from "../entities/user.entity";
 // Modules
 import {
   controller,
-  ControllerHandler
+  ControllerHandler,
 } from "../modules/controller-handler.module";
 
 // Base controller
@@ -25,9 +25,9 @@ export class UserController extends Controller {
         users.map((user: UserEntity) =>
           UserPayloadDTO.parse({
             id: user.id,
-            email: user.email
-          }).serialize()
-        )
+            email: user.email,
+          }).serialize(),
+        ),
       );
     });
   }

@@ -7,7 +7,7 @@ export class Controller {
   public log: LogModule;
   public constructor(
     logModule: typeof LogModule = LogModule,
-    changeCaseModule: typeof changeCase = changeCase
+    changeCaseModule: typeof changeCase = changeCase,
   ) {
     this.log = new logModule(changeCaseModule.paramCase(this.constructor.name));
   }
@@ -16,11 +16,11 @@ export class Controller {
     response: Response,
     message: string,
     error?: any,
-    code: number = 500
+    code: number = 500,
   ): void {
     this.log.error(
       message,
-      ...(error !== undefined ? [{ error: JSON.stringify(error) }] : [])
+      ...(error !== undefined ? [{ error: JSON.stringify(error) }] : []),
     );
     response.sendStatus(code);
   }

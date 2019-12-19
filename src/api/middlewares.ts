@@ -29,8 +29,7 @@ import { IValidationInput, validate } from "./modules/validation.module";
 // Add User to express request interface
 declare global {
   namespace Express {
-    interface Request {
-      // tslint:disable-line:interface-name
+    interface Request { // tslint:disable-line:interface-name
       user: UserPayloadDTO;
     }
   }
