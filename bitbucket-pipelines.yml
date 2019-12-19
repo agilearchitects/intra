@@ -2,7 +2,6 @@ pipelines:
   default:
     - step:
         name: Build and test
-        trigger: manual
         image: node:12.8.0
         caches:
           - node

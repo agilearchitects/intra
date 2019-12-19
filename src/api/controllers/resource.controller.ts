@@ -8,8 +8,8 @@ import { ResourceEntity } from "../entities/resource.entity";
 // Modules
 import { controller, ControllerHandler } from "../modules/controller-handler.module";
 
-// Services
-import { configService } from "../services/config.service";
+// Bootstrap
+import { envService } from "../bootstrap";
 
 // Base controller
 import { Controller } from "./controller";
@@ -24,9 +24,9 @@ export class ResourceController extends Controller {
       try {
         const responsCall = (resource: ResourceEntity) => {
           const protocol = `${handler.request.protocol}://`;
-          let port = configService.get("PORT", "1234");
+          let port = envService.get("PORT", "1234");
           port = port !== "80" ? `:${port}` : "";
-          handler.response<{ location: string }>().json({ location: `${protocol}${configService.get("API_HOST", "")}${port}/resource/${resource.id}` });
+          handler.response<{ location: string }>().json({ location: `${protocol}${envService.get("API_HOST", "")}${port}/resource/${resource.id}` });
         };
         if (handler.request.files !== undefined && handler.request.files.file !== undefined && !(handler.request.files.file instanceof Array)) {
           const uploadedFile = handler.request.files.file;

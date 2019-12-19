@@ -65,6 +65,7 @@
    },
    "include": [
       "src/api/**/*.ts",
-      "src/shared/**/*.ts"
+      "src/api/migrate.ts",
+      "src/shared/**/*.ts",
    ]
 }

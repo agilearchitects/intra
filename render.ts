@@ -3,6 +3,7 @@ import * as ejs from "ejs";
 import * as fs from "fs";
 import { join } from "path";
 import * as yargs from "yargs";
+import { generateMigrations, runMigrations, undoMigration } from "./src/api/typeorm";
 
 const GENERATORS: { [key: string]: { templatePath: string, outputPath: string } } = {
   controller: {
@@ -20,7 +21,7 @@ const GENERATORS: { [key: string]: { templatePath: string, outputPath: string } 
   dto: {
     templatePath: "src/shared/dto/dto.ts.ejs",
     outputPath: "src/shared/dto/",
-  }
+  },
 };
 
 const ENV_PATH = "./.env";
@@ -29,16 +30,17 @@ const ENV_EXAMPLE_PATH = "./.env.example";
 const randomString = (length: number): string => {
   const chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
   return new Array(length).fill("").map(() => chars[Math.floor(Math.random() * chars.length)]).join("");
-}
+};
 
-yargs.command<{}>("generate <type> <name> [values...]", "Generate project file from tempalate",
+// tslint:disable-next-line: no-unused-expression
+yargs.command<{ type: string, name: string, values: string[] }>("generate <type> <name> [values...]", "Generate project file from tempalate",
   (yargs: yargs.Argv) => {
     return yargs.positional("type", {
       describe: "What template to render from",
     }).positional("name", {
       describe: "Under what name should the template be saved",
     });
-  }, (args: any) => {
+  }, (args: { type: string, name: string, values: string[] }) => {
     const values: { [key: string]: string } = {};
     args.values.forEach((value: string, index: number) => {
       const parsedValue = value.split("=");
@@ -78,10 +80,25 @@ yargs.command<{}>("generate <type> <name> [values...]", "Generate project file f
         out[split[0]] = split[1];
         return out;
       }, configs);
-      configs["KEY"] = randomString(10);
-      configs["TOKEN"] = randomString(40);
+      configs.KEY = randomString(10);
+      configs.TOKEN = randomString(40);
 
       fs.writeFileSync(ENV_PATH, Object.keys(configs).map((key: string) => `${key}=${configs[key]}`).join("\n"), "utf8");
     }
+  }).command<{ command: "up" | "down" | "generate" }>("migrate <command>", "Migration command", (yargs: yargs.Argv) => {
+    return yargs.positional("command", {
+      describe: "",
+      choices: ["up", "down", "generate"],
+    });
+  }, (args: { command: "up" | "down" | "generate" }) => {
+    (async () => {
+      if (args.command === "up") {
+        await runMigrations();
+      } else if (args.command === "down") {
+        await undoMigration();
+      } else {
+        await generateMigrations();
+      }
+    })();
   })
   .demandCommand().argv;

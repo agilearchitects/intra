@@ -3,5 +3,12 @@
   "mochaExplorer.require": "ts-node/register",
   "mochaExplorer.mochaPath": "node_modules/mocha",
   "tslint.nodePath": "./node_modules/tslint/bin",
-  "tslint.exclude": "src/**/*.spec.ts"
+  "tslint.exclude": "src/**/*.spec.ts",
+  "sqltools.connections": [
+    {
+      "database": "${workspaceFolder}/storage/db.sqlite",
+      "dialect": "SQLite",
+      "name": "local"
+    }
+  ]
 }
