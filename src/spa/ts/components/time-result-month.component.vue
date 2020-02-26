@@ -29,6 +29,7 @@
 import { Vue, Component, Watch } from "vue-property-decorator";
 import { Moment, default as moment, Duration } from "moment";
 import "moment/locale/sv";
+
 // Services
 import { TimeService } from "../services/time.service";
 
@@ -36,19 +37,14 @@ import { TimeService } from "../services/time.service";
 import { TagDTO } from "../../../shared/dto/tag.dto";
 import { TimeQueryDTO } from "../../../shared/dto/time-query.dto";
 import { TimeDTO } from "../../../shared/dto/time.dto";
-
-// Bootstrap
-import { timeService as timeServiceInstance } from "../bootstrap";
-
-// Components
-import {
-  CustomerViewModel,
-  ProjectViewModel,
-  TagViewModel,
-  TimeViewModel
-} from "./time-result.component.vue";
 import { CustomerDTO } from "../../../shared/dto/customer.dto";
 import { ProjectDTO } from "../../../shared/dto/project.dto";
+
+// Bootstrap
+import {
+  timeService as timeServiceInstance,
+  dateService as dateServiceInstance
+} from "../bootstrap";
 
 @Component
 export default class TimeResultMonthComponent extends Vue {
@@ -95,8 +91,6 @@ export default class TimeResultMonthComponent extends Vue {
     return `${value.charAt(0).toUpperCase()}${value.slice(1)}`;
   }
 
-  public customers: CustomerViewModel[] = [];
-
   public mounted() {
     this.getReports();
   }
@@ -115,49 +109,7 @@ export default class TimeResultMonthComponent extends Vue {
     this.date = new Date();
   }
 
-  public async getReports() {
-    this.customers = ((await this.timeService.index(
-      TimeQueryDTO.parse({
-        year: moment(this.date).format("YYYY"),
-        month: moment(this.date).format("M"),
-        groupBy: "customer"
-      })
-    )) as CustomerDTO[]).map(
-      (customer: CustomerDTO) =>
-        new CustomerViewModel(
-          customer.id,
-          customer.name,
-          customer.projects !== undefined
-            ? customer.projects.map(
-                (project: ProjectDTO) =>
-                  new ProjectViewModel(
-                    project.id,
-                    project.name,
-                    project.times !== undefined
-                      ? project.times.map(
-                          (time: TimeDTO) =>
-                            new TimeViewModel(
-                              time.id,
-                              moment(time.from),
-                              time.to !== undefined
-                                ? moment(time.to)
-                                : undefined,
-                              time.tags !== undefined
-                                ? time.tags.map(
-                                    (tag: TagDTO) =>
-                                      new TagViewModel(tag.id, tag.name)
-                                  )
-                                : [],
-                              time.comment
-                            )
-                        )
-                      : []
-                  )
-              )
-            : []
-        )
-    );
-  }
+  public async getReports() {}
 }
 </script>
 <style lang="scss" scoped>

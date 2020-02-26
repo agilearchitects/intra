@@ -7,6 +7,8 @@ import { MailingunService } from "@agilearchitects/mailingun";
 import { TemplateService } from "@agilearchitects/templategenerator";
 import moment from "moment";
 import { Between, createConnection } from "typeorm";
+import * as typeorm from "typeorm";
+import * as fs from "fs";
 
 // TypeORM
 import { defaultConnectionConfig } from "./typeorm";
@@ -39,7 +41,7 @@ import { CustomerService } from "./services/customer.service";
 import { ProjectService } from "./services/project.service";
 import { TimeService } from "./services/time.service";
 
-export const envService = new EnvService();
+export const envService = new EnvService("./.env", fs);
 export const jwtService = new JWTService(envService.get("TOKEN", Math.random().toString()));
 export const mailingunService = new MailingunService(
   envService.get("MAILGUN_KEY", ""),
@@ -50,7 +52,11 @@ export const templateService = new TemplateService("../storage/email-templates")
 export const hashtiService = new HashtiService();
 export const claimService = new ClaimService(ClaimEntity);
 export const groupService = new GroupService(GroupEntity, claimService);
-export const userService = new UserService<UserEntity>(UserEntity, groupService, claimService);
+export const userService = new UserService<UserEntity>(UserEntity, groupService, claimService, {
+  Brackets: typeorm.Brackets,
+  IsNull: typeorm.IsNull,
+  Not: typeorm.Not,
+});
 export const authService = new AuthService(
   new AuthConfig(
     undefined,
@@ -67,7 +73,7 @@ export const authService = new AuthService(
   jwtService,
   hashtiService,
 );
-export const customerService = new CustomerService(CustomerEntity, CustomerDTO, ProjectDTO, TaskDTO);
+export const customerService = new CustomerService(CustomerEntity, CustomerDTO, ProjectDTO, TaskDTO, TimeDTO, TagDTO);
 export const projectService = new ProjectService("YYYY-MM-DD", CustomerEntity, ProjectEntity, TaskEntity, TaskUserEntity, TimeEntity, UserEntity, CustomerDTO, ProjectDTO, TaskDTO, TaskUserDTO, TimeDTO, UserDTO, moment);
 export const timeService = new TimeService("YYYY-MM-DD HH:mm:ss", TimeEntity, TagEntity, TaskEntity, UserEntity, CustomerDTO, ProjectDTO, TagDTO, TaskDTO, TimeDTO, moment, Between);
 

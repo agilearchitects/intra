@@ -1,31 +1,20 @@
 // Libs
 import { RequestHandler } from "express";
 import moment, { Moment } from "moment";
-import { Between } from "typeorm";
 
 // DTO's
 import { ICreateTimeDTO } from "../../shared/dto/create-time.dto";
 import { IStopTimeDTO } from "../../shared/dto/stop-time.dto";
-import { ITimeDTO, TimeDTO } from "../../shared/dto/time.dto";
+import { ITimeDTO } from "../../shared/dto/time.dto";
 import { IUpdateTimeDTO } from "../../shared/dto/update-time.dto";
+import { ITimeQueryDTO } from "../../shared/dto/time-query.dto";
 
-// Entites
-import { TimeEntity } from "../entities/time.entity";
-
-// Modules
-import { controller, ControllerHandler } from "../modules/controller-handler.module";
+// Services
+import { customerService, timeService } from "../bootstrap";
 
 // Base controller
-import { CustomerDTO } from "../../shared/dto/customer.dto";
-import { ProjectDTO } from "../../shared/dto/project.dto";
-import { TagDTO } from "../../shared/dto/tag.dto";
-import { TaskDTO } from "../../shared/dto/task.dto";
-import { ITimeQueryDTO } from "../../shared/dto/time-query.dto";
-import { customerService, timeService } from "../bootstrap";
-import { CustomerEntity } from "../entities/customer.entity";
-import { TagEntity } from "../entities/tag.entity";
-import { TaskEntity } from "../entities/task.entity";
 import { Controller } from "./controller";
+import { controller, ControllerHandler } from "../modules/controller-handler.module";
 
 export class TimeController extends Controller {
   public index(): RequestHandler {
@@ -33,7 +22,7 @@ export class TimeController extends Controller {
       try {
         const query = handler.query<ITimeQueryDTO>();
         if (query.groupBy === "customer") {
-          handler.response<any>().json(await customerService.getWithUserProjects(handler.request.user.id));
+          handler.response<any>().json(await customerService.getWithUserProjects(handler.request.user.id, query.date, query.month, query.year, query.week));
         } else {
           handler.response<ITimeDTO[]>().json(await timeService.getAll(query.date, query.month, query.year, query.week, handler.request.user.id));
         }
@@ -106,15 +95,6 @@ export class TimeController extends Controller {
         throw error;
       }
     });
-  }
-
-  private setToDate(from: Moment, to: Moment): Moment {
-    const duration = moment.duration(to.diff(from));
-    if (duration.asSeconds() < 0) {
-      return moment(to).add(1, "days");
-    } else {
-      return to;
-    }
   }
 }
 

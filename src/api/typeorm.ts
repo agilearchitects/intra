@@ -1,12 +1,11 @@
 // Libs
-import * as changeCase from "change-case";
+import * as path from "path";
+import moment = require("moment");
 import { ConnectionOptions, createConnection } from "typeorm";
 import { CommandUtils } from "typeorm/commands/CommandUtils";
 import { MysqlDriver } from "typeorm/driver/mysql/MysqlDriver";
 
 // Entites
-import moment = require("moment");
-import yargs = require("yargs");
 import { BannedTokenEntity } from "./entities/banned-token.entity";
 import { ClaimEntity } from "./entities/claim.entity";
 import { CustomerEntity } from "./entities/customer.entity";
@@ -44,37 +43,31 @@ export const defaultConnectionConfig: ConnectionOptions = {
   ],
 };
 
-export const runMigrations = async () => {
-  const connection = await createConnection({
+const getMigrationConnection = async () => {
+  return await createConnection({
     ...defaultConnectionConfig,
     migrations: [
-      "storage/migrations/*.ts",
+      path.resolve(__dirname, "../../storage/migrations/*.js"),
     ],
+    synchronize: false,
+    migrationsRun: false,
+    dropSchema: false,
     logging: true,
   });
-  await connection.runMigrations({ transaction: false });
+};
+export const runMigrations = async () => {
+  const connection = await getMigrationConnection();
+  await connection.runMigrations({ transaction: "all" });
   await connection.close();
 };
 
 export const undoMigration = async () => {
-  const connection = await createConnection({
-    ...defaultConnectionConfig,
-    migrations: [
-      "storage/migrations/*.ts",
-    ],
-    logging: true,
-  });
-  await connection.undoLastMigration({ transaction: false });
+  const connection = await getMigrationConnection();
+  await connection.undoLastMigration({ transaction: "all" });
   await connection.close();
 };
 export const showMigrations = async () => {
-  const connection = await createConnection({
-    ...defaultConnectionConfig,
-    migrations: [
-      "storage/migrations/*.ts",
-    ],
-    logging: "all",
-  });
+  const connection = await getMigrationConnection();
   await connection.showMigrations();
   await connection.close();
 };

@@ -23,8 +23,8 @@ export interface IRequest<B extends IRequestBody = any, P extends IRequestParams
   query: Q;
 }
 
-export interface IResponse<T> extends Response {
-  json: (body?: T) => Response;
+export interface IResponse<E> extends Response {
+  json: <T = IResponse<E>>(body?: any) => T;
 }
 
 export const controller = (callback: (handler: ControllerHandler) => void): RequestHandler => {

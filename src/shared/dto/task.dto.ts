@@ -1,6 +1,7 @@
 import { IProjectDTO, ProjectDTO } from "./project.dto";
 import { ITaskUserDTO, TaskUserDTO } from "./task-user.dto";
 import { ITimeDTO, TimeDTO } from "./time.dto";
+import { DateService } from "../services/date.service";
 
 export interface ITaskDTO {
   id: number;
@@ -14,17 +15,27 @@ export interface ITaskDTO {
 }
 
 export class TaskDTO {
-  public static parse(task: ITaskDTO): TaskDTO {
+  public static parse(task: ITaskDTO, dateService?: DateService): TaskDTO {
     return new this(
       task.id,
       task.name,
-      (task.project !== undefined ? ProjectDTO.parse(task.project) : undefined),
+      (task.project !== undefined ? ProjectDTO.parse(task.project, dateService) : undefined),
       task.rate,
       task.priceBudget,
       task.hoursBudget,
-      (task.times ? task.times.map((time: ITimeDTO) => TimeDTO.parse(time)) : undefined),
+      (task.times ? task.times.map((time: ITimeDTO) => TimeDTO.parse(time, dateService)) : undefined),
       (task.users ? task.users.map((user: ITaskUserDTO) => TaskUserDTO.parse(user)) : undefined),
     );
+  }
+
+  public get hours(): number {
+    if (this.times !== undefined) {
+      return this.times.reduce((previousValue: number, time: TimeDTO) => {
+        return previousValue + (time.hours !== undefined ? time.hours : 0);
+      }, 0)
+    }
+
+    return 0;
   }
 
   public constructor(

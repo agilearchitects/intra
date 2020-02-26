@@ -4,7 +4,6 @@ export interface ITimeQueryDTO {
   month?: string;
   week?: string;
   all?: boolean;
-  groupBy?: "customer";
 }
 
 export class TimeQueryDTO implements ITimeQueryDTO {
@@ -15,7 +14,6 @@ export class TimeQueryDTO implements ITimeQueryDTO {
       object.month,
       object.week,
       object.all,
-      object.groupBy,
     );
   }
 
@@ -25,7 +23,6 @@ export class TimeQueryDTO implements ITimeQueryDTO {
     public readonly month?: string,
     public readonly week?: string,
     public readonly all?: boolean,
-    public readonly groupBy?: "customer",
   ) { }
 
   public serialize(): ITimeQueryDTO {
@@ -35,7 +32,6 @@ export class TimeQueryDTO implements ITimeQueryDTO {
       ...(this.month !== undefined ? { month: this.month } : undefined),
       ...(this.week !== undefined ? { week: this.week } : undefined),
       ...(this.all !== undefined ? { all: this.all } : undefined),
-      ...(this.groupBy !== undefined ? { groupBy: this.groupBy } : undefined),
     };
   }
 }

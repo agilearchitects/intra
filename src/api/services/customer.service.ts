@@ -1,3 +1,6 @@
+// Libs
+import moment from "moment";
+
 // Entities
 import { CustomerEntity } from "../entities/customer.entity";
 import { ProjectEntity } from "../entities/project.entity";
@@ -8,6 +11,10 @@ import { ICreateCustomerDTO } from "../../shared/dto/create-customer.dto";
 import { CustomerDTO, ICustomerDTO } from "../../shared/dto/customer.dto";
 import { ProjectDTO } from "../../shared/dto/project.dto";
 import { TaskDTO } from "../../shared/dto/task.dto";
+import { TimeEntity } from "../entities/time.entity";
+import { TimeDTO } from "../../shared/dto/time.dto";
+import { TagEntity } from "../entities/tag.entity";
+import { TagDTO } from "../../shared/dto/tag.dto";
 
 export class CustomerService {
   public constructor(
@@ -15,6 +22,8 @@ export class CustomerService {
     private readonly customerDTO: typeof CustomerDTO,
     private readonly projectDTO: typeof ProjectDTO,
     private readonly taskDTO: typeof TaskDTO,
+    private readonly timeDTO: typeof TimeDTO,
+    private readonly tagDTO: typeof TagDTO,
   ) { }
 
   public async getWithUserProjects(userId: number): Promise<ICustomerDTO[]> {
@@ -44,6 +53,20 @@ export class CustomerService {
             ...(task.rate !== null ? { rate: task.rate } : undefined),
             ...(task.priceBudget !== null ? { priceBudget: task.priceBudget } : undefined),
             ...(task.hoursBudget !== null ? { hoursBudget: task.hoursBudget } : undefined),
+            ...(task.times !== undefined ? {
+              times: task.times.map((time: TimeEntity) => this.timeDTO.parse({
+                id: time.id,
+                from: moment(time.from).format("YYYY-MM-DD hh:mm:ss"),
+                ...(time.to !== null ? { to: moment(time.to).format("YYYY-MM-DD hh:mm:ss") } : undefined),
+                comment: time.comment !== null ? time.comment : "",
+                ...(time.tags !== undefined ? {
+                  tags: time.tags.map((tag: TagEntity) => this.tagDTO.parse({
+                    id: tag.id,
+                    name: tag.name,
+                  }).serialize())
+                } : undefined)
+              }).serialize())
+            } : undefined)
           }).serialize()),
         }).serialize()),
       } : undefined),

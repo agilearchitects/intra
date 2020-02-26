@@ -1,5 +1,5 @@
 // Libs
-import { ServerModule } from "@agilearchitects/simplyserve";
+import { ServerModule, APIAppModule, SPAAppModule } from "@agilearchitects/simplyserve";
 
 import { boot, envService, hashtiService, userService } from "./bootstrap";
 
@@ -12,21 +12,20 @@ import { router } from "./routes";
   const apiHost = envService.get("API_HOST", "api.test.test");
   const spaHost = envService.get("SPA_HOST", "www.test.test");
   const env = envService.get("ENV", "");
-  await new ServerModule([
-    {
-      domain: apiHost,
-      routes: router,
-      corsConfig: "*",
-    },
-    ...(env === "local" ? [{
-      domain: spaHost,
-      staticPath: "build/spa",
-      apiBaseUrl: `http://${apiHost}:${port}`,
-    }] : []),
+  await new ServerModule([new APIAppModule(
+    apiHost,
+    router,
+    "*",
+  ),
+  ...(env === "local" ? [new SPAAppModule(
+    spaHost,
+    "build/spa",
+    `http://${apiHost}:${port}`,
+  )] : []),
   ], port).start();
   if (["local", "dev"].indexOf(env) !== -1) {
     // Create test user if not exists
-    userService.getUserByEmail("test@test.test").catch(async () => {
+    userService.get("test@test.test").catch(async () => {
       const password = hashtiService.create("test");
       await userService.create("test@test.test", password, true, false);
     });

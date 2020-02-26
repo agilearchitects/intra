@@ -1,4 +1,5 @@
 import { IProjectDTO, ProjectDTO } from "./project.dto";
+import { DateService } from "../services/date.service";
 
 export interface ICustomerDTO {
   id: number;
@@ -7,12 +8,22 @@ export interface ICustomerDTO {
 }
 
 export class CustomerDTO implements ICustomerDTO {
-  public static parse(object: ICustomerDTO): CustomerDTO {
+  public static parse(object: ICustomerDTO, dateService?: DateService): CustomerDTO {
     return new CustomerDTO(
       object.id,
       object.name,
-      (object.projects !== undefined ? object.projects.map((project: IProjectDTO) => ProjectDTO.parse(project)) : undefined),
+      (object.projects !== undefined ? object.projects.map((project: IProjectDTO) => ProjectDTO.parse(project, dateService)) : undefined),
     );
+  }
+
+  public get hours(): number {
+    if (this.projects !== undefined) {
+      return this.projects.reduce((previousValue: number, project: ProjectDTO) => {
+        return previousValue + project.hours;
+      }, 0)
+    }
+
+    return 0;
   }
 
   public constructor(

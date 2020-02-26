@@ -1,8 +1,11 @@
+// Libs
 import * as changeCase from "change-case";
 import * as ejs from "ejs";
 import * as fs from "fs";
 import { join } from "path";
 import * as yargs from "yargs";
+
+// Typeorm
 import { generateMigrations, runMigrations, undoMigration } from "./src/api/typeorm";
 
 const GENERATORS: { [key: string]: { templatePath: string, outputPath: string } } = {
@@ -33,14 +36,14 @@ const randomString = (length: number): string => {
 };
 
 // tslint:disable-next-line: no-unused-expression
-yargs.command<{ type: string, name: string, values: string[] }>("generate <type> <name> [values...]", "Generate project file from tempalate",
+yargs.command<{}>("generate <type> <name> [values...]", "Generate project file from tempalate",
   (yargs: yargs.Argv) => {
     return yargs.positional("type", {
       describe: "What template to render from",
     }).positional("name", {
       describe: "Under what name should the template be saved",
     });
-  }, (args: { type: string, name: string, values: string[] }) => {
+  }, (args: any) => {
     const values: { [key: string]: string } = {};
     args.values.forEach((value: string, index: number) => {
       const parsedValue = value.split("=");
@@ -59,8 +62,8 @@ yargs.command<{ type: string, name: string, values: string[] }>("generate <type>
       }
     });
     // Render from template
-    ejs.renderFile(templatePath, { changeCase, name: args.name, values }, (err: Error, str?: string) => {
-      if (err) { console.error(err); return; } // tslint:disable-line:no-console
+    ejs.renderFile(templatePath, { changeCase, name: args.name, values }, (err: Error | null, str?: string) => {
+      if (err !== null) { console.error(err); return; } // tslint:disable-line:no-console
       // Create new file
       const split = templatePath.split("/");
       const match = split[split.length - 1].match(/(.*)\.(.+)\.ejs$/);

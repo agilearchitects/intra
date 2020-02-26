@@ -1,5 +1,5 @@
 // Libs
-import { LogModule } from "@agilearchitects/logmodule";
+import { LogModule, listners } from "@agilearchitects/logmodule";
 import * as changeCase from "change-case";
 import { Response } from "express";
 
@@ -9,7 +9,7 @@ export class Controller {
     logModule: typeof LogModule = LogModule,
     changeCaseModule: typeof changeCase = changeCase,
   ) {
-    this.log = new logModule(changeCaseModule.paramCase(this.constructor.name));
+    this.log = new logModule([listners.file(changeCaseModule.paramCase(this.constructor.name))]);
   }
 
   public logError(
@@ -18,10 +18,11 @@ export class Controller {
     error?: any,
     code: number = 500,
   ): void {
-    this.log.error(
+    this.log.error({
       message,
+      code,
       ...(error !== undefined ? [{ error: JSON.stringify(error) }] : []),
-    );
+    });
     response.sendStatus(code);
   }
 }

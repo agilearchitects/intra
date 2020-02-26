@@ -4,7 +4,7 @@ import {
   UserPayloadDTO,
   UserService,
 } from "@agilearchitects/authenticaton";
-import { LogModule } from "@agilearchitects/logmodule";
+import { LogModule, listners } from "@agilearchitects/logmodule";
 import Axios from "axios";
 import { RequestHandler, Response } from "express";
 
@@ -50,7 +50,7 @@ export const middleware = (middlewares: RequestHandler | RequestHandler[]) => (
 };
 
 export class Middlewares {
-  public constructor(private log: LogModule = new LogModule("middleware")) { }
+  public constructor(private log: LogModule = new LogModule([listners.file("middleware")])) { }
   public auth(
     checkOnly: boolean = false,
     authService: AuthService = authServiceInstance,
@@ -87,7 +87,7 @@ export class Middlewares {
     return controller(async (handler: ControllerHandler) => {
       try {
         const query = handler.query<{ email: string }>();
-        const user = await userService.getUserByEmail(query.email, null, null);
+        const user = await userService.get(query.email);
         if (user !== undefined) {
           handler.request.user = UserPayloadDTO.parse({
             id: user.id,
@@ -178,7 +178,7 @@ export class Middlewares {
             .json({ validationError: result });
         }
       } catch (error) {
-        this.log.error("Validation error", { error: JSON.stringify(error) });
+        this.log.error({ message: "Validation error", error: JSON.stringify(error), code: 500 });
         handler.sendStatus(500);
       }
     });
@@ -231,9 +231,11 @@ export class Middlewares {
     error?: any,
     code: number = 500,
   ): void {
-    this.log.error(
+    this.log.error({
       message,
-      ...(error !== undefined ? [{ error: JSON.stringify(error) }] : []),
+      ...(error !== undefined ? { error: JSON.stringify(error) } : undefined),
+      code,
+    },
     );
     response.sendStatus(code);
   }
