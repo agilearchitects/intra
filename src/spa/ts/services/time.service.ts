@@ -41,83 +41,42 @@ export class TimeService {
       ))).body;
 
     const customers: ICustomerDTO[] = [];
-    customers[1].projects.findIndex(() => true);
     for (const time of times) {
-      if (time.task !== undefined && time.task.project === undefined && time.task.project.customer === undefined) {
-        let customerIndex = customers.findIndex((customer: ICustomerDTO) => customer.id === time.task.project.customer.id);
-        let projectIndex: number = -1;
-        if (customerIndex !== -1) {
-          projectIndex = customers[customerIndex]
-        }
-        if (customerIndex === -1) { customerIndex = customers.push(time.task.project.customer); }
-        if (customers[customerIndex].projects === undefined) {
-          customers[customerIndex].projects = [time.task.project]
-        } else {
-        }
+      if (time.task !== undefined && time.task.project !== undefined && time.task.project.customer !== undefined) {
+        const currentCustomer = time.task.project.customer;
+        const currentProject = time.task.project;
+        const currentTask = time.task;
+        console.log(currentCustomer)
+        // Get customer from customers
+        let customerIndex = customers.findIndex((customer: ICustomerDTO) => customer.id === currentCustomer.id);
+        // Add if not existing (with empty projects list)
+        if (customerIndex === -1) { customerIndex = customers.push({ ...currentCustomer, projects: [] }); }
+
+        console.log(customerIndex)
+        // Get project from customer projects
+        let projectIndex: number = customers[customerIndex].projects.findIndex((project: IProjectDTO) => project.id === currentProject.id);
+        // Add if not existing (with empty tasks list)
+        if (projectIndex === -1) { projectIndex = customers[customerIndex].projects.push({ ...currentProject, tasks: [] }); }
+
+        // Get task from customer project tasks
+        let taskIndex: number = customers[customerIndex].projects[projectIndex].tasks.findIndex((task: ITaskDTO) => task.id === currentTask.id);
+        // Add if not existing (with empty times list)
+        if (taskIndex === -1) { taskIndex = customers[customerIndex].projects[projectIndex].tasks.push({ ...currentTask, times: [] }); }
+
+        // Add time to customer project task times list
+        customers[customerIndex].projects[projectIndex].tasks[taskIndex].times.push({
+          id: time.id,
+          from: time.from,
+          ...(time.to !== undefined ? { to: time.to, } : {}),
+          comment: time.comment,
+          ...(time.user !== undefined ? { user: time.user, } : {}),
+          ...(time.rate !== undefined ? { rate: time.rate, } : {}),
+        });
       }
     }
 
-    return times.reduce((previousValue: ICustomerDTO[], time: ITimeDTO) => {
-      // Check that customer is not undefined
-      if (time.task === undefined || time.task.project === undefined || time.task.project.customer === undefined) { return previousValue; }
-      // If customer doesn't exists in output array
-      if (((currentCustomer: ICustomerDTO) =>
-        previousValue.findIndex(
-          (customer: CustomerDTO) => customer.id === currentCustomer.id
-        ) !== -1)(time.task.project.customer) === false) {
-        return [
-          ...previousValue,
-          {
-            ...time.task.project.customer,
-            projects: [{
-              ...time.task.project,
-              tasks: [{ ...time.task, times: [time] }]
-            }]
-          }
-        ]
-      } else {
-        return [
-          ((currentProject: IProjectDTO, currentTask: ITaskDTO, currentTime: ITimeDTO): ICustomerDTO[] => previousValue.map((customer: ICustomerDTO) => {
-            if (customer.projects === undefined) {
-              customer.projects = [currentProject];
-            } else {
-              const projectIndex = customer.projects.findIndex((project: IProjectDTO) => project.id === currentProject.id);
-              if (projectIndex === -1) {
-                customer.projects.push({
-                  ...currentProject,
-                  tasks: [{ ...time.task, times: [time] }]
-                })
-              } else {
-                if
-                const taskIndex = customer.projects[projectIndex].tasks
-              }
-            }
-
-            return customer;
-          }))(time.task.project, time.task, time)
-        ]
-      }
-      return [
-        ...previousValue,
-        ...(time.task !== undefined &&
-          time.task.project !== undefined &&
-          time.task.project.customer !== undefined &&
-          ((findCustomer: ICustomerDTO) =>
-            previousValue.findIndex(
-              (customer: CustomerDTO) => customer.id === findCustomer.id
-            ) !== -1)(time.task.project.customer) === false
-          ? [{
-            ...time.task.project.customer,
-            projects: [{
-              ...time.task.project,
-              tasks: [{ ...time.task, times: [time] }]
-            }]
-          }]
-          : previousValue.map((customer: ICustomerDTO) => {
-
-          }))
-      ];
-    }, []).map((customer: ICustomerDTO) => CustomerDTO.parse(customer));
+    // Returned parsed list
+    return customers.map((customer: ICustomerDTO) => CustomerDTO.parse(customer));
   }
   public async show(timeId: number): Promise<TimeDTO> {
     return TimeDTO.parse((await this.apiService.get<ITimeDTO>(`/time/${timeId}`)).body, this.dateService);

@@ -21,11 +21,7 @@ export class TimeController extends Controller {
     return controller(async (handler: ControllerHandler) => {
       try {
         const query = handler.query<ITimeQueryDTO>();
-        if (query.groupBy === "customer") {
-          handler.response<any>().json(await customerService.getWithUserProjects(handler.request.user.id, query.date, query.month, query.year, query.week));
-        } else {
-          handler.response<ITimeDTO[]>().json(await timeService.getAll(query.date, query.month, query.year, query.week, handler.request.user.id));
-        }
+        handler.response<ITimeDTO[]>().json(await timeService.getAll(query.date, query.month, query.year, query.week, handler.request.user.id));
       } catch (error) {
         this.logError(handler.response(), "Error getting times");
         throw error;
