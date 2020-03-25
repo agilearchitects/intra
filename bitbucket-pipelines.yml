@@ -24,3 +24,13 @@ pipelines:
           - rsync -azr --progress build node_modules storage deploy@82.102.2.5:\~/applications/aai/test --exclude="storage/db.sqlite"
           - ssh deploy@82.102.2.5 "/home/deploy/.nvm/versions/node/v12.12.0/bin/node /home/deploy/.nvm/versions/node/v12.12.0/bin/pm2 restart aai.test"
           - ssh deploy@82.102.2.5 "/home/deploy/.nvm/versions/node/v12.12.0/bin/node /home/deploy/.nvm/versions/node/v12.12.0/bin/pm2 restart ssme"
+    - step:
+        name: Deploy
+        trigger: manual
+        deployment: staging
+        image: bitbucketpipelines/rsync-deploy:0.3.2
+        script:
+          - ssh deploy@82.102.2.5 \~/export_db.sh aai staging
+          - rsync -azr --progress build node_modules storage deploy@82.102.2.5:\~/applications/aai/staging --exclude="storage/db.sqlite"
+          - ssh deploy@82.102.2.5 "/home/deploy/.nvm/versions/node/v12.12.0/bin/node /home/deploy/.nvm/versions/node/v12.12.0/bin/pm2 restart aai.staging"
+          - ssh deploy@82.102.2.5 "/home/deploy/.nvm/versions/node/v12.12.0/bin/node /home/deploy/.nvm/versions/node/v12.12.0/bin/pm2 restart ssme"
