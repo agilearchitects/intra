@@ -46,22 +46,21 @@ export class TimeService {
         const currentCustomer = time.task.project.customer;
         const currentProject = time.task.project;
         const currentTask = time.task;
-        console.log(currentCustomer)
+
         // Get customer from customers
         let customerIndex = customers.findIndex((customer: ICustomerDTO) => customer.id === currentCustomer.id);
         // Add if not existing (with empty projects list)
-        if (customerIndex === -1) { customerIndex = customers.push({ ...currentCustomer, projects: [] }); }
+        if (customerIndex === -1) { customerIndex = customers.push({ ...currentCustomer, projects: [] }) - 1; }
 
-        console.log(customerIndex)
         // Get project from customer projects
         let projectIndex: number = customers[customerIndex].projects.findIndex((project: IProjectDTO) => project.id === currentProject.id);
         // Add if not existing (with empty tasks list)
-        if (projectIndex === -1) { projectIndex = customers[customerIndex].projects.push({ ...currentProject, tasks: [] }); }
+        if (projectIndex === -1) { projectIndex = customers[customerIndex].projects.push({ ...currentProject, tasks: [] }) - 1; }
 
         // Get task from customer project tasks
         let taskIndex: number = customers[customerIndex].projects[projectIndex].tasks.findIndex((task: ITaskDTO) => task.id === currentTask.id);
         // Add if not existing (with empty times list)
-        if (taskIndex === -1) { taskIndex = customers[customerIndex].projects[projectIndex].tasks.push({ ...currentTask, times: [] }); }
+        if (taskIndex === -1) { taskIndex = customers[customerIndex].projects[projectIndex].tasks.push({ ...currentTask, times: [] }) - 1; }
 
         // Add time to customer project task times list
         customers[customerIndex].projects[projectIndex].tasks[taskIndex].times.push({

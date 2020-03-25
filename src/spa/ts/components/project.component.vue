@@ -2,9 +2,16 @@
   <div class="container">
     <div class="d-flex justify-content-between align-items-center">
       <h1>Project</h1>
-      <button-component :route="{ name: 'time.project.create' }" v-if="isAdmin">Skapa project</button-component>
+      <button-component
+        :route="{ name: 'time.project.create' }"
+        v-if="isAdmin"
+      >Skapa project</button-component>
     </div>
-    <div class="card mb-5" v-for="project in projects" :key="`project_${project.id}`">
+    <div
+      class="card mb-5"
+      v-for="project in projects"
+      :key="`project_${project.id}`"
+    >
       <div class="card-header d-flex justify-content-between">
         <div>{{ project.name }}</div>
         <div class>
@@ -15,8 +22,15 @@
           >
             <i class="fas fa-edit"></i>
           </router-link>
-          <a v-if="isAdmin" href v-on:click.prevent="deleteProject(project.id)">
-            <i v-tooltip="'Ta bort'" class="fas fa-times"></i>
+          <a
+            v-if="isAdmin"
+            href
+            v-on:click.prevent="deleteProject(project.id)"
+          >
+            <i
+              v-tooltip="'Ta bort'"
+              class="fas fa-times"
+            ></i>
           </a>
         </div>
       </div>
@@ -39,7 +53,10 @@
             </tr>
           </thead>
           <tbody>
-            <tr v-for="(user, index) in project.users" :key="`user_${index}`">
+            <tr
+              v-for="(user, index) in project.users"
+              :key="`user_${index}`"
+            >
               <th>{{ user.email }}</th>
               <td
                 v-for="(task, subIndex) in project.tasks"
@@ -112,10 +129,14 @@ class ProjectViewModel {
   }
 
   public get hours(): number {
-    return this.tasks.reduce(
-      (previousValue: number, currentValue: TaskViewModel) =>
-        previousValue + currentValue.hours,
-      0
+    return (
+      Math.round(
+        this.tasks.reduce(
+          (previousValue: number, currentValue: TaskViewModel) =>
+            previousValue + currentValue.hours,
+          0
+        ) * 100
+      ) / 100
     );
   }
   public get tasksBudget(): number | undefined {
@@ -155,43 +176,50 @@ class ProjectViewModel {
   }
 
   public hoursByUser(userId: number): number {
-    return this.tasks.reduce(
-      (previousValue: number, currentValue: TaskViewModel) => {
-        return previousValue + this.hoursPerUserByTask(userId, currentValue.id);
-      },
-      0
+    return (
+      Math.round(
+        this.tasks.reduce(
+          (previousValue: number, currentValue: TaskViewModel) => {
+            return (
+              previousValue + this.hoursPerUserByTask(userId, currentValue.id)
+            );
+          },
+          0
+        ) * 100
+      ) / 100
     );
   }
   public hoursByTask(taskId: number): number {
-    return this.tasks
-      .find((task: TaskViewModel) => task.id === taskId)!
-      .times.reduce((previousValue: number, currentValue: TimeViewModel) => {
-        return (
-          previousValue +
-          (currentValue.to !== undefined
-            ? Math.round(
-                (currentValue.to.diff(currentValue.from, "minutes") / 60) * 100
-              ) / 100
-            : 0)
-        );
-      }, 0);
+    return (
+      Math.round(
+        this.tasks
+          .find((task: TaskViewModel) => task.id === taskId)!
+          .times.reduce(
+            (previousValue: number, currentValue: TimeViewModel) => {
+              return previousValue + currentValue.diff;
+            },
+            0
+          ) * 100
+      ) / 100
+    );
   }
 
   public hoursPerUserByTask(userId: number, taskId: number): number {
-    return this.tasks
-      .find((task: TaskViewModel) => task.id === taskId)!
-      .times.filter(
-        (time: TimeViewModel) => time.userId === userId && time.to !== undefined
-      )
-      .reduce((previousValue: number, currentValue: TimeViewModel) => {
-        return (
-          previousValue +
-          Math.round(
-            (currentValue.to!.diff(currentValue.from, "minutes") / 60) * 100
-          ) /
-            100
-        );
-      }, 0);
+    return (
+      Math.round(
+        this.tasks
+          .find((task: TaskViewModel) => task.id === taskId)!
+          .times.filter(
+            (time: TimeViewModel) =>
+              time.userId === userId && time.to !== undefined
+          )
+          .reduce(
+            (previousValue: number, currentValue: TimeViewModel) =>
+              previousValue + currentValue.diff,
+            0
+          ) * 100
+      ) / 100
+    );
   }
 }
 
@@ -222,16 +250,16 @@ class TaskViewModel {
   ) {}
 
   public get hours(): number {
-    return this.times.reduce(
-      (previousValue: number, currentValue: TimeViewModel) =>
-        currentValue.to !== undefined
-          ? previousValue +
-            Math.round(
-              (currentValue.to.diff(currentValue.from, "minutes") / 60) * 100
-            ) /
-              100
-          : 0,
-      0
+    return (
+      Math.round(
+        this.times.reduce(
+          (previousValue: number, currentValue: TimeViewModel) =>
+            currentValue.to !== undefined
+              ? previousValue + currentValue.diff
+              : 0,
+          0
+        ) * 100
+      ) / 100
     );
   }
 }
@@ -243,6 +271,13 @@ class TimeViewModel {
     public readonly from: Moment,
     public readonly to?: Moment
   ) {}
+
+  public get diff(): number {
+    if (this.to !== undefined) {
+      return Math.round((this.to.diff(this.from, "minutes") / 60) * 100) / 100;
+    }
+    return 0;
+  }
 }
 
 @Component({ components: { ButtonComponent, BarComponent } })
