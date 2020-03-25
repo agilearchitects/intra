@@ -11,14 +11,14 @@ export enum promMode {
 }
 
 export interface IPromOutput {
-    results: Array<{ result?: any, error?: Error }>;
+    results: ({ result?: any, error?: Error })[];
     resolves: number;
     rejects: number;
 }
 
 export class PromService {
     public sequence(
-        promises: Array<() => BluebirdPromise<any>> = [],
+        promises: (() => BluebirdPromise<any>)[] = [],
         {
             useMode = promMode.recursive,
             breakOnResolve = false,
@@ -29,7 +29,7 @@ export class PromService {
             breakOnResolve?: boolean,
             breakOnReject?: boolean,
             resolveOutput?: IPromOutput,
-        } = {}): BluebirdPromise< IPromOutput> {
+        } = {}): BluebirdPromise<IPromOutput> {
         return new BluebirdPromise((
             resolve: (thenableOrResult?: any | PromiseLike<any>) => void,
             reject: (error?: any) => void, onCancel?: (callback: () => void) => void,
@@ -106,7 +106,7 @@ export class PromService {
 
                 /*Container for all executed promises. Used for when sequence
                 need to halt and end each promise already initiated*/
-                const executedPromises: Array< BluebirdPromise< any>> = [];
+                const executedPromises: BluebirdPromise<any>[] = [];
 
                 // Handler for onCancel event
                 if (onCancel !== undefined) {
@@ -160,7 +160,7 @@ export class PromService {
             }
         });
     }
-    public wait(wait: number): BluebirdPromise< void> {
+    public wait(wait: number): BluebirdPromise<void> {
         return new BluebirdPromise((resolve, reject) => {
             setTimeout(() => {
                 resolve();

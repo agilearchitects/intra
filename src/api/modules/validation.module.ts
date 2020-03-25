@@ -41,11 +41,11 @@ export default class ValidationModule {
 }
 
 export interface IValidationValue { [key: string]: IValidationValue | string | number | boolean; }
-export interface IValidationInput { [key: string]: IValidationInput | validation<any> | Array<validation<any>>; }
+export interface IValidationInput { [key: string]: IValidationInput | validation<any> | validation<any>[]; }
 
 export const validate = (
   value: IValidationValue | string | number | boolean,
-  validation: IValidationInput | validation<any> | Array<validation<any>>,
+  validation: IValidationInput | validation<any> | validation<any>[],
   request: Request, response: Response,
 ): Promise<boolean | ValidationErrorModule> => {
   const isSimple = (value: IValidationValue | string | number | boolean) => {
@@ -74,7 +74,7 @@ export const validate = (
                   resolve(result);
                 }
               }).catch((error: any) => reject(error))) : new Promise((resolve) => resolve()),
-        )).then((results: Array<boolean | ValidationErrorModule>) => {
+        )).then((results: (boolean | ValidationErrorModule)[]) => {
           const validationError = results.find(
             (result: boolean | ValidationErrorModule) => typeof result !== "boolean",
           );
@@ -103,7 +103,7 @@ export const validate = (
                   resolve(result);
                 }
               }).catch((error: any) => reject(error))),
-        )).then((results: Array<boolean | ValidationErrorModule>) => {
+        )).then((results: (boolean | ValidationErrorModule)[]) => {
           const validationError = results.find(
             (result: boolean | ValidationErrorModule) => typeof result !== "boolean",
           );

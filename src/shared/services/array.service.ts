@@ -28,7 +28,7 @@ export class ArrayService {
     const returnValue: T[] = [];
     for (const value of input) {
       for (const annotation of annotations) {
-
+        //
       }
     }
     return returnValue;
@@ -81,5 +81,3 @@ const foo: any = [
     ]
   }
 ]
-
-console.log(new ArrayService().rotate(foo, "customers(id).projects(id).tasks(id)"));

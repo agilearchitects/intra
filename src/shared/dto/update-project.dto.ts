@@ -4,7 +4,7 @@ import { IUpdateTaskDTO, UpdateTaskDTO } from "./update-task.dto";
 
 export interface IUpdateProjectDTO extends ICreateProjectDTO {
   id: number;
-  tasks?: Array<ICreateTaskDTO | IUpdateTaskDTO>;
+  tasks?: (ICreateTaskDTO | IUpdateTaskDTO)[];
 }
 
 export class UpdateProjectDTO extends CreateProjectDTO {
@@ -32,7 +32,7 @@ export class UpdateProjectDTO extends CreateProjectDTO {
     hoursBudget?: number | undefined,
     start?: string,
     end?: string,
-    public readonly tasks?: Array<CreateTaskDTO | UpdateTaskDTO>,
+    public readonly tasks?: (CreateTaskDTO | UpdateTaskDTO)[],
   ) {
     super(
       name,

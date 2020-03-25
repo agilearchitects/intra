@@ -7,7 +7,7 @@ export interface IUpdateTimeDTO {
   to?: string;
   comment: string;
   userId: number;
-  tags?: Array<string | number>;
+  tags?: (string | number)[];
   rate?: number;
 }
 
@@ -32,7 +32,7 @@ export class UpdateTimeDTO implements IUpdateTimeDTO {
     public readonly to: string | undefined,
     public readonly comment: string,
     public readonly userId: number,
-    public readonly tags?: Array<string | number>,
+    public readonly tags?: (string | number)[],
     public readonly rate?: number,
   ) { }
 

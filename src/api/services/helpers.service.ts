@@ -56,7 +56,7 @@ export class HelperService {
     public lcFirst(value: string): string {
         return value.slice(0, 1).toLowerCase() + value.slice(1, value.length);
     }
-    public groupBy(objects: Array<{ [key: string]: any }>, keys: string | string[]): any {
+    public groupBy(objects: ({ [key: string]: any })[], keys: string | string[]): any {
         // If keys is a string convert it to array
         if (typeof keys === "string") {
             keys = [keys];

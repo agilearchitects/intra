@@ -5,7 +5,7 @@ export interface ICreateTimeDTO {
   comment: string;
   userId: number;
   rate?: number;
-  tags?: Array<string | number>;
+  tags?: (string | number)[];
 }
 
 export class CreateTimeDTO implements ICreateTimeDTO {
@@ -28,7 +28,7 @@ export class CreateTimeDTO implements ICreateTimeDTO {
     public readonly comment: string,
     public readonly userId: number,
     public readonly rate?: number,
-    public readonly tags?: Array<string | number>,
+    public readonly tags?: (string | number)[],
   ) { }
 
   public serialize(): ICreateTimeDTO {
