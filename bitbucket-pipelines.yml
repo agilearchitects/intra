@@ -18,15 +18,22 @@ pipelines:
           # Download zip
           - apt-get update && apt-get install -y zip
 
+          # Remove node_modules
+          - rm -rf node_modules
+          # Install production dependencies
+          - yarn --production
+          # ZIP node_modules
+          - zip -r node_modules.zip node_modules
+
           # Copy node modules to api folder
-          - cp node_modules dist/api/ -r
+          # - cp node_modules dist/api/ -r
           # Make index for api function
           - echo "module.exports = require(\"./api/index\")" > dist/api/index.js
           # ZIP api function project
           - zip -r api.zip dist/api
 
           # Copy node modules to migrate folder
-          - cp node_modules dist/migrate/ -r
+          # - cp node_modules dist/migrate/ -r
           # Make index for migrate function
           - echo "module.exports = require(\"./migrate/index\")" > dist/migrate/index.js
           # ZIP migrate function project
@@ -34,10 +41,22 @@ pipelines:
 
           # ZIP spa
           - zip -r spa.zip dist/spa
+
         artifacts:
           - api.zip
           - migrate.zip
           - spa.zip
+          - node_modules.zip
+
+    - step:
+        name: Deploy AWS Lambda layer
+        image: amazon/aws-cli
+        script:
+          - aws configure set default.region "eu-north-1"
+          - aws configure set aws_access_key_id ${AWS_ACCESS_KEY_ID}
+          - aws configure set aws_secret_access_key ${AWS_SECRET_ACCESS_KEY}
+          - aws lambda publish-layer-version --layer-name intranet --compatible-runtimes nodejs12.x --zip-file fileb://node_modules.zip --region "eu-north-1"
+
     - step:
         name: Deploy API Lambda Function
         script:
@@ -49,6 +68,7 @@ pipelines:
               FUNCTION_NAME: "intranet"
               COMMAND: "update"
               ZIP_FILE: "api.zip"
+
     - step:
         name: Deploy Migrate Lambda Function
         script:
@@ -60,6 +80,7 @@ pipelines:
               FUNCTION_NAME: "migrate"
               COMMAND: "update"
               ZIP_FILE: "migrate.zip"
+
     - step:
         name: Deploy SPA app
         script:

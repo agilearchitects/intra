@@ -33,6 +33,7 @@
     "@agilearchitects/mailingun": "^0.0.10",
     "@agilearchitects/server": "^0.0.35",
     "axios": "^0.19.2",
+    "change-case": "^4.1.1",
     "moment": "^2.24.0",
     "typeorm": "^0.2.22"
   },
@@ -69,7 +70,6 @@
     "bootstrap": "^4.4.1",
     "chai": "^4.2.0",
     "chai-as-promised": "^7.1.1",
-    "change-case": "^4.1.1",
     "concurrently": "^5.1.0",
     "ejs": "^3.0.1",
     "husky": "^4.2.3",
