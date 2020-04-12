@@ -1,4 +1,6 @@
+import { bodyType, jsonType } from "@agilearchitects/server";
 import { CreateTaskUserDTO, ICreateTaskUserDTO } from "./create-task-user.dto";
+import { DTO } from "./dto";
 
 export interface ICreateTaskDTO {
   name: string;
@@ -9,6 +11,27 @@ export interface ICreateTaskDTO {
 }
 
 export class CreateTaskDTO {
+  public static parseFromRequest(object: bodyType): CreateTaskDTO {
+    object = DTO.parseFromRequest(object);
+    if (typeof object.name !== "string" ||
+      (object.rate !== undefined &&
+        typeof object.rate !== "number") ||
+      (object.priceBudget !== undefined &&
+        typeof object.priceBudget !== "number") ||
+      (object.hoursBudget !== undefined &&
+        typeof object.hoursBudget !== "number") ||
+      (object.users !== undefined &&
+        !(object.users instanceof Array))) {
+      throw new Error("Unable to parse");
+    }
+    return new CreateTaskDTO(
+      object.name,
+      object.rate,
+      object.priceBudget,
+      object.hoursBudget,
+      object.users !== undefined ? object.users.map((user: jsonType) => CreateTaskUserDTO.parseFromRequest(user)) : undefined,
+    )
+  }
   public static parse(createTask: ICreateTaskDTO):
     CreateTaskDTO {
     return new this(

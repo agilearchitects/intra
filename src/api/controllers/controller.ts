@@ -1,7 +1,7 @@
 // Libs
-import { LogModule, listners } from "@agilearchitects/logmodule";
+import { listners, LogModule } from "@agilearchitects/logmodule";
+import { HandlerModule } from "@agilearchitects/server";
 import * as changeCase from "change-case";
-import { Response } from "express";
 
 export class Controller {
   public log: LogModule;
@@ -9,11 +9,11 @@ export class Controller {
     logModule: typeof LogModule = LogModule,
     changeCaseModule: typeof changeCase = changeCase,
   ) {
-    this.log = new logModule([listners.file(changeCaseModule.paramCase(this.constructor.name))]);
+    this.log = new logModule([listners.console(), listners.file(changeCaseModule.paramCase(this.constructor.name))]);
   }
 
   public logError(
-    response: Response,
+    handler: HandlerModule,
     message: string,
     error?: any,
     code: number = 500,
@@ -23,6 +23,6 @@ export class Controller {
       code,
       ...(error !== undefined ? [{ error: JSON.stringify(error) }] : []),
     });
-    response.sendStatus(code);
+    handler.sendStatus(code);
   }
 }

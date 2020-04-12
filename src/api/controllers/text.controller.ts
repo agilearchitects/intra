@@ -1,64 +1,78 @@
 // Libs
-import { RequestHandler } from "express";
+import { bodyType, handlerMethod, HandlerModule, paramType, parse } from "@agilearchitects/server";
 
 // Entites
-import { TextEntity } from "../entities/text.entity";
-
-// Modules
-import { controller, ControllerHandler } from "../modules/controller-handler.module";
+import { TextEntity } from "../../shared/entities/text.entity";
 
 // DTO's
-import { ITextDTO, TextDTO } from "../../shared/dto/text.dto";
+import { TextDTO } from "../../shared/dto/text.dto";
 
 // Base controller
+import { DTO } from "../../shared/dto/dto";
 import { Controller } from "./controller";
 
 export class TextController extends Controller {
-  public index(): RequestHandler {
-    return controller(async (handler: ControllerHandler) => {
+  public index(): handlerMethod {
+    return async (handler: HandlerModule) => {
       try {
         const texts = await TextEntity.find();
-        handler.response<ITextDTO[]>().json(texts.map((text: TextEntity) => TextDTO.parse({
+        handler.sendJSON(texts.map((text: TextEntity) => TextDTO.parse({
           id: text.id,
           name: text.name,
           content: text.content,
         }).serialize()));
       } catch (error) {
-        this.logError(handler.response(), "Could not get texts");
+        this.logError(handler, "Could not get texts");
         throw error;
       }
-    });
+    };
   }
-  public show(): RequestHandler {
-    return controller(async (handler: ControllerHandler) => {
+  public show(): handlerMethod {
+    return async (handler: HandlerModule<any, { name: string }>) => {
       try {
-        const textName = (handler.params<{ name: string }>().name as string).toLowerCase();
+        const textName = handler.params.name.toLowerCase();
         let text = await TextEntity.findOne({ where: { name: textName } });
         if (text === undefined) {
           text = await TextEntity.create({ name: textName, content: "" }).save();
         }
-        handler.response<ITextDTO>().json(TextDTO.parse({
+        handler.sendJSON(TextDTO.parse({
           id: text.id,
           name: text.name,
           content: text.content,
         }).serialize());
       } catch (error) {
-        this.logError(handler.response(), "Could not get text", error);
+        this.logError(handler, "Could not get text", error);
         throw error;
       }
-    });
+    };
   }
-
-  public update() {
-    return controller(async (handler: ControllerHandler) => {
+  @parse((object: bodyType) => {
+    object = DTO.parseFromRequest(object);
+    if (typeof object.content !== "string") {
+      throw new Error("Unable to parse");
+    }
+    return {
+      content: object.content
+    };
+  }, "body")
+  @parse((object: paramType) => {
+    if (object.id === undefined) {
+      throw new Error("Unable to parse");
+    }
+    return {
+      id: object.id,
+    };
+  }, "params")
+  public update(): handlerMethod {
+    return async (handler: HandlerModule<{ content: string }, { id: string }>) => {
       try {
-        await TextEntity.update(handler.params<{ id: string }>().id, { content: handler.body<{ content: string }>().content });
+        await TextEntity.update(handler.params.id, { content: handler.parsedBody.content });
         handler.sendStatus(200);
       } catch (error) {
-        this.logError(handler.response(), "Could not update text", error);
+        this.logError(handler, "Could not update text", error);
         throw error;
       }
-    });
+    };
   }
 }
 

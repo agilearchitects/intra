@@ -1,4 +1,5 @@
-import { ITagDTO, TagDTO } from "./tag.dto";
+import { bodyType, jsonType } from "@agilearchitects/server";
+import { DTO } from "./dto";
 
 export interface IUpdateTimeDTO {
   id: number;
@@ -12,6 +13,38 @@ export interface IUpdateTimeDTO {
 }
 
 export class UpdateTimeDTO implements IUpdateTimeDTO {
+  public static parseFromRequest(object: bodyType): UpdateTimeDTO {
+    object = DTO.parseFromRequest(object);
+    if (typeof object.id !== "number" ||
+      typeof object.taskId !== "number" ||
+      typeof object.from !== "string" ||
+      (typeof object.to !== "string" && object.to !== undefined) ||
+      typeof object.comment !== "string" ||
+      typeof object.userId !== "number" ||
+      (object.tags !== undefined &&
+        !(object.tags instanceof Array)) ||
+      (object.rate !== undefined &&
+        typeof object.rate !== "number")
+    ) {
+      throw new Error("Unable to parse");
+    }
+
+    return new UpdateTimeDTO(
+      object.id,
+      object.taskId,
+      object.from,
+      object.to !== undefined ? object.to : undefined,
+      object.comment,
+      object.userId,
+      object.tags !== undefined ? object.tags.map((tag: jsonType) => {
+        if (typeof tag !== "string" && typeof tag !== "number") {
+          throw new Error("Unable to parse");
+        }
+        return tag;
+      }) : undefined,
+      object.rate,
+    );
+  }
   public static parse(object: IUpdateTimeDTO): UpdateTimeDTO {
     return new UpdateTimeDTO(
       object.id,

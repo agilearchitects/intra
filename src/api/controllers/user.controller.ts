@@ -1,27 +1,18 @@
 // Libs
-import {
-  IUserPayloadDTO,
-  UserPayloadDTO,
-} from "@agilearchitects/authenticaton";
-import { RequestHandler } from "express";
+import { UserPayloadDTO } from "@agilearchitects/authenticaton";
+import { handlerMethod, HandlerModule } from "@agilearchitects/server";
 
 // Entities
-import { UserEntity } from "../entities/user.entity";
-
-// Modules
-import {
-  controller,
-  ControllerHandler,
-} from "../modules/controller-handler.module";
+import { UserEntity } from "../../shared/entities/user.entity";
 
 // Base controller
 import { Controller } from "./controller";
 
 export class UserController extends Controller {
-  public index(): RequestHandler {
-    return controller(async (handler: ControllerHandler) => {
+  public index(): handlerMethod {
+    return async (handler: HandlerModule) => {
       const users = await UserEntity.find({ where: UserEntity.activeWhere() });
-      handler.response<IUserPayloadDTO[]>().json(
+      handler.sendJSON(
         users.map((user: UserEntity) =>
           UserPayloadDTO.parse({
             id: user.id,
@@ -29,7 +20,7 @@ export class UserController extends Controller {
           }).serialize(),
         ),
       );
-    });
+    };
   }
 }
 

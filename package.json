@@ -4,21 +4,19 @@
   },
   "version": "0.0.1",
   "scripts": {
-    "build-api": "tsc",
+    "build-api": "tsc --project src/api/tsconfig-publish.json",
     "watch-api": "tsc --watch",
-    "build-migrations": "tsc storage/migrations/*.ts",
-    "migrate": "node render.ts migrate up",
     "serve-spa": "parcel src/spa/index.html --out-dir build/spa",
-    "build-spa": "parcel build src/spa/index.html --out-dir build/spa && yarn cp-spa",
-    "cp-spa": "cp -r node_modules/tinymce/plugins build/spa/ && cp -r node_modules/tinymce/skins build/spa/ && cp -r node_modules/tinymce/themes build/spa/",
+    "build-spa": "parcel build src/spa/index.html --out-dir dist/spa && OUT=dist yarn cp-spa",
+    "cp-spa": "OUT=\"${OUT:-build}/spa/\" && mkdir -p $OUT && cp -r node_modules/tinymce/plugins $OUT && cp -r node_modules/tinymce/skins $OUT && cp -r node_modules/tinymce/themes $OUT",
     "watch-spa": "parcel watch src/spa/index.html --out-dir build/spa",
+    "build-migrate": "tsc --project src/migrate/tsconfig-publish.json",
     "serve": "nodemon ./build/api/server.js",
     "watch": "concurrently \"yarn run serve\" \"yarn run watch-api\" \"yarn run watch-spa\"",
-    "build": "yarn build-api && yarn build-spa",
-    "render": "ts-node ./render.ts",
+    "build": "yarn build-api && yarn build-spa && yarn build-migrate",
     "test": "mocha --recursive src/**/*.spec.ts --require ts-node/register --timeout 999999",
     "lint": "tslint --config tslint.json --project tsconfig.json",
-    "deploy_staging": "docker build --build-arg ssh_prv_key=\"$(cat ~/.ssh/id_rsa)\" --build-arg ssh_pub_key=\"$(cat ~/.ssh/id_rsa.pub)\" --build-arg ssh_known_hosts=\"$(cat ~/.ssh/known_hosts)\" --build-arg host=\"82.102.2.5\" --build-arg domain=\"intra.agilearchitects.se\" --build-arg application=\"aai\" --build-arg env=\"staging\" ."
+    "cli": "yarn ts-node src/cli/index.ts"
   },
   "husky": {
     "hooks": {
@@ -28,13 +26,14 @@
   },
   "dependencies": {
     "@agilearchitects/authenticaton": "^0.0.23",
-    "@agilearchitects/env": "^0.1.0",
+    "@agilearchitects/env": "^0.2.0",
     "@agilearchitects/hashti": "^0.0.4",
     "@agilearchitects/jwt": "^0.0.6",
     "@agilearchitects/logmodule": "^0.0.6",
     "@agilearchitects/mailingun": "^0.0.10",
     "@agilearchitects/simplyserve": "^0.0.22",
     "@agilearchitects/templategenerator": "^0.0.3",
+    "aws-serverless-express": "^3.3.8",
     "axios": "^0.19.2",
     "bcrypt": "^4.0.0",
     "bluebird": "^3.7.2",

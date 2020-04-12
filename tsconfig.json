@@ -1,28 +1,21 @@
 {
    "compilerOptions": {
-      "target": "es5",
-      "module": "commonjs",
       "moduleResolution": "node",
-      "lib": [
-         "es5",
-         "es6",
-         "dom"
-      ],
+      "target": "es5",
       "outDir": "./build",
       "removeComments": true,
+      "sourceMap": true,
       "strict": true,
       "noImplicitAny": true,
       "strictNullChecks": true,
       "typeRoots": [
-         "./node_modules/@agilearchitects/simplyserve/@types",
          "./node_modules/@types"
       ],
-      "esModuleInterop": true,
       "experimentalDecorators": true,
       "emitDecoratorMetadata": true,
+      "esModuleInterop": true
    },
-   "include": [
-      "src/api/**/*.ts",
-      "src/shared/**/*.ts"
+   "files": [
+      "src/api/server.ts"
    ]
 }

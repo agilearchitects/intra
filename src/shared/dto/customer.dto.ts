@@ -1,5 +1,7 @@
-import { IProjectDTO, ProjectDTO } from "./project.dto";
+import { bodyType, jsonType } from "@agilearchitects/server";
 import { DateService } from "../services/date.service";
+import { DTO } from "./dto";
+import { IProjectDTO, ProjectDTO } from "./project.dto";
 
 export interface ICustomerDTO {
   id: number;
@@ -8,6 +10,20 @@ export interface ICustomerDTO {
 }
 
 export class CustomerDTO implements ICustomerDTO {
+  public static parseFromRequest(object: bodyType, dateService?: DateService): CustomerDTO {
+    object = DTO.parseFromRequest(object);
+    if (typeof object.id !== "number" ||
+      typeof object.name !== "string" ||
+      (object.projects !== undefined &&
+        !(object.projects instanceof Array))) {
+      throw new Error("Unable to parse");
+    }
+    return new CustomerDTO(
+      object.id,
+      object.name,
+      (object.projects !== undefined ? object.projects.map((project: jsonType) => ProjectDTO.parseFromRequest(project, dateService)) : undefined),
+    )
+  }
   public static parse(object: ICustomerDTO, dateService?: DateService): CustomerDTO {
     return new CustomerDTO(
       object.id,

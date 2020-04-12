@@ -1,3 +1,5 @@
+import { bodyType } from "@agilearchitects/server";
+import { DTO } from "./dto";
 import { IUserDTO, UserDTO } from "./user.dto";
 
 export interface ITaskUserDTO {
@@ -7,6 +9,19 @@ export interface ITaskUserDTO {
 }
 
 export class TaskUserDTO {
+  public static parseFromRequest(object: bodyType): TaskUserDTO {
+    object = DTO.parseFromRequest(object);
+    if (typeof object.id !== "number" ||
+      (typeof object.rate !== "number" && object.rate !== undefined)) {
+      throw new Error("Unable to parse");
+    }
+
+    return new TaskUserDTO(
+      object.id,
+      UserDTO.parseFromRequest(object.user),
+      object.rate,
+    )
+  }
   public static parse(taskUser: ITaskUserDTO):
     TaskUserDTO {
     return new this(

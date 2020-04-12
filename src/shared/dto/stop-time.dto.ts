@@ -1,9 +1,22 @@
+import { bodyType } from "@agilearchitects/server";
+import { DTO } from "./dto";
 export interface IStopTimeDTO {
   id: number;
   to: string;
 }
 
 export class StopTimeDTO implements IStopTimeDTO {
+  public static parseFromRequest(object: bodyType): StopTimeDTO {
+    object = DTO.parseFromRequest(object);
+    if (typeof object.id !== "number" ||
+      typeof object.to !== "string") {
+      throw new Error("Unable to parse")
+    }
+    return new StopTimeDTO(
+      object.id,
+      object.to,
+    )
+  }
   public static parse(object: IStopTimeDTO): StopTimeDTO {
     return new StopTimeDTO(
       object.id,

@@ -12,10 +12,10 @@ import { ITimeDTO, TimeDTO } from "../../shared/dto/time.dto";
 import { ICreateTimeDTO } from "../../shared/dto/create-time.dto";
 import { IStopTimeDTO } from "../../shared/dto/stop-time.dto";
 import { IUpdateTimeDTO, UpdateTimeDTO } from "../../shared/dto/update-time.dto";
-import { TagEntity } from "../entities/tag.entity";
-import { TaskEntity } from "../entities/task.entity";
-import { TimeEntity } from "../entities/time.entity";
-import { UserEntity } from "../entities/user.entity";
+import { TagEntity } from "../../shared/entities/tag.entity";
+import { TaskEntity } from "../../shared/entities/task.entity";
+import { TimeEntity } from "../../shared/entities/time.entity";
+import { UserEntity } from "../../shared/entities/user.entity";
 
 export class TimeService {
   public constructor(

@@ -15,12 +15,12 @@ import { UserDTO } from "../../shared/dto/user.dto";
 
 // Entities
 import { IUpdateTaskDTO } from "../../shared/dto/update-task.dto";
-import { CustomerEntity } from "../entities/customer.entity";
-import { ProjectEntity } from "../entities/project.entity";
-import { TaskUserEntity } from "../entities/task-user.entity";
-import { TaskEntity } from "../entities/task.entity";
-import { TimeEntity } from "../entities/time.entity";
-import { UserEntity } from "../entities/user.entity";
+import { CustomerEntity } from "../../shared/entities/customer.entity";
+import { ProjectEntity } from "../../shared/entities/project.entity";
+import { TaskUserEntity } from "../../shared/entities/task-user.entity";
+import { TaskEntity } from "../../shared/entities/task.entity";
+import { TimeEntity } from "../../shared/entities/time.entity";
+import { UserEntity } from "../../shared/entities/user.entity";
 
 export class ProjectService {
   public constructor(

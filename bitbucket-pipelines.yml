@@ -7,20 +7,54 @@ pipelines:
           - node
         script:
           - yarn
-          - yarn build
           - yarn lint
-          # - yarn test
+          - yarn test
+          - yarn build
         artifacts:
-          - build/**
+          - dist/**
           - storage/**
           - node_modules/**
     - step:
-        name: Deploy
-        trigger: manual
-        deployment: staging
-        image: bitbucketpipelines/rsync-deploy:0.3.2
+        name: Prepare for deploy
+        image: node:12.8.0
         script:
-          - ssh deploy@82.102.2.5 \~/export_db.sh aai staging
-          - rsync -azr --progress build node_modules storage deploy@82.102.2.5:\~/applications/aai/staging --exclude="storage/db.sqlite"
-          - ssh deploy@82.102.2.5 "/home/deploy/.nvm/versions/node/v12.12.0/bin/node /home/deploy/.nvm/versions/node/v12.12.0/bin/pm2 restart aai.staging"
-          - ssh deploy@82.102.2.5 "/home/deploy/.nvm/versions/node/v12.12.0/bin/node /home/deploy/.nvm/versions/node/v12.12.0/bin/pm2 restart ssme"
+          # Download zip
+          - apt-get update && apt-get install -y zip
+          # Copy node modules to api folder
+          - cp node_modules dist/api/
+          # Make index for api function
+          - echo "module.exports = require(\"./api/index\")" > dist/api/index.js
+          # ZIP api function project
+          - zip api.zip dist/api
+
+          # Copy node modules to migrate folder
+          - cp node_modules dist/migrate/
+          # Make index for migrate function
+          - echo "module.exports = require(\"./migrate/index\")" > dist/migrate/index.js
+          # ZIP migrate function project
+          - zip migrate.zip dist/migrate
+        artifacts:
+          - api.zip
+          - migrate.zip
+    - step:
+        name: Deploy API Lambda Function
+        script:
+          - pipe: atlassian/aws-lambda-deploy:0.2.1
+            variables:
+              AWS_ACCESS_KEY_ID: ${AWS_ACCESS_KEY_ID}
+              AWS_SECRET_ACCESS_KEY: ${AWS_SECRET_ACCESS_KEY}
+              AWS_DEFAULT_REGION: "eu-north-1"
+              FUNCTION_NAME: "intranet"
+              COMMAND: "update"
+              ZIP_FILE: "api.zip"
+    - step:
+        name: Deploy Migrate Lambda Function
+        script:
+          - pipe: atlassian/aws-lambda-deploy:0.2.1
+            variables:
+              AWS_ACCESS_KEY_ID: ${AWS_ACCESS_KEY_ID}
+              AWS_SECRET_ACCESS_KEY: ${AWS_SECRET_ACCESS_KEY}
+              AWS_DEFAULT_REGION: "eu-north-1"
+              FUNCTION_NAME: "migrate"
+              COMMAND: "update"
+              ZIP_FILE: "migrate.zip"

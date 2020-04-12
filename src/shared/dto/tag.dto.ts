@@ -1,3 +1,5 @@
+import { bodyType, jsonType } from "@agilearchitects/server";
+import { DTO } from "./dto";
 import { ITimeDTO, TimeDTO } from "./time.dto";
 
 export interface ITagDTO {
@@ -7,6 +9,21 @@ export interface ITagDTO {
 }
 
 export class TagDTO implements ITagDTO {
+  public static parseFromRequest(object: bodyType): TagDTO {
+    object = DTO.parseFromRequest(object);
+    if (typeof object.id !== "number" ||
+      typeof object.name !== "string" ||
+      (object.times !== undefined &&
+        !(object.times instanceof Array))) {
+      throw new Error("Unable to parse");
+    }
+
+    return new TagDTO(
+      object.id,
+      object.name,
+      (object.times !== undefined ? object.times.map((time: jsonType) => TimeDTO.parseFromRequest(time)) : undefined),
+    )
+  }
   public static parse(object: ITagDTO) {
     return new TagDTO(
       object.id,

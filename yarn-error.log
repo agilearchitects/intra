@@ -1,11 +1,11 @@
 Arguments: 
-  /Users/hannes/.nvm/versions/node/v12.8.0/bin/node /Users/hannes/.yarn/bin/yarn.js run --silent husky-run pre-commit
+  /Users/hannes/.nvm/versions/node/v12.8.0/bin/node /Users/hannes/.yarn/bin/yarn.js apa fwef
 
 PATH: 
-  /Library/Developer/CommandLineTools/usr/libexec/git-core:/Users/hannes/.yarn/bin:/Users/hannes/.config/yarn/global/node_modules/.bin:/Library/Frameworks/Python.framework/Versions/2.7/bin:/Library/Frameworks/Python.framework/Versions/2.7/bin:/Users/hannes/.nvm/versions/node/v12.8.0/bin:/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin:/Library/Apple/usr/bin:/Library/Apple/bin:/usr/local/share/dotnet:~/.dotnet/tools:/Library/Frameworks/Mono.framework/Versions/Current/Commands:/Users/hannes/.yarn/bin:/Users/hannes/.config/yarn/global/node_modules/.bin:/Library/Frameworks/Python.framework/Versions/2.7/bin:/Applications/google-cloud-sdk/bin:/Users/hannes/.nvm/versions/node/v12.8.0/bin
+  /Users/hannes/.yarn/bin:/Users/hannes/.config/yarn/global/node_modules/.bin:/Library/Frameworks/Python.framework/Versions/2.7/bin:/Library/Frameworks/Python.framework/Versions/2.7/bin:/Users/hannes/.nvm/versions/node/v12.8.0/bin:/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin:/Library/Apple/usr/bin:/Library/Apple/bin:/usr/local/share/dotnet:~/.dotnet/tools:/Library/Frameworks/Mono.framework/Versions/Current/Commands:/Users/hannes/.yarn/bin:/Users/hannes/.config/yarn/global/node_modules/.bin:/Library/Frameworks/Python.framework/Versions/2.7/bin:/Applications/google-cloud-sdk/bin:/Users/hannes/.nvm/versions/node/v12.8.0/bin
 
 Yarn version: 
-  1.21.1
+  1.22.0
 
 Node version: 
   12.8.0
@@ -14,12 +14,17 @@ Platform:
   darwin x64
 
 Trace: 
-  SyntaxError: /Users/hannes/repos/agilearchitects/intra/package.json: Unexpected token / in JSON at position 1352
-      at JSON.parse (<anonymous>)
-      at /Users/hannes/.yarn/lib/cli.js:1625:59
+  Invariant Violation: Script must exist
+      at invariant (/Users/hannes/.yarn/lib/cli.js:2314:15)
+      at /Users/hannes/.yarn/lib/cli.js:62386:11
       at Generator.next (<anonymous>)
       at step (/Users/hannes/.yarn/lib/cli.js:310:30)
-      at /Users/hannes/.yarn/lib/cli.js:321:13
+      at /Users/hannes/.yarn/lib/cli.js:328:14
+      at new Promise (<anonymous>)
+      at new F (/Users/hannes/.yarn/lib/cli.js:5301:28)
+      at /Users/hannes/.yarn/lib/cli.js:307:12
+      at realRunCommand (/Users/hannes/.yarn/lib/cli.js:62471:23)
+      at action.action (/Users/hannes/.yarn/lib/cli.js:62532:16)
 
 npm manifest: 
   {
@@ -28,13 +33,12 @@ npm manifest:
     },
     "version": "0.0.1",
     "scripts": {
-      "build-api": "tsc",
+      "build-api": "tsc --project src/api/tsconfig-publish.json",
       "watch-api": "tsc --watch",
       "build-migrations": "tsc storage/migrations/*.ts",
-      "migrate": "node render.ts migrate up",
       "serve-spa": "parcel src/spa/index.html --out-dir build/spa",
-      "build-spa": "parcel build src/spa/index.html --out-dir build/spa && yarn cp-spa",
-      "cp-spa": "cp -r node_modules/tinymce/plugins build/spa/ && cp -r node_modules/tinymce/skins build/spa/ && cp -r node_modules/tinymce/themes build/spa/",
+      "build-spa": "parcel build src/spa/index.html --out-dir dist/spa && yarn cp-spa dist",
+      "cp-spa": "OUT=${1:-build}/spa/ && mkdir -p $OUT && cp -r node_modules/tinymce/plugins $OUT && cp -r node_modules/tinymce/skins $OUT && cp -r node_modules/tinymce/themes $OUT",
       "watch-spa": "parcel watch src/spa/index.html --out-dir build/spa",
       "serve": "nodemon ./build/api/server.js",
       "watch": "concurrently \"yarn run serve\" \"yarn run watch-api\" \"yarn run watch-spa\"",
@@ -42,14 +46,15 @@ npm manifest:
       "render": "ts-node ./render.ts",
       "test": "mocha --recursive src/**/*.spec.ts --require ts-node/register --timeout 999999",
       "lint": "tslint --config tslint.json --project tsconfig.json",
-      "deploy_staging": "docker build --build-arg ssh_prv_key=\"$(cat ~/.ssh/id_rsa)\" --build-arg ssh_pub_key=\"$(cat ~/.ssh/id_rsa.pub)\" --build-arg ssh_known_hosts=\"$(cat ~/.ssh/known_hosts)\" --build-arg host=\"82.102.2.5\" --build-arg domain=\"intra.agilearchitects.se\" --build-arg application=\"aai\" --build-arg env=\"staging\" ."
+      "deploy_staging": "docker build --build-arg ssh_prv_key=\"$(cat ~/.ssh/id_rsa)\" --build-arg ssh_pub_key=\"$(cat ~/.ssh/id_rsa.pub)\" --build-arg ssh_known_hosts=\"$(cat ~/.ssh/known_hosts)\" --build-arg host=\"82.102.2.5\" --build-arg domain=\"intra.agilearchitects.se\" --build-arg application=\"aai\" --build-arg env=\"staging\" .",
+      "apa": ""
     },
-    /*"husky": {
+    "husky": {
       "hooks": {
         "pre-commit": "yarn lint",
         "pre-push": "yarn test || yarn lint"
       }
-    },*/
+    },
     "dependencies": {
       "@agilearchitects/authenticaton": "^0.0.23",
       "@agilearchitects/env": "^0.1.0",

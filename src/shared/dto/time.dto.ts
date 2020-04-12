@@ -1,7 +1,10 @@
-import { IUserPayloadDTO, UserPayloadDTO } from "@agilearchitects/authenticaton";
+import { IUserPayloadDTO } from "@agilearchitects/authenticaton";
+import { bodyType } from "@agilearchitects/server";
+import { DateService } from "../services/date.service";
+import { DTO } from "./dto";
 import { ITagDTO, TagDTO } from "./tag.dto";
 import { ITaskDTO, TaskDTO } from "./task.dto";
-import { DateService } from "../services/date.service";
+import { UserPayloadDTO } from "./user-payload.dto";
 
 export interface ITimeDTO {
   id: number;
@@ -15,6 +18,32 @@ export interface ITimeDTO {
 }
 
 export class TimeDTO implements ITimeDTO {
+  public static parseFromRequest(object: bodyType, dateService?: DateService): TimeDTO {
+    object = DTO.parseFromRequest(object);
+    if (typeof object.id !== "number" ||
+      typeof object.task !== "object" ||
+      object.task === null ||
+      (typeof object.task === "object" && (object.task instanceof Array)) ||
+      typeof object.from !== "string" ||
+      (typeof object.to !== "string" && object.to !== undefined) ||
+      typeof object.comment !== "string" ||
+      (object.tags !== undefined &&
+        !(object.tags instanceof Array)) ||
+      (typeof object.user === "object" && (object.user instanceof Array))) {
+      throw new Error("unable to parse");
+    }
+
+    return new TimeDTO(
+      object.id,
+      object.task !== undefined ? TaskDTO.parseFromRequest(object.task) : undefined,
+      object.from,
+      object.to,
+      object.comment,
+      dateService,
+      (object.tags !== undefined ? object.tags.map((tag: bodyType) => TagDTO.parseFromRequest(tag)) : undefined),
+      (object.user !== undefined ? UserPayloadDTO.parseFromRequest(object.user) : undefined),
+    )
+  }
   public static parse(object: ITimeDTO, dateService?: DateService): TimeDTO {
     return new TimeDTO(
       object.id,

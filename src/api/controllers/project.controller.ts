@@ -1,96 +1,89 @@
-// Libs
-import { RequestHandler } from "express";
+// Modules
+import { handlerMethod, HandlerModule } from "../modules/handler.module";
 
 // DTO's
-import { ICreateProjectDTO } from "../../shared/dto/create-project.dto";
-import { IProjectDTO } from "../../shared/dto/project.dto";
-import { IUpdateProjectDTO } from "../../shared/dto/update-project.dto";
-
-// Modules
-import { controller, ControllerHandler } from "../modules/controller-handler.module";
+import { CreateProjectDTO, ICreateProjectDTO } from "../../shared/dto/create-project.dto";
+import { IUpdateProjectDTO, UpdateProjectDTO } from "../../shared/dto/update-project.dto";
 
 // Bootstrap
 import { projectService } from "../bootstrap";
 
 // Base controller
-import { UserEntity } from "../entities/user.entity";
+import { parse } from "@agilearchitects/server";
+import { UserEntity } from "../../shared/entities/user.entity";
 import { Controller } from "./controller";
 
 export class ProjectController extends Controller {
-  public index(): RequestHandler {
-    return controller(async (handler: ControllerHandler) => {
+  public index(): handlerMethod {
+    return async (handler: HandlerModule) => {
       try {
+        if (handler.request.user === undefined) { throw new Error("User not found"); }
         // TODO - Better solution
         const isAdmin: boolean = handler.request.user.hasClaim("admin");
         if (handler.request.user.hasClaim("admin")) {
-          handler.response<IProjectDTO[]>().json(await projectService.getAll());
+          handler.sendJSON(await projectService.getAll());
         } else {
-          handler.response<IProjectDTO[]>().json(await projectService.getForUser(handler.request.user.id, isAdmin));
+          handler.sendJSON(await projectService.getForUser(handler.request.user.id, isAdmin));
         }
       } catch (error) {
-        this.logError(handler.response(), "Error getting projects", error.toString());
-        handler.response().sendStatus(500);
+        this.logError(handler, "Error getting projects", error.toString());
         throw error;
       }
-    });
+    };
   }
-  public show(): RequestHandler {
-    return controller(async (handler: ControllerHandler) => {
+  public show(): handlerMethod {
+    return async (handler: HandlerModule<any, { id: string }>) => {
       try {
-        const params: { id: string } = handler.params();
+        if (handler.request.user === undefined) { throw new Error("User not found"); }
         // TODO - Better solution
         const isAdmin: boolean = (await UserEntity.findOneOrFail(handler.request.user.id)).isAdmin;
-        handler.response<IProjectDTO>().json(await projectService.get(parseInt(params.id, 10), handler.request.user.id, isAdmin));
+        handler.sendJSON(await projectService.get(parseInt(handler.params.id, 10), handler.request.user.id, isAdmin));
       } catch (error) {
-        this.logError(handler.response(), "Error getting project", error);
-        handler.response().sendStatus(500);
+        this.logError(handler, "Error getting project", error);
         throw error;
       }
-    });
+    };
   }
-  public create(): RequestHandler {
-    return controller(async (handler: ControllerHandler) => {
+  @parse(CreateProjectDTO.parseFromRequest, "body")
+  public create(): handlerMethod {
+    return async (handler: HandlerModule<ICreateProjectDTO>) => {
 
       try {
-        const body = handler.body<ICreateProjectDTO>();
-        await projectService.create(body);
+        await projectService.create(handler.parsedBody);
         handler.sendStatus(200);
       } catch (error) {
-        this.logError(handler.response(), "Error creating project", error);
-        handler.response().sendStatus(500);
+        this.logError(handler, "Error creating project", error);
         throw error;
       }
-    });
+    };
   }
 
-  public update(): RequestHandler {
-    return controller(async (handler: ControllerHandler) => {
+  @parse(UpdateProjectDTO.parseFromRequest, "body")
+  public update(): handlerMethod {
+    return async (handler: HandlerModule<IUpdateProjectDTO>) => {
       try {
-        const body = handler.body<IUpdateProjectDTO>();
-        await projectService.update(body);
+        await projectService.update(handler.parsedBody);
         handler.sendStatus(200);
       } catch (error) {
-        this.logError(handler.response(), "Error updating project", error);
-        handler.response().sendStatus(500);
+        this.logError(handler, "Error updating project", error);
         throw error;
       }
-    });
+    };
   }
 
-  public delete(): RequestHandler {
-    return controller(async (handler: ControllerHandler) => {
+  public delete(): handlerMethod {
+    return async (handler: HandlerModule<any, { id: string }>) => {
       try {
-        const params: { id: string } = handler.params<{ id: string }>();
+        if (handler.request.user === undefined) { throw new Error("User not found"); }
         // TODO - Better solution
         const isAdmin: boolean = (await UserEntity.findOneOrFail(handler.request.user.id)).isAdmin;
-        await projectService.delete(parseInt(params.id, 10), handler.request.user.id, isAdmin);
+        await projectService.delete(parseInt(handler.params.id, 10), handler.request.user.id, isAdmin);
         handler.sendStatus(200);
       } catch (error) {
-        this.logError(handler.response(), "Error deleting project", error);
-        handler.response().sendStatus(500);
+        this.logError(handler, "Error deleting project", error);
         throw error;
       }
-    });
+    };
   }
 }
 

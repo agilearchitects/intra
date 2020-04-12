@@ -9,7 +9,10 @@
         :label="$t('customer.customer')"
         :placeholder="$t('customer.select')"
       ></select-component>
-      <button-component v-on:click="openCreateCustomerModal" v-tooltip="'Ny kund'">
+      <button-component
+        v-on:click="openCreateCustomerModal"
+        v-tooltip="'Ny kund'"
+      >
         <i class="fas fa-plus"></i>
       </button-component>
       <input-component
@@ -80,7 +83,10 @@
                 <th class="px-0">Budget (kr)</th>
                 <th class="px-0">Budget (h)</th>
                 <th class="pl-0 align-bottom text-center">
-                  <i v-tooltip="'Ta bort'" class="fas fa-times"></i>
+                  <i
+                    v-tooltip="'Ta bort'"
+                    class="fas fa-times"
+                  ></i>
                 </th>
               </tr>
             </thead>
@@ -88,16 +94,32 @@
               <template v-for="(task, index) in form.tasks">
                 <tr :key="`task_${index}`">
                   <td class="py-0 pr-0">
-                    <input-component placeholder="Aktivitet" class="m-0" v-model="task.name"></input-component>
+                    <input-component
+                      placeholder="Aktivitet"
+                      class="m-0"
+                      v-model="task.name"
+                    ></input-component>
                   </td>
                   <td class="p-0">
-                    <input-component placeholder="kr/h" class="m-0" v-model="task.rate"></input-component>
+                    <input-component
+                      placeholder="kr/h"
+                      class="m-0"
+                      v-model="task.rate"
+                    ></input-component>
                   </td>
                   <td class="p-0">
-                    <input-component placeholder="kronor" class="m-0" v-model="task.priceBudget"></input-component>
+                    <input-component
+                      placeholder="kronor"
+                      class="m-0"
+                      v-model="task.priceBudget"
+                    ></input-component>
                   </td>
                   <td class="p-0">
-                    <input-component placeholder="Timmar" class="m-0" v-model="task.hoursBudget"></input-component>
+                    <input-component
+                      placeholder="Timmar"
+                      class="m-0"
+                      v-model="task.hoursBudget"
+                    ></input-component>
                   </td>
                   <td class="pl-0 pt-0 pb-3 align-bottom text-center">
                     <button-component
@@ -110,19 +132,36 @@
                     </button-component>
                   </td>
                 </tr>
-                <tr :key="`task_${index}_users`" class="pt-2">
+                <tr
+                  :key="`task_${index}_users`"
+                  class="pt-2"
+                >
                   <th class="px-0"></th>
-                  <th colspan="2" class="px-0">Användare</th>
+                  <th
+                    colspan="2"
+                    class="px-0"
+                  >Användare</th>
                   <th class="px-0">Timpris</th>
                 </tr>
                 <template v-for="(user, subIndex) in task.users">
                   <tr :key="`task_${index}_user_${subIndex}`">
                     <td></td>
-                    <td colspan="2" class="p-0">
-                      <input-component class="m-0" :value="user.email" :disabled="true"></input-component>
+                    <td
+                      colspan="2"
+                      class="p-0"
+                    >
+                      <input-component
+                        class="m-0"
+                        :value="user.email"
+                        :disabled="true"
+                      ></input-component>
                     </td>
                     <td class="p-0">
-                      <input-component placeholder="kr/h" class="m-0" v-model="user.rate"></input-component>
+                      <input-component
+                        placeholder="kr/h"
+                        class="m-0"
+                        v-model="user.rate"
+                      ></input-component>
                     </td>
                     <td class="pl-0 pt-0 pb-3 align-bottom text-center">
                       <button-component
@@ -138,7 +177,10 @@
                 </template>
                 <tr :key="`task_${index}_user`">
                   <td></td>
-                  <td colspan="3" class="p-0">
+                  <td
+                    colspan="3"
+                    class="p-0"
+                  >
                     <ul class="list-group m-0">
                       <li
                         v-for="(user, index) in task.userList"
@@ -151,7 +193,10 @@
                 </tr>
               </template>
               <tr v-if="form.tasks.length === 0">
-                <td colspan="5" class="p-2 text-center">
+                <td
+                  colspan="5"
+                  class="p-2 text-center"
+                >
                   <i class="text-muted">Inga aktiviteter tillagda</i>
                 </td>
               </tr>
@@ -187,8 +232,14 @@ import { Vue, Component, Prop } from "vue-property-decorator";
 import { Moment, default as moment, Duration } from "moment";
 
 // DTO's
-import { CreateProjectDTO } from "../../../shared/dto/create-project.dto";
-import { UpdateProjectDTO } from "../../../shared/dto/update-project.dto";
+import {
+  CreateProjectDTO,
+  ICreateProjectDTO
+} from "../../../shared/dto/create-project.dto";
+import {
+  UpdateProjectDTO,
+  IUpdateProjectDTO
+} from "../../../shared/dto/update-project.dto";
 import { CustomerDTO } from "../../../shared/dto/customer.dto";
 import { UserDTO } from "../../../shared/dto/user.dto";
 
@@ -218,13 +269,17 @@ import {
 import CreateCustomerFormComponent from "./create-customer-form.component.vue";
 import { AuthService } from "../services/auth.service";
 import { CreateTaskUserDTO } from "../../../shared/dto/create-task-user.dto";
-import { CreateTaskDTO } from "../../../shared/dto/create-task.dto";
-import { CreateProjectUserDTO } from "../../../shared/dto/create-project-user.dto";
-import { ProjectUserDTO } from "../../../shared/dto/project-user.dto";
+import {
+  CreateTaskDTO,
+  ICreateTaskDTO
+} from "../../../shared/dto/create-task.dto";
 import { TaskDTO } from "../../../shared/dto/task.dto";
 import { TaskUserDTO } from "../../../shared/dto/task-user.dto";
 import { ProjectDTO } from "../../../shared/dto/project.dto";
-import { UpdateTaskDTO } from "../../../shared/dto/update-task.dto";
+import {
+  UpdateTaskDTO,
+  IUpdateTaskDTO
+} from "../../../shared/dto/update-task.dto";
 
 class CustomerViewModel {
   public constructor(
@@ -415,31 +470,31 @@ export default class ProjectFormComponent extends Vue {
   }
 
   public submit() {
-    const parsed = {
+    const parsed: IUpdateProjectDTO | ICreateProjectDTO = {
       name: this.form.name,
       customerId: parseInt(this.form.customer, 10),
       ...(this.form.rate !== ""
-        ? { rate: parseFloat(this.form.rate) }
+        ? { rate: this.parseFloat(this.form.rate) }
         : undefined),
       ...(this.form.priceBudget !== ""
-        ? { priceBudget: parseFloat(this.form.priceBudget) }
+        ? { priceBudget: this.parseFloat(this.form.priceBudget) }
         : undefined),
       ...(this.form.hoursBudget !== ""
-        ? { hoursBudget: parseFloat(this.form.hoursBudget) }
+        ? { hoursBudget: this.parseFloat(this.form.hoursBudget) }
         : undefined),
       ...(this.form.start !== "" ? { start: this.form.start } : undefined),
       ...(this.form.end !== "" ? { end: this.form.end } : undefined),
       tasks: this.form.tasks.map((task: IFormTask) => {
-        const parsed = {
+        const parsed: IUpdateTaskDTO | ICreateTaskDTO = {
           name: task.name,
-          rate: parseFloat(task.rate),
-          priceBudget: parseFloat(task.priceBudget),
-          hoursBudget: parseFloat(task.hoursBudget),
+          rate: this.parseFloat(task.rate),
+          priceBudget: this.parseFloat(task.priceBudget),
+          hoursBudget: this.parseFloat(task.hoursBudget),
           users: task.users.map((formUser: IFormUser) => {
             const parsed = {};
             return CreateTaskUserDTO.parse({
               userId: formUser.userId,
-              rate: parseInt(formUser.rate, 10)
+              rate: this.parseFloat(formUser.rate)
             }).serialize();
           })
         };
@@ -465,6 +520,11 @@ export default class ProjectFormComponent extends Vue {
     } else {
       this.$emit("submit", CreateProjectDTO.parse(parsed));
     }
+  }
+
+  private parseFloat(number: string): number | undefined {
+    const parsed: number = parseFloat(number.replace(",", "."));
+    return isNaN(parsed) ? undefined : parsed;
   }
 
   private getFilteredUsers(users: IFormUser[]): UserViewModel[] {

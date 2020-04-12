@@ -1,11 +1,22 @@
+import { bodyType } from "@agilearchitects/server";
+import { DTO } from "./dto";
+
 export interface ICreateTaskUserDTO {
   userId: number;
-  rate: number;
+  rate?: number;
 }
 
 export class CreateTaskUserDTO {
-  public static parse(createTaskUser: ICreateTaskUserDTO):
-    CreateTaskUserDTO {
+  public static parseFromRequest(object: bodyType): CreateTaskUserDTO {
+    object = DTO.parseFromRequest(object);
+    if (typeof object.userId !== "number" ||
+      (object.rate !== undefined &&
+        typeof object.rate !== "number")) {
+      throw new Error("Unable to parse");
+    }
+    return new CreateTaskUserDTO(object.userId, object.rate);
+  }
+  public static parse(createTaskUser: ICreateTaskUserDTO): CreateTaskUserDTO {
     return new this(
       createTaskUser.userId,
       createTaskUser.rate,
@@ -14,13 +25,13 @@ export class CreateTaskUserDTO {
 
   public constructor(
     public readonly userId: number,
-    public readonly rate: number,
+    public readonly rate?: number,
   ) { }
 
   public serialize(): ICreateTaskUserDTO {
     return {
       userId: this.userId,
-      rate: this.rate,
+      ...(this.rate !== undefined ? { rate: this.rate } : undefined),
     };
   }
 }

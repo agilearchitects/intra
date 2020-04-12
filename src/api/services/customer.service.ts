@@ -2,19 +2,19 @@
 import moment from "moment";
 
 // Entities
-import { CustomerEntity } from "../entities/customer.entity";
-import { ProjectEntity } from "../entities/project.entity";
-import { TaskEntity } from "../entities/task.entity";
+import { CustomerEntity } from "../../shared/entities/customer.entity";
+import { ProjectEntity } from "../../shared/entities/project.entity";
+import { TaskEntity } from "../../shared/entities/task.entity";
 
 // DTO's
 import { ICreateCustomerDTO } from "../../shared/dto/create-customer.dto";
 import { CustomerDTO, ICustomerDTO } from "../../shared/dto/customer.dto";
 import { ProjectDTO } from "../../shared/dto/project.dto";
-import { TaskDTO } from "../../shared/dto/task.dto";
-import { TimeEntity } from "../entities/time.entity";
-import { TimeDTO } from "../../shared/dto/time.dto";
-import { TagEntity } from "../entities/tag.entity";
 import { TagDTO } from "../../shared/dto/tag.dto";
+import { TaskDTO } from "../../shared/dto/task.dto";
+import { TimeDTO } from "../../shared/dto/time.dto";
+import { TagEntity } from "../../shared/entities/tag.entity";
+import { TimeEntity } from "../../shared/entities/time.entity";
 
 export class CustomerService {
   public constructor(

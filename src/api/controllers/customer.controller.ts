@@ -1,67 +1,60 @@
+
 // Libs
-import { RequestHandler } from "express";
+import { parse } from "@agilearchitects/server";
 
 // DTO's
-import { ICreateCustomerDTO } from "../../shared/dto/create-customer.dto";
-import { CustomerDTO, ICustomerDTO } from "../../shared/dto/customer.dto";
-
-// Entities
-import { CustomerEntity } from "../entities/customer.entity";
-import { ProjectEntity } from "../entities/project.entity";
+import { CreateCustomerDTO } from "../../shared/dto/create-customer.dto";
+import { CustomerDTO } from "../../shared/dto/customer.dto";
 
 // Modules
-import { controller, ControllerHandler } from "../modules/controller-handler.module";
+import { handlerMethod, HandlerModule } from "../modules/handler.module";
 
 // Base controller
-import { ProjectDTO } from "../../shared/dto/project.dto";
-import { TaskDTO } from "../../shared/dto/task.dto";
 import { customerService } from "../bootstrap";
-import { TaskEntity } from "../entities/task.entity";
 import { Controller } from "./controller";
 
 export class CustomerController extends Controller {
-  public index(): RequestHandler {
-    return controller(async (handler: ControllerHandler) => {
+  public index(): handlerMethod {
+    return async (handler: HandlerModule) => {
+      if (handler.request.user === undefined) { throw new Error("User was not provided"); }
       try {
-        const query: { all?: string } = handler.query<{ all?: string }>();
+        const query: { all?: string } = handler.query;
         if (query.all !== undefined) {
-          handler.response<ICustomerDTO[]>().json(await customerService.getEvery());
+          handler.sendJSON(await customerService.getEvery());
         } else {
-          handler.response<ICustomerDTO[]>().json(await customerService.getWithUserProjects(handler.request.user.id));
+          handler.sendJSON(await customerService.getWithUserProjects(handler.request.user.id));
         }
       } catch (error) {
-        this.logError(handler.response(), "Error getting customers", error);
-        handler.response().sendStatus(500);
+        this.logError(handler, "Error getting customers", error);
         throw error;
       }
-    });
-  }
-  public create(): RequestHandler {
-    return controller(async (handler: ControllerHandler) => {
-      try {
-        const customer = handler.body<ICreateCustomerDTO>();
-        await customerService.create(customer);
-        handler.sendStatus(200);
-      } catch (error) {
-        this.logError(handler.response(), "Error creating customer", error);
-        handler.response().sendStatus(500);
-        throw error;
-      }
-    });
+    };
   }
 
-  public update(): RequestHandler {
-    return controller(async (handler: ControllerHandler) => {
+  @parse(CreateCustomerDTO.parseFromRequest, "body")
+  public create(): handlerMethod {
+    return async (handler: HandlerModule<CreateCustomerDTO>) => {
       try {
-        const customer = handler.body<ICustomerDTO>();
-        await customerService.update(customer);
+        await customerService.create(handler.parsedBody);
         handler.sendStatus(200);
       } catch (error) {
-        this.logError(handler.response(), "Error updating customer", error);
-        handler.response().sendStatus(500);
+        this.logError(handler, "Error creating customer", error);
         throw error;
       }
-    });
+    };
+  }
+
+  @parse(CustomerDTO.parseFromRequest, "body")
+  public update(): handlerMethod {
+    return async (handler: HandlerModule<CustomerDTO>) => {
+      try {
+        await customerService.update(handler.parsedBody);
+        handler.sendStatus(200);
+      } catch (error) {
+        this.logError(handler, "Error updating customer", error);
+        throw error;
+      }
+    };
   }
 }
 

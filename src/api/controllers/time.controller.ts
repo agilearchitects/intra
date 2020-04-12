@@ -1,96 +1,95 @@
 // Libs
-import { RequestHandler } from "express";
-import moment, { Moment } from "moment";
+import { parse } from "@agilearchitects/server";
 
 // DTO's
-import { ICreateTimeDTO } from "../../shared/dto/create-time.dto";
-import { IStopTimeDTO } from "../../shared/dto/stop-time.dto";
-import { ITimeDTO } from "../../shared/dto/time.dto";
-import { IUpdateTimeDTO } from "../../shared/dto/update-time.dto";
-import { ITimeQueryDTO } from "../../shared/dto/time-query.dto";
+import { CreateTimeDTO } from "../../shared/dto/create-time.dto";
+import { StopTimeDTO } from "../../shared/dto/stop-time.dto";
+import { TimeQueryDTO } from "../../shared/dto/time-query.dto";
+import { UpdateTimeDTO } from "../../shared/dto/update-time.dto";
+
+// Modules
+import { handlerMethod, HandlerModule } from "../modules/handler.module";
 
 // Services
-import { customerService, timeService } from "../bootstrap";
+import { timeService } from "../bootstrap";
 
 // Base controller
 import { Controller } from "./controller";
-import { controller, ControllerHandler } from "../modules/controller-handler.module";
 
 export class TimeController extends Controller {
-  public index(): RequestHandler {
-    return controller(async (handler: ControllerHandler) => {
+  public index(): handlerMethod {
+    return async (handler: HandlerModule) => {
       try {
-        const query = handler.query<ITimeQueryDTO>();
-        handler.response<ITimeDTO[]>().json(await timeService.getAll(query.date, query.month, query.year, query.week, handler.request.user.id));
+        const query = TimeQueryDTO.parse(handler.query);
+        if (handler.request.user === undefined) { throw new Error("User was not defined"); }
+        handler.sendJSON(await timeService.getAll(query.date, query.month, query.year, query.week, handler.request.user.id));
       } catch (error) {
-        this.logError(handler.response(), "Error getting times");
+        this.logError(handler, "Error getting times");
         throw error;
       }
-    });
+    };
   }
 
-  public show(): RequestHandler {
-    return controller(async (handler: ControllerHandler) => {
+  public show(): handlerMethod {
+    return async (handler: HandlerModule<any, { id: string }>) => {
       try {
-        const params: { id: string } = handler.params<{ id: string }>();
-        handler.response<ITimeDTO>().json(await timeService.get(parseInt(params.id, 10)));
+        handler.sendJSON(await timeService.get(parseInt(handler.params.id, 10)));
       } catch (error) {
-        this.logError(handler.response(), "Error getting time", error);
+        this.logError(handler, "Error getting time", error);
         throw error;
       }
-    });
+    };
   }
 
-  public create(): RequestHandler {
-    return controller(async (handler: ControllerHandler) => {
+  @parse(CreateTimeDTO.parseFromRequest, "body")
+  public create(): handlerMethod {
+    return async (handler: HandlerModule) => {
       try {
-        const body = handler.body<ICreateTimeDTO>();
-        await timeService.create(body);
+        await timeService.create(handler.parsedBody);
         handler.sendStatus(200);
       } catch (error) {
-        this.logError(handler.response(), "Error creating time", error);
+        this.logError(handler, "Error creating time", error);
         throw error;
       }
-    });
+    };
   }
 
-  public update(): RequestHandler {
-    return controller(async (handler: ControllerHandler) => {
+  @parse(UpdateTimeDTO.parseFromRequest, "body")
+  public update(): handlerMethod {
+    return async (handler: HandlerModule) => {
       try {
-        const body = handler.body<IUpdateTimeDTO>();
-        await timeService.update(body);
+        await timeService.update(handler.parsedBody);
         handler.sendStatus(200);
       } catch (error) {
-        this.logError(handler.response(), "Error updating time", error);
+        this.logError(handler, "Error updating time", error);
         throw error;
       }
-    });
+    };
   }
 
-  public delete(): RequestHandler {
-    return controller(async (handler: ControllerHandler) => {
+  public delete(): handlerMethod {
+    return async (handler: HandlerModule<any, { id: string }>) => {
       try {
-        const params: { id: string } = handler.params<{ id: string }>();
-        await timeService.delete(parseInt(params.id, 10));
+        await timeService.delete(parseInt(handler.params.id, 10));
         handler.sendStatus(200);
       } catch (error) {
-        this.logError(handler.response(), "Error deleting time", error);
+        this.logError(handler, "Error deleting time", error);
         throw error;
       }
-    });
+    };
   }
 
-  public stop(): RequestHandler {
-    return controller(async (handler: ControllerHandler) => {
+  @parse(StopTimeDTO.parseFromRequest, "body")
+  public stop(): handlerMethod {
+    return async (handler: HandlerModule<StopTimeDTO>) => {
       try {
-        const body = handler.body<IStopTimeDTO>();
-        await timeService.stop(body);
+        await timeService.stop(handler.parsedBody);
         handler.sendStatus(200);
       } catch (error) {
-        this.logError(handler.response(), "Unable to stop time", error);
+        this.logError(handler, "Unable to stop time", error);
         throw error;
       }
-    });
+    };
   }
 }
 

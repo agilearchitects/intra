@@ -1,4 +1,4 @@
-import { PageEntity } from "../entities/page.entity";
+import { PageEntity } from "../../shared/entities/page.entity";
 
 export class PageService {
   public constructor(

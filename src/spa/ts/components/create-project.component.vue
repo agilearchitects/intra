@@ -25,7 +25,6 @@ import { Vue, Component } from "vue-property-decorator";
 import { CreateProjectDTO } from "../../../shared/dto/create-project.dto";
 import { CreateTaskUserDTO } from "../../../shared/dto/create-task-user.dto";
 import { CreateTaskDTO } from "../../../shared/dto/create-task.dto";
-import { CreateProjectUserDTO } from "../../../shared/dto/create-project-user.dto";
 
 // Services
 import { ProjectService } from "../services/project.service";

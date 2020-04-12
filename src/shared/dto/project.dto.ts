@@ -1,6 +1,9 @@
+import { bodyType, jsonType } from "@agilearchitects/server"
+import { DateService } from "../services/date.service"
 import { CustomerDTO, ICustomerDTO } from "./customer.dto";
+import { DTO } from "./dto";
+import { TagDTO } from "./tag.dto";
 import { ITaskDTO, TaskDTO } from "./task.dto";
-import { DateService } from "../services/date.service";
 
 export interface IProjectDTO {
   id: number;
@@ -15,6 +18,36 @@ export interface IProjectDTO {
 }
 
 export class ProjectDTO implements IProjectDTO {
+  public static parseFromRequest(object: bodyType, dateService?: DateService): ProjectDTO {
+    object = DTO.parseFromRequest(object);
+    if (typeof object.id !== "number" ||
+      typeof object.name !== "string" ||
+      (object.rate !== undefined &&
+        typeof object.rate !== "number") ||
+      (object.priceBudget !== undefined &&
+        typeof object.priceBudget !== "number") ||
+      (object.hoursBudget !== undefined &&
+        typeof object.hoursBudget !== "number") ||
+      (object.start !== undefined &&
+        typeof object.start !== "string") ||
+      (object.end !== undefined &&
+        typeof object.end !== "string") ||
+      (object.tasks !== undefined &&
+        !(object.tasks instanceof Array))) {
+      throw new Error("Unable to parse");
+    }
+    return new ProjectDTO(
+      object.id,
+      object.name,
+      object.rate,
+      object.priceBudget,
+      object.hoursBudget,
+      object.start,
+      object.end,
+      (object.customer ? CustomerDTO.parseFromRequest(object.customer, dateService) : undefined),
+      (object.tasks !== undefined ? object.tasks.map((task: jsonType) => TaskDTO.parseFromRequest(task)) : undefined)
+    )
+  }
   public static parse(object: IProjectDTO, dateService?: DateService): ProjectDTO {
     return new ProjectDTO(
       object.id,

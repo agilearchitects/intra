@@ -1,15 +1,9 @@
 // Libs
-import { RequestHandler } from "express";
+import { handlerMethod, HandlerModule } from "@agilearchitects/server";
 import * as path from "path";
 
 // Entites
-import { ResourceEntity } from "../entities/resource.entity";
-
-// Modules
-import { controller, ControllerHandler } from "../modules/controller-handler.module";
-
-// Bootstrap
-import { envService } from "../bootstrap";
+import { ResourceEntity } from "../../shared/entities/resource.entity";
 
 // Base controller
 import { Controller } from "./controller";
@@ -19,15 +13,16 @@ export class ResourceController extends Controller {
     private readonly storagePath: string = "./storage/uploads",
   ) { super(); }
 
-  public upload(): RequestHandler {
-    return controller(async (handler: ControllerHandler) => {
+  /*public upload(): handlerMethod {
+    return async (handler: HandlerModule) => {
       try {
         const responsCall = (resource: ResourceEntity) => {
           const protocol = `${handler.request.protocol}://`;
           let port = envService.get("PORT", "1234");
           port = port !== "80" ? `:${port}` : "";
-          handler.response<{ location: string }>().json({ location: `${protocol}${envService.get("API_HOST", "")}${port}/resource/${resource.id}` });
+          handler.sendJSON({ location: `${protocol}${envService.get("API_HOST", "")}${port}/resource/${resource.id}` });
         };
+
         if (handler.request.files !== undefined && handler.request.files.file !== undefined && !(handler.request.files.file instanceof Array)) {
           const uploadedFile = handler.request.files.file;
           const newFilename = uploadedFile.md5;
@@ -48,30 +43,24 @@ export class ResourceController extends Controller {
       }
 
     });
-  }
-  public show(): RequestHandler {
-    return controller(async (handler: ControllerHandler) => {
+  }*/
+  public show(): handlerMethod {
+    return async (handler: HandlerModule<any, { id: string }>) => {
       // Get file entity using ID param
       try {
-        const resource = await ResourceEntity.findOne(parseInt(handler.params<{ id: string }>().id, 10));
+        const resource = await ResourceEntity.findOne(handler.params.id);
         if (resource === undefined) {
-          handler.response().sendStatus(404);
+          handler.sendStatus(404);
         } else {
-          handler.response().sendFile(path.resolve(this.storagePath, resource.filename), {
-            headers: {
-              "content-disposition": `attachment; filename="${resource.title}"`,
-            },
-          }, (error: any) => {
-            if (error) {
-              this.logError(handler.response(), "Resource could not be found", error);
-            }
+          handler.sendFile(path.resolve(this.storagePath, resource.filename), {
+            "content-disposition": `attachment; filename="${resource.title}"`,
           });
         }
       } catch (error) {
-        this.logError(handler.response(), "Error fetching resource from DB", error);
+        this.logError(handler, "Error fetching resource from DB", error);
         throw error;
       }
-    });
+    };
   }
 }
 

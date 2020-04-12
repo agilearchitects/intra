@@ -1,7 +1,6 @@
 // Libs
-import { Router } from "express";
-import fileUpload from "express-fileupload";
-import "./modules/router.module";
+import { handlerMethod, HandlerModule, RouterModule } from "@agilearchitects/server";
+import * as fs from "fs";
 
 // Controllers
 import authController from "./controllers/auth.controller";
@@ -16,49 +15,59 @@ import userController from "./controllers/user.controller";
 // Middlewares
 import { middlewares } from "./middlewares";
 
-const router: Router = Router();
-
-router.group("/auth", [], (router: Router) => {
-  router.post("/login", middlewares.guest(), authController.login());
+const router: RouterModule = new RouterModule();
+router.group("auth", "auth", [], (router: RouterModule) => {
+  router.post("login", "login", authController.login());
   router.post("/create", middlewares.token(), authController.create());
+  return router;
 });
 
-router.group("", [middlewares.auth()], (router: Router) => {
-  router.group("/customer", [], (router: Router) => {
-    router.get("", customerController.index());
-    router.post("", customerController.create());
+router.group("", "", [middlewares.auth()], (router: RouterModule) => {
+  router.group("/customer", "customer", [], (router: RouterModule) => {
+    router.get("", "index", customerController.index());
+    router.post("", "create", customerController.create());
+    return router;
   });
-  router.group("/project", [], (router: Router) => {
-    router.get("", projectController.index());
-    router.get("/:id", projectController.show());
-    router.post("", projectController.create());
-    router.put("/:id", projectController.update());
-    router.delete("/:id", projectController.delete());
+  router.group("/project", "project", [], (router: RouterModule) => {
+    router.get("", "index", projectController.index());
+    router.get(":id", "show", projectController.show());
+    router.post("", "create", projectController.create());
+    router.put(":id", "update", projectController.update());
+    router.delete(":id", "delete", projectController.delete());
+    return router;
   });
 
-  router.group("/time", [], (router: Router) => {
-    router.get("", timeController.index());
-    router.get("/:id", timeController.show());
-    router.post("", timeController.create());
-    router.put("/:id", timeController.update());
-    router.delete("/:id", timeController.delete());
-    router.put("/stop/:id", timeController.stop());
+  router.group("/time", "time", [], (router: RouterModule) => {
+    router.get("", "index", timeController.index());
+    router.get(":id", "show", timeController.show());
+    router.post("", "create", timeController.create());
+    router.put(":id", "update", timeController.update());
+    router.delete(":id", "delete", timeController.delete());
+    router.put("stop/:id", "stop", timeController.stop());
+    return router;
   });
 
   router.get("/tag", tagController.index());
-  router.group("/text", [], (router: Router) => {
-    router.get("", textController.index());
-    router.get("/:name", textController.show());
-    router.put("/:id", textController.update());
+  router.group("text", "text", [], (router: RouterModule) => {
+    router.get("", "index", textController.index());
+    router.get(":name", "show", textController.show());
+    router.put(":id", "update", textController.update());
+    return router;
   });
 
-  router.get("/user", userController.index());
-  router.group("/resource", [], (router: Router) => {
-    router.post("/upload",
-      fileUpload({ limits: { fileSize: 20 * 1024 * 1204 } }),
-      resourceController.upload());
-    router.get("/:id", resourceController.show());
+  router.get("/user", "index", userController.index());
+  router.group("/resource", "resource", [], (router: RouterModule) => {
+    // router.post("/upload",
+    // fileUpload({ limits: { fileSize: 20 * 1024 * 1204 } }),
+    // resourceController.upload());
+    router.get(":id", "show", resourceController.show());
+    return router;
   });
+
+  return router;
 });
+
+
+fs.writeFileSync("./routes.json", JSON.stringify(router.print(), null, 4), "utf8");
 
 export { router };
