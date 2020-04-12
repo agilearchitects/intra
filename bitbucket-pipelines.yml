@@ -71,3 +71,7 @@ pipelines:
               S3_BUCKET: "agile-architect-intranet"
               LOCAL_PATH: "/"
               ACL: "public-read"
+definitions:
+  services:
+    docker:
+      memory: 2048
