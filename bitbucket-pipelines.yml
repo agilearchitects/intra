@@ -21,14 +21,14 @@ pipelines:
           # Download zip
           - apt-get update && apt-get install -y zip
           # Copy node modules to api folder
-          - cp node_modules dist/api/
+          - cp node_modules dist/api/ -r
           # Make index for api function
           - echo "module.exports = require(\"./api/index\")" > dist/api/index.js
           # ZIP api function project
           - zip api.zip dist/api
 
           # Copy node modules to migrate folder
-          - cp node_modules dist/migrate/
+          - cp node_modules dist/migrate/ -r
           # Make index for migrate function
           - echo "module.exports = require(\"./migrate/index\")" > dist/migrate/index.js
           # ZIP migrate function project
