@@ -11,7 +11,7 @@
     "cp-spa": "OUT=\"${OUT:-build}/spa/\" && mkdir -p $OUT && cp -r node_modules/tinymce/plugins $OUT && cp -r node_modules/tinymce/skins $OUT && cp -r node_modules/tinymce/themes $OUT",
     "watch-spa": "parcel watch src/spa/index.html --out-dir build/spa",
     "build-migrate": "tsc --project src/migrate/tsconfig-publish.json",
-    "serve": "nodemon ./build/api/server.js",
+    "serve": "nodemon --inspect ./src/api/server.ts",
     "watch": "concurrently \"yarn run serve\" \"yarn run watch-api\" \"yarn run watch-spa\"",
     "build": "yarn build-api && yarn build-spa && yarn build-migrate",
     "test": "mocha --recursive src/**/*.spec.ts --require ts-node/register --timeout 999999",
@@ -25,13 +25,13 @@
     }
   },
   "dependencies": {
-    "@agilearchitects/authenticaton": "^0.0.23",
+    "@agilearchitects/authenticaton": "^0.0.24",
     "@agilearchitects/env": "^0.2.0",
     "@agilearchitects/hashti": "^0.0.4",
     "@agilearchitects/jwt": "^0.0.6",
     "@agilearchitects/logmodule": "^0.0.6",
     "@agilearchitects/mailingun": "^0.0.10",
-    "@agilearchitects/simplyserve": "^0.0.22",
+    "@agilearchitects/server": "^0.0.35",
     "@agilearchitects/templategenerator": "^0.0.3",
     "aws-serverless-express": "^3.3.8",
     "axios": "^0.19.2",
@@ -52,6 +52,7 @@
   "devDependencies": {
     "@fortawesome/fontawesome-free": "^5.12.1",
     "@tinymce/tinymce-vue": "^3.1.0",
+    "@types/aws-lambda": "^8.10.47",
     "@types/axios": "^0.14.0",
     "@types/bcrypt": "^3.0.0",
     "@types/bluebird": "^3.5.29",
