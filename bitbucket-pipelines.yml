@@ -89,7 +89,7 @@ pipelines:
               AWS_SECRET_ACCESS_KEY: ${AWS_SECRET_ACCESS_KEY}
               AWS_DEFAULT_REGION: "eu-north-1"
               S3_BUCKET: "agile-architect-intranet"
-              LOCAL_PATH: "/dist/spa"
+              LOCAL_PATH: "dist/spa"
               ACL: "public-read"
 definitions:
   services:
