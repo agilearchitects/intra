@@ -4,7 +4,6 @@ import { HashtiService } from "@agilearchitects/hashti";
 import { JWTService } from "@agilearchitects/jwt";
 import { MailingunService } from "@agilearchitects/mailingun";
 import { validate as baseValidate } from "@agilearchitects/server";
-import { TemplateService } from "@agilearchitects/templategenerator";
 import { IValidationInput, ValidationService } from "@agilearchitects/validation";
 import moment from "moment";
 import { Between, createConnection } from "typeorm";
@@ -51,7 +50,6 @@ export const mailingunService = new MailingunService(
   envService.get("MAILGUN_DOMAIN", ""),
   envService.get("MAILGUN_HOST", ""),
 );
-export const templateService = new TemplateService("../storage/email-templates");
 export const hashtiService = new HashtiService();
 export const claimService = new ClaimService(ClaimEntity);
 export const groupService = new GroupService(GroupEntity, claimService);
