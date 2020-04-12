@@ -68,6 +68,8 @@ pipelines:
               FUNCTION_NAME: "intranet"
               COMMAND: "update"
               ZIP_FILE: "api.zip"
+          # The artefact causes the second run to fail. Remove it
+          - rm /opt/atlassian/pipelines/agent/build/.bitbucket/pipelines/generated/pipeline/pipes/aws-lambda-deploy-env
 
     - step:
         name: Deploy Migrate Lambda Function
