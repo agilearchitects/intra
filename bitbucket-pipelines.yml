@@ -39,14 +39,11 @@ pipelines:
           # ZIP migrate function project
           - zip -r migrate.zip dist/migrate
 
-          # ZIP spa
-          - zip -r spa.zip dist/spa
-
         artifacts:
           - api.zip
           - migrate.zip
-          - spa.zip
           - node_modules.zip
+          - dist/spa/**
 
     - step:
         name: Deploy AWS Lambda layer
@@ -92,7 +89,7 @@ pipelines:
               AWS_SECRET_ACCESS_KEY: ${AWS_SECRET_ACCESS_KEY}
               AWS_DEFAULT_REGION: "eu-north-1"
               S3_BUCKET: "agile-architect-intranet"
-              LOCAL_PATH: "/"
+              LOCAL_PATH: "/dist/spa"
               ACL: "public-read"
 definitions:
   services:
