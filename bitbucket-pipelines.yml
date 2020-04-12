@@ -41,7 +41,7 @@ pipelines:
     - step:
         name: Deploy API Lambda Function
         script:
-          - pipe: atlassian/aws-lambda-deploy
+          - pipe: atlassian/aws-lambda-deploy:0.5.3
             variables:
               AWS_ACCESS_KEY_ID: ${AWS_ACCESS_KEY_ID}
               AWS_SECRET_ACCESS_KEY: ${AWS_SECRET_ACCESS_KEY}
