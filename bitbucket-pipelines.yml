@@ -23,26 +23,26 @@ pipelines:
           # Install production dependencies
           - yarn --production
           # ZIP node_modules
-          - zip -r node_modules.zip node_modules
+          - mkdir nodejs && mv node_modules nodejs && zip -r nodejs.zip nodejs
 
           # Copy node modules to api folder
           # - cp node_modules dist/api/ -r
           # Make index for api function
           - echo "module.exports = require(\"./api/index\")" > dist/api/index.js
           # ZIP api function project
-          - zip -r api.zip dist/api
+          - cd dist/api && zip -r api.zip ./ && cd ../..
 
           # Copy node modules to migrate folder
           # - cp node_modules dist/migrate/ -r
           # Make index for migrate function
           - echo "module.exports = require(\"./migrate/index\")" > dist/migrate/index.js
           # ZIP migrate function project
-          - zip -r migrate.zip dist/migrate
+          - cd dist/migrate && zip -r migrate.zip ./ && cd ../..
 
         artifacts:
           - api.zip
           - migrate.zip
-          - node_modules.zip
+          - nodejs.zip
           - dist/spa/**
 
     - step:
@@ -52,7 +52,7 @@ pipelines:
           - aws configure set default.region "eu-north-1"
           - aws configure set aws_access_key_id ${AWS_ACCESS_KEY_ID}
           - aws configure set aws_secret_access_key ${AWS_SECRET_ACCESS_KEY}
-          - aws lambda publish-layer-version --layer-name intranet --compatible-runtimes nodejs12.x --zip-file fileb://node_modules.zip --region "eu-north-1"
+          - aws lambda publish-layer-version --layer-name intranet --compatible-runtimes nodejs12.x --zip-file fileb://nodejs.zip --region "eu-north-1"
 
     - step:
         name: Deploy API Lambda Function
