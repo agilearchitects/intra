@@ -40,10 +40,9 @@ import { ProjectService } from "./services/project.service";
 import { TimeService } from "./services/time.service";
 
 // Factories
-import { validateFactory } from "@agilearchitects/server";
 import * as envServiceFactory from "../shared/factories/env-service.factory";
 
-export const envService = envServiceFactory.create()
+export const envService = envServiceFactory.create(true);
 export const jwtService = new JWTService(envService.get("TOKEN", Math.random().toString()));
 export const mailingunService = new MailingunService(
   envService.get("MAILGUN_KEY", ""),

@@ -15,10 +15,10 @@
     moment "^2.24.0"
     typeorm "^0.2.22"
 
-"@agilearchitects/env@^0.2.0":
-  version "0.2.0"
-  resolved "https://registry.yarnpkg.com/@agilearchitects/env/-/env-0.2.0.tgz#342893c98aa6cd35632dcdc02d512f659b983aa5"
-  integrity sha512-e0RKRD39rEIcIWz8RGRxvGJNYVtGYJ8YRTsPml2Et8RSRS3jsMjmiG/A5L54ZtC+/9pbQz/1zVfd+0AUKRcUlA==
+"@agilearchitects/env@^0.3.0":
+  version "0.3.0"
+  resolved "https://registry.yarnpkg.com/@agilearchitects/env/-/env-0.3.0.tgz#a391e9f80a611c64626339306b462bd6ad0a94c9"
+  integrity sha512-fMJaVgEpwtg9CRS1OH3l6NoRjgJ8LZ1gYL17Lvt+rG9HKwVIDCZ+7h8wYR3Se4HosV1ruiRynmgFFiXE9iyLUg==
 
 "@agilearchitects/event@^0.0.4":
   version "0.0.4"

@@ -1,4 +1,11 @@
 import { EnvService } from "@agilearchitects/env";
 import * as fs from "fs";
 
-export const create = (fsModule?: typeof fs): EnvService => new EnvService(".env", false);
+export const create = (): EnvService => {
+  const path = ".env";
+  // Will only use fs module
+  if (fs.existsSync(path)) {
+    return new EnvService(".env", fs);
+  }
+  return new EnvService(".env", false);
+}

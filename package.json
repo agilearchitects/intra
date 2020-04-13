@@ -26,7 +26,7 @@
   },
   "dependencies": {
     "@agilearchitects/authenticaton": "^0.0.24",
-    "@agilearchitects/env": "^0.2.0",
+    "@agilearchitects/env": "^0.3.0",
     "@agilearchitects/hashti": "^0.0.4",
     "@agilearchitects/jwt": "^0.0.6",
     "@agilearchitects/logmodule": "^0.0.6",
