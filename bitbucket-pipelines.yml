@@ -30,14 +30,14 @@ pipelines:
           # Make index for api function
           - echo "module.exports = require(\"./api/index\")" > dist/api/index.js
           # ZIP api function project
-          - cd dist/api && zip -r api.zip ./ && cd ../..
+          - cd dist/api && zip -r api.zip ./ && cd ../.. && mv dist/api/api.zip ./
 
           # Copy node modules to migrate folder
           # - cp node_modules dist/migrate/ -r
           # Make index for migrate function
           - echo "module.exports = require(\"./migrate/index\")" > dist/migrate/index.js
           # ZIP migrate function project
-          - cd dist/migrate && zip -r migrate.zip ./ && cd ../..
+          - cd dist/migrate && zip -r migrate.zip ./ && cd ../.. && mv dist/migrate/migrate.zip ./
 
         artifacts:
           - api.zip
