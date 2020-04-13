@@ -1,7 +1,12 @@
 import * as envServiceFactory from "../shared/factories/env-service.factory";
 import { MigrateService } from "../shared/services/migrate.service";
 import { ConnectionConfigs } from "../shared/typeorm";
-import { _20200221_182652 } from "./migrations/20200221_182652";
+
+// SQLite migrations
+import { _20200221_182652 } from "../migrate/migrations/sqlite/20200221_182652";
+
+// MySQL Migrations
+import { _20200413_200506 } from "../migrate/migrations/mysql/20200413_200506";
 
 const envService = envServiceFactory.create();
 
@@ -16,17 +21,25 @@ export const handler = async ({ action }: LambdaEvent) => {
 
   // Create migration service
   const migrateService = new MigrateService({
-    ...envService.get("ENV", "LOCAL") === "LOCAL" ?
-      ConnectionConfigs.local : ConnectionConfigs.production(
-        envService.get("MYSQL_HOST", ""),
-        parseInt(envService.get("MYSQL_PORT", ""), 10),
-        envService.get("MYSQL_USERNAME", ""),
-        envService.get("MYSQL_PASSWORD", ""),
-        envService.get("MYSQL_DATABASE", ""),
-      ),
-    migrations: [
-      _20200221_182652
-    ]
+    ...envService.get("ENV", "local") === "local" ?
+      {
+        ...ConnectionConfigs.local,
+        migrations: [
+          _20200221_182652
+        ]
+      } : {
+        ...ConnectionConfigs.production(
+          envService.get("MYSQL_HOST", ""),
+          parseInt(envService.get("MYSQL_PORT", ""), 10),
+          envService.get("MYSQL_USERNAME", ""),
+          envService.get("MYSQL_PASSWORD", ""),
+          envService.get("MYSQL_DATABASE", ""),
+        ),
+        migrations: [
+          _20200413_200506
+        ]
+      },
+    logging: true,
   });
 
   // Call migration service depending on action

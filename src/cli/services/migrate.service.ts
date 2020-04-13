@@ -33,7 +33,7 @@ export class MigrateService extends SharedMigrateService {
 
       if (upSqls.length) {
         const timestamp = moment().format("YYYYMMDD_HHmmss");
-        await CommandUtils.createFile(`${basePath}/${timestamp}.ts`, `import { MigrationInterface, QueryRunner } from "typeorm";\n\n// tslint:disable-next-line: class-name\nexport class _${timestamp} implements MigrationInterface {\n\n    public async up(queryRunner: QueryRunner): Promise<any> {\n${upSqls.join("\n")}\n    }\n\n    public async down(queryRunner: QueryRunner): Promise<any> {\n${downSqls.reverse().join("\n")}\n    }\n\n}\n`);
+        await CommandUtils.createFile(`${basePath}/${connection.driver.options.type}/${timestamp}.ts`, `import { MigrationInterface, QueryRunner } from "typeorm";\n\n// tslint:disable-next-line: class-name\nexport class _${timestamp} implements MigrationInterface {\n\n    public async up(queryRunner: QueryRunner): Promise<any> {\n${upSqls.join("\n")}\n    }\n\n    public async down(queryRunner: QueryRunner): Promise<any> {\n${downSqls.reverse().join("\n")}\n    }\n\n}\n`);
       }
     });
   }

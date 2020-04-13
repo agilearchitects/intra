@@ -3,6 +3,7 @@ import * as changeCase from "change-case";
 import * as ejs from "ejs";
 import * as fs from "fs";
 import * as path from "path";
+import * as readline from "readline";
 
 // DTO's
 import { IDictionaryDTO } from "../shared/dto/dictionary.dto";
@@ -17,22 +18,59 @@ import { ConnectionConfigs } from "../shared/typeorm";
 import { generator, generatorModel } from "./models/generator";
 
 // Services
-import { _20200221_182652 } from "../migrate/migrations/20200221_182652";
+import * as envServiceFactory from "../shared/factories/env-service.factory";
 import { IMigration } from "../shared/services/migrate.service";
 import { MigrateService } from "./services/migrate.service";
+
+// SQLite migrations
+import { _20200221_182652 } from "../migrate/migrations/sqlite/20200221_182652";
+
+// MySQL Migrations
+import { _20200413_200506 } from "../migrate/migrations/mysql/20200413_200506";
+
+const envService = envServiceFactory.create();
+
+const prompt = async (question: string): Promise<string> => {
+  return new Promise((resolve, reject) => {
+    const rl = readline.createInterface({
+      input: process.stdin,
+      output: process.stdout
+    });
+    rl.question(question, (answer: string) => resolve(answer));
+  });
+}
 
 (async () => {
   if (process.argv.length > 2) {
     const ENV_PATH = "./.env";
     const ENV_EXAMPLE_PATH = "./.env.example";
-    const MIGRATION_OUTPUT_PATH = "../migrate/migrations";
+    const MIGRATION_OUTPUT_PATH = "./src/migrate/migrations";
+
+    const environment = envService.get("ENV", "local");
+    if (environment === "production" && (await prompt("Are you sure you want to run command in production? (y/n) ")).toLowerCase() !== "y") {
+      process.exit();
+    }
 
     // Create migration service
     const migrateService = new MigrateService({
-      ...ConnectionConfigs.local,
-      migrations: [
-        _20200221_182652,
-      ],
+      ...envService.get("ENV", "local") === "local" ?
+        {
+          ...ConnectionConfigs.local,
+          migrations: [
+            _20200221_182652
+          ]
+        } : {
+          ...ConnectionConfigs.production(
+            envService.get("MYSQL_HOST", ""),
+            parseInt(envService.get("MYSQL_PORT", ""), 10),
+            envService.get("MYSQL_USERNAME", ""),
+            envService.get("MYSQL_PASSWORD", ""),
+            envService.get("MYSQL_DATABASE", ""),
+          ),
+          migrations: [
+            _20200413_200506
+          ]
+        },
       synchronize: false,
       migrationsRun: false,
       dropSchema: false,
