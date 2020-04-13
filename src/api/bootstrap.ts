@@ -42,7 +42,7 @@ import { TimeService } from "./services/time.service";
 // Factories
 import * as envServiceFactory from "../shared/factories/env-service.factory";
 
-export const envService = envServiceFactory.create(true);
+export const envService = envServiceFactory.create();
 export const jwtService = new JWTService(envService.get("TOKEN", Math.random().toString()));
 export const mailingunService = new MailingunService(
   envService.get("MAILGUN_KEY", ""),
