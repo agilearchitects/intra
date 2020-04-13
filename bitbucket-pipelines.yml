@@ -4,7 +4,8 @@ pipelines:
         name: Build and test
         image: node:12.8.0
         caches:
-          - node
+          - nodecustom
+          - yarn
         script:
           # Install dependencies
           - yarn
@@ -95,3 +96,6 @@ definitions:
   services:
     docker:
       memory: 2048
+  caches:
+    nodecustom: ./node_modules
+    yarn: /usr/local/share/.cache/yarn
