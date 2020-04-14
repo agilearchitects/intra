@@ -1,4 +1,5 @@
-import { Connection, ConnectionOptions, createConnection, Migration, MigrationExecutor } from "typeorm";
+import { Connection, ConnectionOptions, Migration, MigrationExecutor } from "typeorm";
+import { ConnectionManangerModule } from "../modules/connection-manager.module";
 
 export interface IMigration extends Migration {
   executed: boolean;
@@ -34,9 +35,18 @@ export class MigrateService {
   }
 
   protected async connect<T = void>(callback: (connection: Connection) => Promise<T>): Promise<T> {
-    const connection = await createConnection(this.connectionOptions);
-    const result = await callback(connection);
-    await connection.close();
-    return result;
+
+    // Create connection
+    const connection = await ConnectionManangerModule.connect(this.connectionOptions);
+    try {
+      // Execute callback with connection and return callback result
+      const result = await callback(connection);
+      return result;
+    } catch (error) {
+      throw error;
+    } finally {
+      // Make sure to always disconnect
+      await connection.close();
+    }
   }
 }

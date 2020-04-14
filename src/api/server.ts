@@ -18,7 +18,7 @@ const env = envService.get("ENV", "local");
 
 export const handler = (event: APIGatewayProxyEvent): Promise<APIGatewayProxyResult> => {
   return new Promise(async (resolve, reject) => {
-    await boot();
+    await boot("production");
     const server = new ServerModule({ useServer: false });
     server.use(cors(), bodyParse(), router);
     const request: LambdaRequestModule = new LambdaRequestModule(
@@ -51,7 +51,7 @@ export const handler = (event: APIGatewayProxyEvent): Promise<APIGatewayProxyRes
 
 if (env === "local") {
   (async () => {
-    await boot();
+    await boot("local");
     // Creating local server
     const server = new ServerModule({ useServer: { requestModule: RequestModule } });
     server.use(vhost(apiHost, cors(), bodyParse(), router));

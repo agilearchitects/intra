@@ -6,9 +6,10 @@ import { MailingunService } from "@agilearchitects/mailingun";
 import { validate as baseValidate } from "@agilearchitects/server";
 import { IValidationInput, ValidationService } from "@agilearchitects/validation";
 import moment from "moment";
-import { Between, createConnection } from "typeorm";
+import { Between } from "typeorm";
 import * as typeorm from "typeorm";
 
+import { ConnectionManangerModule } from "../shared/modules/connection-manager.module";
 import { ConnectionConfigs } from "../shared/typeorm";
 
 // DTO's
@@ -80,6 +81,19 @@ export const timeService = new TimeService("YYYY-MM-DD HH:mm:ss", TimeEntity, Ta
 const validationService = new ValidationService();
 export const validate = (validation: IValidationInput, shouldValidate?: "body" | "params" | "query") => baseValidate(validationService, validation, shouldValidate);
 
-export const boot = async () => {
-  await createConnection({ ...ConnectionConfigs.local });
+export const boot = async (env: string) => {
+  await ConnectionManangerModule.connect({
+    ...env === "local" ?
+      {
+        ...ConnectionConfigs.local,
+      } : {
+        ...ConnectionConfigs.production(
+          envService.get("MYSQL_HOST", ""),
+          parseInt(envService.get("MYSQL_PORT", ""), 10),
+          envService.get("MYSQL_USERNAME", ""),
+          envService.get("MYSQL_PASSWORD", ""),
+          envService.get("MYSQL_DATABASE", ""),
+        ),
+      },
+  });
 };
