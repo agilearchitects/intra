@@ -8,13 +8,15 @@
 // Libs
 import { Vue, Component } from "vue-property-decorator";
 import { AxiosResponse } from "axios";
+import { EnvService } from "@agilearchitects/env";
 
 // Bootstrap
 import {
   broadcastService as broadcastServiceInstance,
   apiService as apiServiceInstance,
   authService as authServiceInstance,
-  errorService as errorServiceInstance
+  errorService as errorServiceInstance,
+  envService as envServiceInstance
 } from "../bootstrap";
 
 // Services
@@ -29,6 +31,7 @@ export default class IndexComponent extends Vue {
   private readonly broadcastService: BroadcastService = broadcastServiceInstance;
   private readonly errorService: ErrorService = errorServiceInstance;
   private readonly authService: AuthService = authServiceInstance;
+  private readonly envService: EnvService = envServiceInstance;
 
   public loading: boolean = false;
 
@@ -54,13 +57,18 @@ export default class IndexComponent extends Vue {
   }
 
   public async setBaseUrl(): Promise<void> {
-    const response = await this.apiService.head(`/api_base_url`);
-    if (response.headers.api_base_url) {
-      this.apiService.setBaseUrl(response.headers.api_base_url);
+    const apiBaseUrl = this.envService.get("API_BASE_URL", "");
+    if (apiBaseUrl === "") {
+      const response = await this.apiService.head(`/api_base_url`);
+      if (response.headers.api_base_url) {
+        this.apiService.setBaseUrl(response.headers.api_base_url);
+      } else {
+        this.errorService.submit({
+          message: "API base URL was missing from header"
+        });
+      }
     } else {
-      this.errorService.submit({
-        message: "API base URL was missing from header"
-      });
+      this.apiService.setBaseUrl(apiBaseUrl);
     }
   }
 

@@ -1,8 +1,11 @@
 // Libs
+import { EnvService } from "@agilearchitects/env";
 import moment from "moment";
+
 
 // Services
 import { APIService } from "../../shared/services/api.service";
+import { DateService } from "../../shared/services/date.service";
 import { AuthService } from "./services/auth.service";
 import { BroadcastService } from "./services/broadcast.service";
 import { CustomerService } from "./services/customer.service";
@@ -14,7 +17,6 @@ import { TagService } from "./services/tag.service";
 import { TextService } from "./services/text.service";
 import { TimeService } from "./services/time.service";
 import { UserService } from "./services/user.service";
-import { DateService } from "../../shared/services/date.service";
 
 export const dateService = new DateService(moment);
 export const apiService = new APIService();
@@ -29,6 +31,7 @@ export const tagService = new TagService(apiService, errorService);
 export const authService = new AuthService(apiService, errorService, storageService);
 export const menuService = new MenuService(authService);
 export const userService = new UserService(apiService);
+export const envService = new EnvService(false);
 
 (window as any).authService = authService;
 (window as any).storageService = storageService;

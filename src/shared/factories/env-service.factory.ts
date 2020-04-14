@@ -1,11 +1,12 @@
 import { EnvService } from "@agilearchitects/env";
 import * as fs from "fs";
 
-export const create = (): EnvService => {
+export const create = (useFs: boolean = true): EnvService => {
   const path = ".env";
   // Will only use fs module
-  if (fs.existsSync(path)) {
-    return new EnvService(".env", fs);
+  if (useFs === true && fs.existsSync(path)) {
+    return new EnvService(path, false, fs);
   }
-  return new EnvService(".env", false);
+  // Env service will only use in memory variables
+  return new EnvService(false);
 }
