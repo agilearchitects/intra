@@ -71,10 +71,10 @@
     "@types/mailgun-js" "^0.22.3"
     mailgun-js "^0.22.0"
 
-"@agilearchitects/server@^0.0.35":
-  version "0.0.35"
-  resolved "https://registry.yarnpkg.com/@agilearchitects/server/-/server-0.0.35.tgz#10f668c8e55ef6c721d797c9e98780c6a921de7b"
-  integrity sha512-dJOM+wVEOqNUpt61eQtT41TJQzNKoNMxIgJnDKSgpV/dfU3xBSGh9WgqCM5t2Tqt+vr7O5HOtfANBFOnasjS4Q==
+"@agilearchitects/server@^0.0.36":
+  version "0.0.36"
+  resolved "https://registry.yarnpkg.com/@agilearchitects/server/-/server-0.0.36.tgz#fab8af71ff8d4c26df1ceedd5bfdd31020dc9c01"
+  integrity sha512-cz5W7tXYW0vtDKR66MvOI8of4f2nUUO67U+GXwtg3EQHEhiY8BzLDBNCssYBrSPFFCpF9uiKoDrh5j6XNtaScw==
   dependencies:
     "@agilearchitects/event" "^0.0.4"
     "@agilearchitects/validation" "^0.0.2"
@@ -82,6 +82,7 @@
     mime-types "^2.1.26"
     moment "^2.24.0"
     reflect-metadata "^0.1.13"
+    typescript "^3.8.3"
 
 "@agilearchitects/templategenerator@^0.0.3":
   version "0.0.3"
@@ -7837,6 +7838,11 @@ typescript@^3.8.2:
   version "3.8.2"
   resolved "https://registry.yarnpkg.com/typescript/-/typescript-3.8.2.tgz#91d6868aaead7da74f493c553aeff76c0c0b1d5a"
   integrity sha512-EgOVgL/4xfVrCMbhYKUQTdF37SQn4Iw73H5BgCrF1Abdun7Kwy/QZsE/ssAy0y4LxBbvua3PIbFsbRczWWnDdQ==
+
+typescript@^3.8.3:
+  version "3.8.3"
+  resolved "https://registry.yarnpkg.com/typescript/-/typescript-3.8.3.tgz#409eb8544ea0335711205869ec458ab109ee1061"
+  integrity sha512-MYlEfn5VrLNsgudQTVJeNaQFUAI7DkhnOjdpAp4T+ku1TfQClewlbSuTVHiA+8skNBgaf02TL/kLOvig4y3G8w==
 
 uncss@^0.17.2:
   version "0.17.3"

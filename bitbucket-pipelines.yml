@@ -14,7 +14,7 @@ pipelines:
           # Test
           - yarn test
           # Build
-          - API_BASE_URL="https://intra.agilearchitects.se/api" yarn build
+          - API_BASE_URL="https://api.intra.agilearchitects.se" yarn build
 
           # Download zip
           - apt-get update && apt-get install -y zip

@@ -16,7 +16,7 @@ const apiHost = envService.get("API_HOST", "api.test.test");
 const spaHost = envService.get("SPA_HOST", "www.test.test");
 const env = envService.get("ENV", "local");
 
-export const handler = (event: APIGatewayProxyEvent): Promise<APIGatewayProxyResult> => {
+export const handler = async (event: APIGatewayProxyEvent): Promise<APIGatewayProxyResult> => {
   return new Promise(async (resolve, reject) => {
     await boot("production");
     const server = new ServerModule({ useServer: false });

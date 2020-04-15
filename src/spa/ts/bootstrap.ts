@@ -1,7 +1,5 @@
 // Libs
-import { EnvService } from "@agilearchitects/env";
 import moment from "moment";
-
 
 // Services
 import { APIService } from "../../shared/services/api.service";
@@ -31,7 +29,6 @@ export const tagService = new TagService(apiService, errorService);
 export const authService = new AuthService(apiService, errorService, storageService);
 export const menuService = new MenuService(authService);
 export const userService = new UserService(apiService);
-export const envService = new EnvService(false);
 
 (window as any).authService = authService;
 (window as any).storageService = storageService;
