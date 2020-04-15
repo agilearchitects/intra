@@ -14,7 +14,7 @@ pipelines:
           # Test
           - yarn test
           # Build
-          - yarn build
+          - API_BASE_URL="https://intra.agilearchitects.se/api" yarn build
 
           # Download zip
           - apt-get update && apt-get install -y zip
@@ -29,7 +29,7 @@ pipelines:
           # Copy node modules to api folder
           # - cp node_modules dist/api/ -r
           # Make index for api function
-          - echo "module.exports = require(\"./api/index\")" > dist/api/index.js
+          - echo "module.exports = require(\"./api/index\")" > dist/api/server.js
           # ZIP api function project
           - cd dist/api && zip -r api.zip ./ && cd ../.. && mv dist/api/api.zip ./
 
@@ -66,7 +66,7 @@ pipelines:
               FUNCTION_NAME: "intranet"
               COMMAND: "update"
               ZIP_FILE: "api.zip"
-          # The artefact causes the second run to fail. Remove it
+          # The artifact causes the next lambda function deploy to fail. Remove it
           - rm /opt/atlassian/pipelines/agent/build/.bitbucket/pipelines/generated/pipeline/pipes/aws-lambda-deploy-env
 
     - step:
@@ -89,7 +89,7 @@ pipelines:
               AWS_ACCESS_KEY_ID: ${AWS_ACCESS_KEY_ID}
               AWS_SECRET_ACCESS_KEY: ${AWS_SECRET_ACCESS_KEY}
               AWS_DEFAULT_REGION: "eu-north-1"
-              S3_BUCKET: "agile-architect-intranet"
+              S3_BUCKET: "intra.agilearchitects.se"
               LOCAL_PATH: "dist/spa"
               ACL: "public-read"
 definitions:
