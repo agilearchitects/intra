@@ -67,7 +67,4 @@ router.group("", "", [middlewares.auth()], (router: RouterModule) => {
   return router;
 });
 
-
-fs.writeFileSync("./routes.json", JSON.stringify(router.print(), null, 4), "utf8");
-
 export { router };
