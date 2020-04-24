@@ -31,7 +31,7 @@
     "@agilearchitects/jwt": "^0.0.6",
     "@agilearchitects/logmodule": "^0.0.9",
     "@agilearchitects/mailingun": "^0.0.10",
-    "@agilearchitects/server": "^0.2.4",
+    "@agilearchitects/server": "^0.2.5",
     "axios": "^0.19.2",
     "change-case": "^4.1.1",
     "moment": "^2.24.0",

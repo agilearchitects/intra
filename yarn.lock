@@ -71,10 +71,10 @@
     "@types/mailgun-js" "^0.22.3"
     mailgun-js "^0.22.0"
 
-"@agilearchitects/server@^0.2.4":
-  version "0.2.4"
-  resolved "https://registry.yarnpkg.com/@agilearchitects/server/-/server-0.2.4.tgz#be0029934414fd4ad7d9ddac25c70366f9293620"
-  integrity sha512-K6UbECFBYjc1xZDvXAd4hJBtgWzIcPgjNwpS3oAaDoFZe4A54OL3J+Gx0DaPPra9osQNI7MecPWaW2FQrOt35g==
+"@agilearchitects/server@^0.2.5":
+  version "0.2.5"
+  resolved "https://registry.yarnpkg.com/@agilearchitects/server/-/server-0.2.5.tgz#ea46e1021e7d1d00c742d74d43a783210b563b31"
+  integrity sha512-TlXg4PJlUwvwL4pMSCoE0KpGbJ+cjvXV7TI8c3CSaUEvLNsDUUZSpETopORA4x7Z4JxEb0ZnwDjK3HDra3bXYw==
   dependencies:
     "@agilearchitects/event" "^0.0.4"
     "@agilearchitects/validation" "^0.0.2"
