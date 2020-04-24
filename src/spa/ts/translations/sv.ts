@@ -1,5 +1,5 @@
 export default {
-  title: process.env.TITLE,
+  title: "AAI",
   menu: {
     start: "Start",
     wiki: "Wiki",
@@ -10,6 +10,7 @@ export default {
       project: "Projekt",
     },
     crm: "CRM",
+    "cv": "CV",
     login: "Logga in",
     logout: "Logga ut",
   },

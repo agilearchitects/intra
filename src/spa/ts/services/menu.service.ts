@@ -51,6 +51,7 @@ export class MenuService {
             { route: { name: "time.result" }, title: i18n.t("menu.time.result") },
           ],
         },
+        { route: { name: "cv" }, title: i18n.t("menu.cv") },
         { route: { name: "crm" }, title: i18n.t("menu.crm") },
         { divider: true },
         { route: { name: "logout" }, title: i18n.t("menu.logout") },

@@ -1,4 +1,4 @@
-import { bodyType } from "@agilearchitects/server";
+import { jsonType } from "@agilearchitects/server";
 import { DTO } from "./dto";
 
 export interface IUserDTO {
@@ -7,7 +7,7 @@ export interface IUserDTO {
 }
 
 export class UserDTO implements IUserDTO {
-  public static parseFromRequest(object: bodyType): UserDTO {
+  public static parseFromRequest(object: jsonType): UserDTO {
     object = DTO.parseFromRequest(object);
     if (typeof object.id !== "number" || typeof object.email !== "string") {
       throw new Error("Unable to parse");

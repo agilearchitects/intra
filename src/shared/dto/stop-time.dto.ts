@@ -1,4 +1,4 @@
-import { bodyType } from "@agilearchitects/server";
+import { jsonType } from "@agilearchitects/server";
 import { DTO } from "./dto";
 export interface IStopTimeDTO {
   id: number;
@@ -6,7 +6,7 @@ export interface IStopTimeDTO {
 }
 
 export class StopTimeDTO implements IStopTimeDTO {
-  public static parseFromRequest(object: bodyType): StopTimeDTO {
+  public static parseFromRequest(object: jsonType): StopTimeDTO {
     object = DTO.parseFromRequest(object);
     if (typeof object.id !== "number" ||
       typeof object.to !== "string") {

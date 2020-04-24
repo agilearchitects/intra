@@ -1,4 +1,4 @@
-import { bodyType } from "@agilearchitects/server";
+import { jsonType } from "@agilearchitects/server";
 import { DTO } from "./dto";
 
 export interface ICreateTaskUserDTO {
@@ -7,7 +7,7 @@ export interface ICreateTaskUserDTO {
 }
 
 export class CreateTaskUserDTO {
-  public static parseFromRequest(object: bodyType): CreateTaskUserDTO {
+  public static parseFromRequest(object: jsonType): CreateTaskUserDTO {
     object = DTO.parseFromRequest(object);
     if (typeof object.userId !== "number" ||
       (object.rate !== undefined &&

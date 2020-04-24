@@ -23,6 +23,3 @@ export class UserController extends Controller {
     };
   }
 }
-
-const userController: UserController = new UserController();
-export default userController;

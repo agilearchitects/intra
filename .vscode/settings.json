@@ -29,14 +29,19 @@
         "type": "node",
         "request": "launch",
         "name": "Test",
-        "skipFiles": [
-          "<node_internals>/**"
+        "args": [
+          "${workspaceRoot}/src/test.ts"
         ],
-        "program": "${workspaceFolder}/src/test.ts",
-        "preLaunchTask": "tsc: build - tsconfig.json",
-        "outFiles": [
-          "${workspaceFolder}/build/**/*.js"
-        ]
+        "runtimeArgs": [
+          "-r",
+          "ts-node/register"
+        ],
+        "cwd": "${workspaceRoot}",
+        "protocol": "inspector",
+        "internalConsoleOptions": "openOnSessionStart",
+        "env": {
+          "TS_NODE_IGNORE": "false"
+        }
       }
     ],
     "compounds": []

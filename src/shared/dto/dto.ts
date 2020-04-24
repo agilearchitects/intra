@@ -1,7 +1,7 @@
-import { bodyType, jsonType } from "@agilearchitects/server";
+import { jsonType } from "@agilearchitects/server";
 
 export abstract class DTO<I> {
-  public static parseFromRequest(object: bodyType): { [key: string]: jsonType } {
+  public static parseFromRequest(object: jsonType): { [key: string]: jsonType } {
     if (object === null ||
       typeof object !== "object" ||
       (object instanceof Array)) {

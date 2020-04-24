@@ -1,4 +1,4 @@
-import { bodyType, jsonType } from "@agilearchitects/server";
+import { jsonType } from "@agilearchitects/server";
 import { DTO } from "./dto";
 
 export interface ICreateTimeDTO {
@@ -12,7 +12,7 @@ export interface ICreateTimeDTO {
 }
 
 export class CreateTimeDTO implements ICreateTimeDTO {
-  public static parseFromRequest(object: bodyType): CreateTimeDTO {
+  public static parseFromRequest(object: jsonType): CreateTimeDTO {
     object = DTO.parseFromRequest(object);
     if (typeof object.taskId !== "number" ||
       typeof object.from !== "string" ||

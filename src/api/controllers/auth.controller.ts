@@ -1,19 +1,13 @@
 // Libs
 import { AuthService, ILoginPayloadDTO, UserService } from "@agilearchitects/authenticaton";
 import { HashtiService } from "@agilearchitects/hashti";
+import { LogModule } from "@agilearchitects/logmodule";
 import { handlerMethod, HandlerModule, parse } from "@agilearchitects/server";
 import { validators } from "@agilearchitects/validation";
 
+
 // DTO's
 import { CreateUserDTO } from "../../shared/dto/create-user.dto";
-import { LoginDTO } from "../../shared/dto/login.dto";
-
-// Services
-import {
-  authService as authServiceInstance,
-  hashtiService as hashtiServiceInstance,
-  userService as userServiceInstance,
-} from "../bootstrap";
 
 // Entites
 import { UserEntity } from "../../shared/entities/user.entity";
@@ -25,22 +19,23 @@ import { validate } from "../bootstrap";
 
 export class AuthController extends Controller {
   public constructor(
-    private readonly authService: AuthService = authServiceInstance,
-    private readonly userService: UserService<UserEntity> = userServiceInstance,
-    private readonly hashtiService: HashtiService = hashtiServiceInstance,
-  ) { super(); }
+    private readonly authService: AuthService,
+    private readonly userService: UserService<UserEntity>,
+    private readonly hashtiService: HashtiService,
+    log: LogModule,
+  ) { super(log); }
 
   // Protect controller with validation middleware. Validating email and password
-  @parse(LoginDTO.parseFromRequest, "body")
+  // @parse(LoginDTO.parseFromRequest, "body")
   @validate({ email: [validators.required, validators.email], password: validators.required })
   // Parse login form
   /**
    * Login controller. Attemps login using the authservice, providing email and password from request body
    */
   public login(): handlerMethod {
-    return async (handler: HandlerModule<LoginDTO>) => {
+    return async (handler: HandlerModule) => {
       try {
-        const loginPayload: ILoginPayloadDTO = await this.authService.login(handler.parsedBody);
+        const loginPayload: ILoginPayloadDTO = await this.authService.login(handler.request.body);
         handler.sendJSON(loginPayload);
       } catch (error) {
         this.logError(handler, "Error logging in", error);
@@ -51,9 +46,9 @@ export class AuthController extends Controller {
 
   @parse(CreateUserDTO.parseFromRequest, "body")
   public create(): handlerMethod {
-    return async (handler: HandlerModule<CreateUserDTO>) => {
+    return async (handler: HandlerModule) => {
       try {
-        const body = { ...handler.parsedBody };
+        const body = { ...handler.request.body };
         body.password = this.hashtiService.create(body.password);
         try {
           await this.userService.resetPassword(body.email, body.password);
@@ -68,6 +63,3 @@ export class AuthController extends Controller {
     };
   }
 }
-
-const authController: AuthController = new AuthController();
-export default authController;

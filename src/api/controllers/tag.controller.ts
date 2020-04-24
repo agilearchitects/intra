@@ -21,6 +21,3 @@ export class TagController extends Controller {
     }
   }
 }
-
-const tagController: TagController = new TagController();
-export default tagController;

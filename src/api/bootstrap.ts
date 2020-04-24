@@ -2,9 +2,11 @@
 import { AuthConfig, AuthService, BannedTokenService, UserService } from "@agilearchitects/authenticaton";
 import { HashtiService } from "@agilearchitects/hashti";
 import { JWTService } from "@agilearchitects/jwt";
+import { ILog, listners, logLevel, LogModule } from "@agilearchitects/logmodule";
 import { MailingunService } from "@agilearchitects/mailingun";
 import { validate as baseValidate } from "@agilearchitects/server";
 import { IValidationInput, ValidationService } from "@agilearchitects/validation";
+import * as changeCase from "change-case";
 import moment from "moment";
 import { Between } from "typeorm";
 import * as typeorm from "typeorm";
@@ -42,7 +44,9 @@ import { TimeService } from "./services/time.service";
 
 // Factories
 import * as envServiceFactory from "../shared/factories/env-service.factory";
+import { handler } from "./server";
 
+// Creating services
 export const envService = envServiceFactory.create();
 export const jwtService = new JWTService(envService.get("TOKEN", Math.random().toString()));
 export const mailingunService = new MailingunService(
@@ -77,9 +81,45 @@ export const authService = new AuthService(
 export const customerService = new CustomerService(CustomerEntity, CustomerDTO, ProjectDTO, TaskDTO, TimeDTO, TagDTO);
 export const projectService = new ProjectService("YYYY-MM-DD", CustomerEntity, ProjectEntity, TaskEntity, TaskUserEntity, TimeEntity, UserEntity, CustomerDTO, ProjectDTO, TaskDTO, TaskUserDTO, TimeDTO, UserDTO, moment);
 export const timeService = new TimeService("YYYY-MM-DD HH:mm:ss", TimeEntity, TagEntity, TaskEntity, UserEntity, CustomerDTO, ProjectDTO, TagDTO, TaskDTO, TimeDTO, moment, Between);
-
 const validationService = new ValidationService();
 export const validate = (validation: IValidationInput, shouldValidate?: "body" | "params" | "query") => baseValidate(validationService, validation, shouldValidate);
+
+const b: number = 2;
+const a: logLevel = b in logLevel ? b : logLevel.ERROR;
+
+export const log = new LogModule(((env: string) =>
+  [
+    ...(env === "production" ? [{
+      level: ((level: number): logLevel => level in logLevel ? level : logLevel.INFO)(parseInt(envService.get("LOG_LEVEL", "5"), 10)),
+      handler: (log: ILog): void => {
+        const logData: { code?: number, data?: any } = {};
+        if (log.code !== undefined) { logData.code = log.code; }
+        if (log.data !== undefined) { logData.data = log.data; }
+
+        switch (log.level) {
+          case logLevel.ERROR:
+            console.error(log.message, logData); // tslint:disable-line: no-console
+            break;
+          case logLevel.WARNING:
+            console.warn(log.message, logData); // tslint:disable-line: no-console
+            break;
+          case logLevel.LOG:
+            console.log(log.message, logData); // tslint:disable-line: no-console
+            break;
+          case logLevel.INFO:
+            console.info(log.message, logData); // tslint:disable-line: no-console
+            break;
+          case logLevel.VERBOSE:
+            console.debug(log.message, logData); // tslint:disable-line: no-console
+            break;
+        }
+      }
+    }] : [
+        listners.console(), listners.file("log")
+      ]),
+  ]
+)(envService.get("ENV", "local")));
+
 
 export const boot = async (env: string) => {
   await ConnectionManangerModule.connect({

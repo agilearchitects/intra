@@ -1,5 +1,5 @@
 import { IUserPayloadDTO } from "@agilearchitects/authenticaton";
-import { bodyType } from "@agilearchitects/server";
+import { jsonType } from "@agilearchitects/server";
 import { DateService } from "../services/date.service";
 import { DTO } from "./dto";
 import { ITagDTO, TagDTO } from "./tag.dto";
@@ -18,7 +18,7 @@ export interface ITimeDTO {
 }
 
 export class TimeDTO implements ITimeDTO {
-  public static parseFromRequest(object: bodyType, dateService?: DateService): TimeDTO {
+  public static parseFromRequest(object: jsonType, dateService?: DateService): TimeDTO {
     object = DTO.parseFromRequest(object);
     if (typeof object.id !== "number" ||
       typeof object.task !== "object" ||
@@ -40,7 +40,7 @@ export class TimeDTO implements ITimeDTO {
       object.to,
       object.comment,
       dateService,
-      (object.tags !== undefined ? object.tags.map((tag: bodyType) => TagDTO.parseFromRequest(tag)) : undefined),
+      (object.tags !== undefined ? object.tags.map((tag: jsonType) => TagDTO.parseFromRequest(tag)) : undefined),
       (object.user !== undefined ? UserPayloadDTO.parseFromRequest(object.user) : undefined),
     )
   }

@@ -49,10 +49,10 @@
     moment "^2.24.0"
     winston "^3.2.1"
 
-"@agilearchitects/logmodule@^0.0.6":
-  version "0.0.6"
-  resolved "https://registry.yarnpkg.com/@agilearchitects/logmodule/-/logmodule-0.0.6.tgz#56602f452f577bff711c7171ef1a231ef544be71"
-  integrity sha512-Q5hAtaXCzjd7NshIvBSpm0HLiCI8S78gU9LqAKOKnR9pxOss/bvNAuQ8hbF8m3eHcbBytX3qfq6jAyHA7dXzkg==
+"@agilearchitects/logmodule@^0.0.9":
+  version "0.0.9"
+  resolved "https://registry.yarnpkg.com/@agilearchitects/logmodule/-/logmodule-0.0.9.tgz#99b396984e4647d7bfdba1b39feef4cd319588a1"
+  integrity sha512-GL1eNXJwX2/2BjGF3oTheXQ8GzAP5PnbSQaZXOOjFFVBZz7Gu2fPOkHZa0Ii8YML90qPEviQnnydNu/rNoIQag==
 
 "@agilearchitects/mailingun@^0.0.10":
   version "0.0.10"
@@ -71,13 +71,14 @@
     "@types/mailgun-js" "^0.22.3"
     mailgun-js "^0.22.0"
 
-"@agilearchitects/server@^0.0.36":
-  version "0.0.36"
-  resolved "https://registry.yarnpkg.com/@agilearchitects/server/-/server-0.0.36.tgz#fab8af71ff8d4c26df1ceedd5bfdd31020dc9c01"
-  integrity sha512-cz5W7tXYW0vtDKR66MvOI8of4f2nUUO67U+GXwtg3EQHEhiY8BzLDBNCssYBrSPFFCpF9uiKoDrh5j6XNtaScw==
+"@agilearchitects/server@^0.2.4":
+  version "0.2.4"
+  resolved "https://registry.yarnpkg.com/@agilearchitects/server/-/server-0.2.4.tgz#be0029934414fd4ad7d9ddac25c70366f9293620"
+  integrity sha512-K6UbECFBYjc1xZDvXAd4hJBtgWzIcPgjNwpS3oAaDoFZe4A54OL3J+Gx0DaPPra9osQNI7MecPWaW2FQrOt35g==
   dependencies:
     "@agilearchitects/event" "^0.0.4"
     "@agilearchitects/validation" "^0.0.2"
+    "@types/aws-lambda" "^8.10.50"
     "@types/mime-types" "^2.1.0"
     mime-types "^2.1.26"
     moment "^2.24.0"
@@ -1010,6 +1011,11 @@
   version "8.10.47"
   resolved "https://registry.yarnpkg.com/@types/aws-lambda/-/aws-lambda-8.10.47.tgz#9ec9e730e78d1f3180be37cf55ab0815b96b225d"
   integrity sha512-FIZjS1alDbH7qFpJxghmyS2g7h+DJjBj6Qhf2F4Nkz4LR+alTSvThQEAR2j9yRt7qlxDDxK/EagXDCURRSxo8A==
+
+"@types/aws-lambda@^8.10.50":
+  version "8.10.50"
+  resolved "https://registry.yarnpkg.com/@types/aws-lambda/-/aws-lambda-8.10.50.tgz#fecc12b91cf9c58e98b6cc201b5996a3bb1e7cee"
+  integrity sha512-RDzmQ5mO1f0BViKiuOudENZmoCACEa461nTRVtxhsAiEqGCgwdhCYN0aFgk42X5+ELAiqJKbv2mK0LkopYRYQg==
 
 "@types/axios@^0.14.0":
   version "0.14.0"

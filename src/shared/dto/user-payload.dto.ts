@@ -1,11 +1,11 @@
 import { UserPayloadDTO as BaseUserPayloadDTO } from "@agilearchitects/authenticaton";
-import { bodyType, jsonType } from "@agilearchitects/server";
+import { jsonType } from "@agilearchitects/server";
 
 import { ClaimPayloadDTO } from "./claim-payload.dto";
 import { DTO } from "./dto";
 
 export class UserPayloadDTO extends BaseUserPayloadDTO {
-  public static parseFromRequest(object: bodyType): UserPayloadDTO {
+  public static parseFromRequest(object: jsonType): UserPayloadDTO {
     object = DTO.parseFromRequest(object);
     if (
       typeof object.id !== "number" ||

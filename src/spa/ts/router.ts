@@ -8,12 +8,12 @@ import { default as middlewares, guard } from "./middlewares";
 import { CreateElement } from "vue";
 import CreateProjectComponent from "./components/create-project.component.vue";
 import CrmComponent from "./components/crm.component.vue";
+import CVComponent from "./components/cv.component.vue";
 import EditProjectComponent from "./components/edit-project.component.vue";
 import ErrorComponent from "./components/error.component.vue";
 import LoginComponent from "./components/login.component.vue";
 import PageComponent from "./components/page.component.vue";
 import PasswordResetComponent from "./components/password-reset.component.vue";
-import ProjectFormComponent from "./components/project-form.component.vue";
 import ProjectComponent from "./components/project.component.vue";
 import StartComponent from "./components/start.component.vue";
 import TextComponent from "./components/text.component.vue";
@@ -64,6 +64,7 @@ const router = new VueRouter({
           ],
         },
         { path: "crm", name: "crm", component: CrmComponent },
+        { path: "cv", name: "cv", component: CVComponent },
         { path: "/logout", name: "logout", beforeEnter: guard([middlewares.logout]) },
       ],
       beforeEnter: guard([middlewares.auth]),

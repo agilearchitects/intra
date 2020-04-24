@@ -4,13 +4,9 @@ import { HandlerModule } from "@agilearchitects/server";
 import * as changeCase from "change-case";
 
 export class Controller {
-  public log: LogModule;
   public constructor(
-    logModule: typeof LogModule = LogModule,
-    changeCaseModule: typeof changeCase = changeCase,
-  ) {
-    this.log = new logModule([listners.console(), listners.file(changeCaseModule.paramCase(this.constructor.name))]);
-  }
+    protected log: LogModule
+  ) { }
 
   public logError(
     handler: HandlerModule,

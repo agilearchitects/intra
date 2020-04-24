@@ -1,4 +1,4 @@
-import { bodyType, jsonType } from "@agilearchitects/server";
+import { jsonType } from "@agilearchitects/server";
 import { DTO } from "./dto";
 import { ITimeDTO, TimeDTO } from "./time.dto";
 
@@ -9,7 +9,7 @@ export interface ITagDTO {
 }
 
 export class TagDTO implements ITagDTO {
-  public static parseFromRequest(object: bodyType): TagDTO {
+  public static parseFromRequest(object: jsonType): TagDTO {
     object = DTO.parseFromRequest(object);
     if (typeof object.id !== "number" ||
       typeof object.name !== "string" ||

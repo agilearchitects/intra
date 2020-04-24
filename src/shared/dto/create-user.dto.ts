@@ -1,4 +1,4 @@
-import { bodyType } from "@agilearchitects/server";
+import { jsonType } from "@agilearchitects/server";
 
 import { DTO } from "./dto";
 
@@ -8,7 +8,7 @@ export interface ICreateUserDTO {
 }
 
 export class CreateUserDTO implements ICreateUserDTO {
-  public static parseFromRequest(object: bodyType): CreateUserDTO {
+  public static parseFromRequest(object: jsonType): CreateUserDTO {
     object = DTO.parseFromRequest(object);
     if (typeof object.email !== "string" ||
       typeof object.password !== "string") {

@@ -1,4 +1,4 @@
-import { bodyType, jsonType } from "@agilearchitects/server";
+import { jsonType } from "@agilearchitects/server";
 import { CreateTaskDTO, ICreateTaskDTO } from "./create-task.dto";
 import { DTO } from "./dto";
 
@@ -14,7 +14,7 @@ export interface ICreateProjectDTO {
 }
 
 export class CreateProjectDTO implements ICreateProjectDTO {
-  public static parseFromRequest(object: bodyType): CreateProjectDTO {
+  public static parseFromRequest(object: jsonType): CreateProjectDTO {
     object = DTO.parseFromRequest(object);
     if (typeof object.name !== "string" ||
       typeof object.customerId !== "number" ||

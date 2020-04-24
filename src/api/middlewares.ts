@@ -28,7 +28,6 @@ export class Middlewares {
     authService: AuthService = authServiceInstance,
   ): handlerMethod {
     return async (handler: HandlerModule) => {
-
       try {
         // Check for authorization header
         if (handler.request.headers.authorization) {
@@ -59,7 +58,7 @@ export class Middlewares {
   ): handlerMethod {
     return async (handler: HandlerModule) => {
       try {
-        const user = await userService.get(handler.query.email.toString());
+        const user = await userService.get(handler.request.query.email.toString());
         if (user !== undefined) {
           handler.request.user = UserPayloadDTO.parse({
             id: user.id,
@@ -99,7 +98,7 @@ export class Middlewares {
     return async (handler: HandlerModule) => {
       try {
         const token = envServiceInstance.get("TOKEN", Math.random().toString());
-        if (handler.query.token.toString() === token) {
+        if (handler.request.query.token.toString() === token) {
           handler.next();
         } else {
           handler.sendStatus(401);
@@ -117,7 +116,8 @@ export class Middlewares {
 
   public reCaptchaToken(): handlerMethod {
     return async (handler: HandlerModule) => {
-      try {
+      handler.next();
+      /*try {
         const token = handler.request.headers.recaptcha;
         await Axios.post("https://www.google.com/recaptcha/api/siteverify", {
           secret: envServiceInstance.get("GOOGLE_RECAPTCHA_SECRET", ""),
@@ -131,7 +131,7 @@ export class Middlewares {
           headers: handler.request.headers,
         });
         throw error;
-      }
+      }*/
     };
   }
 

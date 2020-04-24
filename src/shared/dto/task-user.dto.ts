@@ -1,4 +1,4 @@
-import { bodyType } from "@agilearchitects/server";
+import { jsonType } from "@agilearchitects/server";
 import { DTO } from "./dto";
 import { IUserDTO, UserDTO } from "./user.dto";
 
@@ -9,7 +9,7 @@ export interface ITaskUserDTO {
 }
 
 export class TaskUserDTO {
-  public static parseFromRequest(object: bodyType): TaskUserDTO {
+  public static parseFromRequest(object: jsonType): TaskUserDTO {
     object = DTO.parseFromRequest(object);
     if (typeof object.id !== "number" ||
       (typeof object.rate !== "number" && object.rate !== undefined)) {

@@ -1,14 +1,15 @@
 // Libs
-import { bodyType, handlerMethod, HandlerModule, paramType, parse } from "@agilearchitects/server";
+import { handlerMethod, HandlerModule, jsonType, parse } from "@agilearchitects/server";
 
 // Entites
 import { TextEntity } from "../../shared/entities/text.entity";
 
 // DTO's
+import { DTO } from "../../shared/dto/dto";
 import { TextDTO } from "../../shared/dto/text.dto";
 
 // Base controller
-import { DTO } from "../../shared/dto/dto";
+import { IDictionary } from "../modules/dictionary.module";
 import { Controller } from "./controller";
 
 export class TextController extends Controller {
@@ -28,9 +29,9 @@ export class TextController extends Controller {
     };
   }
   public show(): handlerMethod {
-    return async (handler: HandlerModule<any, { name: string }>) => {
+    return async (handler: HandlerModule) => {
       try {
-        const textName = handler.params.name.toLowerCase();
+        const textName = handler.request.params.name.toLowerCase();
         let text = await TextEntity.findOne({ where: { name: textName } });
         if (text === undefined) {
           text = await TextEntity.create({ name: textName, content: "" }).save();
@@ -46,7 +47,7 @@ export class TextController extends Controller {
       }
     };
   }
-  @parse((object: bodyType) => {
+  @parse((object: jsonType) => {
     object = DTO.parseFromRequest(object);
     if (typeof object.content !== "string") {
       throw new Error("Unable to parse");
@@ -55,7 +56,7 @@ export class TextController extends Controller {
       content: object.content
     };
   }, "body")
-  @parse((object: paramType) => {
+  @parse((object: IDictionary<string>) => {
     if (object.id === undefined) {
       throw new Error("Unable to parse");
     }
@@ -64,9 +65,9 @@ export class TextController extends Controller {
     };
   }, "params")
   public update(): handlerMethod {
-    return async (handler: HandlerModule<{ content: string }, { id: string }>) => {
+    return async (handler: HandlerModule) => {
       try {
-        await TextEntity.update(handler.params.id, { content: handler.parsedBody.content });
+        await TextEntity.update(handler.request.params.id, { content: handler.request.body.content });
         handler.sendStatus(200);
       } catch (error) {
         this.logError(handler, "Could not update text", error);
@@ -75,6 +76,3 @@ export class TextController extends Controller {
     };
   }
 }
-
-const textController: TextController = new TextController();
-export default textController;

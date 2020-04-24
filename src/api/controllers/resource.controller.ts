@@ -1,4 +1,5 @@
 // Libs
+import { LogModule } from "@agilearchitects/logmodule";
 import { handlerMethod, HandlerModule } from "@agilearchitects/server";
 import * as path from "path";
 
@@ -11,7 +12,8 @@ import { Controller } from "./controller";
 export class ResourceController extends Controller {
   public constructor(
     private readonly storagePath: string = "./storage/uploads",
-  ) { super(); }
+    log: LogModule,
+  ) { super(log); }
 
   /*public upload(): handlerMethod {
     return async (handler: HandlerModule) => {
@@ -45,14 +47,14 @@ export class ResourceController extends Controller {
     });
   }*/
   public show(): handlerMethod {
-    return async (handler: HandlerModule<any, { id: string }>) => {
+    return async (handler: HandlerModule) => {
       // Get file entity using ID param
       try {
-        const resource = await ResourceEntity.findOne(handler.params.id);
+        const resource = await ResourceEntity.findOne(handler.request.params.id);
         if (resource === undefined) {
           handler.sendStatus(404);
         } else {
-          handler.sendFile(path.resolve(this.storagePath, resource.filename), {
+          handler.response.sendFile(path.resolve(this.storagePath, resource.filename), {
             "content-disposition": `attachment; filename="${resource.title}"`,
           });
         }
@@ -63,6 +65,3 @@ export class ResourceController extends Controller {
     };
   }
 }
-
-const resourceController: ResourceController = new ResourceController();
-export default resourceController;

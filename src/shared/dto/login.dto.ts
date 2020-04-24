@@ -1,11 +1,11 @@
 import { LoginDTO as BaseLoginDTO } from "@agilearchitects/authenticaton";
-import { bodyType } from "@agilearchitects/server";
+import { jsonType } from "@agilearchitects/server";
 
 import { DTO } from "./dto";
 
 
 export class LoginDTO extends BaseLoginDTO {
-  public static parseFromRequest(object: bodyType) {
+  public static parseFromRequest(object: jsonType) {
     object = DTO.parseFromRequest(object);
     if (
       typeof object.email !== "string" ||

@@ -1,4 +1,4 @@
-import { bodyType, jsonType } from "@agilearchitects/server";
+import { jsonType } from "@agilearchitects/server";
 import { DTO } from "./dto";
 
 export interface IUpdateTimeDTO {
@@ -13,7 +13,7 @@ export interface IUpdateTimeDTO {
 }
 
 export class UpdateTimeDTO implements IUpdateTimeDTO {
-  public static parseFromRequest(object: bodyType): UpdateTimeDTO {
+  public static parseFromRequest(object: jsonType): UpdateTimeDTO {
     object = DTO.parseFromRequest(object);
     if (typeof object.id !== "number" ||
       typeof object.taskId !== "number" ||

@@ -1,4 +1,4 @@
-import { bodyType, jsonType } from "@agilearchitects/server"
+import { jsonType } from "@agilearchitects/server"
 import { DateService } from "../services/date.service"
 import { CustomerDTO, ICustomerDTO } from "./customer.dto";
 import { DTO } from "./dto";
@@ -18,7 +18,7 @@ export interface IProjectDTO {
 }
 
 export class ProjectDTO implements IProjectDTO {
-  public static parseFromRequest(object: bodyType, dateService?: DateService): ProjectDTO {
+  public static parseFromRequest(object: jsonType, dateService?: DateService): ProjectDTO {
     object = DTO.parseFromRequest(object);
     if (typeof object.id !== "number" ||
       typeof object.name !== "string" ||
