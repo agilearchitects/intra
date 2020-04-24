@@ -41,7 +41,7 @@ router.get("version", {}, (handler: HandlerModule) => {
 
 router.group("auth", { name: "auth" }, [], (router: RouterModule) => {
   router.post("login", { name: "login" }, authController.login());
-  router.post("/create", {}, middlewares.token(), authController.create());
+  router.post("create", {}, middlewares.token(), authController.create());
   return router;
 });
 
