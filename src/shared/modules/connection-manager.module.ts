@@ -1,4 +1,6 @@
-import { Connection, ConnectionOptions, getConnectionManager } from "typeorm";
+import { Connection, ConnectionOptions, DefaultNamingStrategy, EntityManager, getConnectionManager, NamingStrategyInterface, } from "typeorm";
+import { RelationIdLoader } from "typeorm/query-builder/RelationIdLoader";
+import { RelationLoader } from "typeorm/query-builder/RelationLoader";
 
 export class ConnectionManangerModule {
   public static async connect(options: ConnectionOptions): Promise<Connection> {
@@ -15,23 +17,16 @@ export class ConnectionManangerModule {
      * from Connection constructor()
      */
 
-    // @ts-ignore
-    connection.options = connectionOptions
-    // @ts-ignore
-    connection.manager = connection.createEntityManager();
-    // @ts-ignore
-    connection.namingStrategy = connection.options.namingStrategy || new DefaultNamingStrategy();
-    // @ts-ignore
-    connection.relationLoader = new RelationLoader(connection);
-    // @ts-ignore
-    connection.relationIdLoader = new RelationIdLoader(connection);
+    ((connection as any).options as ConnectionOptions) = connectionOptions;
+    ((connection as any).manager as EntityManager) = connection.createEntityManager();
+    ((connection as any).namingStrategy as NamingStrategyInterface) = connection.options.namingStrategy || new DefaultNamingStrategy();
+    ((connection as any).relationLoader as RelationLoader) = new RelationLoader(connection);
+    ((connection as any).relationIdLoader as RelationIdLoader) = new RelationIdLoader(connection);
 
     /**
      * from Connection connect()
      */
-    // @ts-ignore
-    connection.buildMetadatas();
-
+    ((connection as any).buildMetadatas as () => void)();
     return connection;
   }
 }
