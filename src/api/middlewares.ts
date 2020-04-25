@@ -22,7 +22,9 @@ import { handlerMethod, HandlerModule } from "./modules/handler.module";
 
 
 export class Middlewares {
-  public constructor(private log: LogModule = new LogModule([listners.file("middleware")])) { }
+  public constructor(
+    private readonly log: LogModule
+  ) { }
   public auth(
     checkOnly: boolean = false,
     authService: AuthService = authServiceInstance,
@@ -147,5 +149,3 @@ export class Middlewares {
     handler.sendStatus(code);
   }
 }
-
-export const middlewares = new Middlewares();

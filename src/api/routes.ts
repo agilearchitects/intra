@@ -15,7 +15,7 @@ import { TimeController } from "./controllers/time.controller";
 import { UserController } from "./controllers/user.controller";
 
 // Middlewares
-import { middlewares } from "./middlewares";
+import { Middlewares } from "./middlewares";
 
 // Bootstrap
 import { authService, customerService, hashtiService, log, projectService, timeService, userService } from "./bootstrap";
@@ -28,6 +28,7 @@ const tagController = new TagController(log);
 const textController = new TextController(log);
 const timeController = new TimeController(timeService, log);
 const userController = new UserController(log);
+const middlewares = new Middlewares(log);
 
 const router: RouterModule = new RouterModule();
 

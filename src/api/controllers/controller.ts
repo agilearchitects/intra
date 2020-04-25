@@ -5,7 +5,7 @@ import * as changeCase from "change-case";
 
 export class Controller {
   public constructor(
-    protected log: LogModule
+    protected readonly log: LogModule
   ) { }
 
   public logError(

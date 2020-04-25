@@ -6,7 +6,6 @@ import { ILog, listners, logLevel, LogModule } from "@agilearchitects/logmodule"
 import { MailingunService } from "@agilearchitects/mailingun";
 import { validate as baseValidate } from "@agilearchitects/server";
 import { IValidationInput, ValidationService } from "@agilearchitects/validation";
-import * as changeCase from "change-case";
 import moment from "moment";
 import { Between } from "typeorm";
 import * as typeorm from "typeorm";
@@ -44,7 +43,6 @@ import { TimeService } from "./services/time.service";
 
 // Factories
 import * as envServiceFactory from "../shared/factories/env-service.factory";
-import { handler } from "./server";
 
 // Creating services
 export const envService = envServiceFactory.create();
