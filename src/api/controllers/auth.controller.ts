@@ -8,6 +8,7 @@ import { validators } from "@agilearchitects/validation";
 
 // DTO's
 import { CreateUserDTO } from "../../shared/dto/create-user.dto";
+import { LoginDTO } from "../../shared/dto/login.dto";
 
 // Entites
 import { UserEntity } from "../../shared/entities/user.entity";
@@ -26,7 +27,7 @@ export class AuthController extends Controller {
   ) { super(log); }
 
   // Protect controller with validation middleware. Validating email and password
-  // @parse(LoginDTO.parseFromRequest, "body")
+  @parse(LoginDTO.parseFromRequest, "body")
   @validate({ email: [validators.required, validators.email], password: validators.required })
   // Parse login form
   /**
