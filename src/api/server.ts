@@ -21,10 +21,10 @@ const env = envService.get("ENV", "local");
 export const handler = async (event: APIGatewayProxyEvent): Promise<APIGatewayProxyResult> => {
   // Boot sql connection
   await boot("production");
-  // Handler request
-  const server = new ServerModule();
-  server.register(vhost(apiHost, cors(), bodyParse(), router));
-  return await server.lambda(event);
+  return await ServerModule.lambda(
+    event,
+    [vhost(apiHost, cors(), bodyParse(), router)]
+  );
 };
 
 if (env === "local") {

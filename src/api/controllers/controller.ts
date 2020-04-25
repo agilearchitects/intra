@@ -17,7 +17,14 @@ export class Controller {
     this.log.error({
       message,
       code,
-      ...(error !== undefined ? [{ error: JSON.stringify(error) }] : []),
+      data: {
+        ...(error !== undefined ? [{ error: JSON.stringify(error) }] : []),
+        request: {
+          url: handler.request.url,
+          headers: handler.request.headers,
+          body: handler.request.body,
+        }
+      }
     });
     handler.sendStatus(code);
   }

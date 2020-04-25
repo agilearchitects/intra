@@ -21,7 +21,7 @@ export default {
     // Logout
     authService.logout();
     // Navigate to start page
-    next({ name: "start" });
+    next({ name: "login" });
   }) as NavigationGuard,
   // Redirect to 404 page if route is not defined
   invalidRoute: ((to, from, next) => {
