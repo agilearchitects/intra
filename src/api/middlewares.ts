@@ -30,9 +30,9 @@ export class Middlewares {
     return async (handler: HandlerModule) => {
       try {
         // Check for authorization header
-        if (handler.request.headers.authorization) {
-          const token = (handler.request.headers
-            .authorization as string).substr(7);
+        const authorizationHeader: string | string[] | undefined = handler.request.getHeader("authorization");
+        if (authorizationHeader !== undefined && typeof authorizationHeader === "string") {
+          const token = authorizationHeader.substr(7);
           const user = await authService.auth(token);
           handler.request.user = UserPayloadDTO.parse({
             id: user.id,
@@ -80,10 +80,7 @@ export class Middlewares {
   public guest(): handlerMethod {
     return (handler: HandlerModule) => {
       try {
-        if (
-          handler.request.headers !== undefined &&
-          handler.request.headers.authorization === undefined
-        ) {
+        if (handler.request.getHeader("authorization") === undefined) {
           handler.next();
         } else {
           handler.sendStatus(400);
