@@ -1,7 +1,6 @@
 // Libs
-import { listners, LogModule } from "@agilearchitects/logmodule";
+import { LogModule } from "@agilearchitects/logmodule";
 import { HandlerModule } from "@agilearchitects/server";
-import * as changeCase from "change-case";
 
 export class Controller {
   public constructor(

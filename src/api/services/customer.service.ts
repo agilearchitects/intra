@@ -1,10 +1,13 @@
 // Libs
 import moment from "moment";
+import { SelectQueryBuilder } from "typeorm";
 
 // Entities
 import { CustomerEntity } from "../../shared/entities/customer.entity";
 import { ProjectEntity } from "../../shared/entities/project.entity";
+import { TagEntity } from "../../shared/entities/tag.entity";
 import { TaskEntity } from "../../shared/entities/task.entity";
+import { TimeEntity } from "../../shared/entities/time.entity";
 
 // DTO's
 import { ICreateCustomerDTO } from "../../shared/dto/create-customer.dto";
@@ -13,8 +16,6 @@ import { ProjectDTO } from "../../shared/dto/project.dto";
 import { TagDTO } from "../../shared/dto/tag.dto";
 import { TaskDTO } from "../../shared/dto/task.dto";
 import { TimeDTO } from "../../shared/dto/time.dto";
-import { TagEntity } from "../../shared/entities/tag.entity";
-import { TimeEntity } from "../../shared/entities/time.entity";
 
 export class CustomerService {
   public constructor(
@@ -36,7 +37,9 @@ export class CustomerService {
         "projects.tasks.times",
         "projects.tasks.times.tags",
       ],
-      where: `"CustomerEntity__projects__tasks__taskUsers__user"."id" = ${userId}`,
+      where: (queryBuilder: SelectQueryBuilder<any>) => {
+        queryBuilder.where("CustomerEntity__projects__tasks__taskUsers__user.id = :id", { id: userId })
+      },
     })).map((customer: CustomerEntity) => this.customerDTO.parse({
       id: customer.id,
       name: customer.name,
