@@ -5,7 +5,7 @@ import { GroupPayloadDTO } from "./group-payload.dto";
 import { UserPayloadDTO } from "./user-payload.dto";
 
 export class ClaimPayloadDTO extends BaseClaimPayloadDTO {
-  public static parseRequestBody(object: jsonType): ClaimPayloadDTO {
+  public static parseFromRequest(object: jsonType): ClaimPayloadDTO {
     object = DTO.parseFromRequest(object);
     if (typeof object.id !== "number" ||
       typeof object.name !== "string" ||

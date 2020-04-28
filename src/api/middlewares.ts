@@ -4,8 +4,7 @@ import {
   UserPayloadDTO,
   UserService,
 } from "@agilearchitects/authenticaton";
-import { listners, LogModule } from "@agilearchitects/logmodule";
-import Axios from "axios";
+import { LogModule } from "@agilearchitects/logmodule";
 
 // Services
 import {
@@ -19,7 +18,6 @@ import { UserEntity } from "../shared/entities/user.entity";
 
 // Modules
 import { handlerMethod, HandlerModule } from "./modules/handler.module";
-
 
 export class Middlewares {
   public constructor(

@@ -14,7 +14,7 @@ pipelines:
           # Test
           - yarn test
           # Build
-          - API_BASE_URL="https://api.intra.agilearchitects.se" yarn build
+          - API_BASE_URL="${API_BASE_URL}" yarn build
 
           # Download zip
           - apt-get update && apt-get install -y zip
@@ -50,36 +50,32 @@ pipelines:
         name: Deploy AWS Lambda layer
         image: amazon/aws-cli
         script:
-          - aws configure set default.region "eu-north-1"
+          - aws configure set default.region "${AWS_REGION}"
           - aws configure set aws_access_key_id ${AWS_ACCESS_KEY_ID}
           - aws configure set aws_secret_access_key ${AWS_SECRET_ACCESS_KEY}
-          - aws lambda publish-layer-version --layer-name intranet --compatible-runtimes nodejs12.x --zip-file fileb://nodejs.zip --region "eu-north-1"
+          - aws lambda publish-layer-version --layer-name ${LAMBDA_LAYER} --compatible-runtimes nodejs12.x --zip-file fileb://nodejs.zip --region "eu-north-1"
 
     - step:
         name: Deploy API Lambda Function
         script:
-          - pipe: atlassian/aws-lambda-deploy:0.5.3
-            variables:
-              AWS_ACCESS_KEY_ID: ${AWS_ACCESS_KEY_ID}
-              AWS_SECRET_ACCESS_KEY: ${AWS_SECRET_ACCESS_KEY}
-              AWS_DEFAULT_REGION: "eu-north-1"
-              FUNCTION_NAME: "intranet"
-              COMMAND: "update"
-              ZIP_FILE: "api.zip"
-          # The artifact causes the next lambda function deploy to fail. Remove it
-          - rm /opt/atlassian/pipelines/agent/build/.bitbucket/pipelines/generated/pipeline/pipes/aws-lambda-deploy-env
+          - aws configure set default.region "${AWS_REGION}"
+          - aws configure set aws_access_key_id "$"{AWS_ACCESS_KEY_ID}"
+          - aws configure set aws_secret_access_key "${AWS_SECRET_ACCESS_KEY}"
+          # Getting latest version of layer
+          - LATEST_LAYER_VERSION=$(aws lambda list-layer-versions --layer-name "${LAMBDA_LAYER}" --output text --query 'LayerVersions[0].[LayerVersionArn]')
+          # Deploy with latest layer
+          - aws lambda update-function-code --function-name "${API_LAMBDA_FUNCTION}" --zip-file "api.zip" --layers "$LATEST_LAYER_VERSION" --publish
 
     - step:
         name: Deploy Migrate Lambda Function
         script:
-          - pipe: atlassian/aws-lambda-deploy:0.5.3
-            variables:
-              AWS_ACCESS_KEY_ID: ${AWS_ACCESS_KEY_ID}
-              AWS_SECRET_ACCESS_KEY: ${AWS_SECRET_ACCESS_KEY}
-              AWS_DEFAULT_REGION: "eu-north-1"
-              FUNCTION_NAME: "migrate"
-              COMMAND: "update"
-              ZIP_FILE: "migrate.zip"
+          - aws configure set default.region "${AWS_REGION}"
+          - aws configure set aws_access_key_id "$"{AWS_ACCESS_KEY_ID}"
+          - aws configure set aws_secret_access_key "${AWS_SECRET_ACCESS_KEY}"
+          # Getting latest version of layer
+          - LATEST_LAYER_VERSION=$(aws lambda list-layer-versions --layer-name "${LAMBDA_LAYER}" --output text --query 'LayerVersions[0].[LayerVersionArn]')
+          # Deploy with latest layer
+          - aws lambda update-function-code --function-name "${MIGRATE_LAMBDA_FUNCTION}" --zip-file "migrate.zip" --layers "$LATEST_LAYER_VERSION" --publish
 
     - step:
         name: Deploy SPA app
@@ -89,7 +85,7 @@ pipelines:
               AWS_ACCESS_KEY_ID: ${AWS_ACCESS_KEY_ID}
               AWS_SECRET_ACCESS_KEY: ${AWS_SECRET_ACCESS_KEY}
               AWS_DEFAULT_REGION: "eu-north-1"
-              S3_BUCKET: "intra.agilearchitects.se"
+              S3_BUCKET: "${SPA_S3}"
               LOCAL_PATH: "dist/spa"
               ACL: "public-read"
 definitions:

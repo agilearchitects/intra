@@ -3,7 +3,6 @@ import { AuthService, ILoginPayloadDTO, UserService } from "@agilearchitects/aut
 import { HashtiService } from "@agilearchitects/hashti";
 import { LogModule } from "@agilearchitects/logmodule";
 import { handlerMethod, HandlerModule, parse } from "@agilearchitects/server";
-import { validators } from "@agilearchitects/validation";
 
 
 // DTO's
@@ -16,8 +15,6 @@ import { UserEntity } from "../../shared/entities/user.entity";
 // Base controller
 import { Controller } from "./controller";
 
-import { validate } from "../bootstrap";
-
 export class AuthController extends Controller {
   public constructor(
     private readonly authService: AuthService,
@@ -28,7 +25,6 @@ export class AuthController extends Controller {
 
   // Protect controller with validation middleware. Validating email and password
   @parse(LoginDTO.parseFromRequest, "body")
-  @validate({ email: [validators.required, validators.email], password: validators.required })
   // Parse login form
   /**
    * Login controller. Attemps login using the authservice, providing email and password from request body

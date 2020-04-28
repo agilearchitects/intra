@@ -16,7 +16,7 @@ export class GroupPayloadDTO extends BaseGroupPayloadDTO {
     return new GroupPayloadDTO(
       object.id,
       object.name,
-      object.claims !== undefined ? (object.claims as jsonType[]).map((claim: jsonType) => ClaimPayloadDTO.parseRequestBody(claim)) : undefined
+      object.claims !== undefined ? (object.claims as jsonType[]).map((claim: jsonType) => ClaimPayloadDTO.parseFromRequest(claim)) : undefined
     );
   }
 }

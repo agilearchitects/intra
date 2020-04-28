@@ -1,5 +1,5 @@
 // Libs
-import { bodyParse, cors, HandlerModule, headers, method, ResponseModule, RouterModule, ServerModule, staticContent, vhost } from "@agilearchitects/server";
+import { bodyParse, cors, HandlerModule, method, RouterModule, ServerModule, staticContent, vhost } from "@agilearchitects/server";
 import { APIGatewayProxyEvent, APIGatewayProxyResult } from "aws-lambda";
 import * as http from "http";
 import * as stream from "stream";
