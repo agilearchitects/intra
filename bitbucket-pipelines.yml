@@ -79,7 +79,7 @@ pipelines:
           - LATEST_LAYER_VERSION=$(aws lambda list-layer-versions --layer-name "${LAMBDA_LAYER}" --output text --query 'LayerVersions[0].[LayerVersionArn]')
           # Deploy with latest layer
           - aws lambda update-function-code --function-name "${MIGRATE_LAMBDA_FUNCTION}" --zip-file fileb://migrate.zip --publish
-            - aws lambda update-function-configuration --function-name "${MIGRATE_LAMBDA_FUNCTION}" --layers "$LATEST_LAYER_VERSION"
+          - aws lambda update-function-configuration --function-name "${MIGRATE_LAMBDA_FUNCTION}" --layers "$LATEST_LAYER_VERSION"
 
     - step:
         name: Deploy SPA app
