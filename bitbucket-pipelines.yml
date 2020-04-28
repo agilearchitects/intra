@@ -60,7 +60,7 @@ pipelines:
         image: amazon/aws-cli
         script:
           - aws configure set default.region "${AWS_REGION}"
-          - aws configure set aws_access_key_id "$"{AWS_ACCESS_KEY_ID}"
+          - aws configure set aws_access_key_id "${AWS_ACCESS_KEY_ID}"
           - aws configure set aws_secret_access_key "${AWS_SECRET_ACCESS_KEY}"
           # Getting latest version of layer
           - LATEST_LAYER_VERSION=$(aws lambda list-layer-versions --layer-name "${LAMBDA_LAYER}" --output text --query 'LayerVersions[0].[LayerVersionArn]')
@@ -72,7 +72,7 @@ pipelines:
         image: amazon/aws-cli
         script:
           - aws configure set default.region "${AWS_REGION}"
-          - aws configure set aws_access_key_id "$"{AWS_ACCESS_KEY_ID}"
+          - aws configure set aws_access_key_id "${AWS_ACCESS_KEY_ID}"
           - aws configure set aws_secret_access_key "${AWS_SECRET_ACCESS_KEY}"
           # Getting latest version of layer
           - LATEST_LAYER_VERSION=$(aws lambda list-layer-versions --layer-name "${LAMBDA_LAYER}" --output text --query 'LayerVersions[0].[LayerVersionArn]')
