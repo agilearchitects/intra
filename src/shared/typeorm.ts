@@ -16,6 +16,12 @@ import { TimeEntity } from "./entities/time.entity";
 import { TokenEntity } from "./entities/token.entity";
 import { UserEntity } from "./entities/user.entity";
 
+// SQLite migrations
+import { _20200221_182652 } from "../migrate/migrations/sqlite/20200221_182652";
+
+// MySQL Migrations
+import { _20200413_200506 } from "../migrate/migrations/mysql/20200413_200506";
+
 export class ConnectionConfigs {
   protected static entities = [
     BannedTokenEntity,
@@ -33,17 +39,22 @@ export class ConnectionConfigs {
     UserEntity,
   ];
 
-  public static local(): ConnectionOptions {
+  public static local(withMigrations: boolean = false): ConnectionOptions {
     return {
       type: "sqlite",
       database: "storage/db.sqlite",
       synchronize: false,
       logging: false,
       entities: ConnectionConfigs.entities,
+      ...(withMigrations ? {
+        migrations: [
+          _20200221_182652
+        ],
+      } : undefined)
     };
   }
 
-  public static production(host: string, port: number, username: string, password: string, database: string): ConnectionOptions {
+  public static production(host: string, port: number, username: string, password: string, database: string, withMigrations: boolean = false): ConnectionOptions {
     return {
       type: "mysql",
       host,
@@ -54,6 +65,12 @@ export class ConnectionConfigs {
       synchronize: false,
       logging: false,
       entities: ConnectionConfigs.entities,
+      ...(withMigrations ? {
+        migrations: [
+          _20200413_200506
+        ],
+      } : undefined)
+
     }
   }
 }

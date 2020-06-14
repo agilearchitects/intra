@@ -2,12 +2,6 @@ import * as envServiceFactory from "../shared/factories/env-service.factory";
 import { MigrateService } from "../shared/services/migrate.service";
 import { ConnectionConfigs } from "../shared/typeorm";
 
-// SQLite migrations
-import { _20200221_182652 } from "../migrate/migrations/sqlite/20200221_182652";
-
-// MySQL Migrations
-import { _20200413_200506 } from "../migrate/migrations/mysql/20200413_200506";
-
 const envService = envServiceFactory.create();
 
 interface LambdaEvent {
@@ -23,10 +17,7 @@ export const handler = async ({ action }: LambdaEvent) => {
   const migrateService = new MigrateService({
     ...envService.get("ENV", "local") === "local" ?
       {
-        ...ConnectionConfigs.local,
-        migrations: [
-          _20200221_182652
-        ]
+        ...ConnectionConfigs.local(true)
       } : {
         ...ConnectionConfigs.production(
           envService.get("MYSQL_HOST", ""),
@@ -34,10 +25,8 @@ export const handler = async ({ action }: LambdaEvent) => {
           envService.get("MYSQL_USERNAME", ""),
           envService.get("MYSQL_PASSWORD", ""),
           envService.get("MYSQL_DATABASE", ""),
-        ),
-        migrations: [
-          _20200413_200506
-        ]
+          true,
+        )
       },
     logging: true,
   });

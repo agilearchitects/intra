@@ -55,10 +55,7 @@ const prompt = async (question: string): Promise<string> => {
     const migrateService = new MigrateService({
       ...envService.get("ENV", "local") === "local" ?
         {
-          ...ConnectionConfigs.local,
-          migrations: [
-            _20200221_182652
-          ]
+          ...ConnectionConfigs.local(true),
         } : {
           ...ConnectionConfigs.production(
             envService.get("MYSQL_HOST", ""),
@@ -66,10 +63,8 @@ const prompt = async (question: string): Promise<string> => {
             envService.get("MYSQL_USERNAME", ""),
             envService.get("MYSQL_PASSWORD", ""),
             envService.get("MYSQL_DATABASE", ""),
-          ),
-          migrations: [
-            _20200413_200506
-          ]
+            true,
+          )
         },
       synchronize: false,
       migrationsRun: false,
