@@ -27,81 +27,82 @@ definitions:
 pipelines:
   default:
     - step: *build-test
-  master:
-    - step: *build-test
-    - step:
-        name: publish
-        image: node:12.8.0
-        caches:
-          - nodecustom
-          - yarn
-        script:
-          # Download zip
-          - apt-get update && apt-get install -y zip
-          # Install production dependencies
-          - yarn --production
-          # ZIP node_modules
-          - mkdir nodejs && mv node_modules nodejs && zip -r nodejs.zip nodejs
+  branches:
+    master:
+      - step: *build-test
+      - step:
+          name: publish
+          image: node:12.8.0
+          caches:
+            - nodecustom
+            - yarn
+          script:
+            # Download zip
+            - apt-get update && apt-get install -y zip
+            # Install production dependencies
+            - yarn --production
+            # ZIP node_modules
+            - mkdir nodejs && mv node_modules nodejs && zip -r nodejs.zip nodejs
 
-          # Make index for api function
-          - echo "module.exports = require(\"./api/server\")" > dist/api/index.js
-          # ZIP api function project
-          - cd dist/api && zip -r api.zip ./ && cd ../.. && mv dist/api/api.zip ./
+            # Make index for api function
+            - echo "module.exports = require(\"./api/server\")" > dist/api/index.js
+            # ZIP api function project
+            - cd dist/api && zip -r api.zip ./ && cd ../.. && mv dist/api/api.zip ./
 
-          # Make index for migrate function
-          - echo "module.exports = require(\"./migrate/index\")" > dist/migrate/index.js
-          # ZIP migrate function project
-          - cd dist/migrate && zip -r migrate.zip ./ && cd ../.. && mv dist/migrate/migrate.zip ./
+            # Make index for migrate function
+            - echo "module.exports = require(\"./migrate/index\")" > dist/migrate/index.js
+            # ZIP migrate function project
+            - cd dist/migrate && zip -r migrate.zip ./ && cd ../.. && mv dist/migrate/migrate.zip ./
 
-        artifacts:
-          - api.zip
-          - migrate.zip
-          - nodejs.zip
-          - dist/spa/**
+          artifacts:
+            - api.zip
+            - migrate.zip
+            - nodejs.zip
+            - dist/spa/**
 
-    - step:
-        name: Deploy AWS Lambda layer
-        image: amazon/aws-cli
-        script:
-          - aws configure set default.region "${AWS_REGION}"
-          - aws configure set aws_access_key_id ${AWS_ACCESS_KEY_ID}
-          - aws configure set aws_secret_access_key ${AWS_SECRET_ACCESS_KEY}
-          - aws lambda publish-layer-version --layer-name ${LAMBDA_LAYER} --compatible-runtimes nodejs12.x --zip-file fileb://nodejs.zip --region "eu-north-1"
+      - step:
+          name: Deploy AWS Lambda layer
+          image: amazon/aws-cli
+          script:
+            - aws configure set default.region "${AWS_REGION}"
+            - aws configure set aws_access_key_id ${AWS_ACCESS_KEY_ID}
+            - aws configure set aws_secret_access_key ${AWS_SECRET_ACCESS_KEY}
+            - aws lambda publish-layer-version --layer-name ${LAMBDA_LAYER} --compatible-runtimes nodejs12.x --zip-file fileb://nodejs.zip --region "eu-north-1"
 
-    - step:
-        name: Deploy API Lambda Function
-        image: amazon/aws-cli
-        script:
-          - aws configure set default.region "${AWS_REGION}"
-          - aws configure set aws_access_key_id "${AWS_ACCESS_KEY_ID}"
-          - aws configure set aws_secret_access_key "${AWS_SECRET_ACCESS_KEY}"
-          # Getting latest version of layer
-          - LATEST_LAYER_VERSION=$(aws lambda list-layer-versions --layer-name "${LAMBDA_LAYER}" --output text --query 'LayerVersions[0].[LayerVersionArn]')
-          # Deploy with latest layer
-          - aws lambda update-function-code --function-name "${API_LAMBDA_FUNCTION}" --zip-file fileb://api.zip --publish
-          - aws lambda update-function-configuration --function-name "${API_LAMBDA_FUNCTION}" --layers "$LATEST_LAYER_VERSION"
+      - step:
+          name: Deploy API Lambda Function
+          image: amazon/aws-cli
+          script:
+            - aws configure set default.region "${AWS_REGION}"
+            - aws configure set aws_access_key_id "${AWS_ACCESS_KEY_ID}"
+            - aws configure set aws_secret_access_key "${AWS_SECRET_ACCESS_KEY}"
+            # Getting latest version of layer
+            - LATEST_LAYER_VERSION=$(aws lambda list-layer-versions --layer-name "${LAMBDA_LAYER}" --output text --query 'LayerVersions[0].[LayerVersionArn]')
+            # Deploy with latest layer
+            - aws lambda update-function-code --function-name "${API_LAMBDA_FUNCTION}" --zip-file fileb://api.zip --publish
+            - aws lambda update-function-configuration --function-name "${API_LAMBDA_FUNCTION}" --layers "$LATEST_LAYER_VERSION"
 
-    - step:
-        name: Deploy Migrate Lambda Function
-        image: amazon/aws-cli
-        script:
-          - aws configure set default.region "${AWS_REGION}"
-          - aws configure set aws_access_key_id "${AWS_ACCESS_KEY_ID}"
-          - aws configure set aws_secret_access_key "${AWS_SECRET_ACCESS_KEY}"
-          # Getting latest version of layer
-          - LATEST_LAYER_VERSION=$(aws lambda list-layer-versions --layer-name "${LAMBDA_LAYER}" --output text --query 'LayerVersions[0].[LayerVersionArn]')
-          # Deploy with latest layer
-          - aws lambda update-function-code --function-name "${MIGRATE_LAMBDA_FUNCTION}" --zip-file fileb://migrate.zip --publish
-          - aws lambda update-function-configuration --function-name "${MIGRATE_LAMBDA_FUNCTION}" --layers "$LATEST_LAYER_VERSION"
+      - step:
+          name: Deploy Migrate Lambda Function
+          image: amazon/aws-cli
+          script:
+            - aws configure set default.region "${AWS_REGION}"
+            - aws configure set aws_access_key_id "${AWS_ACCESS_KEY_ID}"
+            - aws configure set aws_secret_access_key "${AWS_SECRET_ACCESS_KEY}"
+            # Getting latest version of layer
+            - LATEST_LAYER_VERSION=$(aws lambda list-layer-versions --layer-name "${LAMBDA_LAYER}" --output text --query 'LayerVersions[0].[LayerVersionArn]')
+            # Deploy with latest layer
+            - aws lambda update-function-code --function-name "${MIGRATE_LAMBDA_FUNCTION}" --zip-file fileb://migrate.zip --publish
+            - aws lambda update-function-configuration --function-name "${MIGRATE_LAMBDA_FUNCTION}" --layers "$LATEST_LAYER_VERSION"
 
-    - step:
-        name: Deploy SPA app
-        script:
-          - pipe: atlassian/aws-s3-deploy:0.3.8
-            variables:
-              AWS_ACCESS_KEY_ID: ${AWS_ACCESS_KEY_ID}
-              AWS_SECRET_ACCESS_KEY: ${AWS_SECRET_ACCESS_KEY}
-              AWS_DEFAULT_REGION: "eu-north-1"
-              S3_BUCKET: "${SPA_S3}"
-              LOCAL_PATH: "dist/spa"
-              ACL: "public-read"
+      - step:
+          name: Deploy SPA app
+          script:
+            - pipe: atlassian/aws-s3-deploy:0.3.8
+              variables:
+                AWS_ACCESS_KEY_ID: ${AWS_ACCESS_KEY_ID}
+                AWS_SECRET_ACCESS_KEY: ${AWS_SECRET_ACCESS_KEY}
+                AWS_DEFAULT_REGION: "eu-north-1"
+                S3_BUCKET: "${SPA_S3}"
+                LOCAL_PATH: "dist/spa"
+                ACL: "public-read"
