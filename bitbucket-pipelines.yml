@@ -1,6 +1,12 @@
-pipelines:
-  default:
-    - step:
+definitions:
+  services:
+    docker:
+      memory: 2048
+  caches:
+    nodecustom: ./node_modules
+    yarn: /usr/local/share/.cache/yarn
+  steps:
+    - step: &build-test
         name: Build and test
         image: node:12.8.0
         caches:
@@ -15,26 +21,33 @@ pipelines:
           - yarn test
           # Build
           - API_BASE_URL="${API_BASE_URL}" yarn build
-
+        # Publish build artifacts
+        artifacts:
+          - dist/**
+pipelines:
+  default:
+    - step: *build-test
+  master:
+    - step: *build-test
+    - step:
+        name: publish
+        image: node:12.8.0
+        caches:
+          - nodecustom
+          - yarn
+        script:
           # Download zip
           - apt-get update && apt-get install -y zip
-
-          # Remove node_modules
-          - rm -rf node_modules
           # Install production dependencies
           - yarn --production
           # ZIP node_modules
           - mkdir nodejs && mv node_modules nodejs && zip -r nodejs.zip nodejs
 
-          # Copy node modules to api folder
-          # - cp node_modules dist/api/ -r
           # Make index for api function
           - echo "module.exports = require(\"./api/server\")" > dist/api/index.js
           # ZIP api function project
           - cd dist/api && zip -r api.zip ./ && cd ../.. && mv dist/api/api.zip ./
 
-          # Copy node modules to migrate folder
-          # - cp node_modules dist/migrate/ -r
           # Make index for migrate function
           - echo "module.exports = require(\"./migrate/index\")" > dist/migrate/index.js
           # ZIP migrate function project
@@ -92,10 +105,3 @@ pipelines:
               S3_BUCKET: "${SPA_S3}"
               LOCAL_PATH: "dist/spa"
               ACL: "public-read"
-definitions:
-  services:
-    docker:
-      memory: 2048
-  caches:
-    nodecustom: ./node_modules
-    yarn: /usr/local/share/.cache/yarn
