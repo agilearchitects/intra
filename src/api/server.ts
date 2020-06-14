@@ -4,33 +4,47 @@ import { APIGatewayProxyEvent, APIGatewayProxyResult } from "aws-lambda";
 import * as http from "http";
 import * as stream from "stream";
 
+// Factories
+import * as envServiceFactory from "../shared/factories/env-service.factory";
 
 // Modules
 
-import { boot, envService, hashtiService, userService } from "./bootstrap";
+import { boot } from "./bootstrap";
 
 // Routes
 import { IDictionary } from "./modules/dictionary.module";
-import { router } from "./routes";
+import { routes } from "./routes";
 
-const port: number = parseInt(envService.get("PORT", "1234"), 10);
+const envService = envServiceFactory.create();
+
+// Constants
+const port = parseInt(envService.get("PORT", "1234"), 10);
 const apiHost = envService.get("API_HOST", "api.test.test");
 const spaHost = envService.get("SPA_HOST", "www.test.test");
 const env = envService.get("ENV", "local");
 
 export const handler = async (event: APIGatewayProxyEvent): Promise<APIGatewayProxyResult> => {
   // Boot sql connection
-  await boot("production");
+  const bootContent = await boot(envService);
   return await ServerModule.lambda(
     event,
-    [vhost(apiHost, cors(), bodyParse(), router)]
+    [vhost(apiHost, cors(), bodyParse(), routes(
+      bootContent.authService,
+      bootContent.userService,
+      bootContent.hashtiService,
+      bootContent.customerService,
+      bootContent.projectService,
+      bootContent.timeService,
+      envService,
+      bootContent.log
+    ))]
   );
 };
 
-if (env === "local") {
+if (env === "local" || env === "production_debug") {
   (async () => {
-    await boot("local");
-    const server = new ServerModule();
+    const bootContent = await boot(envService);
+
     const staticRouter = new RouterModule();
     staticRouter.any("api_base_url", [method.HEAD], {}, (handler: HandlerModule) => {
       handler.response.send("", {
@@ -54,7 +68,16 @@ if (env === "local") {
         request,
         [
           // Attach
-          vhost(apiHost, cors(), bodyParse(), router),
+          vhost(apiHost, cors(), bodyParse(), routes(
+            bootContent.authService,
+            bootContent.userService,
+            bootContent.hashtiService,
+            bootContent.customerService,
+            bootContent.projectService,
+            bootContent.timeService,
+            envService,
+            bootContent.log
+          )),
           vhost(spaHost, staticRouter, staticContent("./build/spa")),
         ],
       );
@@ -74,9 +97,9 @@ if (env === "local") {
 
     }).listen(port, () => {
       // Create test user if not exists
-      userService.get("test@test.test").catch(async () => {
-        const password = hashtiService.create("test");
-        await userService.create("test@test.test", password, true, false);
+      bootContent.userService.get("test@test.test").catch(async () => {
+        const password = bootContent.hashtiService.create("test");
+        await bootContent.userService.create("test@test.test", password, true, false);
       });
 
       console.log(`Running API on http://${apiHost}:${port}`);  // tslint:disable-line: no-console

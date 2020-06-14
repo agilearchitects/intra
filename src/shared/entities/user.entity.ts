@@ -1,5 +1,5 @@
 // Libs
-import { IUserModel } from "@agilearchitects/authenticaton";
+import { IUserEntity } from "@agilearchitects/authenticaton";
 import { Column, Entity, FindConditions, IsNull, JoinTable, ManyToMany, ManyToOne, Not, OneToMany, OneToOne } from "typeorm";
 import { Entity as AppEntity } from "./entity";
 
@@ -12,7 +12,7 @@ import { TimeEntity } from "./time.entity";
 export interface IAttemptResult { token: string; user: UserEntity; }
 
 @Entity()
-export class UserEntity extends AppEntity implements IUserModel {
+export class UserEntity extends AppEntity implements IUserEntity {
     public static activeWhere(): FindConditions<UserEntity> {
         return { activated: Not(IsNull()), banned: IsNull() };
     }

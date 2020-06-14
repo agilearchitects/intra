@@ -1,11 +1,11 @@
-import { IClaimModel } from "@agilearchitects/authenticaton";
+import { IClaimEntity } from "@agilearchitects/authenticaton";
 import { Column, Entity, ManyToMany } from "typeorm";
 import { Entity as AppEntity } from "./entity";
 import { GroupEntity } from "./group.entity";
 import { UserEntity } from "./user.entity";
 
 @Entity()
-export class ClaimEntity extends AppEntity implements IClaimModel {
+export class ClaimEntity extends AppEntity implements IClaimEntity {
   @Column({ unique: true })
   public name!: string;
   @ManyToMany((type: any) => GroupEntity, (group: GroupEntity) => group.claims)

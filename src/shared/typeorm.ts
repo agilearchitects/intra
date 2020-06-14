@@ -33,13 +33,15 @@ export class ConnectionConfigs {
     UserEntity,
   ];
 
-  public static local: ConnectionOptions = {
-    type: "sqlite",
-    database: "storage/db.sqlite",
-    synchronize: false,
-    logging: false,
-    entities: ConnectionConfigs.entities,
-  };
+  public static local(): ConnectionOptions {
+    return {
+      type: "sqlite",
+      database: "storage/db.sqlite",
+      synchronize: false,
+      logging: false,
+      entities: ConnectionConfigs.entities,
+    };
+  }
 
   public static production(host: string, port: number, username: string, password: string, database: string): ConnectionOptions {
     return {

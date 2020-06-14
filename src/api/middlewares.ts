@@ -4,28 +4,21 @@ import {
   UserPayloadDTO,
   UserService,
 } from "@agilearchitects/authenticaton";
+import { EnvService } from "@agilearchitects/env";
 import { LogModule } from "@agilearchitects/logmodule";
-
-// Services
-import {
-  authService as authServiceInstance,
-  envService as envServiceInstance,
-  userService as userServiceInstance,
-} from "./bootstrap";
-
-// Entites
-import { UserEntity } from "../shared/entities/user.entity";
 
 // Modules
 import { handlerMethod, HandlerModule } from "./modules/handler.module";
 
 export class Middlewares {
   public constructor(
-    private readonly log: LogModule
+    private readonly log: LogModule,
+    private readonly authService: AuthService,
+    private readonly userService: UserService,
+    private readonly envService: EnvService,
   ) { }
   public auth(
     checkOnly: boolean = false,
-    authService: AuthService = authServiceInstance,
   ): handlerMethod {
     return async (handler: HandlerModule) => {
       try {
@@ -33,7 +26,7 @@ export class Middlewares {
         const authorizationHeader: string | string[] | undefined = handler.request.getHeader("authorization");
         if (authorizationHeader !== undefined && typeof authorizationHeader === "string") {
           const token = authorizationHeader.substr(7);
-          const user = await authService.auth(token);
+          const user = await this.authService.auth(token);
           handler.request.user = UserPayloadDTO.parse({
             id: user.id,
             email: user.email,
@@ -53,12 +46,10 @@ export class Middlewares {
     };
   }
 
-  public userByEmail(
-    userService: UserService<UserEntity> = userServiceInstance,
-  ): handlerMethod {
+  public userByEmail(): handlerMethod {
     return async (handler: HandlerModule) => {
       try {
-        const user = await userService.get(handler.request.query.email.toString());
+        const user = await this.userService.get(handler.request.query.email.toString());
         if (user !== undefined) {
           handler.request.user = UserPayloadDTO.parse({
             id: user.id,
@@ -94,7 +85,7 @@ export class Middlewares {
   public token(): handlerMethod {
     return async (handler: HandlerModule) => {
       try {
-        const token = envServiceInstance.get("TOKEN", Math.random().toString());
+        const token = this.envService.get("TOKEN", Math.random().toString());
         if (handler.request.query.token.toString() === token) {
           handler.next();
         } else {

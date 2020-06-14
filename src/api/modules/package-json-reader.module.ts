@@ -1,7 +1,7 @@
 import * as fs from "fs";
 
 interface IFsModule {
-  readFileSync(path: string, encoding: string): string;
+  readFileSync(path: string, encoding: BufferEncoding): string;
 }
 
 export class PackageJsonReaderModule {

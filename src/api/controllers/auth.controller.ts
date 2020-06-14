@@ -18,7 +18,7 @@ import { Controller } from "./controller";
 export class AuthController extends Controller {
   public constructor(
     private readonly authService: AuthService,
-    private readonly userService: UserService<UserEntity>,
+    private readonly userService: UserService,
     private readonly hashtiService: HashtiService,
     log: LogModule,
   ) { super(log); }
