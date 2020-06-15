@@ -31,7 +31,8 @@
         class="mr-4"
         name="from"
         :value="time.fromFormatted"
-        v-on:blur="updateFromOrTo($event, 'from')"
+        ref="time-from"
+        v-on:blur="updateFromOrTo('from')"
         :label="$t('time.from')"
         placeholder="HH:mm"
       ></input-component>
@@ -39,12 +40,21 @@
         class="ml-4"
         name="to"
         :value="time.toFormatted"
-        v-on:blur="updateFromOrTo($event, 'to')"
+        ref="time-to"
+        v-on:blur="updateFromOrTo('to')"
         :label="$t('time.to')"
         placeholder="HH:mm"
       ></input-component>
-      <input-component v-model="time.rate" label="pris/h" :disabled="!shoudSetRate"></input-component>
-      <checkbox-component id="set_rate" v-model="shoudSetRate" label="Avvikande timpris"></checkbox-component>
+      <input-component
+        v-model="time.rate"
+        label="pris/h"
+        :disabled="!shoudSetRate"
+      ></input-component>
+      <checkbox-component
+        id="set_rate"
+        v-model="shoudSetRate"
+        label="Avvikande timpris"
+      ></checkbox-component>
     </div>
     <div class="d-flex">
       <tag-component
@@ -65,7 +75,10 @@
       ></input-component>
     </div>
     <div class="d-flex justify-content-end">
-      <button-component button-style="danger" v-on:click="remove">Ta bort</button-component>
+      <button-component
+        button-style="danger"
+        v-on:click="remove"
+      >Ta bort</button-component>
     </div>
   </modal-form-component>
 </template>
@@ -347,37 +360,44 @@ export default class TimeReportFormComponent extends Vue {
     }));
   }
 
-  public updateFromOrTo($event: Event, type: "from" | "to") {
-    if ($event.srcElement !== null) {
-      const value = moment(
-        ($event.srcElement as HTMLInputElement).value,
+  public updateFromOrTo(type: "from" | "to") {
+    if (type !== "from" && type !== "to") {
+      throw new Error(`Type was wrong value. Expected "from" or "to"`);
+    }
+    let elementValue = ((this.$refs[`time-${type}`] as Vue).$el.querySelector(
+      "input"
+    ) as HTMLInputElement).value;
+    console.log(elementValue);
+    let value = moment(
+      `${this.date.format("YYYY-MM-DD")} ${moment(elementValue, "HH:mm").format(
         "HH:mm"
-      );
-      if (value.isValid()) {
-        if (type === "from") {
-          this.time.from = moment(
-            `${this.date.format("YYYY-MM-DD")} ${value.format("HH:mm")}`,
-            "YYYY-MM-DD HH:mm"
-          );
-        } else {
+      )}`,
+      "YYYY-MM-DD HH:mm"
+    );
+    if (value.isValid()) {
+      if (type === "from") {
+        this.time.from = moment(
+          `${this.date.format("YYYY-MM-DD")} ${value.format("HH:mm")}`,
+          "YYYY-MM-DD HH:mm"
+        );
+      } else {
+        if (elementValue !== "") {
           this.time.to = moment(
             `${this.date.format("YYYY-MM-DD")} ${value.format("HH:mm")}`,
             "YYYY-MM-DD HH:mm"
           );
+        } else {
+          this.time.to = undefined;
         }
-      }
-
-      if (type === "to" && this.time.to === undefined) {
-        ($event.srcElement as HTMLInputElement).value = "";
-      } else {
-        ($event.srcElement as HTMLInputElement).value = moment(
-          type === "from" ? this.time.from : this.time.to
-        ).format("HH:mm");
       }
     }
   }
 
   public async save(): Promise<void> {
+    // Update time input before initiating save
+    this.updateFromOrTo("from");
+    this.updateFromOrTo("to");
+
     if (this.time === null || this.time.projectId === undefined) {
       return;
     }
