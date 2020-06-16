@@ -80,11 +80,32 @@ export default {
   },
   customer: {
     customer: "Kund",
+    name: "Namn",
     select: "Välj @:customer.customer",
+    create: {
+      header: "Lägg till ny kund",
+      error: {
+        header: "@:error.header",
+        message: "Gick inte att skapa kund. Var god försök igen"
+      }
+    }
+
   },
   project: {
     project: "Projekt",
     select: "Välj @:project.project",
+    create: {
+      error: {
+        header: "@:error.header",
+        message: "Gick inte att skapa projekt. Var god försök igen"
+      }
+    },
+    update: {
+      error: {
+        header: "@:error.header",
+        message: "Gick inte att uppdatera projekt. Var god försök igen"
+      }
+    }
   },
   task: {
     task: "Uppgift",
@@ -109,6 +130,46 @@ export default {
     to: "Till",
     tag: "Taggar",
     comment: "Kommentar",
+    stop: {
+      error: {
+        header: "@:error.header",
+        message: "Timer gick inte att stoppa. Var god försök igen"
+      }
+    },
+    create: {
+      error: {
+        header: "@:error.header",
+        message: "Gick inte att skapa tidrapport. Var god försök igen"
+      }
+    },
+    update: {
+      error: {
+        header: "@:error.header",
+        message: "Gick inte att uppdatera tidrapport. Var god försök igen"
+      }
+    }
+
+  },
+  text: {
+    update: {
+      success: {
+        header: "Text uppdaterad!",
+        message: "Text har uppdaterats"
+      }
+    }
   },
   empty_list: "Inga val i lista",
+  auth: {
+    error: {
+      login: "Failed to login"
+    }
+  },
+  api: {
+    error: {
+      missing_header: "API base URL was missing from header",
+    }
+  },
+  error: {
+    header: "Error"
+  }
 };

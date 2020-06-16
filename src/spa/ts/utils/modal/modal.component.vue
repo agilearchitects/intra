@@ -2,13 +2,16 @@
   <div
     class="mdo-modal"
     :class="`mdo-modal--${size}`"
-    :style="{ 'display': state === 'visible' ? 'inherit' : 'none' }"
+    :style="{ ...(state !== 'visible' ? { display: 'none' } : undefined) }"
     v-on:click="clickOutside"
     @keydown.esc="clickEsc"
     ref="modalWindow"
   >
     <div class="mdo-modal__content d-flex align-items-center">
-      <div class="mdo-modal__container" v-on:click.stop>
+      <div
+        class="mdo-modal__container"
+        v-on:click.stop
+      >
         <component
           :is="component"
           :data="data"
@@ -94,11 +97,14 @@ export default class ModalComponent extends Vue {
   width: 100vw;
   height: 100vh;
   background-color: rgba(0, 0, 0, 0.5);
+  z-index: 1001;
   overflow-y: auto;
   position: absolute;
+  display: flex;
+  align-items: center;
   top: 0px;
   left: 0px;
-  z-index: 1000;
+  z-index: 1;
   &__backdrop {
     width: 100vw;
     height: 100vh;
@@ -114,6 +120,9 @@ export default class ModalComponent extends Vue {
     padding-left: 15px;
     z-index: 1002;
   }
+  &--xs &__container {
+    width: 300px;
+  }
   &--sm &__container {
     width: 400px;
   }
@@ -124,7 +133,7 @@ export default class ModalComponent extends Vue {
     width: 800px;
   }
   &__container {
-    margin: 0px auto;
+    margin: 10px auto;
     background-color: #fff;
     box-shadow: 0 24px 38px 3px rgba(0, 0, 0, 0.14),
       0 9px 46px 8px rgba(0, 0, 0, 0.12), 0 11px 15px -7px rgba(0, 0, 0, 0.2);

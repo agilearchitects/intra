@@ -71,7 +71,7 @@ export class AuthService {
       this.apiService.setDefaultHeaders({ Authorization: `Bearer ${authResponse.body.token}` });
       return;
     } catch (error) {
-      this.errorService.submit({ message: "Authentication request failed", error });
+      this.errorService.submit({ message: "Failed to login", error });
       throw error;
     }
   }

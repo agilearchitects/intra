@@ -9,7 +9,10 @@
         v-model="text.content"
         :init="tinyMCEInitWith"
       ></tiny-mce>
-      <div v-else v-html="text.content"></div>
+      <div
+        v-else
+        v-html="text.content"
+      ></div>
     </template>
   </div>
 </template>
@@ -21,9 +24,11 @@ import { ITinyMCESettings, init as tinyMCEInit } from "../utils/tinymce";
 import { AuthService } from "../services/auth.service";
 import {
   authService as authServiceInstance,
-  textService as textServiceInstance
+  textService as textServiceInstance,
+  messageService as messageServiceInstance
 } from "../bootstrap";
 import { TextService } from "../services/text.service";
+import { MessageService } from "../services/message.service";
 
 @Component({
   components: { tinyMce: Editor }
@@ -31,6 +36,7 @@ import { TextService } from "../services/text.service";
 export default class TextComponent extends Vue {
   private readonly authService: AuthService = authServiceInstance;
   private readonly textService: TextService = textServiceInstance;
+  private readonly messageService: MessageService = messageServiceInstance;
   @Prop(String) name!: string;
   @Watch("name") onNameChange() {
     this.getText();
@@ -91,12 +97,20 @@ export default class TextComponent extends Vue {
     this.textService
       .update(TextDTO.parse(this.text))
       .then(() => {
-        alert("Text sparad");
-        this.saving = false;
+        this.messageService.showModal(
+          "success",
+          this.$t("text.update.success.header").toString(),
+          this.$t("text.update.success.message").toString(),
+          () => (this.saving = false)
+        );
       })
       .catch((error: any) => {
-        alert("Something went wrong");
-        this.saving = false;
+        this.messageService.showModal(
+          "success",
+          this.$t("text.update.error.header").toString(),
+          this.$t("text.update.error.message").toString(),
+          () => (this.saving = false)
+        );
       });
   }
 }

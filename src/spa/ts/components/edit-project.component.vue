@@ -12,7 +12,10 @@
       <h1>Redigera projekt</h1>
     </div>
     <div>
-      <project-form-component :project-id="projectId" v-on:submit="save"></project-form-component>
+      <project-form-component
+        :project-id="projectId"
+        v-on:submit="save"
+      ></project-form-component>
     </div>
   </div>
 </template>
@@ -22,13 +25,17 @@ import { Vue, Component } from "vue-property-decorator";
 
 // Services
 import { ProjectService } from "../services/project.service";
+import { MessageService } from "../services/message.service";
 
 // Components
 import ProjectFormComponent from "./project-form.component.vue";
 import ButtonComponent from "./layout/button.component.vue";
 
 // Bootstrap
-import { projectService as projectServiceInstance } from "../bootstrap";
+import {
+  projectService as projectServiceInstance,
+  messageService as messageServiceInstance
+} from "../bootstrap";
 import { ProjectDTO } from "../../../shared/dto/project.dto";
 
 @Component({
@@ -36,6 +43,7 @@ import { ProjectDTO } from "../../../shared/dto/project.dto";
 })
 export default class EditProjectComponent extends Vue {
   public projectService: ProjectService = projectServiceInstance;
+  public messageService: MessageService = messageServiceInstance;
 
   public loading: boolean = false;
   public saving: boolean = false;
@@ -52,11 +60,16 @@ export default class EditProjectComponent extends Vue {
     this.saving = true;
     try {
       await this.projectService.update(project);
+      this.saving = false;
       this.$router.push({ name: "time.project" });
     } catch {
-      alert("Something went wrong. Please try again");
+      this.messageService.showModal(
+        "error",
+        this.$t("project.update.error.header").toString(),
+        this.$t("project.update.error.message").toString(),
+        () => (this.saving = false)
+      );
     }
-    this.saving = false;
   }
 }
 </script>

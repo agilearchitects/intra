@@ -91,7 +91,8 @@ import {
   authService as authServiceInstance,
   customerService as customerServiceInstance,
   timeService as timeServiceInstance,
-  tagService as tagServiceInstance
+  tagService as tagServiceInstance,
+  messageService as messageServiceInstance
 } from "../bootstrap";
 
 // Components
@@ -107,6 +108,7 @@ import { TimeService } from "../services/time.service";
 import { CustomerService } from "../services/customer.service";
 import { AuthService } from "../services/auth.service";
 import { TagService } from "../services/tag.service";
+import { MessageService } from "../services/message.service";
 
 // DTO's
 import { UserDTO } from "../../../shared/dto/user.dto";
@@ -182,6 +184,8 @@ export default class TimeReportFormComponent extends Vue {
   private readonly customerService: CustomerService = customerServiceInstance;
   private readonly authService: AuthService = authServiceInstance;
   private readonly tagService: TagService = tagServiceInstance;
+  private readonly messageService: MessageService = messageServiceInstance;
+
   @Prop({ default: {} }) data!: { timeId?: number; date: Moment };
 
   private get timeId(): number | undefined {
@@ -401,9 +405,9 @@ export default class TimeReportFormComponent extends Vue {
     if (this.time === null || this.time.projectId === undefined) {
       return;
     }
-    try {
-      this.saving = true;
-      if (!this.edit) {
+    this.saving = true;
+    if (!this.edit) {
+      try {
         await this.timeService.create(
           CreateTimeDTO.parse({
             taskId: parseInt(this.time.taskId, 10),
@@ -419,7 +423,19 @@ export default class TimeReportFormComponent extends Vue {
             userId: this.authService.user!.id
           })
         );
-      } else {
+        this.$emit("close");
+        this.saving = false;
+      } catch {
+        this.messageService.showModal(
+          "error",
+          this.$t("time.create.error.header").toString(),
+          this.$t("time.create.error.message").toString(),
+          () => (this.saving = false)
+        );
+        this.saving = false;
+      }
+    } else {
+      try {
         await this.timeService.update(
           UpdateTimeDTO.parse({
             id: this.time.id as number,
@@ -436,11 +452,17 @@ export default class TimeReportFormComponent extends Vue {
             userId: this.authService.user!.id
           })
         );
+        this.$emit("close");
+        this.saving = false;
+      } catch {
+        this.messageService.showModal(
+          "error",
+          this.$t("time.update.error.header").toString(),
+          this.$t("time.update.error.message").toString(),
+          () => (this.saving = false)
+        );
+        this.saving = false;
       }
-      this.saving = false;
-      this.$emit("close");
-    } catch (error) {
-      alert("Something went wrong. Please try again");
     }
   }
 
@@ -452,7 +474,12 @@ export default class TimeReportFormComponent extends Vue {
         this.saving = false;
         this.$emit("close");
       } catch (error) {
-        alert("Something went wrong. Please try again");
+        this.messageService.showModal(
+          "error",
+          this.$t("time.delete.error.header").toString(),
+          this.$t("time.delete.error.message").toString(),
+          () => (this.saving = false)
+        );
       }
     }
   }

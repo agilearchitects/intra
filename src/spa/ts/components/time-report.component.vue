@@ -2,7 +2,10 @@
   <div class="container">
     <div class="d-flex justify-content-between">
       <div>
-        <button-component style="font-size: 3rem; padding: 1rem;" v-on:click="openModal">
+        <button-component
+          style="font-size: 3rem; padding: 1rem;"
+          v-on:click="openModal"
+        >
           <i class="fas fa-plus"></i>
         </button-component>
       </div>
@@ -35,7 +38,10 @@
           <strong>Task:</strong>
           <i>{{ time.task.name }}</i>
         </div>
-        <div class="d-flex align-items-center" v-if="time.tags.length > 0">
+        <div
+          class="d-flex align-items-center"
+          v-if="time.tags.length > 0"
+        >
           <strong>Tags:</strong>
           <pill-component
             class="mx-1"
@@ -51,8 +57,15 @@
       <div class="pl-2">
         <p class="text-right nowrap">{{ time.hours }}h {{ time.minutes }}m</p>
         <div class="d-flex justify-content-end">
-          <button-component class="mr-2" v-if="time.isActive" v-on:click="stop(time.id)">Stop</button-component>
-          <button-component class="px-2" v-on:click="openModal(time.id)">
+          <button-component
+            class="mr-2"
+            v-if="time.isActive"
+            v-on:click="stop(time.id)"
+          >Stop</button-component>
+          <button-component
+            class="px-2"
+            v-on:click="openModal(time.id)"
+          >
             <i class="fas fa-edit"></i>
           </button-component>
         </div>
@@ -61,8 +74,31 @@
   </div>
 </template>
 <script lang="ts">
+// Libs
 import { Vue, Component, Watch } from "vue-property-decorator";
 import { Moment, default as moment, Duration } from "moment";
+
+// Services
+import { TimeService } from "../services/time.service";
+import { MessageService } from "../services/message.service";
+
+// DTO's
+import { TimeDTO } from "../../../shared/dto/time.dto";
+import { StopTimeDTO } from "../../../shared/dto/stop-time.dto";
+import { TimeQueryDTO } from "../../../shared/dto/time-query.dto";
+import { TagDTO } from "../../../shared/dto/tag.dto";
+
+// Components
+import ButtonComponent from "./layout/button.component.vue";
+import TimeReportFormComponent from "./time-report-form.component.vue";
+import TimeDateComponent from "./time-date.component.vue";
+import PillComponent from "./layout/pill.component.vue";
+
+// Bootstrap
+import {
+  timeService as timeServiceInstance,
+  messageService as messageServiceInstance
+} from "../bootstrap";
 
 import {
   ModalInstance,
@@ -168,22 +204,12 @@ export class TimeViewModel {
   }
 }
 
-import ButtonComponent from "./layout/button.component.vue";
-import TimeReportFormComponent from "./time-report-form.component.vue";
-import { TimeDTO } from "../../../shared/dto/time.dto";
-import { StopTimeDTO } from "../../../shared/dto/stop-time.dto";
-import { TimeService } from "../services/time.service";
-import { timeService as timeServiceInstance } from "../bootstrap";
-import { TimeQueryDTO } from "../../../shared/dto/time-query.dto";
-import { TagDTO } from "../../../shared/dto/tag.dto";
-import TimeDateComponent from "./time-date.component.vue";
-import PillComponent from "./layout/pill.component.vue";
-
 @Component({
   components: { ButtonComponent, TimeDateComponent, PillComponent }
 })
 export default class TimeReportComponent extends Vue {
   private readonly timeService: TimeService = timeServiceInstance;
+  private readonly messageService: MessageService = messageServiceInstance;
 
   @Watch("date") onDateChange() {
     this.getReports();
@@ -299,7 +325,11 @@ export default class TimeReportComponent extends Vue {
       );
       this.getReports();
     } catch (error) {
-      alert("Something went wrong. Try again");
+      this.messageService.showModal(
+        "error",
+        this.$t("time.stop.error.header").toString(),
+        this.$t("time.stop.error.message").toString()
+      );
     }
   }
 }

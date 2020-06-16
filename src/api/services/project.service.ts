@@ -222,8 +222,8 @@ export class ProjectService {
       ...(project.rate !== null ? { rate: project.rate } : undefined),
       ...(project.priceBudget !== null ? { priceBudget: project.priceBudget } : undefined),
       ...(project.hoursBudget !== null ? { hoursBudget: project.hoursBudget } : undefined),
-      ...(project.start !== null ? { start: this.momentModule(project.start).format("YYYY-MM-DD") } : undefined),
-      ...(project.end !== null ? { end: this.momentModule(project.end).format("YYYY-MM-DD") } : undefined),
+      ...(project.start !== null ? { start: this.momentModule(project.start.toString()).format("YYYY-MM-DD") } : undefined),
+      ...(project.end !== null ? { end: this.momentModule(project.end.toString()).format("YYYY-MM-DD") } : undefined),
       ...(project.customer !== undefined ? {
         customer: this.customerDTO.parse({
           id: project.customer.id,

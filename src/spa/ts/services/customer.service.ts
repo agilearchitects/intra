@@ -15,7 +15,7 @@ export class CustomerService {
     try {
       return (await this.apiService.get<ICustomerDTO[]>("/customer", all === true ? { all: "true" } : undefined)).body.map((customer: ICustomerDTO) => CustomerDTO.parse(customer));
     } catch (error) {
-      this.errorService.submit({ message: "Error while fetching customers", error });
+      this.errorService.submit({ message: "Error while getting customers", error });
       throw error;
     }
   }
@@ -23,7 +23,7 @@ export class CustomerService {
     try {
       return CustomerDTO.parse((await this.apiService.post<ICreateCustomerDTO, ICustomerDTO>("/customer", payload.serialize())).body);
     } catch (error) {
-      this.errorService.submit({ message: "Error while creating customer", error });
+      this.errorService.submit({ message: "Unable to create customer", error });
       throw error;
     }
   }
