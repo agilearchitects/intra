@@ -1,19 +1,42 @@
 <template>
   <div>
     <div class="container text-center my-4 d-none d-lg-block">
-      <router-link :to="{ name: 'start' }" class="navbar-brand p-0">
-        <img src="../../resources/img/logo.png" style="height: 40px;" />
+      <router-link
+        :to="{ name: 'start' }"
+        class="navbar-brand p-0"
+      >
+        <img
+          src="../../resources/img/logo.png"
+          style="height: 40px;"
+        />
       </router-link>
     </div>
-    <nav class="navbar navbar-expand-lg" ref="navbar">
+    <nav
+      class="navbar navbar-expand-lg"
+      ref="navbar"
+    >
       <div class="container-custom">
-        <button class="navbar-toggler" type="button" v-on:click="toggleEvent">
+        <button
+          class="navbar-toggler"
+          type="button"
+          v-on:click="toggleEvent"
+        >
           <i class="fas fa-bars"></i>
         </button>
-        <a class="navbar-brand d-lg-none" href="#">{{ $t('title') }}</a>
-        <div class="collapse navbar-collapse no-transition" ref="navbarContent">
+        <a
+          class="navbar-brand d-lg-none"
+          href="#"
+        >{{ $t('title') }}</a>
+        <div
+          class="collapse navbar-collapse no-transition"
+          ref="navbarContent"
+        >
           <template v-for="(menu, index) in menus">
-            <ul class="navbar-nav" :class="{ 'mr-auto': index === 0 }" :key="`menu_${index}`">
+            <ul
+              class="navbar-nav"
+              :class="{ 'mr-auto': index === 0 }"
+              :key="`menu_${index}`"
+            >
               <li
                 class="nav-item"
                 :class="{ 'dropdown': menuItem.children, 'show': menuItem.children && matches(menuItem.route), 'nav-divider': menuItem.divider !== undefined }"
@@ -245,7 +268,7 @@ export default class HeaderComponent extends Vue {
     top: 0;
     right: 0;
     left: 0;
-    z-index: 1030;
+    z-index: 1;
   }
 }
 </style>

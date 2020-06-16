@@ -7,6 +7,7 @@ import ModalComponent from "./modal.component.vue";
 // global.Promise = Promise;
 
 export enum modalSize {
+  XS = "xs",
   SM = "sm",
   MD = "md",
   LG = "lg",
@@ -37,12 +38,12 @@ export interface IModalInterceptor<T, R> {
 }
 
 export class ModalInstance<T, R> {
-  public static create<T, R>(component: typeof Vue, data?: T): ModalInstance<T, R> {
+  public static create<T = any, R = any>(component: typeof Vue, data?: T): ModalInstance<T, R> {
     return new ModalInstance<T, R>(Vue, component, data);
   }
 
-  public events: Array<IModalEvent<T, R>> = [];
-  public interceptors: Array<IModalInterceptor<T, R>> = [];
+  public events: IModalEvent<T, R>[] = [];
+  public interceptors: IModalInterceptor<T, R>[] = [];
   private modalComponent: ModalComponent;
   private eventInActions: boolean = false;
 

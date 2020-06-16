@@ -4,11 +4,13 @@ import moment from "moment";
 // Services
 import { APIService } from "../../shared/services/api.service";
 import { DateService } from "../../shared/services/date.service";
+import { i18n } from "./locale";
 import { AuthService } from "./services/auth.service";
 import { BroadcastService } from "./services/broadcast.service";
 import { CustomerService } from "./services/customer.service";
 import { ErrorService } from "./services/error.service";
 import { MenuService } from "./services/menu.service";
+import { MessageService } from "./services/message.service";
 import { ProjectService } from "./services/project.service";
 import { StorageService } from "./services/storage.service";
 import { TagService } from "./services/tag.service";
@@ -29,6 +31,7 @@ export const tagService = new TagService(apiService, errorService);
 export const authService = new AuthService(apiService, errorService, storageService);
 export const menuService = new MenuService(authService);
 export const userService = new UserService(apiService);
+export const messageService = new MessageService();
 
 (window as any).authService = authService;
 (window as any).storageService = storageService;

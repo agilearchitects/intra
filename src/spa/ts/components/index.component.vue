@@ -22,6 +22,7 @@ import { BroadcastService } from "../services/broadcast.service";
 import { ErrorService, IErrorPayload } from "../services/error.service";
 import { APIService } from "../../../shared/services/api.service";
 import { AuthService } from "../services/auth.service";
+import VueI18n from "vue-i18n";
 
 @Component
 export default class IndexComponent extends Vue {

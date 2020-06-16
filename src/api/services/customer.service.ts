@@ -78,6 +78,13 @@ export class CustomerService {
   public async getEvery(): Promise<ICustomerDTO[]> {
     return (await this.customerEntity.find()).map((customer: CustomerEntity) => this.parseCustomerEntityToDTO(customer));
   }
+  public async get(name: number | string): Promise<ICustomerDTO> {
+    return this.parseCustomerEntityToDTO(await this.customerEntity.findOneOrFail({
+      where: {
+        ...(typeof name === "number" ? { id: name } : { name }),
+      }
+    }));
+  }
   public async create(customer: ICreateCustomerDTO): Promise<ICustomerDTO> {
     const newCustomer = await this.customerEntity.create({
       name: customer.name,

@@ -27,7 +27,7 @@ export enum ButtonStyle {
   SECONDARY = "secondary",
   INFO = "info",
   WARNING = "warning",
-  ERROR = "error"
+  DANGER = "danger"
 }
 export enum ButtonSize {
   XS = "xs",

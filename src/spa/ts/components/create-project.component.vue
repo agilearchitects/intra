@@ -29,6 +29,7 @@ import { CreateTaskDTO } from "../../../shared/dto/create-task.dto";
 // Services
 import { ProjectService } from "../services/project.service";
 import { AuthService } from "../services/auth.service";
+import { MessageService } from "../services/message.service";
 
 // Components
 import ButtonComponent from "./layout/button.component.vue";
@@ -36,7 +37,10 @@ import ButtonComponent from "./layout/button.component.vue";
 import ProjectFormComponent from "./project-form.component.vue";
 
 // Bootstrap
-import { projectService as projectServiceInstance } from "../bootstrap";
+import {
+  projectService as projectServiceInstance,
+  messageService as messageServiceInstance
+} from "../bootstrap";
 @Component({
   components: {
     ButtonComponent,
@@ -45,7 +49,8 @@ import { projectService as projectServiceInstance } from "../bootstrap";
   }
 })
 export default class CreateProjectComponent extends Vue {
-  public projectService: ProjectService = projectServiceInstance;
+  public readonly projectService: ProjectService = projectServiceInstance;
+  public readonly messageService: MessageService = messageServiceInstance;
 
   public loading: boolean = false;
   public saving: boolean = false;
@@ -54,11 +59,16 @@ export default class CreateProjectComponent extends Vue {
     this.saving = true;
     try {
       await this.projectService.create(createProject);
+      this.saving = false;
       this.$router.push({ name: "time.project" });
     } catch {
-      alert("Something went wrong. Please try again");
+      this.messageService.showModal(
+        "error",
+        this.$t("project.create.error.header").toString(),
+        this.$t("project.create.error.message").toString(),
+        () => (this.saving = false)
+      );
     }
-    this.saving = false;
   }
 }
 </script>
