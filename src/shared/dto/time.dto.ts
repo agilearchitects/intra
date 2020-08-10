@@ -25,7 +25,6 @@ export interface ITimeDTO {
 
 export class TimeDTO {
   public static parseFromRequest(object: IDictionaryDTO<jsonType>, dateService?: DateService): TimeDTO {
-    object.lkorv
     if (
       typeof object.id !== "number" ||
       typeof object.task !== "object" ||

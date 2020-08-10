@@ -24,15 +24,6 @@ export interface IProjectDTO {
 
 export class ProjectDTO {
   public static parseFromRequest(object: IDictionaryDTO<jsonType>, dateService?: DateService): ProjectDTO {
-    const a: (string | number)[] = [1, 2, 3];
-    if (a.find((a: any) => typeof a === "string") === undefined) {
-      a
-    }
-    if ((object.tasks !== undefined && !(object.tasks instanceof Array))) {
-
-    } else {
-      object.tasks
-    }
     if (
       typeof object.id !== "number" ||
       typeof object.name !== "string" ||
