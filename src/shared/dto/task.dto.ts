@@ -1,5 +1,11 @@
+// Libs
 import { jsonType } from "@agilearchitects/server";
+
+// Services
 import { DateService } from "../services/date.service";
+
+// DTO's
+import { IDictionaryDTO } from "./dictionary.dto";
 import { DTO } from "./dto";
 import { IProjectDTO, ProjectDTO } from "./project.dto";
 import { ITaskUserDTO, TaskUserDTO } from "./task-user.dto";
@@ -17,19 +23,20 @@ export interface ITaskDTO {
 }
 
 export class TaskDTO {
-  public static parseFromRequest(object: jsonType, dateService?: DateService): TaskDTO {
-    object = DTO.parseFromRequest(object);
-    if (typeof object.id !== "number" ||
+  public static parseFromRequest(object: IDictionaryDTO<jsonType>, dateService?: DateService): TaskDTO {
+    if (
+      typeof object.id !== "number" ||
       typeof object.name !== "string" ||
-      object.project === null ||
-      (typeof object.project === "object" && (object.project instanceof Array)) ||
+      (object.project !== undefined && (
+        object.project === null ||
+        (object.project instanceof Array) ||
+        typeof object.project !== "object"
+      )) ||
       (typeof object.rate !== "number" && object.rate !== undefined) ||
       (typeof object.priceBudget !== "number" && object.priceBudget !== undefined) ||
       (typeof object.hoursBudget !== "number" && object.hoursBudget !== undefined) ||
-      (object.times !== undefined &&
-        !(object.times instanceof Array)) ||
-      (object.users !== undefined &&
-        !(object.users instanceof Array))
+      (object.times !== undefined && !(object.times instanceof Array)) ||
+      (object.users !== undefined && !(object.users instanceof Array))
     ) {
       throw new Error("Unable to parse");
     }
@@ -41,8 +48,8 @@ export class TaskDTO {
       object.rate,
       object.priceBudget,
       object.hoursBudget,
-      (object.times !== undefined ? object.times.map((time: jsonType) => TimeDTO.parseFromRequest(time)) : undefined),
-      (object.users !== undefined ? object.users.map((user: jsonType) => TaskUserDTO.parseFromRequest(user)) : undefined),
+      (object.times !== undefined ? DTO.parseArrayToDictionary(object.times).map((time: IDictionaryDTO<jsonType>) => TimeDTO.parseFromRequest(time)) : undefined),
+      (object.users !== undefined ? DTO.parseArrayToDictionary(object.users).map((user: IDictionaryDTO<jsonType>) => TaskUserDTO.parseFromRequest(user)) : undefined),
     )
   }
   public static parse(task: ITaskDTO, dateService?: DateService): TaskDTO {

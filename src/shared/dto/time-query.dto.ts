@@ -6,7 +6,7 @@ export interface ITimeQueryDTO {
   all?: boolean;
 }
 
-export class TimeQueryDTO implements ITimeQueryDTO {
+export class TimeQueryDTO {
   public static parse(object: ITimeQueryDTO) {
     return new TimeQueryDTO(
       object.date,

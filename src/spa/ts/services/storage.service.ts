@@ -1,8 +1,6 @@
 import { BroadcastService } from "./broadcast.service";
 
 export class StorageService {
-
-  public private;
   private _storage: any = {};
 
   public constructor(
@@ -11,7 +9,7 @@ export class StorageService {
   ) { }
 
   public on<T>(key: string, callback: (value: T) => void) {
-    this.broadcastService.subscribe<T>(`storage.${key}`).then((payload: T) => callback(payload));
+    this.broadcastService.subscribe<T>(`storage.${key}`, (payload?: T) => payload !== undefined ? callback(payload) : undefined);
   }
 
   public get<T>(key: string, defaultValue?: T): T | undefined {
@@ -34,13 +32,24 @@ export class StorageService {
     this.broadcastService.emit(`storage.${key}`, value);
   }
 
+  public delete(key: string): void {
+    if (key in this._storage) {
+      // Delete if exists
+      delete this._storage[key];
+    }
+    // Call to write storage (save to local storage)
+    this.write();
+    // Emit event for key update
+    this.broadcastService.emit(`storage.${key}`, undefined);
+  }
+
   private write(): void {
     localStorage.setItem(this.key, JSON.stringify(this._storage));
   }
   private read(): void {
-    const storage = JSON.parse(localStorage.getItem(this.key));
+    const storage = localStorage.getItem(this.key);
     if (storage !== null) {
-      this._storage = JSON.parse(localStorage.getItem(this.key));
+      this._storage = JSON.parse(storage);
     }
   }
 }

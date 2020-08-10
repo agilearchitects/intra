@@ -1,0 +1,226 @@
+[
+    {
+        "id": 1,
+        "name": "Utveckling",
+        "rate": null,
+        "priceBudget": null,
+        "hoursBudget": null,
+        "projectId": 1
+    },
+    {
+        "id": 2,
+        "name": "Övrigt",
+        "rate": null,
+        "priceBudget": null,
+        "hoursBudget": null,
+        "projectId": 1
+    },
+    {
+        "id": 3,
+        "name": "Möte",
+        "rate": null,
+        "priceBudget": null,
+        "hoursBudget": null,
+        "projectId": 1
+    },
+    {
+        "id": 4,
+        "name": "Övrigt",
+        "rate": null,
+        "priceBudget": null,
+        "hoursBudget": null,
+        "projectId": 2
+    },
+    {
+        "id": 5,
+        "name": "Utveckling",
+        "rate": null,
+        "priceBudget": null,
+        "hoursBudget": null,
+        "projectId": 3
+    },
+    {
+        "id": 6,
+        "name": "Möte",
+        "rate": null,
+        "priceBudget": null,
+        "hoursBudget": null,
+        "projectId": 3
+    },
+    {
+        "id": 7,
+        "name": "Övrigt",
+        "rate": null,
+        "priceBudget": null,
+        "hoursBudget": null,
+        "projectId": 3
+    },
+    {
+        "id": 8,
+        "name": "Support",
+        "rate": null,
+        "priceBudget": null,
+        "hoursBudget": null,
+        "projectId": 3
+    },
+    {
+        "id": 9,
+        "name": "SJ",
+        "rate": null,
+        "priceBudget": null,
+        "hoursBudget": null,
+        "projectId": 4
+    },
+    {
+        "id": 10,
+        "name": "Carnegie",
+        "rate": null,
+        "priceBudget": null,
+        "hoursBudget": null,
+        "projectId": 4
+    },
+    {
+        "id": 11,
+        "name": "Bankgiro",
+        "rate": null,
+        "priceBudget": null,
+        "hoursBudget": null,
+        "projectId": 4
+    },
+    {
+        "id": 12,
+        "name": "Möte",
+        "rate": null,
+        "priceBudget": null,
+        "hoursBudget": null,
+        "projectId": 5
+    },
+    {
+        "id": 13,
+        "name": "Övrigt",
+        "rate": null,
+        "priceBudget": null,
+        "hoursBudget": null,
+        "projectId": 5
+    },
+    {
+        "id": 14,
+        "name": "Utveckling",
+        "rate": null,
+        "priceBudget": null,
+        "hoursBudget": null,
+        "projectId": 6
+    },
+    {
+        "id": 15,
+        "name": "Support",
+        "rate": null,
+        "priceBudget": null,
+        "hoursBudget": null,
+        "projectId": 6
+    },
+    {
+        "id": 16,
+        "name": "Development",
+        "rate": null,
+        "priceBudget": null,
+        "hoursBudget": null,
+        "projectId": 7
+    },
+    {
+        "id": 17,
+        "name": "Documentation",
+        "rate": null,
+        "priceBudget": null,
+        "hoursBudget": null,
+        "projectId": 7
+    },
+    {
+        "id": 18,
+        "name": "Other",
+        "rate": null,
+        "priceBudget": null,
+        "hoursBudget": null,
+        "projectId": 7
+    },
+    {
+        "id": 19,
+        "name": "Utveckling",
+        "rate": null,
+        "priceBudget": null,
+        "hoursBudget": null,
+        "projectId": 8
+    },
+    {
+        "id": 20,
+        "name": "Möte",
+        "rate": null,
+        "priceBudget": null,
+        "hoursBudget": null,
+        "projectId": 8
+    },
+    {
+        "id": 21,
+        "name": "Övrigt",
+        "rate": null,
+        "priceBudget": null,
+        "hoursBudget": null,
+        "projectId": 8
+    },
+    {
+        "id": 22,
+        "name": "Utveckling",
+        "rate": null,
+        "priceBudget": null,
+        "hoursBudget": null,
+        "projectId": 9
+    },
+    {
+        "id": 23,
+        "name": "Marknadsföring",
+        "rate": null,
+        "priceBudget": null,
+        "hoursBudget": null,
+        "projectId": 9
+    },
+    {
+        "id": 24,
+        "name": "Kommunikation",
+        "rate": null,
+        "priceBudget": null,
+        "hoursBudget": null,
+        "projectId": 9
+    },
+    {
+        "id": 25,
+        "name": "Layout",
+        "rate": null,
+        "priceBudget": null,
+        "hoursBudget": null,
+        "projectId": 9
+    },
+    {
+        "id": 26,
+        "name": "Tidrapportering",
+        "rate": null,
+        "priceBudget": null,
+        "hoursBudget": null,
+        "projectId": 10
+    },
+    {
+        "id": 27,
+        "name": "Styrelsearbete",
+        "rate": null,
+        "priceBudget": null,
+        "hoursBudget": null,
+        "projectId": 10
+    },
+    {
+        "id": 28,
+        "name": "Bokföring",
+        "rate": null,
+        "priceBudget": null,
+        "hoursBudget": null,
+        "projectId": 10
+    }
+]

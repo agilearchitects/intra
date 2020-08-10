@@ -1,6 +1,6 @@
 <template>
   <button-component
-    :class="`mdo-btn mdo-btn--${buttonType} mdo-btn--${buttonStyle} mdo-btn--${buttonSize}`"
+    :class="`btn btn--${buttonType} btn--${buttonStyle} btn--${buttonSize}`"
     :loading="loading"
     :disabled="disabled"
     :route="route"
@@ -39,28 +39,31 @@ export enum ButtonSize {
   components: { ButtonComponent }
 })
 export default class LayoutButtonComponent extends Vue {
-  @Prop({ type: Boolean, default: false }) loading!: boolean;
-  @Prop({ type: Boolean, default: false }) disabled!: boolean;
+  @Prop({ type: Boolean, default: false })
+  public loading!: boolean;
+  @Prop({ type: Boolean, default: false })
+  public disabled!: boolean;
   @Prop({ default: undefined }) route!: Route;
-  @Prop({ type: String, default: "button" }) type!: string;
+  @Prop({ type: String, default: "button" })
+  public type!: string;
   @Prop({ type: String, default: ButtonType.CONTAINED })
-  buttonType!: ButtonType;
+  public buttonType!: ButtonType;
   @Prop({ type: String, default: ButtonStyle.PRIMARY })
-  buttonStyle!: ButtonStyle;
+  public buttonStyle!: ButtonStyle;
   @Prop({ type: String, default: ButtonSize.MD })
-  buttonSize!: ButtonSize;
+  public buttonSize!: ButtonSize;
 
   public click() {
     this.$emit("click");
   }
 }
 </script>
-<style lang="scss">
-@import "~bootstrap/scss/_functions";
+<style lang="scss" scoped>
 @import "../../../scss/variables";
+@import "~bootstrap/scss/_functions";
 @import "~bootstrap/scss/_variables";
 
-.mdo-btn {
+.btn {
   display: inline-block;
   &:hover {
     text-decoration: none;
@@ -109,7 +112,7 @@ export default class LayoutButtonComponent extends Vue {
   }*/
   &--text,
   &--outlined {
-    &.mdo-btn--secondary {
+    &.btn--secondary {
       color: theme-color("secondary");
     }
   }
@@ -117,23 +120,23 @@ export default class LayoutButtonComponent extends Vue {
     &:disabled {
       background-color: gray("300") !important;
     }
-    &.mdo-btn--primary {
+    &.btn--primary {
       color: theme-color-level("primary", -10);
       background-color: theme-color("primary");
     }
-    &.mdo-btn--secondary {
+    &.btn--secondary {
       color: theme-color-level("secondary", -10);
       background-color: theme-color("secondary");
     }
-    &.mdo-btn--warning {
+    &.btn--warning {
       color: theme-color-level("warning", -10);
       background-color: theme-color("warning");
     }
-    &.mdo-btn--danger {
+    &.btn--danger {
       color: theme-color-level("danger", -10);
       background-color: theme-color("danger");
     }
-    &.mdo-btn--info {
+    &.btn--info {
       color: theme-color-level("info", -10);
       background-color: theme-color("info");
     }

@@ -1,10 +1,28 @@
+// Libs
+import { jsonType } from "@agilearchitects/server";
+
+// DTO's
+import { IDictionaryDTO } from "./dictionary.dto";
+
 export interface IPasswordResetDTO {
   email: string;
 }
 
-export class PasswordResetDTO implements IPasswordResetDTO {
+export class PasswordResetDTO {
+  public static parseFromRequest(object: IDictionaryDTO<jsonType>): PasswordResetDTO {
+    if (
+      typeof object.email !== "string"
+    ) {
+      throw new Error("Unable to parse");
+    }
+
+    return PasswordResetDTO.parse({
+      email: object.email,
+    });
+  }
+
   public static parse(object: IPasswordResetDTO): PasswordResetDTO {
-    return new PasswordResetDTO(
+    return new this(
       object.email,
     );
   }

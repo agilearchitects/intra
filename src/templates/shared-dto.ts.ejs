@@ -1,0 +1,53 @@
+<!-- target=src/shared/dto/<%= name %>.dto.ts -->
+// Libs
+import { jsonType } from "@agilearchitects/server";
+
+// DTO's
+import { IDictionaryDTO } from "./dictionary.dto";
+
+export interface I<%= changeCase.pascalCase(name) %>DTO {
+  id: number;
+  name: string;
+  optional?: boolean;
+}
+
+export class <%= changeCase.pascalCase(name) %>DTO {
+  public static parseFromRequest(object: IDictionaryDTO<jsonType>): <%= changeCase.pascalCase(name) %>DTO {
+    if (
+      typeof object.id !== "number" ||
+      typeof object.name !== "string" ||
+      (object.optional !== undefined &&
+        typeof object.optional !== "boolean")
+    ) {
+      throw new Error("Unable to parse");
+    }
+
+    return <%= changeCase.pascalCase(name) %>DTO.parse({
+      id: object.id,
+      name: object.name,
+      ...(object.optional !== undefined ? { optional: object.optional } : undefined),
+    });
+  }
+
+  public static parse(object: I<%= changeCase.pascalCase(name) %>DTO): <%= changeCase.pascalCase(name) %>DTO {
+    return new this(
+      object.id,
+      object.name,
+      object.optional !== undefined ? object.optional : undefined
+    );
+  }
+
+  public constructor(
+    public readonly id: number,
+    public readonly name: string,
+    public readonly optional?: boolean,
+  ) { }
+
+  public serialize(): I<%= changeCase.pascalCase(name) %>DTO {
+    return {
+      id: this.id,
+      name: this.name,
+      ...(this.optional !== undefined ? { optional: this.optional } : undefined),
+    };
+  }
+}

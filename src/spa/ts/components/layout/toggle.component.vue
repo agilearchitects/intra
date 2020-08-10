@@ -11,7 +11,10 @@
       <i class="b switch"></i>
       <i class="b track"></i>
     </div>
-    <label :for="id" class="ml-2">
+    <label
+      :for="id"
+      class="ml-2"
+    >
       <slot></slot>
     </label>
   </div>
@@ -47,8 +50,8 @@ export default class ToggleComponent extends Vue {
 }
 </script>
 <style lang="scss" scoped>
-@import "~bootstrap/scss/_functions";
 @import "../../../scss/variables";
+@import "~bootstrap/scss/_functions";
 @import "~bootstrap/scss/_variables";
 
 .mdo-toggle {

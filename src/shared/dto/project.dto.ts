@@ -1,8 +1,13 @@
+// Libs
 import { jsonType } from "@agilearchitects/server"
+
+// Services
 import { DateService } from "../services/date.service"
+
+// DTO's
 import { CustomerDTO, ICustomerDTO } from "./customer.dto";
+import { IDictionaryDTO } from "./dictionary.dto";
 import { DTO } from "./dto";
-import { TagDTO } from "./tag.dto";
 import { ITaskDTO, TaskDTO } from "./task.dto";
 
 export interface IProjectDTO {
@@ -17,23 +22,32 @@ export interface IProjectDTO {
   tasks?: ITaskDTO[];
 }
 
-export class ProjectDTO implements IProjectDTO {
-  public static parseFromRequest(object: jsonType, dateService?: DateService): ProjectDTO {
-    object = DTO.parseFromRequest(object);
-    if (typeof object.id !== "number" ||
+export class ProjectDTO {
+  public static parseFromRequest(object: IDictionaryDTO<jsonType>, dateService?: DateService): ProjectDTO {
+    const a: (string | number)[] = [1, 2, 3];
+    if (a.find((a: any) => typeof a === "string") === undefined) {
+      a
+    }
+    if ((object.tasks !== undefined && !(object.tasks instanceof Array))) {
+
+    } else {
+      object.tasks
+    }
+    if (
+      typeof object.id !== "number" ||
       typeof object.name !== "string" ||
-      (object.rate !== undefined &&
-        typeof object.rate !== "number") ||
-      (object.priceBudget !== undefined &&
-        typeof object.priceBudget !== "number") ||
-      (object.hoursBudget !== undefined &&
-        typeof object.hoursBudget !== "number") ||
-      (object.start !== undefined &&
-        typeof object.start !== "string") ||
-      (object.end !== undefined &&
-        typeof object.end !== "string") ||
-      (object.tasks !== undefined &&
-        !(object.tasks instanceof Array))) {
+      (object.rate !== undefined && typeof object.rate !== "number") ||
+      (object.priceBudget !== undefined && typeof object.priceBudget !== "number") ||
+      (object.hoursBudget !== undefined && typeof object.hoursBudget !== "number") ||
+      (object.start !== undefined && typeof object.start !== "string") ||
+      (object.end !== undefined && typeof object.end !== "string") ||
+      (object.customer !== undefined && (
+        object.customer === null ||
+        (object.customer instanceof Array) ||
+        typeof object.customer !== "object"
+      )) ||
+      (object.tasks !== undefined && !(object.tasks instanceof Array))
+    ) {
       throw new Error("Unable to parse");
     }
     return new ProjectDTO(
@@ -45,7 +59,7 @@ export class ProjectDTO implements IProjectDTO {
       object.start,
       object.end,
       (object.customer ? CustomerDTO.parseFromRequest(object.customer, dateService) : undefined),
-      (object.tasks !== undefined ? object.tasks.map((task: jsonType) => TaskDTO.parseFromRequest(task)) : undefined)
+      (object.tasks !== undefined ? DTO.parseArrayToDictionary(object.tasks).map((task: IDictionaryDTO<jsonType>) => TaskDTO.parseFromRequest(task)) : undefined)
     )
   }
   public static parse(object: IProjectDTO, dateService?: DateService): ProjectDTO {

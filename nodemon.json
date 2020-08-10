@@ -9,7 +9,7 @@
     "ts": "node --require ts-node/register"
   },
   "watch": [
-    "src/api",
+    "src/app",
     "src/shared"
   ],
   "env": {

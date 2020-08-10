@@ -2,65 +2,137 @@
 import { TranslateResult } from "vue-i18n";
 import { Location } from "vue-router";
 
-// Locale
-import { i18n } from "../locale";
-
-// Modules
-import { wiki, wikiToRoute } from "../../resources/wiki";
-
 // Services
 import { AuthService } from "./auth.service";
 
-// Bootstrap
-import { authService as authServiceInstance } from "../bootstrap";
+// Locale
+import { i18n } from "../locale";
 
-export interface ITree { route: Location; title: TranslateResult; children?: ITree[]; }
-export interface IMenuItem { route?: Location; title?: TranslateResult; children?: IMenuItem[]; divider?: boolean; }
+// Menu
+import { ClaimPayloadDTO } from "../../../shared/dto/claim-payload.dto";
+import { UserPayloadDTO } from "../../../shared/dto/user-payload.dto";
+import menu from "../../resources/menu.json";
+import { BroadcastService, ISubscription } from "./broadcast.service";
+
+export type position = "left" | "right";
+
+interface IJsonDivider {
+  divider: true;
+  claims?: string[];
+}
+interface IJsonRootDivider extends IJsonDivider {
+  position: position;
+}
+
+interface IJsonMenu {
+  route: string | Location;
+  name: string;
+  claims?: string[];
+  children?: jsonMenuType[];
+}
+interface IJsonRootMenu extends IJsonMenu {
+  position?: position;
+}
+
+export interface IDivider {
+  divider: true;
+}
+export interface IMenu {
+  route: Location;
+  title: TranslateResult;
+  children?: menuType[];
+}
+
+export interface ITree {
+  route: Location;
+  title: TranslateResult;
+  children?: ITree[];
+}
+
+type jsonRootMenuType = IJsonRootMenu | IJsonRootDivider;
+type jsonMenuType = IJsonMenu | IJsonDivider;
+export type menuType = IMenu | IDivider;
 
 export class MenuService {
+  private readonly broadcastService = new BroadcastService();
+
   public constructor(
     private readonly authService: AuthService,
-  ) { }
+  ) {
+    // Set up listners for login and logout to emit when menu is changing
+    this.authService.onLogin(() => this.broadcastService.emit("menu_change"));
+    this.authService.onLogout(() => this.broadcastService.emit("menu_change"));
+  }
 
-  public get tree(): ITree[] {
-    return [
-      { route: { name: "start" }, title: i18n.t("menu.start") },
-      { route: { name: "wiki" }, title: i18n.t("menu.wiki"), children: wikiToRoute(wiki, "wiki") },
-      {
-        route: { name: "time" }, title: i18n.t("menu.time.time"), children: [
-          { route: { name: "time.report" }, title: i18n.t("menu.time.report") },
-          { route: { name: "time.result" }, title: i18n.t("menu.time.result") },
-          { route: { name: "time.project" }, title: i18n.t("menu.time.project") },
-        ],
-      },
-      { route: { name: "crm" }, title: i18n.t("menu.crm") },
-    ];
+  public getJsonMenu(): jsonRootMenuType[] {
+    const user: UserPayloadDTO = this.authService.user !== undefined ?
+      this.authService.user :
+      // Will use dummy user with guest claim if not logged in
+      UserPayloadDTO.parse({
+        id: 0,
+        email: "",
+        claims: [ClaimPayloadDTO.parse({ id: 0, name: "guest" })],
+      });
+    return this.claimFilterMenu(menu as any, user) as jsonRootMenuType[];
   }
-  public get leftMenu(): IMenuItem[] {
-    return [
-      { route: { name: "start" }, title: i18n.t("menu.start") },
-      { route: { name: "wiki" }, title: i18n.t("menu.wiki"), children: wikiToRoute(wiki, "wiki") },
-    ];
+
+  // Property for menu tree
+  public getTree(): ITree[] {
+    return this.mapToTree(this.getJsonMenu());
   }
-  public get rightMenu(): IMenuItem[] {
-    return [
-      ...this.authService.isAuth ? [
-        {
-          route: { name: "time" }, title: i18n.t("menu.time.time"), children: [
-            { route: { name: "time.report" }, title: i18n.t("menu.time.report") },
-            { route: { name: "time.result" }, title: i18n.t("menu.time.result") },
-          ],
-        },
-        { route: { name: "cv" }, title: i18n.t("menu.cv") },
-        { route: { name: "crm" }, title: i18n.t("menu.crm") },
-        { divider: true },
-        { route: { name: "logout" }, title: i18n.t("menu.logout") },
-      ] : [
-          { route: { name: "login" }, title: i18n.t("menu.login") },
-        ],
-    ];
+
+  // Property for left side menu
+  public getLeftMenu(): menuType[] {
+    return this.mapRootMenu(this.getJsonMenu(), "left");
   }
-  public get menus(): IMenuItem[][] {
-    return [this.leftMenu, this.rightMenu];
+
+  // Property for right side menu
+  public getRightMenu(): menuType[] {
+    return this.mapRootMenu(this.getJsonMenu(), "right");
+  }
+
+  public getMenu(): menuType[] {
+    return this.mapRootMenu(this.getJsonMenu());
+  }
+
+  private claimFilterMenu(menu: (jsonRootMenuType | jsonMenuType)[], user: UserPayloadDTO): (jsonRootMenuType | jsonMenuType)[] {
+    return menu.filter((item: jsonRootMenuType | jsonMenuType) => item.claims === undefined || (item.claims !== undefined && user.hasClaim(item.claims, "all")))
+      .map((item: jsonRootMenuType | jsonMenuType) => "children" in item && item.children !== undefined ? { ...item, children: this.claimFilterMenu(item.children, user) } : item);
+  }
+
+  public onMenuChange(callback: () => void): ISubscription {
+    return this.broadcastService.subscribe("menu_change", callback);
+  }
+
+  private mapRootMenu(menu: jsonRootMenuType[], position?: position): menuType[] {
+    return this.mapToMenu(menu.filter((menu: jsonRootMenuType) =>
+      // No position is provided (will return all menu items)
+      position === undefined ||
+      // Position for menu is set and match provided position
+      (menu.position !== undefined && menu.position === position) ||
+      // Provided position is set to left and menu position is not defined (default to left)
+      (position === "left" && menu.position === undefined)
+    ));
+  }
+
+  private mapToMenu(menu: jsonMenuType[]): menuType[] {
+    return menu.map((item: jsonMenuType) => ({
+      ...("divider" in item ? {
+        divider: item.divider,
+      } : {
+          route: typeof item.route === "string" ? { name: item.route } : item.route,
+          title: i18n.t(item.name),
+          ...(item.children !== undefined ? { children: this.mapToMenu(item.children) } : undefined)
+        })
+    }))
+  }
+
+  private mapToTree(menu: (jsonRootMenuType | jsonMenuType)[]): ITree[] {
+    return (menu.filter((item: jsonRootMenuType | jsonMenuType) => ("divider" in item) === false) as (IJsonRootMenu | IJsonMenu)[])
+      .map((item: IJsonRootMenu | IJsonMenu) => ({
+        route: typeof item.route === "string" ? { name: item.route } : item.route,
+        title: i18n.t(item.name),
+        ...(item.children !== undefined ? { children: this.mapToTree(item.children) } : undefined),
+      }));
   }
 }

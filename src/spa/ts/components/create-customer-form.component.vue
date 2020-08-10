@@ -34,17 +34,12 @@ import InputComponent from "./layout/input.component.vue";
 import MessageComponent, { IMessagePayload } from "./message.component.vue";
 
 // Bootstrap
-import {
-  customerService as customerServiceInstance,
-  messageService as messageServiceInstance
-} from "../bootstrap";
+import { bootstrap } from "../bootstrap";
 
 @Component({
-  components: { ModalFormComponent, InputComponent }
+  components: { ModalFormComponent, InputComponent },
 })
 export default class CreateCustomerFormComponent extends Vue {
-  public customerService: CustomerService = customerServiceInstance;
-  public messageService: MessageService = messageServiceInstance;
   public name: string = "";
 
   public saving: boolean = false;
@@ -55,14 +50,13 @@ export default class CreateCustomerFormComponent extends Vue {
   public async save() {
     this.saving = true;
     try {
-      throw new Error("APA");
-      const customer: CustomerDTO = await this.customerService.create(
+      const customer: CustomerDTO = await bootstrap.customerService.create(
         CreateCustomerDTO.parse({ name: this.name })
       );
       this.saving = false;
       this.$emit("close", { result: customer });
     } catch {
-      this.messageService.showModal(
+      bootstrap.messageService.showModal(
         "error",
         this.$t("customer.create.error.header").toString(),
         this.$t("customer.create.error.message").toString(),

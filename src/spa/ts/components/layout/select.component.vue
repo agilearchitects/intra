@@ -1,20 +1,32 @@
 <template>
-  <div class="mdo-form-group">
-    <label class="mdo-form-group__label mdo-form-group__label--active mdo-form-group__label--gray">
+  <div class="form-group">
+    <label class="form-group__label form-group__label--active form-group__label--gray">
       <slot name="label">{{ label }}</slot>
     </label>
-    <i class="mdo-form-group__caret fas fa-caret-down"></i>
+    <i class="form-group__caret fas fa-caret-down"></i>
     <label
-      class="mdo-form-group__select-placeholder"
+      class="form-group__select-placeholder"
       v-if="hasPlaceholder && hiddenValue === '' && !isOptionsEmpty"
     >
       <slot name="placeholder">{{ placeholder }}</slot>
     </label>
-    <label class="mdo-form-group__select-placeholder" v-if="isOptionsEmpty">
+    <label
+      class="form-group__select-placeholder"
+      v-if="isOptionsEmpty"
+    >
       <slot name="empty">{{ emptyLabel }}</slot>
     </label>
-    <select class="mdo-form-group__control" v-on:input="onInput" ref="select">
-      <option value hidden default v-if="hasPlaceholder"></option>
+    <select
+      class="form-group__control"
+      v-on:input="onInput"
+      ref="select"
+    >
+      <option
+        value
+        hidden
+        default
+        v-if="hasPlaceholder"
+      ></option>
       <template v-for="(option, index) in options">
         <optgroup
           v-if="option.children !== undefined"
@@ -54,7 +66,6 @@ export default class SelectComponent extends Vue {
   @Prop({ default: "", type: String }) value!: string;
   @Prop() options!: IOption[];
   @Watch("value") onValueChange(value: any, oldValue: any) {
-    console.log("VALUE UPDATE", value);
     (this.$refs.select as any).value = value;
     this.hiddenValue = value;
   }
@@ -92,10 +103,11 @@ export default class SelectComponent extends Vue {
 }
 </script>
 <style lang="scss" scoped>
-@import "~bootstrap/scss/_functions";
 @import "../../../scss/variables";
+@import "~bootstrap/scss/_functions";
 @import "~bootstrap/scss/_variables";
-.mdo-form-group {
+.form-group {
+  position: relative;
   &__label {
     position: absolute;
     font-size: 1rem;
@@ -118,7 +130,7 @@ export default class SelectComponent extends Vue {
   &__caret {
     position: absolute;
     right: 0px;
-    bottom: 13px;
+    bottom: 16px;
   }
   &__select-placeholder {
     min-height: 3rem;
@@ -157,7 +169,7 @@ export default class SelectComponent extends Vue {
     }
   }
 }
-select.mdo-form-group__control {
+select.form-group__control {
   -webkit-appearance: none;
   border-radius: 0px;
 }

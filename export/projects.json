@@ -1,0 +1,112 @@
+[
+    {
+        "id": 1,
+        "name": "Integration",
+        "rate": null,
+        "priceBudget": null,
+        "hoursBudget": null,
+        "start": "2019-09-03 00:00:00",
+        "end": "2019-12-03 00:00:00",
+        "customerId": 1
+    },
+    {
+        "id": 2,
+        "name": "Internt",
+        "rate": 700,
+        "priceBudget": null,
+        "hoursBudget": null,
+        "start": "2019-11-07 00:00:00",
+        "end": null,
+        "customerId": 2
+    },
+    {
+        "id": 3,
+        "name": "Mockingjay",
+        "rate": null,
+        "priceBudget": null,
+        "hoursBudget": null,
+        "start": "2019-11-14 00:00:00",
+        "end": null,
+        "customerId": 3
+    },
+    {
+        "id": 4,
+        "name": "Support",
+        "rate": 825,
+        "priceBudget": null,
+        "hoursBudget": null,
+        "start": "2019-12-04 00:00:00",
+        "end": null,
+        "customerId": 3
+    },
+    {
+        "id": 5,
+        "name": "Internt",
+        "rate": null,
+        "priceBudget": null,
+        "hoursBudget": null,
+        "start": "2019-12-16 00:00:00",
+        "end": null,
+        "customerId": 3
+    },
+    {
+        "id": 6,
+        "name": "JHInova",
+        "rate": null,
+        "priceBudget": null,
+        "hoursBudget": null,
+        "start": "2020-01-26 00:00:00",
+        "end": null,
+        "customerId": 2
+    },
+    {
+        "id": 7,
+        "name": "FinKno",
+        "rate": 900,
+        "priceBudget": null,
+        "hoursBudget": 16,
+        "start": "2020-02-17 00:00:00",
+        "end": null,
+        "customerId": 4
+    },
+    {
+        "id": 8,
+        "name": "Sören",
+        "rate": 825,
+        "priceBudget": null,
+        "hoursBudget": null,
+        "start": "2020-02-25 00:00:00",
+        "end": null,
+        "customerId": 5
+    },
+    {
+        "id": 9,
+        "name": "Webb",
+        "rate": null,
+        "priceBudget": 10000,
+        "hoursBudget": null,
+        "start": "2020-03-01 00:00:00",
+        "end": null,
+        "customerId": 6
+    },
+    {
+        "id": 10,
+        "name": "Internt arbete",
+        "rate": null,
+        "priceBudget": null,
+        "hoursBudget": null,
+        "start": "2020-03-10 00:00:00",
+        "end": null,
+        "customerId": 7
+    },
+    {
+        "id": 12,
+        "name": "A",
+        "rate": null,
+        "priceBudget": null,
+        "hoursBudget": "ABC",
+        "start": "Invalid date",
+        "end": "Invalid date",
+        "customerId": 1
+    }
+]

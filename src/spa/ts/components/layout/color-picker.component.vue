@@ -1,12 +1,16 @@
 <template>
-  <div class="mdo-form-group">
+  <div class="form-group">
     <v-popover>
       <!-- This will be the popover target (for the events and position) -->
       <layout-button-component>
         <slot></slot>
       </layout-button-component>
       <!-- This will be the content of the popover -->
-      <chrome-picker slot="popover" :value="value" v-on:input="onInput" />
+      <chrome-picker
+        slot="popover"
+        :value="value"
+        v-on:input="onInput"
+      />
     </v-popover>
   </div>
 </template>
@@ -29,14 +33,14 @@ export enum colorPickerFormat {
   HEX = "hex",
   HEX8 = "hex8",
   RGB = "rgb",
-  RGBA = "rgba"
+  RGBA = "rgba",
 }
 
 @Component({
   components: {
     ChromePicker,
-    LayoutButtonComponent
-  }
+    LayoutButtonComponent,
+  },
 })
 export default class ColorPickerComponent extends Vue {
   @Prop(String) label!: string;

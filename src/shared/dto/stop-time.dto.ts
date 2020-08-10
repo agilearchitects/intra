@@ -1,15 +1,20 @@
+// Libs
 import { jsonType } from "@agilearchitects/server";
-import { DTO } from "./dto";
+
+// DTO's
+import { IDictionaryDTO } from "./dictionary.dto";
+
 export interface IStopTimeDTO {
   id: number;
   to: string;
 }
 
-export class StopTimeDTO implements IStopTimeDTO {
-  public static parseFromRequest(object: jsonType): StopTimeDTO {
-    object = DTO.parseFromRequest(object);
-    if (typeof object.id !== "number" ||
-      typeof object.to !== "string") {
+export class StopTimeDTO {
+  public static parseFromRequest(object: IDictionaryDTO<jsonType>): StopTimeDTO {
+    if (
+      typeof object.id !== "number" ||
+      typeof object.to !== "string"
+    ) {
       throw new Error("Unable to parse")
     }
     return new StopTimeDTO(

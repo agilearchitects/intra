@@ -1,6 +1,12 @@
+// Libs
 import { IUserPayloadDTO } from "@agilearchitects/authenticaton";
 import { jsonType } from "@agilearchitects/server";
+
+// Services
 import { DateService } from "../services/date.service";
+
+// DTO's
+import { IDictionaryDTO } from "./dictionary.dto";
 import { DTO } from "./dto";
 import { ITagDTO, TagDTO } from "./tag.dto";
 import { ITaskDTO, TaskDTO } from "./task.dto";
@@ -17,19 +23,24 @@ export interface ITimeDTO {
   rate?: number;
 }
 
-export class TimeDTO implements ITimeDTO {
-  public static parseFromRequest(object: jsonType, dateService?: DateService): TimeDTO {
-    object = DTO.parseFromRequest(object);
-    if (typeof object.id !== "number" ||
+export class TimeDTO {
+  public static parseFromRequest(object: IDictionaryDTO<jsonType>, dateService?: DateService): TimeDTO {
+    object.lkorv
+    if (
+      typeof object.id !== "number" ||
       typeof object.task !== "object" ||
       object.task === null ||
       (typeof object.task === "object" && (object.task instanceof Array)) ||
       typeof object.from !== "string" ||
       (typeof object.to !== "string" && object.to !== undefined) ||
       typeof object.comment !== "string" ||
-      (object.tags !== undefined &&
-        !(object.tags instanceof Array)) ||
-      (typeof object.user === "object" && (object.user instanceof Array))) {
+      (object.tags !== undefined && !(object.tags instanceof Array)) ||
+      (object.user !== undefined && (
+        object.user === null ||
+        (object.user instanceof Array) ||
+        typeof object.user !== "object"
+      ))
+    ) {
       throw new Error("unable to parse");
     }
 
@@ -40,7 +51,7 @@ export class TimeDTO implements ITimeDTO {
       object.to,
       object.comment,
       dateService,
-      (object.tags !== undefined ? object.tags.map((tag: jsonType) => TagDTO.parseFromRequest(tag)) : undefined),
+      (object.tags !== undefined ? DTO.parseArrayToDictionary(object.tags).map((tag: IDictionaryDTO<jsonType>) => TagDTO.parseFromRequest(tag)) : undefined),
       (object.user !== undefined ? UserPayloadDTO.parseFromRequest(object.user) : undefined),
     )
   }

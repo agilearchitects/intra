@@ -1,6 +1,3 @@
-// Bootstrap
-import { apiService as apiServiceInstance } from "../bootstrap";
-
 // DTO's
 import { CreateProjectDTO } from "../../../shared/dto/create-project.dto";
 import { IProjectDTO, ProjectDTO } from "../../../shared/dto/project.dto";

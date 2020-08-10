@@ -1,5 +1,8 @@
+// Libs
 import { jsonType } from "@agilearchitects/server";
-import { DTO } from "./dto";
+
+// DTO's
+import { IDictionaryDTO } from "./dictionary.dto";
 import { IUserDTO, UserDTO } from "./user.dto";
 
 export interface ITaskUserDTO {
@@ -9,10 +12,14 @@ export interface ITaskUserDTO {
 }
 
 export class TaskUserDTO {
-  public static parseFromRequest(object: jsonType): TaskUserDTO {
-    object = DTO.parseFromRequest(object);
-    if (typeof object.id !== "number" ||
-      (typeof object.rate !== "number" && object.rate !== undefined)) {
+  public static parseFromRequest(object: IDictionaryDTO<jsonType>): TaskUserDTO {
+    if (
+      typeof object.id !== "number" ||
+      object.user === null ||
+      typeof object.user !== "object" ||
+      (object.user instanceof Array) ||
+      (typeof object.rate !== "number" && object.rate !== undefined)
+    ) {
       throw new Error("Unable to parse");
     }
 

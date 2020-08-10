@@ -1,5 +1,8 @@
 <template>
-  <div class="mdo-form-tags" :class="{ 'mdo-form-tags--active': active }">
+  <div
+    class="mdo-form-tags"
+    :class="{ 'mdo-form-tags--active': active }"
+  >
     <label
       class="mdo-form-tags__label"
       :class="{ 'mdo-form-tags__label--active': active || input !== '' || value.length > 0}"
@@ -77,7 +80,7 @@ export default class TagComponent extends Vue {
       (value: any) =>
         this.options.find((option: IOption) => option.value === value) || {
           value,
-          text: value
+          text: value,
         }
     );
   }
@@ -223,8 +226,8 @@ export default class TagComponent extends Vue {
 }
 </script>
 <style lang="scss" scoped>
-@import "~bootstrap/scss/_functions";
 @import "../../../scss/variables";
+@import "~bootstrap/scss/_functions";
 @import "~bootstrap/scss/_variables";
 
 .mdo-form-tags {

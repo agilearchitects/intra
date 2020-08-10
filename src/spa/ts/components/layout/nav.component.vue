@@ -9,8 +9,8 @@ import { Vue, Component } from "vue-property-decorator";
 export default class NavComponent extends Vue {}
 </script>
 <style lang="scss" scoped>
-@import "~bootstrap/scss/_functions";
 @import "../../../scss/variables";
+@import "~bootstrap/scss/_functions";
 @import "~bootstrap/scss/_variables";
 
 nav {

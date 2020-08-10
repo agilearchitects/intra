@@ -1,0 +1,170 @@
+[
+    {
+        "id": 2,
+        "rate": null,
+        "taskId": 2,
+        "userId": 1
+    },
+    {
+        "id": 3,
+        "rate": 900,
+        "taskId": 1,
+        "userId": 1
+    },
+    {
+        "id": 4,
+        "rate": null,
+        "taskId": 3,
+        "userId": 1
+    },
+    {
+        "id": 5,
+        "rate": null,
+        "taskId": 4,
+        "userId": 1
+    },
+    {
+        "id": 13,
+        "rate": 825,
+        "taskId": 5,
+        "userId": 1
+    },
+    {
+        "id": 14,
+        "rate": 825,
+        "taskId": 6,
+        "userId": 1
+    },
+    {
+        "id": 15,
+        "rate": 825,
+        "taskId": 7,
+        "userId": 1
+    },
+    {
+        "id": 16,
+        "rate": 825,
+        "taskId": 8,
+        "userId": 1
+    },
+    {
+        "id": 17,
+        "rate": 825,
+        "taskId": 10,
+        "userId": 1
+    },
+    {
+        "id": 18,
+        "rate": 825,
+        "taskId": 11,
+        "userId": 1
+    },
+    {
+        "id": 19,
+        "rate": 825,
+        "taskId": 9,
+        "userId": 1
+    },
+    {
+        "id": 20,
+        "rate": 825,
+        "taskId": 12,
+        "userId": 1
+    },
+    {
+        "id": 21,
+        "rate": 825,
+        "taskId": 13,
+        "userId": 1
+    },
+    {
+        "id": 22,
+        "rate": 700,
+        "taskId": 14,
+        "userId": 1
+    },
+    {
+        "id": 23,
+        "rate": 700,
+        "taskId": 15,
+        "userId": 1
+    },
+    {
+        "id": 24,
+        "rate": null,
+        "taskId": 16,
+        "userId": 1
+    },
+    {
+        "id": 25,
+        "rate": null,
+        "taskId": 17,
+        "userId": 1
+    },
+    {
+        "id": 26,
+        "rate": null,
+        "taskId": 18,
+        "userId": 1
+    },
+    {
+        "id": 27,
+        "rate": null,
+        "taskId": 19,
+        "userId": 1
+    },
+    {
+        "id": 28,
+        "rate": null,
+        "taskId": 20,
+        "userId": 1
+    },
+    {
+        "id": 29,
+        "rate": null,
+        "taskId": 21,
+        "userId": 1
+    },
+    {
+        "id": 30,
+        "rate": null,
+        "taskId": 22,
+        "userId": 1
+    },
+    {
+        "id": 31,
+        "rate": null,
+        "taskId": 23,
+        "userId": 1
+    },
+    {
+        "id": 32,
+        "rate": null,
+        "taskId": 24,
+        "userId": 1
+    },
+    {
+        "id": 33,
+        "rate": null,
+        "taskId": 25,
+        "userId": 1
+    },
+    {
+        "id": 34,
+        "rate": null,
+        "taskId": 26,
+        "userId": 1
+    },
+    {
+        "id": 35,
+        "rate": null,
+        "taskId": 27,
+        "userId": 1
+    },
+    {
+        "id": 36,
+        "rate": null,
+        "taskId": 28,
+        "userId": 1
+    }
+]

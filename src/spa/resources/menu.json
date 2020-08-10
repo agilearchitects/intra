@@ -1,0 +1,173 @@
+[
+  {
+    "route": "start",
+    "name": "menu.start"
+  },
+  {
+    "divider": true
+  },
+  {
+    "route": "wiki",
+    "name": "menu.wiki.wiki",
+    "children": [
+      {
+        "route": "wiki.agile_architects",
+        "name": "menu.wiki.agile_architects.agile_architects",
+        "children": [
+          {
+            "route": "wiki.agile_architects.mentality",
+            "name": "menu.wiki.agile_architects.mentality"
+          },
+          {
+            "route": "wiki.agile_architects.communication",
+            "name": "menu.wiki.agile_architects.communication"
+          },
+          {
+            "route": "wiki.agile_architects.transparency",
+            "name": "menu.wiki.agile_architects.transparency"
+          }
+        ]
+      },
+      {
+        "route": "wiki.board",
+        "name": "menu.wiki.board.board",
+        "children": [
+          {
+            "route": "wiki.board.members",
+            "name": "menu.wiki.board.members"
+          },
+          {
+            "route": "wiki.board.aoa",
+            "name": "menu.wiki.board.aoa"
+          }
+        ]
+      },
+      {
+        "route": "wiki.accounting",
+        "name": "menu.wiki.accounting.accounting",
+        "children": [
+          {
+            "route": "wiki.accounting.bokio",
+            "name": "menu.wiki.accounting.bokio"
+          },
+          {
+            "route": "wiki.accounting.expenses",
+            "name": "menu.wiki.accounting.expenses"
+          },
+          {
+            "route": "wiki.accounting.purchase",
+            "name": "menu.wiki.accounting.purchase"
+          }
+        ]
+      },
+      {
+        "route": "wiki.channels",
+        "name": "menu.wiki.channels.channels",
+        "children": [
+          {
+            "route": "wiki.channels.email",
+            "name": "menu.wiki.channels.email"
+          },
+          {
+            "route": "wiki.channels.chat",
+            "name": "menu.wiki.channels.chat"
+          },
+          {
+            "route": "wiki.channels.files",
+            "name": "menu.wiki.channels.files"
+          }
+        ]
+      },
+      {
+        "route": "wiki.staff",
+        "name": "menu.wiki.staff.staff",
+        "children": [
+          {
+            "route": "wiki.staff.onboarding",
+            "name": "menu.wiki.staff.onboarding"
+          },
+          {
+            "route": "wiki.staff.offboarding",
+            "name": "menu.wiki.staff.offboarding"
+          }
+        ]
+      },
+      {
+        "route": "wiki.development",
+        "name": "menu.wiki.development.development",
+        "children": [
+          {
+            "route": "wiki.development.git",
+            "name": "menu.wiki.development.git"
+          },
+          {
+            "route": "wiki.development.devops",
+            "name": "menu.wiki.development.devops"
+          },
+          {
+            "route": "wiki.development.scrum",
+            "name": "menu.wiki.development.scrum"
+          },
+          {
+            "route": "wiki.development.documentation",
+            "name": "menu.wiki.development.documentation"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "route": "time",
+    "name": "menu.time.time",
+    "claims": [
+      "user"
+    ],
+    "position": "right",
+    "children": [
+      {
+        "route": "time.report",
+        "name": "menu.time.report"
+      },
+      {
+        "route": "time.result",
+        "name": "menu.time.result"
+      },
+      {
+        "route": "time.project",
+        "name": "menu.time.project"
+      }
+    ]
+  },
+  {
+    "route": "cv",
+    "name": "menu.cv",
+    "position": "right",
+    "claims": [
+      "user"
+    ]
+  },
+  {
+    "route": "crm",
+    "name": "menu.crm",
+    "position": "right",
+    "claims": [
+      "user"
+    ]
+  },
+  {
+    "route": "auth.login",
+    "name": "menu.login",
+    "claims": [
+      "guest"
+    ],
+    "position": "right"
+  },
+  {
+    "route": "auth.logout",
+    "name": "menu.logout",
+    "claims": [
+      "user"
+    ],
+    "position": "right"
+  }
+]

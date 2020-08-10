@@ -1,33 +1,47 @@
-export type observer<T> = (payload: T) => void;
+export type observer<T> = (payload?: T) => void;
+
+export interface ISubscription {
+  unsubscribe: () => void;
+}
 
 export class BroadcastService {
-  private observers: { [key: string]: Array<observer<any>> | null } = {};
+  private observers: { [key: string]: (observer<any>)[] } = {};
 
-  public subscribe<T>(name: string) {
-    let index: number;
-    if (Object.keys(this.observers).findIndex((observerName: string) => observerName === name) !== -1) {
-      index = this.observers[name].length;
-      this.observers[name].push(null);
-    } else {
-      index = 0;
-      this.observers[name] = [null];
+  /**
+   * Subscribe to event handler
+   * @param name Name of event
+   * @param callback The callback to be called each time event emits
+   */
+  public subscribe<T>(name: string, callback: observer<T>): ISubscription {
+    // Looks for named observer list. If not create it
+    if (!(name in this.observers)) {
+      this.observers[name] = [];
     }
-    const unsubscribe = () => {
-      this.observers[name].splice(index, 1);
-    };
+
+    // Pushes callback to observer list
+    this.observers[name].push(callback);
 
     return {
-      then: (callback: observer<T>) => {
-        this.observers[name][index] = callback;
-        return { unsubscribe };
-      }, unsubscribe,
-    };
+      // Return unsubscribe method
+      unsubscribe: (): void => {
+        // Find callback in observer list
+        const index = this.observers[name].findIndex((observer: observer<T>) => observer === callback);
+        // Removes it if found
+        if (index !== -1) { this.observers[name].splice(index, 1) }
+      }
+    }
   }
-  public emit<T = any>(name: string, payload?: T) {
-    if (this.observers[name]) {
-      this.observers[name].forEach((observer: observer<T>) => {
-        observer(payload);
-      });
+
+  /**
+   * Emit event
+   * @param name Name of event
+   * @param payload Payload to send
+   */
+  public emit<T = any>(name: string, payload?: T): void {
+    // Look if observer with name exists
+    if (name in this.observers) {
+      // Call each observer callback in observer list with payload
+      this.observers[name].forEach((observer: observer<T>) => observer(payload));
     }
   }
 }

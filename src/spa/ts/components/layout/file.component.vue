@@ -1,5 +1,8 @@
 <template>
-  <div class="d-flex" v-on:click="click">
+  <div
+    class="d-flex"
+    v-on:click="click"
+  >
     <div class="d-flex align-items-end">
       <input
         class="d-none"
@@ -11,12 +14,10 @@
       />
       <layout-button-component class="mb-4">Välj</layout-button-component>
     </div>
-    <div class="mdo-form-group flex-fill ml-3">
-      <label
-        class="mdo-form-group__label mdo-form-group__label--active mdo-form-group__label--gray"
-      >{{ label }}</label>
+    <div class="form-group flex-fill ml-3">
+      <label class="form-group__label form-group__label--active form-group__label--gray">{{ label }}</label>
       <input
-        class="mdo-form-group__control"
+        class="form-group__control"
         type="text"
         ref="input"
         :value="inputValue"
@@ -33,7 +34,7 @@ export interface IFileInput {
   blob: Blob;
 }
 @Component({
-  components: { LayoutButtonComponent }
+  components: { LayoutButtonComponent },
 })
 export default class FileComponent extends Vue {
   @Prop({ type: String, default: "" }) label!: string;

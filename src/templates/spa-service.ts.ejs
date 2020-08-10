@@ -1,0 +1,27 @@
+<!-- target=src/spa/ts/services/<%= name %>.service.ts -->
+<%
+const dtoName = typeof dto !== "undefined" ? `${changeCase.pascalCase(dto)}DTO` : undefined;
+const dtoInterfaceName = typeof dto !== "undefined" ? `I${changeCase.pascalCase(dto)}DTO` : undefined;
+const dtoParamName = typeof dto !== "undefined" ? changeCase.paramCase(dto) : undefined;
+if(typeof dto !== "undefined") { 
+%>// DTO's
+import { <%= dtoName %> } from "../../../shared/dto/<%= dtoParamName %>.dto";
+<% }
+if(typeof dto !== "undefined") { %>
+// Services
+import { APIService } from "../../../shared/services/api.service";
+
+// Base service
+import { BaseService } from "./base.service";
+
+<% }
+%>export class <%= changeCase.pascalCase(name) %>Service<% if(typeof dto !== "undefined") { %> extends BaseService<<%= dtoName %>><% } %> {
+<% if(typeof dto !== "undefined") {
+%>  protected basePath: string = "<%= dtoParamName %>";
+
+  public constructor(
+    apiService: APIService,
+  ) { super(apiService, <%= dtoName %>.parse); }
+<% } else { %>
+<% }
+%>}

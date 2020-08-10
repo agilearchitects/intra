@@ -2,7 +2,8 @@
   <form v-on:submit.prevent="submit">
     <div class="d-flex justify-content-between align-items-center">
       <select-component
-        class="w-100 mr-4"
+        class="mr-4"
+        style="width: 100%;"
         name="customer"
         v-model="form.customer"
         :options="customerOptions"
@@ -16,7 +17,8 @@
         <i class="fas fa-plus"></i>
       </button-component>
       <input-component
-        class="w-100 ml-4"
+        class="ml-4"
+        style="width: 100%;"
         name="name"
         v-model="form.name"
         label="Namn"
@@ -121,7 +123,7 @@
                       v-model="task.hoursBudget"
                     ></input-component>
                   </td>
-                  <td class="pl-0 pt-0 pb-3 align-bottom text-center">
+                  <td class="pl-0 align-middle text-center">
                     <button-component
                       button-style="danger"
                       button-size="xs"
@@ -163,10 +165,10 @@
                         v-model="user.rate"
                       ></input-component>
                     </td>
-                    <td class="pl-0 pt-0 pb-3 align-bottom text-center">
+                    <td class="align-middle text-center">
                       <button-component
                         button-style="danger"
-                        button-size="xs"
+                        button-size="sm"
                         v-tooltip="'Ta bort'"
                         v-on:click="removeUser(task, subIndex)"
                       >
@@ -234,19 +236,14 @@ import { Moment, default as moment, Duration } from "moment";
 // DTO's
 import {
   CreateProjectDTO,
-  ICreateProjectDTO
+  ICreateProjectDTO,
 } from "../../../shared/dto/create-project.dto";
 import {
   UpdateProjectDTO,
-  IUpdateProjectDTO
+  IUpdateProjectDTO,
 } from "../../../shared/dto/update-project.dto";
 import { CustomerDTO } from "../../../shared/dto/customer.dto";
 import { UserDTO } from "../../../shared/dto/user.dto";
-
-// Services
-import { CustomerService } from "../services/customer.service";
-import { ProjectService } from "../services/project.service";
-import { UserService } from "../services/user.service";
 
 // Components
 import InputComponent from "./layout/input.component.vue";
@@ -255,30 +252,25 @@ import ButtonComponent from "./layout/button.component.vue";
 import TagComponent from "./layout/tag.component.vue";
 
 // Bootstrap
-import {
-  customerService as customerServiceInstance,
-  projectService as projectServiceInstance,
-  userService as userServiceInstance,
-  authService as authServiceInstance
-} from "../bootstrap";
+import { bootstrap } from "../bootstrap";
 import {
   ModalInstance,
   modalSize,
-  modalEventType
+  modalEventType,
 } from "../utils/modal/modal.util";
 import CreateCustomerFormComponent from "./create-customer-form.component.vue";
 import { AuthService } from "../services/auth.service";
 import { CreateTaskUserDTO } from "../../../shared/dto/create-task-user.dto";
 import {
   CreateTaskDTO,
-  ICreateTaskDTO
+  ICreateTaskDTO,
 } from "../../../shared/dto/create-task.dto";
 import { TaskDTO } from "../../../shared/dto/task.dto";
 import { TaskUserDTO } from "../../../shared/dto/task-user.dto";
 import { ProjectDTO } from "../../../shared/dto/project.dto";
 import {
   UpdateTaskDTO,
-  IUpdateTaskDTO
+  IUpdateTaskDTO,
 } from "../../../shared/dto/update-task.dto";
 
 class CustomerViewModel {
@@ -327,16 +319,12 @@ interface IForm {
     InputComponent,
     SelectComponent,
     TagComponent,
-    ButtonComponent
-  }
+    ButtonComponent,
+  },
 })
 export default class ProjectFormComponent extends Vue {
-  public customerService: CustomerService = customerServiceInstance;
-  public projectService: ProjectService = projectServiceInstance;
-  public userService: UserService = userServiceInstance;
-  public authService: AuthService = authServiceInstance;
-
-  @Prop(Number) projectId?: number;
+  @Prop(Number)
+  projectId?: number;
 
   public form: IForm = {
     customer: "",
@@ -347,7 +335,7 @@ export default class ProjectFormComponent extends Vue {
     start: moment().format("YYYY-MM-DD"),
     end: "",
     newTask: "",
-    tasks: []
+    tasks: [],
   };
   public autoCalculatePrice: boolean = true;
 
@@ -360,7 +348,7 @@ export default class ProjectFormComponent extends Vue {
   public get customerOptions(): IOption[] {
     return this.customers.map((customer: CustomerViewModel) => ({
       value: customer.id.toString(),
-      text: customer.name
+      text: customer.name,
     }));
   }
 
@@ -386,7 +374,7 @@ export default class ProjectFormComponent extends Vue {
   }
 
   public async loadProject(projectId: number): Promise<void> {
-    const project = await this.projectService.get(projectId);
+    const project = await bootstrap.projectService.get(projectId);
     this.form = {
       customer:
         project.customer !== undefined ? project.customer.id.toString() : "",
@@ -427,22 +415,22 @@ export default class ProjectFormComponent extends Vue {
                       rate:
                         taskUser.rate !== undefined
                           ? taskUser.rate.toString()
-                          : ""
+                          : "",
                     }))
                   : [],
-              userList: [...this.users]
+              userList: [...this.users],
             }))
-          : []
+          : [],
     };
   }
   public async getCustomers(): Promise<CustomerViewModel[]> {
-    return (await this.customerService.index(true)).map(
+    return (await bootstrap.customerService.index(true)).map(
       (customer: CustomerDTO) =>
         new CustomerViewModel(customer.id, customer.name)
     );
   }
   public async getUsers(): Promise<UserViewModel[]> {
-    return (await this.userService.index()).map(
+    return (await bootstrap.userService.index()).map(
       (user: UserDTO) => new UserViewModel(user.id, user.email)
     );
   }
@@ -494,27 +482,27 @@ export default class ProjectFormComponent extends Vue {
             const parsed = {};
             return CreateTaskUserDTO.parse({
               userId: formUser.userId,
-              rate: this.parseFloat(formUser.rate)
+              rate: this.parseFloat(formUser.rate),
             }).serialize();
-          })
+          }),
         };
 
         if (task.id !== undefined) {
           return UpdateTaskDTO.parse({
             id: task.id,
-            ...parsed
+            ...parsed,
           }).serialize();
         } else {
           return CreateTaskDTO.parse(parsed).serialize();
         }
-      })
+      }),
     };
     if (this.projectId !== undefined) {
       this.$emit(
         "submit",
         UpdateProjectDTO.parse({
           id: this.projectId,
-          ...parsed
+          ...parsed,
         })
       );
     } else {
@@ -543,8 +531,8 @@ export default class ProjectFormComponent extends Vue {
         {
           userId: user.id,
           email: user.email,
-          rate: ""
-        }
+          rate: "",
+        },
       ];
     }
 
@@ -554,7 +542,7 @@ export default class ProjectFormComponent extends Vue {
   public async removeUser(task: IFormTask, index: number) {
     task.users = [
       ...task.users.slice(0, index),
-      ...task.users.slice(index + 1)
+      ...task.users.slice(index + 1),
     ];
 
     task.userList = [...this.getFilteredUsers(task.users)];
@@ -570,7 +558,7 @@ export default class ProjectFormComponent extends Vue {
       priceBudget: "",
       hoursBudget: "",
       users: [],
-      userList: [...this.users]
+      userList: [...this.users],
     });
     this.form.newTask = "";
   }
@@ -578,7 +566,7 @@ export default class ProjectFormComponent extends Vue {
   public removeTask(index: number) {
     this.form.tasks = [
       ...this.form.tasks.slice(0, index),
-      ...this.form.tasks.slice(index + 1)
+      ...this.form.tasks.slice(index + 1),
     ];
   }
 
@@ -600,4 +588,12 @@ export default class ProjectFormComponent extends Vue {
 }
 </script>
 <style lang="scss" scoped>
+@import "../../scss/variables.scss";
+@import "~bootstrap/scss/_functions";
+@import "~bootstrap/scss/_variables";
+@import "~bootstrap/scss/_mixins";
+@import "~bootstrap/scss/_list-group";
+@import "~bootstrap/scss/utilities/_align";
+@import "~bootstrap/scss/bootstrap-grid";
+@import "~bootstrap/scss/_tables";
 </style>

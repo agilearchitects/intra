@@ -1,22 +1,22 @@
 <template>
-  <div class="mdo-bar">
-    <div class="mdo-bar__budget-container">
+  <div class="bar">
+    <div class="bar__budget-container">
       <div
-        class="mdo-bar__budget"
+        class="bar__budget"
         v-for="(item, index) in items"
         :key="`budget_${index}`"
         :style="`width: ${percentage(item.budgetUnits)}%;`"
       >
         <i
           v-tooltip="`${item.name !== undefined ? `${item.name} ` : ''}${item.budgetUnits}${suffix || ''}`"
-          class="mdo-bar__budget__caret fas fa-caret-down"
+          class="bar__budget__caret fas fa-caret-down"
           :style="`color: ${item.color};`"
         ></i>
       </div>
     </div>
-    <div class="mdo-bar__item-container">
+    <div class="bar__item-container">
       <div
-        class="mdo-bar__item"
+        class="bar__item"
         :style="`width: ${percentage(item.units)}%; background-color: ${item.color};`"
         v-for="(item, index) in items"
         :key="`item_${index}`"
@@ -35,17 +35,17 @@ export interface IBarItem {
 }
 @Component
 export default class BarComponent extends Vue {
-  @Prop(Number) totalUnits!: number;
+  @Prop(Number) size!: number;
   @Prop({ type: String, default: undefined }) suffix?: string;
   @Prop() items!: IBarItem[];
 
   public percentage(unit: number): number {
-    return Math.round((unit / this.totalUnits) * 100 * 100) / 100;
+    return Math.round((unit / this.size) * 100 * 100) / 100;
   }
 }
 </script>
 <style lang="scss" scoped>
-.mdo-bar {
+.bar {
   height: 20px;
   position: relative;
   &__budget-container {

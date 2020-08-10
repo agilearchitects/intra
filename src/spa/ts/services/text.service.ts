@@ -1,6 +1,3 @@
-// Bootstrap
-import { apiService as apiServiceInstance } from "../bootstrap";
-
 // DTO's
 import { ITextDTO, TextDTO } from "../../../shared/dto/text.dto";
 

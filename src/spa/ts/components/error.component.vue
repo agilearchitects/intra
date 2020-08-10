@@ -1,19 +1,15 @@
 <template>
-  <div class="container">
-    <div class="jumbotron">
-      <h1 class="display-4">Error {{ errorCode }}</h1>
-      <p class="lead">Sidan du söker kunde inte hittas</p>
-    </div>
+  <div>
+
   </div>
 </template>
 <script lang="ts">
-import { Vue, Component, Watch } from "vue-property-decorator";
-import { Route } from "vue-router";
+// Libs
+import { Component, Vue } from "vue-property-decorator";
 
 @Component
-export default class ErrorComponent extends Vue {
-  public get errorCode(): number {
-    return parseInt(this.$route.params["code"]);
-  }
-}
+export default class ErrorComponent extends Vue { }
 </script>
+<style lang="scss" scoped>
+
+</style>

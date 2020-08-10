@@ -1,5 +1,11 @@
+// Libs
 import { jsonType } from "@agilearchitects/server";
+
+// Services
 import { DateService } from "../services/date.service";
+
+// DTO's
+import { IDictionaryDTO } from "./dictionary.dto";
 import { DTO } from "./dto";
 import { IProjectDTO, ProjectDTO } from "./project.dto";
 
@@ -9,19 +15,19 @@ export interface ICustomerDTO {
   projects?: IProjectDTO[];
 }
 
-export class CustomerDTO implements ICustomerDTO {
-  public static parseFromRequest(object: jsonType, dateService?: DateService): CustomerDTO {
-    object = DTO.parseFromRequest(object);
-    if (typeof object.id !== "number" ||
+export class CustomerDTO {
+  public static parseFromRequest(object: IDictionaryDTO<jsonType>, dateService?: DateService): CustomerDTO {
+    if (
+      typeof object.id !== "number" ||
       typeof object.name !== "string" ||
-      (object.projects !== undefined &&
-        !(object.projects instanceof Array))) {
+      (object.projects !== undefined && !(object.projects instanceof Array))
+    ) {
       throw new Error("Unable to parse");
     }
     return new CustomerDTO(
       object.id,
       object.name,
-      (object.projects !== undefined ? object.projects.map((project: jsonType) => ProjectDTO.parseFromRequest(project, dateService)) : undefined),
+      (object.projects !== undefined ? DTO.parseArrayToDictionary(object.projects).map((project: IDictionaryDTO<jsonType>) => ProjectDTO.parseFromRequest(project, dateService)) : undefined),
     )
   }
   public static parse(object: ICustomerDTO, dateService?: DateService): CustomerDTO {

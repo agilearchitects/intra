@@ -30,17 +30,16 @@ export const init = (buttons: string = "", setup?: (editor: any) => void): ITiny
       input.setAttribute("type", "file");
       input.setAttribute("accept", "*");
 
-      input.onchange = () => {
-        if (input.files.length < 0) { return; }
+      input.onchange = async () => {
+        if (input.files === null || input.files.length < 0) { return; }
         const formData = new FormData();
         formData.append("file", input.files[0]);
-        Axios.post("/resource/upload", formData, {
+        const response: AxiosResponse<{ location: string }> = await Axios.post("/resource/upload", formData, {
           headers: {
             "Content-Type": "multipart/form-data",
           },
-        }).then((response: AxiosResponse<{ location: string }>) => {
-          callback(response.data.location, { title: input.files[0].name });
         });
+        callback(response.data.location, { title: input.files[0].name });
       };
 
       input.click();

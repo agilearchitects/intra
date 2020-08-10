@@ -1,3 +1,4 @@
+// Global libs
 import * as bootstrap from "bootstrap";
 import $ from "jquery";
 import popper from "popper.js";
@@ -12,24 +13,24 @@ import VueI18n from "vue-i18n";
 import VueRouter from "vue-router";
 
 // TinyMCE
-import tinymce from "tinymce/tinymce";
+import tinymce from "tinymce";
 (window as any).tinymce = tinymce;
 
+// Load vue plugins
 Vue.use(VueI18n);
 Vue.use(VueRouter);
 Vue.use(VTooltip);
-
-import loading from "./utils/loading/loading.plugin";
-Vue.use(loading);
 
 // Index component
 import IndexComponent from "./components/index.component.vue";
 
 // Router
-import router from "./router";
+import { router } from "./router";
 
+// Locale
 import { i18n } from "./locale";
-const app = new Vue({
+
+export default new Vue({
   el: "#app",
   render: (h) => h(IndexComponent),
   router,

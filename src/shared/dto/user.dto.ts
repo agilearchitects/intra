@@ -1,19 +1,29 @@
+// Libs
 import { jsonType } from "@agilearchitects/server";
-import { DTO } from "./dto";
+
+// DTO's
+import { IDictionaryDTO } from "./dictionary.dto";
 
 export interface IUserDTO {
   id: number;
   email: string;
 }
 
-export class UserDTO implements IUserDTO {
-  public static parseFromRequest(object: jsonType): UserDTO {
-    object = DTO.parseFromRequest(object);
-    if (typeof object.id !== "number" || typeof object.email !== "string") {
+export class UserDTO {
+  public static parseFromRequest(object: IDictionaryDTO<jsonType>): UserDTO {
+    if (
+      typeof object.id !== "number" ||
+      typeof object.email !== "string"
+    ) {
       throw new Error("Unable to parse");
     }
-    return new UserDTO(object.id, object.email);
+
+    return UserDTO.parse({
+      id: object.id,
+      email: object.email,
+    });
   }
+
   public static parse(object: IUserDTO): UserDTO {
     return new UserDTO(
       object.id,

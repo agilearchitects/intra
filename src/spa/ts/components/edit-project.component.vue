@@ -1,5 +1,5 @@
 <template>
-  <div class="container">
+  <div>
     <div class="d-flex justify-content-between align-items-center">
       <button-component
         :route="{ name: 'time.project' }"
@@ -32,19 +32,13 @@ import ProjectFormComponent from "./project-form.component.vue";
 import ButtonComponent from "./layout/button.component.vue";
 
 // Bootstrap
-import {
-  projectService as projectServiceInstance,
-  messageService as messageServiceInstance
-} from "../bootstrap";
+import { bootstrap } from "../bootstrap";
 import { ProjectDTO } from "../../../shared/dto/project.dto";
 
 @Component({
-  components: { ProjectFormComponent, ButtonComponent }
+  components: { ProjectFormComponent, ButtonComponent },
 })
 export default class EditProjectComponent extends Vue {
-  public projectService: ProjectService = projectServiceInstance;
-  public messageService: MessageService = messageServiceInstance;
-
   public loading: boolean = false;
   public saving: boolean = false;
 
@@ -59,11 +53,11 @@ export default class EditProjectComponent extends Vue {
   public async save(project: ProjectDTO) {
     this.saving = true;
     try {
-      await this.projectService.update(project);
+      await bootstrap.projectService.update(project);
       this.saving = false;
       this.$router.push({ name: "time.project" });
     } catch {
-      this.messageService.showModal(
+      bootstrap.messageService.showModal(
         "error",
         this.$t("project.update.error.header").toString(),
         this.$t("project.update.error.message").toString(),

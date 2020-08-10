@@ -1,12 +1,13 @@
 definitions:
   services:
     docker:
+      # Build error because of memory running out might occure with this missing
       memory: 2048
   caches:
     nodecustom: ./node_modules
     yarn: /usr/local/share/.cache/yarn
   steps:
-    - step: &build-test
+    - step: &test
         name: Build and test
         image: node:12.8.0
         caches:
@@ -15,94 +16,139 @@ definitions:
         script:
           # Install dependencies
           - yarn
+
           # Lint
           - yarn lint
+
           # Test
           - yarn test
+    - step: &build-spa
+        name: Build SPA
+        image: node:12.8.0
+        caches:
+          - nodecustom
+          - yarn
+        script:
+          # Load env vars
+          - source shared_vars.sh
+
           # Build
-          - API_BASE_URL="${API_BASE_URL}" yarn build
+          - NODE_ENV="${NODE_ENV}" BASE_API_URL="${BASE_API_URL}" yarn build-spa
         # Publish build artifacts
         artifacts:
-          - dist/**
+          - dist/** # SPA artifact (for S3)
+    - step: &build-app
+        name: Build APP
+        image: node:12.8.0
+        caches:
+          - nodecustom
+          - yarn
+        script:
+          # Load env vars
+          - source shared_vars.sh
+
+          # Download and install zip
+          - apt-get update && apt-get install -y zip
+
+          # Install production dependencies
+          - yarn --production
+
+          # ZIP node_modules (AWS Lambda layer requires root of node files to be "nodejs")
+          - mkdir nodejs && mv node_modules nodejs && zip -r nodejs.zip nodejs
+
+          # Install all dependencies (to be able to build application)
+          - yarn --production=false
+
+          # Build App
+          - NODE_ENV="${NODE_ENV}" yarn build-app
+
+          # Make index for lambda function
+          - echo "module.exports = require(\"./app/lambda\")" > dist/app/index.js
+          # ZIP app project
+          - cd dist/app && zip -r app.zip ./ && cd ../.. && mv dist/app/app.zip ./
+
+        artifacts:
+          - app.zip # App artifact (for AWS Lambda function)
+          - nodejs.zip # Node modules artifact (for AWS Lambda Layer)
+    - step: &deploy
+        name: Deploy
+        image: amazon/aws-cli
+        script:
+          # Set AWS region and credentials
+          - aws configure set default.region "${AWS_REGION}"
+          - aws configure set aws_access_key_id ${AWS_ACCESS_KEY_ID}
+          - aws configure set aws_secret_access_key ${AWS_SECRET_ACCESS_KEY}
+
+          # Deploy layer and get deployed layer version
+          - LATEST_LAYER_VERSION=$(aws lambda publish-layer-version --layer-name "${AWS_LAMBDA_LAYER}" --compatible-runtimes nodejs12.x --zip-file fileb://nodejs.zip --region "${AWS_REGION}" --query 'LayerVersionArn' --output text)
+
+          # Configure AWS Lambda function for APP to use latest AWS layer version
+          - aws lambda update-function-configuration --function-name "${AWS_LAMBDA_FUNCTION}" --layers "$LATEST_LAYER_VERSION"
+
+          # Deploy APP to AWS Lambda function and publish (will lock layer version to published version)
+          - LATEST_FUNCTION_VERSION=$(aws lambda update-function-code --function-name "${AWS_LAMBDA_FUNCTION}" --zip-file fileb://app.zip --publish --query 'Version' --output text)
+
+          # Update alias to point to latest version
+          - aws lambda update-alias --function-name "${AWS_LAMBDA_FUNCTION}" --name "${AWS_LAMBDA_ALIAS}" --function-version "$LATEST_FUNCTION_VERSION"
+
+          # Deploy SPA to AWS S3
+          - pipe: atlassian/aws-s3-deploy:0.3.8
+            variables:
+              AWS_ACCESS_KEY_ID: ${AWS_ACCESS_KEY_ID}
+              AWS_SECRET_ACCESS_KEY: ${AWS_SECRET_ACCESS_KEY}
+              AWS_DEFAULT_REGION: "eu-north-1"
+              S3_BUCKET: "${AWS_S3}"
+              LOCAL_PATH: "dist/spa"
+              ACL: "public-read"
+
 pipelines:
   default:
-    - step: *build-test
+    - step: *test
   branches:
-    master:
-      - step: *build-test
+    dev:
       - step:
-          name: publish
-          image: node:12.8.0
-          caches:
-            - nodecustom
-            - yarn
+          name: Setting variables
           script:
-            # Download zip
-            - apt-get update && apt-get install -y zip
-            # Install production dependencies
-            - yarn --production
-            # ZIP node_modules
-            - mkdir nodejs && mv node_modules nodejs && zip -r nodejs.zip nodejs
-
-            # Make index for api function
-            - echo "module.exports = require(\"./api/server\")" > dist/api/index.js
-            # ZIP api function project
-            - cd dist/api && zip -r api.zip ./ && cd ../.. && mv dist/api/api.zip ./
-
-            # Make index for migrate function
-            - echo "module.exports = require(\"./migrate/index\")" > dist/migrate/index.js
-            # ZIP migrate function project
-            - cd dist/migrate && zip -r migrate.zip ./ && cd ../.. && mv dist/migrate/migrate.zip ./
-
+            - echo export NODE_ENV=$DEVELOPMENT_NODE_ENV >> shared_vars.sh
+            - echo export BASE_API_URL=$DEVELOPMENT_BASE_API_URL >> shared_vars.sh
           artifacts:
-            - api.zip
-            - migrate.zip
-            - nodejs.zip
-            - dist/spa/**
-
+            - shared_vars.sh
+      - step: *test
+      - step: *build-spa
+      - step: *build-app
       - step:
-          name: Deploy AWS Lambda layer
-          image: amazon/aws-cli
-          script:
-            - aws configure set default.region "${AWS_REGION}"
-            - aws configure set aws_access_key_id ${AWS_ACCESS_KEY_ID}
-            - aws configure set aws_secret_access_key ${AWS_SECRET_ACCESS_KEY}
-            - aws lambda publish-layer-version --layer-name ${LAMBDA_LAYER} --compatible-runtimes nodejs12.x --zip-file fileb://nodejs.zip --region "eu-north-1"
-
+          <<: *deploy
+          name: Deploy development
+          deployment: dev
+    release/*:
       - step:
-          name: Deploy API Lambda Function
-          image: amazon/aws-cli
+          name: Setting variables
           script:
-            - aws configure set default.region "${AWS_REGION}"
-            - aws configure set aws_access_key_id "${AWS_ACCESS_KEY_ID}"
-            - aws configure set aws_secret_access_key "${AWS_SECRET_ACCESS_KEY}"
-            # Getting latest version of layer
-            - LATEST_LAYER_VERSION=$(aws lambda list-layer-versions --layer-name "${LAMBDA_LAYER}" --output text --query 'LayerVersions[0].[LayerVersionArn]')
-            # Deploy with latest layer
-            - aws lambda update-function-code --function-name "${API_LAMBDA_FUNCTION}" --zip-file fileb://api.zip --publish
-            - aws lambda update-function-configuration --function-name "${API_LAMBDA_FUNCTION}" --layers "$LATEST_LAYER_VERSION"
-
+            - echo export NODE_ENV=$STAGING_NODE_ENV >> shared_vars.sh
+            - echo export BASE_API_URL=$STAGING_BASE_API_URL >> shared_vars.sh
+          artifacts:
+            - shared_vars.sh
+      - step: *test
+      - step: *build-spa
+      - step: *build-app
       - step:
-          name: Deploy Migrate Lambda Function
-          image: amazon/aws-cli
-          script:
-            - aws configure set default.region "${AWS_REGION}"
-            - aws configure set aws_access_key_id "${AWS_ACCESS_KEY_ID}"
-            - aws configure set aws_secret_access_key "${AWS_SECRET_ACCESS_KEY}"
-            # Getting latest version of layer
-            - LATEST_LAYER_VERSION=$(aws lambda list-layer-versions --layer-name "${LAMBDA_LAYER}" --output text --query 'LayerVersions[0].[LayerVersionArn]')
-            # Deploy with latest layer
-            - aws lambda update-function-code --function-name "${MIGRATE_LAMBDA_FUNCTION}" --zip-file fileb://migrate.zip --publish
-            - aws lambda update-function-configuration --function-name "${MIGRATE_LAMBDA_FUNCTION}" --layers "$LATEST_LAYER_VERSION"
-
+          <<: *deploy
+          name: Deploy staging
+          deployment: staging
+          trigger: manual
+    master:
       - step:
-          name: Deploy SPA app
+          name: Setting variables
           script:
-            - pipe: atlassian/aws-s3-deploy:0.3.8
-              variables:
-                AWS_ACCESS_KEY_ID: ${AWS_ACCESS_KEY_ID}
-                AWS_SECRET_ACCESS_KEY: ${AWS_SECRET_ACCESS_KEY}
-                AWS_DEFAULT_REGION: "eu-north-1"
-                S3_BUCKET: "${SPA_S3}"
-                LOCAL_PATH: "dist/spa"
-                ACL: "public-read"
+            - echo export NODE_ENV=$PRODUCTION_NODE_ENV >> shared_vars.sh
+            - echo export BASE_API_URL=$PRODUCTION_BASE_API_URL >> shared_vars.sh
+          artifacts:
+            - shared_vars.sh
+      - step: *test
+      - step: *build-spa
+      - step: *build-app
+      - step:
+          <<: *deploy
+          name: Deploy production
+          deployment: production
+          trigger: manual

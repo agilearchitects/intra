@@ -1,0 +1,19 @@
+<!-- target=src/app/controllers/<%= name %>.controller.ts -->
+// Libs
+import { handlerMethod, HandlerModule } from "@agilearchitects/server";
+
+// Base controller
+import { Controller } from "./controller";
+
+export class <%= changeCase.pascalCase(name) %>Controller extends Controller {
+  public index(): handlerMethod {
+    return async (handler: HandlerModule) => {
+      try {
+        handler.sendJSON({ foo: "bar" });
+      } catch (error) {
+        this.logError(handler, "Index error", error);
+        throw error;
+      }
+    }
+  }
+}

@@ -1,5 +1,5 @@
 <template>
-  <div class="container">
+  <div>
     <div class="d-flex justify-content-between align-items-center">
       <h1>Project</h1>
       <button-component
@@ -81,21 +81,27 @@
   </div>
 </template>
 <script lang="ts">
+// Libs
 import { Vue, Component } from "vue-property-decorator";
+import moment, { Moment } from "moment";
+
+// Services
 import { ProjectService } from "../services/project.service";
 import { AuthService } from "../services/auth.service";
-import moment, { Moment } from "moment";
-import {
-  projectService as projectServiceInstance,
-  authService as authServiceInstance
-} from "../bootstrap";
+
+// DTO's
 import { ProjectDTO } from "../../../shared/dto/project.dto";
 import { TaskDTO } from "../../../shared/dto/task.dto";
 import { UserDTO } from "../../../shared/dto/user.dto";
-import ButtonComponent from "./layout/button.component.vue";
-import BarComponent, { IBarItem } from "./layout/bar.component.vue";
 import { TimeDTO } from "../../../shared/dto/time.dto";
 import { TaskUserDTO } from "../../../shared/dto/task-user.dto";
+
+// Components
+import ButtonComponent from "./layout/button.component.vue";
+import BarComponent, { IBarItem } from "./layout/bar.component.vue";
+
+// Bootstrap
+import { bootstrap } from "../bootstrap";
 
 class ProjectViewModel {
   public static colorMap: string[] = ["#f00", "#0f0", "#00f"];
@@ -121,7 +127,7 @@ class ProjectViewModel {
                 (previousTaskUser: UserViewModel) =>
                   taskUser.id === previousTaskUser.id
               ) === -1
-          )
+          ),
         ];
       },
       []
@@ -168,7 +174,7 @@ class ProjectViewModel {
         name: task.name,
         units: task.hours,
         budgetUnits: task.hoursBudget !== undefined ? task.hoursBudget : 0,
-        color: ProjectViewModel.colorMap[index]
+        color: ProjectViewModel.colorMap[index],
       }));
     }
 
@@ -282,11 +288,8 @@ class TimeViewModel {
 
 @Component({ components: { ButtonComponent, BarComponent } })
 export default class ProjectComponent extends Vue {
-  private readonly projectService: ProjectService = projectServiceInstance;
-  public authService: AuthService = authServiceInstance;
-
   public get isAdmin(): boolean {
-    return this.authService.isAdmin;
+    return bootstrap.authService.isAdmin;
   }
 
   public projects: ProjectViewModel[] = [];
@@ -296,7 +299,7 @@ export default class ProjectComponent extends Vue {
   }
 
   public async getProjects() {
-    this.projects = (await this.projectService.index()).map(
+    this.projects = (await bootstrap.projectService.index()).map(
       (project: ProjectDTO) =>
         new ProjectViewModel(
           project.id,
@@ -324,7 +327,7 @@ export default class ProjectComponent extends Vue {
                     task.users !== undefined
                       ? task.users.map((user: TaskUserDTO) => ({
                           id: user.user.id,
-                          email: user.user.email
+                          email: user.user.email,
                         }))
                       : [],
                     task.rate,
@@ -341,7 +344,7 @@ export default class ProjectComponent extends Vue {
   }
   public async deleteProject(projectId: number) {
     if (confirm("Är du säker?")) {
-      await this.projectService.delete(projectId);
+      await bootstrap.projectService.delete(projectId);
       await this.getProjects();
     }
   }

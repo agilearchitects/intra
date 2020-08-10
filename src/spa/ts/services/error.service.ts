@@ -14,6 +14,6 @@ export class ErrorService {
     this.broadcastService.emit("error", payload);
   }
   public subscribe(callback: subscribeActionPayload): void {
-    this.broadcastService.subscribe("error").then((payload: IErrorPayload) => callback(payload));
+    this.broadcastService.subscribe("error", (payload?: IErrorPayload) => payload !== undefined ? callback(payload) : undefined);
   }
 }

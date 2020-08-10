@@ -1,6 +1,5 @@
 <template>
-  <div class="container">
-    <!--<date-picker-component></date-picker-component>-->
+  <div class="">
     <div class="d-flex justify-content-between align-items-center">
       <button-component
         :route="{ name: 'time.project' }"
@@ -37,32 +36,26 @@ import ButtonComponent from "./layout/button.component.vue";
 import ProjectFormComponent from "./project-form.component.vue";
 
 // Bootstrap
-import {
-  projectService as projectServiceInstance,
-  messageService as messageServiceInstance
-} from "../bootstrap";
+import { bootstrap } from "../bootstrap";
 @Component({
   components: {
     ButtonComponent,
-    ProjectFormComponent
+    ProjectFormComponent,
     // DatePickerComponent
-  }
+  },
 })
 export default class CreateProjectComponent extends Vue {
-  public readonly projectService: ProjectService = projectServiceInstance;
-  public readonly messageService: MessageService = messageServiceInstance;
-
   public loading: boolean = false;
   public saving: boolean = false;
 
   public async save(createProject: CreateProjectDTO) {
     this.saving = true;
     try {
-      await this.projectService.create(createProject);
+      await bootstrap.projectService.create(createProject);
       this.saving = false;
       this.$router.push({ name: "time.project" });
     } catch {
-      this.messageService.showModal(
+      bootstrap.messageService.showModal(
         "error",
         this.$t("project.create.error.header").toString(),
         this.$t("project.create.error.message").toString(),
@@ -73,4 +66,6 @@ export default class CreateProjectComponent extends Vue {
 }
 </script>
 <style lang="scss" scoped>
+@import "../../scss/variables.scss";
+@import "~bootstrap/scss/bootstrap-grid";
 </style>

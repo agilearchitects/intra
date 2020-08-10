@@ -1,5 +1,8 @@
 <template>
-  <div class="mdo-pill__value" :class="{'mdo-pill__value--selected': active === true}">
+  <div
+    class="mdo-pill__value"
+    :class="{'mdo-pill__value--selected': active === true}"
+  >
     <slot></slot>
     <i
       v-if="showRemove"
@@ -18,8 +21,8 @@ export default class PillComponent extends Vue {
 }
 </script>
 <style lang="scss" scoped>
-@import "~bootstrap/scss/_functions";
 @import "../../../scss/variables";
+@import "~bootstrap/scss/_functions";
 @import "~bootstrap/scss/_variables";
 
 .mdo-pill {

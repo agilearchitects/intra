@@ -87,13 +87,7 @@ import { Vue, Component, Prop, Watch } from "vue-property-decorator";
 import { Moment, default as moment } from "moment";
 
 // Bootstrap
-import {
-  authService as authServiceInstance,
-  customerService as customerServiceInstance,
-  timeService as timeServiceInstance,
-  tagService as tagServiceInstance,
-  messageService as messageServiceInstance
-} from "../bootstrap";
+import { bootstrap } from "../bootstrap";
 
 // Components
 import ModalFormComponent from "./modal-form.component.vue";
@@ -176,16 +170,10 @@ export class TagViewModel {
     SelectComponent,
     ButtonComponent,
     TagComponent,
-    CheckboxComponent
-  }
+    CheckboxComponent,
+  },
 })
 export default class TimeReportFormComponent extends Vue {
-  private readonly timeService: TimeService = timeServiceInstance;
-  private readonly customerService: CustomerService = customerServiceInstance;
-  private readonly authService: AuthService = authServiceInstance;
-  private readonly tagService: TagService = tagServiceInstance;
-  private readonly messageService: MessageService = messageServiceInstance;
-
   @Prop({ default: {} }) data!: { timeId?: number; date: Moment };
 
   private get timeId(): number | undefined {
@@ -207,8 +195,8 @@ export default class TimeReportFormComponent extends Vue {
         text: customer.name,
         children: customer.projects.map((project: ProjectViewModel) => ({
           value: project.id.toString(),
-          text: project.name
-        }))
+          text: project.name,
+        })),
       });
     });
 
@@ -231,7 +219,7 @@ export default class TimeReportFormComponent extends Vue {
     if (selectedProject !== undefined) {
       return selectedProject.tasks.map((task: TaskViewModel) => ({
         value: task.id.toString(),
-        text: task.name
+        text: task.name,
       }));
     }
 
@@ -264,7 +252,7 @@ export default class TimeReportFormComponent extends Vue {
   public get tagOptions(): Array<{ value: number; text: string }> {
     return this.tags.map((tag: TagViewModel) => ({
       value: tag.id,
-      text: tag.name
+      text: tag.name,
     }));
   }
   public shoudSetRate: boolean = false;
@@ -295,7 +283,7 @@ export default class TimeReportFormComponent extends Vue {
 
   // Get time report
   public async getTime(id: number): Promise<void> {
-    const time: TimeDTO = await this.timeService.show(id);
+    const time: TimeDTO = await bootstrap.timeService.show(id);
     this.time = new TimeReportFormViewModel(
       time.id,
       time.task !== undefined && time.task.project !== undefined
@@ -316,7 +304,7 @@ export default class TimeReportFormComponent extends Vue {
 
   // Get all customers to be able to populate dropdown list
   public async getCustomers(): Promise<void> {
-    const customers = await this.customerService.index();
+    const customers = await bootstrap.customerService.index();
 
     this.customers = customers.map(
       (customer: CustomerDTO) =>
@@ -357,10 +345,10 @@ export default class TimeReportFormComponent extends Vue {
   }
 
   public async getTags(): Promise<void> {
-    const tags: TagDTO[] = await this.tagService.index();
+    const tags: TagDTO[] = await bootstrap.tagService.index();
     this.tags = tags.map((tag: TagDTO) => ({
       id: tag.id,
-      name: tag.name
+      name: tag.name,
     }));
   }
 
@@ -371,7 +359,6 @@ export default class TimeReportFormComponent extends Vue {
     let elementValue = ((this.$refs[`time-${type}`] as Vue).$el.querySelector(
       "input"
     ) as HTMLInputElement).value;
-    console.log(elementValue);
     let value = moment(
       `${this.date.format("YYYY-MM-DD")} ${moment(elementValue, "HH:mm").format(
         "HH:mm"
@@ -408,7 +395,7 @@ export default class TimeReportFormComponent extends Vue {
     this.saving = true;
     if (!this.edit) {
       try {
-        await this.timeService.create(
+        await bootstrap.timeService.create(
           CreateTimeDTO.parse({
             taskId: parseInt(this.time.taskId, 10),
             from: this.time.from.format("YYYY-MM-DD HH:mm:ss").toString(),
@@ -420,13 +407,13 @@ export default class TimeReportFormComponent extends Vue {
               : undefined),
             comment: this.time.comment,
             tags: this.time.tags,
-            userId: this.authService.user!.id
+            userId: bootstrap.authService.user!.id,
           })
         );
         this.$emit("close");
         this.saving = false;
       } catch {
-        this.messageService.showModal(
+        bootstrap.messageService.showModal(
           "error",
           this.$t("time.create.error.header").toString(),
           this.$t("time.create.error.message").toString(),
@@ -436,7 +423,7 @@ export default class TimeReportFormComponent extends Vue {
       }
     } else {
       try {
-        await this.timeService.update(
+        await bootstrap.timeService.update(
           UpdateTimeDTO.parse({
             id: this.time.id as number,
             taskId: parseInt(this.time.taskId, 10),
@@ -449,13 +436,13 @@ export default class TimeReportFormComponent extends Vue {
               : undefined),
             comment: this.time.comment,
             tags: this.time.tags,
-            userId: this.authService.user!.id
+            userId: bootstrap.authService.user!.id,
           })
         );
         this.$emit("close");
         this.saving = false;
       } catch {
-        this.messageService.showModal(
+        bootstrap.messageService.showModal(
           "error",
           this.$t("time.update.error.header").toString(),
           this.$t("time.update.error.message").toString(),
@@ -470,11 +457,11 @@ export default class TimeReportFormComponent extends Vue {
     if (this.time.id !== undefined && confirm("Är du säker?")) {
       this.saving = true;
       try {
-        await this.timeService.delete(this.time.id);
+        await bootstrap.timeService.delete(this.time.id);
         this.saving = false;
         this.$emit("close");
       } catch (error) {
-        this.messageService.showModal(
+        bootstrap.messageService.showModal(
           "error",
           this.$t("time.delete.error.header").toString(),
           this.$t("time.delete.error.message").toString(),

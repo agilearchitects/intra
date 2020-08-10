@@ -1,274 +1,115 @@
 <template>
-  <div>
-    <div class="container text-center my-4 d-none d-lg-block">
-      <router-link
-        :to="{ name: 'start' }"
-        class="navbar-brand p-0"
-      >
-        <img
-          src="../../resources/img/logo.png"
-          style="height: 40px;"
-        />
-      </router-link>
-    </div>
-    <nav
-      class="navbar navbar-expand-lg"
-      ref="navbar"
+  <div class="header">
+    <router-link
+      :to="{ name: 'start'}"
+      class="header__logo"
     >
-      <div class="container-custom">
-        <button
-          class="navbar-toggler"
-          type="button"
-          v-on:click="toggleEvent"
-        >
-          <i class="fas fa-bars"></i>
-        </button>
-        <a
-          class="navbar-brand d-lg-none"
-          href="#"
-        >{{ $t('title') }}</a>
-        <div
-          class="collapse navbar-collapse no-transition"
-          ref="navbarContent"
-        >
-          <template v-for="(menu, index) in menus">
-            <ul
-              class="navbar-nav"
-              :class="{ 'mr-auto': index === 0 }"
-              :key="`menu_${index}`"
-            >
-              <li
-                class="nav-item"
-                :class="{ 'dropdown': menuItem.children, 'show': menuItem.children && matches(menuItem.route), 'nav-divider': menuItem.divider !== undefined }"
-                v-for="(menuItem, subIndex) in menu"
-                :key="`menuItem_${index}_${subIndex}`"
-              >
-                <template v-if="menuItem.divider === undefined">
-                  <template v-if="menuItem.children">
-                    <a
-                      class="nav-link dropdown-toggle d-lg-none"
-                      :class="{ 'router-link-active': matches(menuItem.route) }"
-                      href="#"
-                      role="button"
-                      data-toggle="dropdown"
-                    >{{ menuItem.title }}</a>
-                    <div
-                      class="dropdown-menu d-lg-none"
-                      :class="{ 'show': matches(menuItem.route)}"
-                      aria-labelledby="navbarDropdown"
-                    >
-                      <template v-for="(menuItem, subSubIndex) in menuItem.children">
-                        <div
-                          v-if="menuItem.divider"
-                          class="dropdown-divider"
-                          :key="`subMenuItem_${index}_${subIndex}_${subSubIndex}`"
-                        ></div>
-                        <span
-                          v-else
-                          v-on:click="triggerNavbarToggler"
-                          :key="`subMenuItem_${index}_${subIndex}_${subSubIndex}`"
-                        >
-                          <router-link
-                            class="dropdown-item pl-3"
-                            :to="menuItem.route"
-                          >{{ menuItem.title }}</router-link>
-                        </span>
-                        <template v-if="menuItem.children">
-                          <template v-for="(subMenuItem, subSubSubIndex) in menuItem.children">
-                            <div
-                              v-if="subMenuItem.divider"
-                              class="dropdown-divider"
-                              :key="`subSubMenuItem_${index}_${subIndex}_${subSubIndex}_${subSubSubIndex}`"
-                            ></div>
-                            <span
-                              v-else
-                              v-on:click="triggerNavbarToggler"
-                              :key="`subSubMenuItem_${index}_${subIndex}_${subSubIndex}_${subSubSubIndex}`"
-                            >
-                              <router-link
-                                class="dropdown-item pl-4"
-                                :class="{ 'dropdown-last': subSubSubIndex === menuItem.children.length - 1 }"
-                                :to="subMenuItem.route"
-                              >{{ subMenuItem.title }}</router-link>
-                            </span>
-                          </template>
-                        </template>
-                      </template>
-                    </div>
-                  </template>
-                  <span v-on:click="triggerNavbarToggler">
-                    <router-link
-                      class="nav-link"
-                      :class="{ 'd-none d-lg-block': menuItem.children }"
-                      :to="menuItem.route"
-                    >
-                      {{ menuItem.title }}
-                      <span class="sr-only">(current)</span>
-                    </router-link>
-                  </span>
-                </template>
-              </li>
-            </ul>
-          </template>
-        </div>
+      <img
+        src="../../resources/img/logo.png"
+        alt="Logo"
+      />
+    </router-link>
+    <nav class="header__navbar">
+      <div class="header__navbar__container">
+        <nav-component
+          :menu="leftMenu"
+          base-class="header__"
+        ></nav-component>
+        <nav-component
+          :menu="rightMenu"
+          base-class="header__"
+          class="header__nav--right"
+        ></nav-component>
       </div>
     </nav>
   </div>
 </template>
 <script lang="ts">
-import { Vue, Component, Watch } from "vue-property-decorator";
-import { IMenuItem, MenuService } from "../services/menu.service";
-import { RouteRecord, Route } from "vue-router";
-import { menuService as menuServiceInstance } from "../bootstrap";
+// Libs
+import { Component, Vue } from "vue-property-decorator";
 
-interface IMenuItemWithShow extends IMenuItem {
-  show: boolean;
-}
+// Services
+import { menuType } from "../services/menu.service";
 
-@Component
+// Bootstrap
+import { bootstrap } from "../bootstrap";
+
+// Components
+import NavComponent from "./nav.component.vue";
+import { ISubscription } from "../services/broadcast.service";
+
+@Component({ components: { NavComponent } })
 export default class HeaderComponent extends Vue {
-  private readonly menuService: MenuService = menuServiceInstance;
-  public get menus(): IMenuItem[][] {
-    return this.menuService.menus;
-  }
-  public dev: boolean = false;
+  public leftMenu: menuType[] = bootstrap.menuService.getLeftMenu();
+  public rightMenu: menuType[] = bootstrap.menuService.getRightMenu();
 
-  public get navBar(): HTMLElement {
-    return this.$refs.navbar as HTMLElement;
-  }
+  private menuChangeSubscription?: ISubscription;
 
   public mounted() {
-    let offset = this.navBar.offsetTop;
-    window.onresize = () => {
-      offset = this.navBar.offsetTop;
-    };
-    window.onscroll = () => {
-      if (window.pageYOffset > offset) {
-        this.navBar.classList.add("nav-fixed-top");
-        if (
-          this.navBar.parentElement !== null &&
-          this.navBar.parentElement.nextElementSibling !== null
-        ) {
-          (this.navBar.parentElement
-            .nextElementSibling as HTMLElement).style.paddingTop = `${this.navBar.offsetHeight}px`;
-        }
-      } else {
-        this.navBar.classList.remove("nav-fixed-top");
-        if (
-          this.navBar.parentElement !== null &&
-          this.navBar.parentElement.nextElementSibling !== null
-        ) {
-          (this.navBar.parentElement
-            .nextElementSibling as HTMLElement).style.paddingTop = "";
-        }
-      }
-    };
+    this.menuChangeSubscription = bootstrap.menuService.onMenuChange(() => {
+      this.leftMenu = bootstrap.menuService.getLeftMenu();
+      this.rightMenu = bootstrap.menuService.getRightMenu();
+    });
   }
 
-  public matches(route: Route) {
-    return (
-      this.$route.matched.findIndex(
-        (routeRecord: RouteRecord) => route.name === routeRecord.name
-      ) !== -1
-    );
-  }
-
-  public triggerNavbarToggler() {
-    const ref = this.$refs.navbarContent as Element | undefined;
-    if (ref !== undefined) {
-      ref.classList.toggle("show");
-      //$(".navbar-toggler").trigger("click");
-      this.checkOverflow();
+  public destroyed() {
+    if (this.menuChangeSubscription !== undefined) {
+      this.menuChangeSubscription.unsubscribe();
     }
-  }
-
-  public toggleEvent() {
-    this.triggerNavbarToggler();
-    this.checkOverflow();
-  }
-
-  private checkOverflow() {
-    setTimeout(() => {
-      if ((this.$refs.navbarContent as Element).classList.contains("show")) {
-        document.body.classList.add("overflow-hidden-md");
-      } else {
-        document.body.classList.remove("overflow-hidden-md");
-      }
-    }, 10);
   }
 }
 </script>
 <style lang="scss" scoped>
-@import "~bootstrap/scss/_functions";
-@import "~bootstrap/scss/_mixins";
-@import "../../scss/variables";
-@import "~bootstrap/scss/_variables";
-@import "~bootstrap/scss/_grid";
-
-.container-custom {
-  @extend .container;
-  @include media-breakpoint-down(md) {
-    padding: 0px;
-    margin-right: 0px;
-    margin-left: 0px;
-    min-width: 100%;
-  }
-}
-.navbar {
-  .navbar-collapse.show {
-    @include media-breakpoint-down(md) {
-      overflow-y: auto;
-      height: 100vh;
+@import "../../scss/variables.scss";
+@import "~bootstrap/scss/bootstrap-grid";
+.header {
+  width: 100%;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-around;
+  &__logo {
+    margin: 10px 0px 20px;
+    height: 80px;
+    align-self: center;
+    img {
+      height: 100%;
     }
   }
-  padding: 0px;
-  .navbar-brand {
-    color: #eee;
-  }
-  .nav-link {
-    padding: 0.6rem 1rem !important;
-    color: #fff;
-    text-transform: uppercase;
-
-    &:hover,
-    &.router-link-active {
-      background-color: darken(theme-color("primary"), 10%);
+  &__navbar {
+    flex-basis: 100%;
+    background-color: theme-color("primary");
+    &__container {
+      @extend .container;
+      display: flex;
     }
   }
-  .nav-divider {
-    border-color: #fff;
-    border-style: solid;
-    border-width: 0px 1px 0px 0px;
-  }
-
-  .dropdown-menu {
+  ::v-deep &__nav {
     margin: 0px;
     padding: 0px;
-    border: 0px;
-    border-radius: 0px;
-  }
-  .dropdown-item {
-    padding: 0.6rem 1rem;
-    text-transform: uppercase;
-    background-color: #f0f0f0;
-    border-bottom: 1px solid #ddd;
-
-    &.router-link-active {
-      font-weight: bold;
+    display: flex;
+    list-style-type: none;
+    &--right {
+      margin-left: auto;
     }
-  }
-  .dropdown-last {
-    border-bottom: 1px solid #ddd;
-  }
-
-  background-color: theme-color("primary");
-
-  &.nav-fixed-top {
-    position: fixed;
-    top: 0;
-    right: 0;
-    left: 0;
-    z-index: 1;
+    &__nav-item {
+      text-transform: uppercase;
+      &--divider {
+        border-left: 2px solid color-yiq(theme-color("primary"));
+      }
+      &__nav-link {
+        padding: 0px 20px;
+        line-height: 40px;
+        display: block;
+        color: color-yiq(theme-color("primary"));
+        &:hover {
+          text-decoration: none;
+          color: darken(color-yiq(theme-color("primary")), 10%);
+        }
+        &--active {
+          background-color: darken(theme-color("primary"), 10%);
+        }
+      }
+    }
   }
 }
 </style>

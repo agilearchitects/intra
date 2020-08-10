@@ -1,4 +1,8 @@
+// Libs
 import { jsonType } from "@agilearchitects/server";
+
+// DTO's
+import { IDictionaryDTO } from "./dictionary.dto";
 import { DTO } from "./dto";
 import { ITimeDTO, TimeDTO } from "./time.dto";
 
@@ -8,20 +12,20 @@ export interface ITagDTO {
   times?: ITimeDTO[];
 }
 
-export class TagDTO implements ITagDTO {
-  public static parseFromRequest(object: jsonType): TagDTO {
-    object = DTO.parseFromRequest(object);
-    if (typeof object.id !== "number" ||
+export class TagDTO {
+  public static parseFromRequest(object: IDictionaryDTO<jsonType>): TagDTO {
+    if (
+      typeof object.id !== "number" ||
       typeof object.name !== "string" ||
-      (object.times !== undefined &&
-        !(object.times instanceof Array))) {
+      (object.times !== undefined && !(object.times instanceof Array))
+    ) {
       throw new Error("Unable to parse");
     }
 
     return new TagDTO(
       object.id,
       object.name,
-      (object.times !== undefined ? object.times.map((time: jsonType) => TimeDTO.parseFromRequest(time)) : undefined),
+      (object.times !== undefined ? DTO.parseArrayToDictionary(object.times).map((time: IDictionaryDTO<jsonType>) => TimeDTO.parseFromRequest(time)) : undefined),
     )
   }
   public static parse(object: ITagDTO) {

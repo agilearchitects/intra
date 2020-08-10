@@ -1,7 +1,5 @@
-.DS_Store
 .cache
-dist
 build
-log
+dist
 node_modules
 .env

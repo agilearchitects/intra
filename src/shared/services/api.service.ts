@@ -1,28 +1,31 @@
 // Libs
-import Axios, { AxiosInstance, AxiosResponse } from "axios";
-import * as querystring from "querystring";
-import * as url from "url";
+import { AxiosInstance, AxiosResponse } from "axios";
 
-// Dictionary
-import { IDictionary } from "../index";
+// DTO's
+import { IDictionaryDTO } from "../dto/dictionary.dto";
 
 interface IOptions {
-  params?: IDictionary<string>;
-  headers?: IDictionary<string>;
+  params?: IDictionaryDTO<string>;
+  headers?: IDictionaryDTO<string>;
 }
 interface IOptionsSubmit extends IOptions {
   postType?: "json" | "form";
 }
 
 interface IResponse<T> {
-  headers: IDictionary<string>;
+  headers: IDictionaryDTO<string>;
   status: number;
   body: T;
 }
 
+interface IQuerystringModule {
+  stringify: (obj?: IDictionaryDTO<string | number | boolean | string[] | number[] | boolean[] | null>) => string;
+
+}
+
 
 export interface IAPIService {
-  get<T>(url: string, params?: IDictionary<string>, options?: IOptions): Promise<IResponse<T>>;
+  get<T>(url: string, params?: IDictionaryDTO<string>, options?: IOptions): Promise<IResponse<T>>;
   post<T, R>(url: string, body: T, options?: IOptionsSubmit): Promise<IResponse<R>>;
   put<T, R>(url: string, body: T, options?: IOptionsSubmit): Promise<IResponse<R>>;
   patch<T, R>(url: string, body: T, options?: IOptionsSubmit): Promise<IResponse<R>>;
@@ -30,14 +33,14 @@ export interface IAPIService {
 
 export class APIService implements IAPIService {
   public constructor(
-    private readonly baseUrl: string = "",
-    private readonly axios: AxiosInstance = Axios.create(),
-    private readonly querystringModule: typeof querystring = querystring,
+    private readonly baseUrl: string,
+    private readonly axios: AxiosInstance,
+    private readonly querystringModule: IQuerystringModule,
   ) {
-    this.axios.defaults.baseURL = this.baseUrl;
+    axios.defaults.baseURL = this.baseUrl;
   }
 
-  public async get<T>(url: string, params?: IDictionary<string>, options?: IOptions): Promise<IResponse<T>> {
+  public async get<T>(url: string, params?: IDictionaryDTO<string>, options?: IOptions): Promise<IResponse<T>> {
     try {
       if (options === undefined) {
         options = {};
@@ -53,7 +56,7 @@ export class APIService implements IAPIService {
     }
   }
 
-  public async head(url: string, params?: IDictionary<string>, options?: IOptions): Promise<IResponse<undefined>> {
+  public async head(url: string, params?: IDictionaryDTO<string>, options?: IOptions): Promise<IResponse<undefined>> {
     try {
       if (options === undefined) {
         options = {};
@@ -96,7 +99,7 @@ export class APIService implements IAPIService {
     this.axios.defaults.baseURL = baseUrl;
   }
 
-  public setDefaultHeaders(headers: IDictionary<string>): void {
+  public setDefaultHeaders(headers: IDictionaryDTO<string>): void {
     this.axios.defaults.headers = { ...this.axios.defaults.headers, ...headers };
   }
 
@@ -114,7 +117,7 @@ export class APIService implements IAPIService {
     this.axios.interceptors.response.use(onSuccess, onFail);
   }
 
-  public parseToQuery(object: IDictionary<string | string[]>): string {
+  public parseToQuery(object: IDictionaryDTO<string | string[]>): string {
     const query = Object.keys(object).map((key: string) => {
       let value = object[key];
       if (!(value instanceof Array)) {
@@ -125,10 +128,10 @@ export class APIService implements IAPIService {
     return `${query !== "" ? "?" : ""}${query}`;
   }
 
-  public parseFromQuery(query: string): IDictionary<string[]> {
+  public parseFromQuery(query: string): IDictionaryDTO<string[]> {
     const match = query.match(/^([^\?]*)\??([^#]*)/);
     if (match !== null && match[2].length > 0) {
-      return match[2].split("&").reduce((previousValue: IDictionary<string[]>, currentValue: string) => {
+      return match[2].split("&").reduce((previousValue: IDictionaryDTO<string[]>, currentValue: string) => {
         const split = currentValue.split("=");
         return {
           ...previousValue, [split[0]]: [
@@ -141,7 +144,7 @@ export class APIService implements IAPIService {
     return {};
   }
 
-  private async submitData<T extends IDictionary<any>, R>(verb: "post" | "put" | "patch", url: string, data?: T, options?: IOptionsSubmit): Promise<IResponse<R>> {
+  private async submitData<T extends IDictionaryDTO<any>, R>(verb: "post" | "put" | "patch", url: string, data?: T, options?: IOptionsSubmit): Promise<IResponse<R>> {
     try {
       if (options === undefined) {
         options = {};

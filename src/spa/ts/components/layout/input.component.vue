@@ -1,16 +1,22 @@
 <template>
-  <div class="mdo-form-group" :class="{ 'mdo-form-group--warning': warning }">
+  <div
+    class="form-group"
+    :class="{ 'form-group--warning': warning }"
+  >
     <label
-      class="mdo-form-group__label"
-      v-bind:class="{ 'mdo-form-group__label--active': isActive, 'mdo-form-group__label--not-empty': !empty || placeholder !== '', 'mdo-form-group__label--gray': disabled }"
+      class="form-group__label"
+      v-bind:class="{ 'form-group__label--active': isActive, 'form-group__label--not-empty': !empty || placeholder !== '', 'form-group__label--gray': disabled }"
       v-on:click="focusInput"
     >
       {{ label }}
-      <span v-if="required" style="color: #aa0000">*</span>
+      <span
+        v-if="required"
+        style="color: #aa0000"
+      >*</span>
     </label>
     <textarea
       v-if="type === inputType.TEXTAREA"
-      class="mdo-form-group__control"
+      class="form-group__control"
       :id="id"
       :name="name"
       :placeholder="placeholder"
@@ -23,7 +29,7 @@
     />
     <input
       v-else
-      class="mdo-form-group__control"
+      class="form-group__control"
       :id="id"
       :type="type"
       :name="name"
@@ -37,15 +43,15 @@
       v-on:keypress="$emit('keypress', $event)"
       :disabled="disabled"
     />
-    <small v-if="hasHelp" class="mdo-form-group__help">{{ helpText }}</small>
-    <small v-if="warning" class="mdo-form-group__warning">{{ warningText }}</small>
+    <small v-if="hasHelp" class="form-group__help">{{ helpText }}</small>
+    <small v-if="warning" class="form-group__warning">{{ warningText }}</small>
   </div>
 </template>
 <script lang="ts">
 import { Vue, Component, Prop, Watch } from "vue-property-decorator";
 export enum inputType {
   TEXT = "text",
-  TEXTAREA = "textarea"
+  TEXTAREA = "textarea",
 }
 @Component
 export default class InputComponent extends Vue {
@@ -91,9 +97,11 @@ export default class InputComponent extends Vue {
       const textarea = this.$refs.input as HTMLTextAreaElement;
       const computedStyle = window.getComputedStyle(textarea);
       textarea.style.height = "inherit";
-      textarea.style.height = `${textarea.scrollHeight -
+      textarea.style.height = `${
+        textarea.scrollHeight -
         parseInt(computedStyle.getPropertyValue("padding-top"), 10) -
-        parseInt(computedStyle.getPropertyValue("padding-bottom"), 10)}px`;
+        parseInt(computedStyle.getPropertyValue("padding-bottom"), 10)
+      }px`;
     }
   }
 
@@ -103,11 +111,11 @@ export default class InputComponent extends Vue {
 }
 </script>
 <style lang="scss" scoped>
-@import "~bootstrap/scss/_functions";
 @import "../../../scss/variables";
+@import "~bootstrap/scss/_functions";
 @import "~bootstrap/scss/_variables";
 
-.mdo-form-group {
+.form-group {
   &__label {
     position: absolute;
     font-size: 1rem;
@@ -182,7 +190,7 @@ export default class InputComponent extends Vue {
     color: theme-color("warning");
   }
 }
-select.mdo-form-group__control {
+select.form-group__control {
   -webkit-appearance: none;
   border-radius: 0px;
 }

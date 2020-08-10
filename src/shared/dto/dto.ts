@@ -1,17 +1,14 @@
 import { jsonType } from "@agilearchitects/server";
+import { IDictionaryDTO } from "./dictionary.dto";
 
-export abstract class DTO<I> {
-  public static parseFromRequest(object: jsonType): { [key: string]: jsonType } {
-    if (object === null ||
-      typeof object !== "object" ||
-      (object instanceof Array)) {
-      throw new Error("Object type could not be verified")
-    }
-
-    return object;
+export class DTO {
+  public static parseArrayToDictionary(array: jsonType[]): IDictionaryDTO<jsonType>[] {
+    return array.map((object: jsonType) => {
+      if (object === null || (object instanceof Array) || typeof object !== "object") {
+        throw new Error();
+      } else {
+        return object;
+      }
+    });
   }
-  public static parse<D, I>(object: I): D {
-    throw new Error("static method parse not implemented");
-  }
-  public abstract serialize(): I;
 }

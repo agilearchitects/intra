@@ -1,5 +1,5 @@
 <template>
-  <div class="container">
+  <div>
     <slot
       name="header"
       v-bind:next="next"
@@ -12,12 +12,21 @@
       <h1 v-if="customers.length === 0">
         <i>Inga tidrapporter :(</i>
       </h1>
-      <div v-for="customer in customers" :key="`customer_${customer.id}`">
+      <div
+        v-for="customer in customers"
+        :key="`customer_${customer.id}`"
+      >
         <h1>Kund: {{ customer.name }} - {{ customer.hours }}h</h1>
-        <div v-for="project in customer.projects" :key="`project_${project.id}`">
+        <div
+          v-for="project in customer.projects"
+          :key="`project_${project.id}`"
+        >
           <h2>{{ project.name }} - {{ project.hours }}h</h2>
           <ul>
-            <li v-for="tag in project.tags" :key="`tag_${tag.id}`">{{ tag.name }} - {{ tag.hours }}h</li>
+            <li
+              v-for="tag in project.tags"
+              :key="`tag_${tag.id}`"
+            >{{ tag.name }} - {{ tag.hours }}h</li>
           </ul>
         </div>
       </div>
@@ -41,12 +50,10 @@ import { ProjectDTO } from "../../../shared/dto/project.dto";
 import { TaskDTO } from "../../../shared/dto/task.dto";
 
 // Bootstrap
-import { timeService as timeServiceInstance } from "../bootstrap";
+import { bootstrap } from "../bootstrap";
 
 @Component
 export default class TimeResultWeekComponent extends Vue {
-  private readonly timeService: TimeService = timeServiceInstance;
-
   @Watch("date") onDateChange() {
     this.getReports();
   }
@@ -72,8 +79,8 @@ export default class TimeResultWeekComponent extends Vue {
     this.$router.push({
       query: {
         year: moment(value).format("YYYY"),
-        week: moment(value).format("W")
-      }
+        week: moment(value).format("W"),
+      },
     });
   }
 
@@ -91,27 +98,22 @@ export default class TimeResultWeekComponent extends Vue {
   }
 
   public next() {
-    this.date = moment(this.date)
-      .add(1, "week")
-      .toDate();
+    this.date = moment(this.date).add(1, "week").toDate();
   }
   public previous() {
-    this.date = moment(this.date)
-      .subtract(1, "week")
-      .toDate();
+    this.date = moment(this.date).subtract(1, "week").toDate();
   }
   public today() {
     this.date = new Date();
   }
 
   public async getReports() {
-    this.customers = await this.timeService.indexByCustomer(
+    this.customers = await bootstrap.timeService.indexByCustomer(
       TimeQueryDTO.parse({
         year: moment(this.date).format("YYYY"),
-        week: moment(this.date).format("W")
+        week: moment(this.date).format("W"),
       })
     );
-    console.log(this.customers);
   }
 }
 </script>

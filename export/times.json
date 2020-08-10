@@ -1,0 +1,4115 @@
+[
+    {
+        "id": 8,
+        "from": "2019-11-04 17:00:00",
+        "to": "2019-11-04 17:47:00",
+        "comment": null,
+        "userId": 1,
+        "taskId": 1,
+        "rate": null
+    },
+    {
+        "id": 9,
+        "from": "2019-11-05 11:15:00",
+        "to": "2019-11-05 12:18:00",
+        "comment": null,
+        "userId": 1,
+        "taskId": 1,
+        "rate": null
+    },
+    {
+        "id": 10,
+        "from": "2019-11-05 13:48:00",
+        "to": "2019-11-05 16:29:34",
+        "comment": null,
+        "userId": 1,
+        "taskId": 1,
+        "rate": null
+    },
+    {
+        "id": 11,
+        "from": "2019-11-05 11:00:00",
+        "to": "2019-11-05 11:15:00",
+        "comment": null,
+        "userId": 1,
+        "taskId": 3,
+        "rate": null
+    },
+    {
+        "id": 12,
+        "from": "2019-11-05 09:40:00",
+        "to": "2019-11-05 11:00:00",
+        "comment": null,
+        "userId": 1,
+        "taskId": 1,
+        "rate": null
+    },
+    {
+        "id": 13,
+        "from": "2019-11-06 10:12:00",
+        "to": "2019-11-06 11:05:00",
+        "comment": null,
+        "userId": 1,
+        "taskId": 1,
+        "rate": null
+    },
+    {
+        "id": 14,
+        "from": "2019-11-06 11:05:00",
+        "to": "2019-11-06 11:35:00",
+        "comment": null,
+        "userId": 1,
+        "taskId": 3,
+        "rate": null
+    },
+    {
+        "id": 15,
+        "from": "2019-11-06 11:35:00",
+        "to": "2019-11-06 14:28:37",
+        "comment": null,
+        "userId": 1,
+        "taskId": 1,
+        "rate": null
+    },
+    {
+        "id": 16,
+        "from": "2019-11-06 14:39:00",
+        "to": "2019-11-06 18:26:00",
+        "comment": null,
+        "userId": 1,
+        "taskId": 1,
+        "rate": null
+    },
+    {
+        "id": 17,
+        "from": "2019-11-07 09:45:00",
+        "to": "2019-11-07 11:02:11",
+        "comment": null,
+        "userId": 1,
+        "taskId": 1,
+        "rate": null
+    },
+    {
+        "id": 18,
+        "from": "2019-11-07 11:02:00",
+        "to": "2019-11-07 12:20:00",
+        "comment": null,
+        "userId": 1,
+        "taskId": 3,
+        "rate": null
+    },
+    {
+        "id": 19,
+        "from": "2019-11-07 11:20:00",
+        "to": "2019-11-07 13:57:37",
+        "comment": null,
+        "userId": 1,
+        "taskId": 1,
+        "rate": null
+    },
+    {
+        "id": 20,
+        "from": "2019-11-07 15:00:00",
+        "to": "2019-11-07 16:20:11",
+        "comment": null,
+        "userId": 1,
+        "taskId": 1,
+        "rate": null
+    },
+    {
+        "id": 22,
+        "from": "2019-11-07 22:45:00",
+        "to": "2019-11-07 23:28:40",
+        "comment": "Backup av databas för Loopia VPS",
+        "userId": 1,
+        "taskId": 4,
+        "rate": null
+    },
+    {
+        "id": 24,
+        "from": "2019-11-08 09:52:00",
+        "to": "2019-11-08 11:02:00",
+        "comment": null,
+        "userId": 1,
+        "taskId": 1,
+        "rate": null
+    },
+    {
+        "id": 25,
+        "from": "2019-11-08 11:02:00",
+        "to": "2019-11-08 11:50:00",
+        "comment": "Uttökad standup",
+        "userId": 1,
+        "taskId": 3,
+        "rate": null
+    },
+    {
+        "id": 26,
+        "from": "2019-11-08 11:50:00",
+        "to": "2019-11-08 14:09:02",
+        "comment": null,
+        "userId": 1,
+        "taskId": 1,
+        "rate": null
+    },
+    {
+        "id": 28,
+        "from": "2019-11-08 14:32:00",
+        "to": "2019-11-08 16:29:49",
+        "comment": null,
+        "userId": 1,
+        "taskId": 1,
+        "rate": null
+    },
+    {
+        "id": 29,
+        "from": "2019-11-14 09:45:00",
+        "to": "2019-11-14 11:00:00",
+        "comment": null,
+        "userId": 1,
+        "taskId": 1,
+        "rate": null
+    },
+    {
+        "id": 30,
+        "from": "2019-11-13 17:00:00",
+        "to": "2019-11-13 17:55:00",
+        "comment": "Uppstartsmöte med kort genomgång av uppdragets omfattning",
+        "userId": 1,
+        "taskId": 6,
+        "rate": null
+    },
+    {
+        "id": 31,
+        "from": "2019-11-14 11:00:00",
+        "to": "2019-11-14 11:25:00",
+        "comment": null,
+        "userId": 1,
+        "taskId": 3,
+        "rate": null
+    },
+    {
+        "id": 32,
+        "from": "2019-11-14 11:25:00",
+        "to": "2019-11-14 14:39:37",
+        "comment": null,
+        "userId": 1,
+        "taskId": 1,
+        "rate": null
+    },
+    {
+        "id": 33,
+        "from": "2019-11-14 14:56:00",
+        "to": "2019-11-14 16:45:00",
+        "comment": null,
+        "userId": 1,
+        "taskId": 1,
+        "rate": null
+    },
+    {
+        "id": 36,
+        "from": "2019-11-15 09:43:00",
+        "to": "2019-11-15 12:00:00",
+        "comment": null,
+        "userId": 1,
+        "taskId": 1,
+        "rate": null
+    },
+    {
+        "id": 37,
+        "from": "2019-11-15 12:00:00",
+        "to": "2019-11-15 13:00:00",
+        "comment": null,
+        "userId": 1,
+        "taskId": 3,
+        "rate": null
+    },
+    {
+        "id": 38,
+        "from": "2019-11-15 13:00:00",
+        "to": "2019-11-15 14:30:00",
+        "comment": null,
+        "userId": 1,
+        "taskId": 1,
+        "rate": null
+    },
+    {
+        "id": 39,
+        "from": "2019-11-15 14:30:00",
+        "to": "2019-11-15 16:35:00",
+        "comment": null,
+        "userId": 1,
+        "taskId": 3,
+        "rate": null
+    },
+    {
+        "id": 40,
+        "from": "2019-11-15 16:35:00",
+        "to": "2019-11-15 18:30:00",
+        "comment": null,
+        "userId": 1,
+        "taskId": 1,
+        "rate": null
+    },
+    {
+        "id": 41,
+        "from": "2019-11-18 09:53:00",
+        "to": "2019-11-18 11:00:00",
+        "comment": null,
+        "userId": 1,
+        "taskId": 1,
+        "rate": null
+    },
+    {
+        "id": 42,
+        "from": "2019-11-18 14:59:00",
+        "to": "2019-11-18 16:00:00",
+        "comment": null,
+        "userId": 1,
+        "taskId": 1,
+        "rate": null
+    },
+    {
+        "id": 43,
+        "from": "2019-11-18 11:00:00",
+        "to": "2019-11-18 11:20:00",
+        "comment": null,
+        "userId": 1,
+        "taskId": 3,
+        "rate": null
+    },
+    {
+        "id": 44,
+        "from": "2019-11-18 11:20:00",
+        "to": "2019-11-18 14:40:00",
+        "comment": null,
+        "userId": 1,
+        "taskId": 1,
+        "rate": null
+    },
+    {
+        "id": 45,
+        "from": "2019-11-18 16:00:00",
+        "to": "2019-11-18 16:40:00",
+        "comment": "Teammöte",
+        "userId": 1,
+        "taskId": 3,
+        "rate": null
+    },
+    {
+        "id": 46,
+        "from": "2019-11-18 16:40:00",
+        "to": "2019-11-18 18:24:00",
+        "comment": null,
+        "userId": 1,
+        "taskId": 1,
+        "rate": null
+    },
+    {
+        "id": 47,
+        "from": "2019-11-19 09:44:00",
+        "to": "2019-11-19 11:00:00",
+        "comment": null,
+        "userId": 1,
+        "taskId": 1,
+        "rate": null
+    },
+    {
+        "id": 48,
+        "from": "2019-11-19 11:00:00",
+        "to": "2019-11-19 11:47:32",
+        "comment": null,
+        "userId": 1,
+        "taskId": 3,
+        "rate": null
+    },
+    {
+        "id": 49,
+        "from": "2019-11-19 12:15:00",
+        "to": "2019-11-19 12:32:11",
+        "comment": null,
+        "userId": 1,
+        "taskId": 1,
+        "rate": null
+    },
+    {
+        "id": 50,
+        "from": "2019-11-19 12:57:00",
+        "to": "2019-11-19 14:11:03",
+        "comment": null,
+        "userId": 1,
+        "taskId": 1,
+        "rate": null
+    },
+    {
+        "id": 51,
+        "from": "2019-11-19 14:25:00",
+        "to": "2019-11-19 18:31:57",
+        "comment": null,
+        "userId": 1,
+        "taskId": 1,
+        "rate": null
+    },
+    {
+        "id": 52,
+        "from": "2019-11-20 09:53:00",
+        "to": "2019-11-20 11:00:00",
+        "comment": null,
+        "userId": 1,
+        "taskId": 1,
+        "rate": null
+    },
+    {
+        "id": 53,
+        "from": "2019-11-20 11:00:00",
+        "to": "2019-11-20 11:45:22",
+        "comment": null,
+        "userId": 1,
+        "taskId": 1,
+        "rate": null
+    },
+    {
+        "id": 54,
+        "from": "2019-11-20 11:45:00",
+        "to": "2019-11-20 12:55:00",
+        "comment": null,
+        "userId": 1,
+        "taskId": 1,
+        "rate": null
+    },
+    {
+        "id": 55,
+        "from": "2019-11-20 12:55:00",
+        "to": "2019-11-20 14:05:00",
+        "comment": null,
+        "userId": 1,
+        "taskId": 3,
+        "rate": null
+    },
+    {
+        "id": 56,
+        "from": "2019-11-20 14:05:00",
+        "to": "2019-11-20 16:28:11",
+        "comment": null,
+        "userId": 1,
+        "taskId": 1,
+        "rate": null
+    },
+    {
+        "id": 57,
+        "from": "2019-11-21 09:55:00",
+        "to": "2019-11-21 11:14:37",
+        "comment": null,
+        "userId": 1,
+        "taskId": 1,
+        "rate": null
+    },
+    {
+        "id": 58,
+        "from": "2019-11-21 11:00:00",
+        "to": "2019-11-21 11:51:00",
+        "comment": null,
+        "userId": 1,
+        "taskId": 3,
+        "rate": null
+    },
+    {
+        "id": 59,
+        "from": "2019-11-21 11:51:00",
+        "to": "2019-11-21 13:26:22",
+        "comment": null,
+        "userId": 1,
+        "taskId": 1,
+        "rate": null
+    },
+    {
+        "id": 60,
+        "from": "2019-11-21 13:38:00",
+        "to": "2019-11-21 16:30:00",
+        "comment": null,
+        "userId": 1,
+        "taskId": 1,
+        "rate": null
+    },
+    {
+        "id": 61,
+        "from": "2019-11-22 09:54:00",
+        "to": "2019-11-22 11:00:00",
+        "comment": null,
+        "userId": 1,
+        "taskId": 1,
+        "rate": null
+    },
+    {
+        "id": 62,
+        "from": "2019-11-22 11:00:00",
+        "to": "2019-11-22 11:25:00",
+        "comment": null,
+        "userId": 1,
+        "taskId": 3,
+        "rate": null
+    },
+    {
+        "id": 63,
+        "from": "2019-11-22 11:25:00",
+        "to": "2019-11-22 13:53:14",
+        "comment": null,
+        "userId": 1,
+        "taskId": 1,
+        "rate": null
+    },
+    {
+        "id": 64,
+        "from": "2019-11-22 14:09:00",
+        "to": "2019-11-22 17:00:00",
+        "comment": null,
+        "userId": 1,
+        "taskId": 1,
+        "rate": null
+    },
+    {
+        "id": 65,
+        "from": "2019-11-25 09:43:00",
+        "to": "2019-11-25 10:03:00",
+        "comment": null,
+        "userId": 1,
+        "taskId": 1,
+        "rate": null
+    },
+    {
+        "id": 66,
+        "from": "2019-11-25 10:03:00",
+        "to": "2019-11-25 10:40:00",
+        "comment": null,
+        "userId": 1,
+        "taskId": 3,
+        "rate": null
+    },
+    {
+        "id": 67,
+        "from": "2019-11-25 10:40:00",
+        "to": "2019-11-25 13:54:00",
+        "comment": null,
+        "userId": 1,
+        "taskId": 1,
+        "rate": null
+    },
+    {
+        "id": 69,
+        "from": "2019-11-25 14:24:00",
+        "to": "2019-11-25 16:00:00",
+        "comment": null,
+        "userId": 1,
+        "taskId": 1,
+        "rate": null
+    },
+    {
+        "id": 70,
+        "from": "2019-11-04 09:37:00",
+        "to": "2019-11-04 11:00:00",
+        "comment": null,
+        "userId": 1,
+        "taskId": 1,
+        "rate": null
+    },
+    {
+        "id": 71,
+        "from": "2019-11-04 11:00:00",
+        "to": "2019-11-04 11:15:00",
+        "comment": null,
+        "userId": 1,
+        "taskId": 3,
+        "rate": null
+    },
+    {
+        "id": 72,
+        "from": "2019-11-04 11:15:00",
+        "to": "2019-11-04 14:00:00",
+        "comment": null,
+        "userId": 1,
+        "taskId": 1,
+        "rate": null
+    },
+    {
+        "id": 73,
+        "from": "2019-11-25 16:00:00",
+        "to": "2019-11-25 17:00:00",
+        "comment": null,
+        "userId": 1,
+        "taskId": 3,
+        "rate": null
+    },
+    {
+        "id": 74,
+        "from": "2019-11-25 17:00:00",
+        "to": "2019-11-25 18:29:55",
+        "comment": null,
+        "userId": 1,
+        "taskId": 1,
+        "rate": null
+    },
+    {
+        "id": 75,
+        "from": "2019-11-26 11:17:00",
+        "to": "2019-11-26 12:00:34",
+        "comment": null,
+        "userId": 1,
+        "taskId": 1,
+        "rate": null
+    },
+    {
+        "id": 76,
+        "from": "2019-11-26 12:14:00",
+        "to": "2019-11-26 12:32:43",
+        "comment": null,
+        "userId": 1,
+        "taskId": 1,
+        "rate": null
+    },
+    {
+        "id": 77,
+        "from": "2019-11-26 12:32:00",
+        "to": "2019-11-26 13:00:00",
+        "comment": null,
+        "userId": 1,
+        "taskId": 3,
+        "rate": null
+    },
+    {
+        "id": 78,
+        "from": "2019-11-26 13:00:00",
+        "to": "2019-11-26 13:34:12",
+        "comment": null,
+        "userId": 1,
+        "taskId": 1,
+        "rate": null
+    },
+    {
+        "id": 79,
+        "from": "2019-11-26 14:10:00",
+        "to": "2019-11-26 16:05:05",
+        "comment": null,
+        "userId": 1,
+        "taskId": 1,
+        "rate": null
+    },
+    {
+        "id": 80,
+        "from": "2019-11-26 16:25:00",
+        "to": "2019-11-26 21:04:47",
+        "comment": "Överlämning med Jimmy och Joel",
+        "userId": 1,
+        "taskId": 6,
+        "rate": null
+    },
+    {
+        "id": 81,
+        "from": "2019-11-29 09:41:00",
+        "to": "2019-11-29 12:04:00",
+        "comment": null,
+        "userId": 1,
+        "taskId": 1,
+        "rate": null
+    },
+    {
+        "id": 82,
+        "from": "2019-11-29 12:04:00",
+        "to": "2019-11-29 13:05:00",
+        "comment": null,
+        "userId": 1,
+        "taskId": 3,
+        "rate": null
+    },
+    {
+        "id": 83,
+        "from": "2019-11-29 13:45:00",
+        "to": "2019-11-29 14:35:00",
+        "comment": null,
+        "userId": 1,
+        "taskId": 1,
+        "rate": null
+    },
+    {
+        "id": 84,
+        "from": "2019-11-29 13:05:00",
+        "to": "2019-11-29 13:25:00",
+        "comment": null,
+        "userId": 1,
+        "taskId": 1,
+        "rate": null
+    },
+    {
+        "id": 85,
+        "from": "2019-11-29 14:35:00",
+        "to": "2019-11-29 15:05:23",
+        "comment": null,
+        "userId": 1,
+        "taskId": 3,
+        "rate": null
+    },
+    {
+        "id": 86,
+        "from": "2019-12-02 09:57:00",
+        "to": "2019-12-02 14:17:17",
+        "comment": null,
+        "userId": 1,
+        "taskId": 1,
+        "rate": null
+    },
+    {
+        "id": 87,
+        "from": "2019-12-02 14:35:00",
+        "to": "2019-12-02 16:25:00",
+        "comment": null,
+        "userId": 1,
+        "taskId": 1,
+        "rate": null
+    },
+    {
+        "id": 88,
+        "from": "2019-12-03 09:54:00",
+        "to": "2019-12-03 11:00:00",
+        "comment": null,
+        "userId": 1,
+        "taskId": 1,
+        "rate": null
+    },
+    {
+        "id": 89,
+        "from": "2019-12-03 11:00:00",
+        "to": "2019-12-03 11:58:26",
+        "comment": null,
+        "userId": 1,
+        "taskId": 3,
+        "rate": null
+    },
+    {
+        "id": 90,
+        "from": "2019-12-03 12:23:00",
+        "to": "2019-12-03 13:00:00",
+        "comment": null,
+        "userId": 1,
+        "taskId": 1,
+        "rate": null
+    },
+    {
+        "id": 91,
+        "from": "2019-12-03 13:00:00",
+        "to": "2019-12-03 13:55:00",
+        "comment": null,
+        "userId": 1,
+        "taskId": 3,
+        "rate": null
+    },
+    {
+        "id": 92,
+        "from": "2019-12-03 13:55:00",
+        "to": "2019-12-03 16:00:00",
+        "comment": null,
+        "userId": 1,
+        "taskId": 1,
+        "rate": null
+    },
+    {
+        "id": 93,
+        "from": "2019-12-03 16:00:00",
+        "to": "2019-12-03 17:07:00",
+        "comment": null,
+        "userId": 1,
+        "taskId": 2,
+        "rate": null
+    },
+    {
+        "id": 94,
+        "from": "2019-12-03 17:07:00",
+        "to": "2019-12-03 18:06:32",
+        "comment": null,
+        "userId": 1,
+        "taskId": 1,
+        "rate": null
+    },
+    {
+        "id": 95,
+        "from": "2019-12-04 09:22:00",
+        "to": "2019-12-04 11:13:00",
+        "comment": "Resa från Sundbyberg till Örebro med Anna",
+        "userId": 1,
+        "taskId": 5,
+        "rate": null
+    },
+    {
+        "id": 96,
+        "from": "2019-12-04 11:13:00",
+        "to": "2019-12-04 13:09:48",
+        "comment": "Överlämning med Joel, Jimmy och Anna",
+        "userId": 1,
+        "taskId": 6,
+        "rate": null
+    },
+    {
+        "id": 97,
+        "from": "2019-12-04 13:09:00",
+        "to": "2019-12-04 13:47:00",
+        "comment": "Lunch tillsammans med Joel, Jimmy och Anna",
+        "userId": 1,
+        "taskId": 6,
+        "rate": null
+    },
+    {
+        "id": 98,
+        "from": "2019-12-04 13:47:00",
+        "to": "2019-12-04 17:41:39",
+        "comment": "Fortsatt överlämning och uppsättning av arbetsmiljöer och devops",
+        "userId": 1,
+        "taskId": 6,
+        "rate": null
+    },
+    {
+        "id": 99,
+        "from": "2019-12-04 17:41:00",
+        "to": "2019-12-04 19:40:00",
+        "comment": "Resa hem från Örebro till Sundbyberg. Första tester på pipelines av repos",
+        "userId": 1,
+        "taskId": 5,
+        "rate": null
+    },
+    {
+        "id": 100,
+        "from": "2019-12-05 10:05:00",
+        "to": "2019-12-05 10:30:00",
+        "comment": "Satt upp Devkanal i teams och fila på backlog i Azure DevOps",
+        "userId": 1,
+        "taskId": 5,
+        "rate": null
+    },
+    {
+        "id": 101,
+        "from": "2019-12-05 10:30:00",
+        "to": "2019-12-05 10:50:00",
+        "comment": "Kort sync med Johan och Tommy inför morgondagens möte med SJ",
+        "userId": 1,
+        "taskId": 6,
+        "rate": null
+    },
+    {
+        "id": 102,
+        "from": "2019-12-05 10:50:00",
+        "to": "2019-12-05 13:46:40",
+        "comment": "Strukturerna av board och dokumentation",
+        "userId": 1,
+        "taskId": 5,
+        "rate": null
+    },
+    {
+        "id": 103,
+        "from": "2019-12-05 14:04:00",
+        "to": "2019-12-05 16:05:36",
+        "comment": "Dokumentation och scrumplanering",
+        "userId": 1,
+        "taskId": 5,
+        "rate": null
+    },
+    {
+        "id": 104,
+        "from": "2019-12-05 16:05:00",
+        "to": "2019-12-05 16:38:00",
+        "comment": "Kommunikation ang. planering",
+        "userId": 1,
+        "taskId": 6,
+        "rate": null
+    },
+    {
+        "id": 105,
+        "from": "2019-12-06 10:04:00",
+        "to": "2019-12-06 10:30:00",
+        "comment": "Dokumentation och förberedelser inför möte med SJ",
+        "userId": 1,
+        "taskId": 5,
+        "rate": null
+    },
+    {
+        "id": 106,
+        "from": "2019-12-06 10:30:00",
+        "to": "2019-12-06 11:30:00",
+        "comment": "Möte med SJ. Introduktion och avstämning av dagsläget",
+        "userId": 1,
+        "taskId": 6,
+        "rate": null
+    },
+    {
+        "id": 107,
+        "from": "2019-12-06 11:30:00",
+        "to": "2019-12-06 12:00:00",
+        "comment": "Avstämning efter SJ möte tillsammans med Johan och Tommy",
+        "userId": 1,
+        "taskId": 6,
+        "rate": null
+    },
+    {
+        "id": 108,
+        "from": "2019-12-06 12:00:00",
+        "to": "2019-12-06 12:30:00",
+        "comment": "Resa från centralen till kontoret på Gärdet",
+        "userId": 1,
+        "taskId": 7,
+        "rate": null
+    },
+    {
+        "id": 109,
+        "from": "2019-12-06 12:30:00",
+        "to": "2019-12-06 12:50:00",
+        "comment": "Synkning med Anna samt överseende av devops board och teams-kanaler.",
+        "userId": 1,
+        "taskId": 5,
+        "rate": null
+    },
+    {
+        "id": 110,
+        "from": "2019-12-06 12:50:00",
+        "to": "2019-12-06 13:17:00",
+        "comment": "Lunch med Anna och Josefina. Förberedelse inför möte",
+        "userId": 1,
+        "taskId": 7,
+        "rate": null
+    },
+    {
+        "id": 111,
+        "from": "2019-12-06 13:17:00",
+        "to": "2019-12-06 15:26:34",
+        "comment": "Avstämning av ärendehantering med Anna och Josefina",
+        "userId": 1,
+        "taskId": 3,
+        "rate": null
+    },
+    {
+        "id": 112,
+        "from": "2019-12-09 09:54:00",
+        "to": "2019-12-09 11:00:00",
+        "comment": "Planering inför möte och backlog refinement",
+        "userId": 1,
+        "taskId": 5,
+        "rate": null
+    },
+    {
+        "id": 113,
+        "from": "2019-12-09 11:00:00",
+        "to": "2019-12-09 12:16:00",
+        "comment": "Planeringsmöte med Anna och Joel. Mest synkning då vi inte hade Tommy eller Johan med som kravdefinerare",
+        "userId": 1,
+        "taskId": 6,
+        "rate": null
+    },
+    {
+        "id": 114,
+        "from": "2019-12-09 12:16:00",
+        "to": "2019-12-09 13:04:30",
+        "comment": "Sätta upp test applikation för dev miljö",
+        "userId": 1,
+        "taskId": 5,
+        "rate": null
+    },
+    {
+        "id": 115,
+        "from": "2019-12-09 13:18:00",
+        "to": "2019-12-09 18:01:36",
+        "comment": "Bygge av pipelines för ver, prod och test",
+        "userId": 1,
+        "taskId": 5,
+        "rate": null
+    },
+    {
+        "id": 116,
+        "from": "2019-12-10 10:03:00",
+        "to": "2019-12-10 10:23:00",
+        "comment": "Småcheckar av boarden innan möte",
+        "userId": 1,
+        "taskId": 5,
+        "rate": null
+    },
+    {
+        "id": 117,
+        "from": "2019-12-10 10:23:00",
+        "to": "2019-12-10 11:30:00",
+        "comment": "Brainstormingmöte",
+        "userId": 1,
+        "taskId": 6,
+        "rate": null
+    },
+    {
+        "id": 118,
+        "from": "2019-12-10 11:30:00",
+        "to": "2019-12-10 12:50:42",
+        "comment": "Byggscript för backend",
+        "userId": 1,
+        "taskId": 5,
+        "rate": null
+    },
+    {
+        "id": 119,
+        "from": "2019-12-10 13:10:00",
+        "to": "2019-12-10 13:38:00",
+        "comment": "Planeringsmöte",
+        "userId": 1,
+        "taskId": 6,
+        "rate": null
+    },
+    {
+        "id": 120,
+        "from": "2019-12-10 13:38:00",
+        "to": "2019-12-10 16:17:00",
+        "comment": "Byggscript för backend",
+        "userId": 1,
+        "taskId": 5,
+        "rate": null
+    },
+    {
+        "id": 121,
+        "from": "2019-12-11 10:10:00",
+        "to": "2019-12-11 12:50:00",
+        "comment": "Fortsatt jobba med pipeline byggscript och även försöka få applikationen att bygga lokalt med msbuild",
+        "userId": 1,
+        "taskId": 5,
+        "rate": null
+    },
+    {
+        "id": 122,
+        "from": "2019-12-11 13:21:00",
+        "to": "2019-12-11 19:10:00",
+        "comment": "Lyckats bygga applikationen lokalt med msbuild. Påbörjat dokumentation för reproducering och debugger i vscode.",
+        "userId": 1,
+        "taskId": 5,
+        "rate": null
+    },
+    {
+        "id": 124,
+        "from": "2019-12-12 13:19:00",
+        "to": "2019-12-12 16:55:00",
+        "comment": "Koppla isär det externa beroendet av .NET och istället skapa installer script i mono-repot. Detta hjälper till att undersöka hur vi kan bygga applikationen i molnet eller på en annan plattform där windows som operativsystem blir det enda kravet.",
+        "userId": 1,
+        "taskId": 5,
+        "rate": null
+    },
+    {
+        "id": 125,
+        "from": "2019-12-13 10:15:00",
+        "to": "2019-12-13 10:30:00",
+        "comment": "Uppföljning av ärende MS-2014 där ver av intranätet ligger nere",
+        "userId": 1,
+        "taskId": 10,
+        "rate": null
+    },
+    {
+        "id": 126,
+        "from": "2019-12-13 10:30:00",
+        "to": "2019-12-13 11:00:00",
+        "comment": "Felsökning tillsammans med Patrik Kandell på Combitech",
+        "userId": 1,
+        "taskId": 9,
+        "rate": null
+    },
+    {
+        "id": 127,
+        "from": "2019-12-13 11:00:00",
+        "to": "2019-12-13 15:28:21",
+        "comment": "Felsökning av ärende MS-2014",
+        "userId": 1,
+        "taskId": 10,
+        "rate": null
+    },
+    {
+        "id": 128,
+        "from": "2019-12-13 16:50:00",
+        "to": "2019-12-13 17:16:43",
+        "comment": "Felsökning av ärende MS-2015",
+        "userId": 1,
+        "taskId": 10,
+        "rate": null
+    },
+    {
+        "id": 129,
+        "from": "2019-12-16 10:10:00",
+        "to": "2019-12-16 12:10:00",
+        "comment": "Felsökning av ärende MS-2015",
+        "userId": 1,
+        "taskId": 10,
+        "rate": null
+    },
+    {
+        "id": 130,
+        "from": "2019-12-16 12:10:00",
+        "to": "2019-12-16 13:50:00",
+        "comment": "Rekryteringsmöte med Sebastian kombinerat med lunch",
+        "userId": 1,
+        "taskId": 12,
+        "rate": null
+    },
+    {
+        "id": 131,
+        "from": "2019-12-16 13:50:00",
+        "to": "2019-12-16 17:01:47",
+        "comment": "Felsökning av ärende MS-2015",
+        "userId": 1,
+        "taskId": 10,
+        "rate": null
+    },
+    {
+        "id": 132,
+        "from": "2019-12-17 10:13:00",
+        "to": "2019-12-17 12:10:00",
+        "comment": "Felsökning av ärende MS-2015",
+        "userId": 1,
+        "taskId": 10,
+        "rate": null
+    },
+    {
+        "id": 133,
+        "from": "2019-12-17 13:46:00",
+        "to": "2019-12-17 18:06:00",
+        "comment": "Felsökning av ärende MS-2015 med support from Nicklas Lindblom",
+        "userId": 1,
+        "taskId": 10,
+        "rate": null
+    },
+    {
+        "id": 134,
+        "from": "2019-12-17 18:38:00",
+        "to": "2019-12-17 18:48:37",
+        "comment": "Quickfix av MS-2015. Lade till custom attributes i Sharepoint så länge. Fortfarande inte klart varför backend inte renderar dem.",
+        "userId": 1,
+        "taskId": 10,
+        "rate": null
+    },
+    {
+        "id": 135,
+        "from": "2019-12-18 10:14:00",
+        "to": "2019-12-18 11:44:00",
+        "comment": "SSO länk för Combitech. Ser ut att bero på att de ändrat från http till https. Deploy till ver för att verifiera ändring krävs",
+        "userId": 1,
+        "taskId": 9,
+        "rate": null
+    },
+    {
+        "id": 136,
+        "from": "2019-12-18 11:44:00",
+        "to": "2019-12-18 13:38:10",
+        "comment": "Byggscript med vs_buildtools.exe",
+        "userId": 1,
+        "taskId": 5,
+        "rate": null
+    },
+    {
+        "id": 137,
+        "from": "2019-12-18 14:35:00",
+        "to": "2019-12-18 16:45:00",
+        "comment": "Byggscript med vs_buildtools.exe",
+        "userId": 1,
+        "taskId": 5,
+        "rate": null
+    },
+    {
+        "id": 138,
+        "from": "2019-12-19 10:06:00",
+        "to": "2019-12-19 11:00:00",
+        "comment": "Fix av byggscript för repo",
+        "userId": 1,
+        "taskId": 5,
+        "rate": null
+    },
+    {
+        "id": 139,
+        "from": "2019-12-19 11:00:00",
+        "to": "2019-12-19 11:43:25",
+        "comment": "Uppdatering och städning av ärende i Service Desk",
+        "userId": 1,
+        "taskId": 12,
+        "rate": null
+    },
+    {
+        "id": 140,
+        "from": "2019-12-19 11:43:00",
+        "to": "2019-12-19 12:09:06",
+        "comment": "Dokumentation och test av byggscript",
+        "userId": 1,
+        "taskId": 5,
+        "rate": null
+    },
+    {
+        "id": 141,
+        "from": "2019-12-19 12:09:00",
+        "to": "2019-12-19 12:14:00",
+        "comment": "Uppföljning av SSO länkar inte fungerar till Combitech",
+        "userId": 1,
+        "taskId": 9,
+        "rate": null
+    },
+    {
+        "id": 142,
+        "from": "2019-12-19 12:14:00",
+        "to": "2019-12-19 12:20:00",
+        "comment": "Återkoppla med Rickard ang. länkar i intranätet inte syns. Ärende MS-2014",
+        "userId": 1,
+        "taskId": 10,
+        "rate": null
+    },
+    {
+        "id": 143,
+        "from": "2019-12-19 12:20:00",
+        "to": "2019-12-19 12:55:00",
+        "comment": "Test av byggscript",
+        "userId": 1,
+        "taskId": 5,
+        "rate": null
+    },
+    {
+        "id": 144,
+        "from": "2019-12-19 12:55:00",
+        "to": "2019-12-19 13:47:32",
+        "comment": "Felsökning",
+        "userId": 1,
+        "taskId": 9,
+        "rate": null
+    },
+    {
+        "id": 145,
+        "from": "2019-12-19 14:15:00",
+        "to": "2019-12-19 15:49:00",
+        "comment": "Felsökning",
+        "userId": 1,
+        "taskId": 9,
+        "rate": null
+    },
+    {
+        "id": 146,
+        "from": "2019-12-19 15:49:00",
+        "to": "2019-12-19 17:29:18",
+        "comment": "Scripting för deploy och bygge",
+        "userId": 1,
+        "taskId": 5,
+        "rate": null
+    },
+    {
+        "id": 147,
+        "from": "2019-12-20 10:38:00",
+        "to": "2019-12-20 13:25:00",
+        "comment": "Felsökning för varför intranätet går så långsamt",
+        "userId": 1,
+        "taskId": 10,
+        "rate": null
+    },
+    {
+        "id": 148,
+        "from": "2019-12-20 13:51:00",
+        "to": "2019-12-20 14:11:44",
+        "comment": "Byggscript",
+        "userId": 1,
+        "taskId": 5,
+        "rate": null
+    },
+    {
+        "id": 149,
+        "from": "2019-12-20 15:23:00",
+        "to": "2019-12-20 16:25:00",
+        "comment": "Felsökning för SSO-länkar",
+        "userId": 1,
+        "taskId": 9,
+        "rate": null
+    },
+    {
+        "id": 150,
+        "from": "2019-12-21 13:58:00",
+        "to": "2019-12-21 14:10:00",
+        "comment": "La upp deploy script i master för MockingJay.Backend",
+        "userId": 1,
+        "taskId": 9,
+        "rate": null
+    },
+    {
+        "id": 151,
+        "from": "2019-12-22 16:49:00",
+        "to": "2019-12-22 19:06:28",
+        "comment": "Test av deploy script för Azure Devops",
+        "userId": 1,
+        "taskId": 9,
+        "rate": null
+    },
+    {
+        "id": 152,
+        "from": "2019-12-22 21:25:00",
+        "to": "2019-12-22 22:38:34",
+        "comment": "Test av deploy script för Azure Devops",
+        "userId": 1,
+        "taskId": 9,
+        "rate": null
+    },
+    {
+        "id": 153,
+        "from": "2019-12-25 15:06:00",
+        "to": "2019-12-25 15:58:33",
+        "comment": "Byggscript",
+        "userId": 1,
+        "taskId": 9,
+        "rate": null
+    },
+    {
+        "id": 154,
+        "from": "2019-12-25 17:07:00",
+        "to": "2019-12-25 18:40:30",
+        "comment": "Byggscript",
+        "userId": 1,
+        "taskId": 9,
+        "rate": null
+    },
+    {
+        "id": 155,
+        "from": "2019-12-25 19:15:00",
+        "to": "2019-12-25 20:19:32",
+        "comment": "Byggscript",
+        "userId": 1,
+        "taskId": 9,
+        "rate": null
+    },
+    {
+        "id": 156,
+        "from": "2019-12-25 20:58:00",
+        "to": "2019-12-25 22:02:21",
+        "comment": "Byggscript",
+        "userId": 1,
+        "taskId": 9,
+        "rate": null
+    },
+    {
+        "id": 157,
+        "from": "2019-12-26 18:13:00",
+        "to": "2019-12-26 19:13:22",
+        "comment": "Undersökning av deploy pipeline från Azure devops",
+        "userId": 1,
+        "taskId": 9,
+        "rate": null
+    },
+    {
+        "id": 158,
+        "from": "2019-12-26 19:46:00",
+        "to": "2019-12-26 20:43:10",
+        "comment": "Byggscript",
+        "userId": 1,
+        "taskId": 9,
+        "rate": null
+    },
+    {
+        "id": 159,
+        "from": "2019-12-27 18:49:00",
+        "to": "2019-12-27 19:03:04",
+        "comment": "Deployscript",
+        "userId": 1,
+        "taskId": 9,
+        "rate": null
+    },
+    {
+        "id": 160,
+        "from": "2019-12-27 20:00:00",
+        "to": "2019-12-27 20:21:14",
+        "comment": "Deployscript",
+        "userId": 1,
+        "taskId": 9,
+        "rate": null
+    },
+    {
+        "id": 161,
+        "from": "2019-12-27 20:28:00",
+        "to": "2019-12-27 22:51:14",
+        "comment": "Deployscript",
+        "userId": 1,
+        "taskId": 9,
+        "rate": null
+    },
+    {
+        "id": 162,
+        "from": "2020-01-02 10:33:00",
+        "to": "2020-01-02 13:55:42",
+        "comment": null,
+        "userId": 1,
+        "taskId": 9,
+        "rate": null
+    },
+    {
+        "id": 163,
+        "from": "2020-01-02 14:48:00",
+        "to": "2020-01-02 17:43:59",
+        "comment": null,
+        "userId": 1,
+        "taskId": 9,
+        "rate": null
+    },
+    {
+        "id": 164,
+        "from": "2020-01-02 21:45:00",
+        "to": "2020-01-03 00:24:08",
+        "comment": null,
+        "userId": 1,
+        "taskId": 9,
+        "rate": null
+    },
+    {
+        "id": 165,
+        "from": "2020-01-03 11:15:00",
+        "to": "2020-01-03 13:45:00",
+        "comment": null,
+        "userId": 1,
+        "taskId": 9,
+        "rate": null
+    },
+    {
+        "id": 166,
+        "from": "2020-01-03 14:20:00",
+        "to": "2020-01-03 15:49:19",
+        "comment": null,
+        "userId": 1,
+        "taskId": 9,
+        "rate": null
+    },
+    {
+        "id": 167,
+        "from": "2020-01-07 10:17:00",
+        "to": "2020-01-07 13:59:00",
+        "comment": null,
+        "userId": 1,
+        "taskId": 9,
+        "rate": null
+    },
+    {
+        "id": 168,
+        "from": "2020-01-07 14:13:00",
+        "to": "2020-01-07 18:03:27",
+        "comment": null,
+        "userId": 1,
+        "taskId": 9,
+        "rate": null
+    },
+    {
+        "id": 169,
+        "from": "2020-01-08 10:10:00",
+        "to": "2020-01-08 13:01:23",
+        "comment": null,
+        "userId": 1,
+        "taskId": 9,
+        "rate": null
+    },
+    {
+        "id": 170,
+        "from": "2020-01-08 13:20:00",
+        "to": "2020-01-08 14:42:52",
+        "comment": null,
+        "userId": 1,
+        "taskId": 9,
+        "rate": null
+    },
+    {
+        "id": 171,
+        "from": "2020-01-08 14:42:00",
+        "to": "2020-01-08 16:08:59",
+        "comment": null,
+        "userId": 1,
+        "taskId": 5,
+        "rate": null
+    },
+    {
+        "id": 172,
+        "from": "2020-01-09 10:11:00",
+        "to": "2020-01-09 10:46:00",
+        "comment": null,
+        "userId": 1,
+        "taskId": 5,
+        "rate": null
+    },
+    {
+        "id": 173,
+        "from": "2020-01-09 10:46:00",
+        "to": "2020-01-09 12:10:10",
+        "comment": "MS-2020",
+        "userId": 1,
+        "taskId": 9,
+        "rate": null
+    },
+    {
+        "id": 174,
+        "from": "2020-01-09 14:06:00",
+        "to": "2020-01-09 14:55:36",
+        "comment": "MS-2020",
+        "userId": 1,
+        "taskId": 9,
+        "rate": null
+    },
+    {
+        "id": 175,
+        "from": "2020-01-09 15:09:00",
+        "to": "2020-01-09 16:53:58",
+        "comment": null,
+        "userId": 1,
+        "taskId": 5,
+        "rate": null
+    },
+    {
+        "id": 176,
+        "from": "2020-01-10 10:30:00",
+        "to": "2020-01-10 12:00:00",
+        "comment": null,
+        "userId": 1,
+        "taskId": 6,
+        "rate": null
+    },
+    {
+        "id": 177,
+        "from": "2020-01-10 12:00:00",
+        "to": "2020-01-10 13:00:00",
+        "comment": "Eftersnack från möte med SJ",
+        "userId": 1,
+        "taskId": 6,
+        "rate": null
+    },
+    {
+        "id": 178,
+        "from": "2020-01-12 22:00:00",
+        "to": "2020-01-12 22:23:00",
+        "comment": "Swap av produktionsmiljö för ny release",
+        "userId": 1,
+        "taskId": 9,
+        "rate": null
+    },
+    {
+        "id": 179,
+        "from": "2020-01-10 13:00:00",
+        "to": "2020-01-10 14:15:00",
+        "comment": "Lunch tillsammans med infozone kombinerat med möte",
+        "userId": 1,
+        "taskId": 12,
+        "rate": null
+    },
+    {
+        "id": 180,
+        "from": "2020-01-10 14:15:00",
+        "to": "2020-01-10 17:30:00",
+        "comment": "Felsökning av MS-2059",
+        "userId": 1,
+        "taskId": 10,
+        "rate": null
+    },
+    {
+        "id": 181,
+        "from": "2020-01-13 09:50:00",
+        "to": "2020-01-13 10:21:00",
+        "comment": "inför sprintplanering",
+        "userId": 1,
+        "taskId": 7,
+        "rate": null
+    },
+    {
+        "id": 182,
+        "from": "2020-01-13 10:21:00",
+        "to": "2020-01-13 11:06:00",
+        "comment": null,
+        "userId": 1,
+        "taskId": 10,
+        "rate": null
+    },
+    {
+        "id": 183,
+        "from": "2020-01-13 11:06:00",
+        "to": "2020-01-13 12:46:00",
+        "comment": null,
+        "userId": 1,
+        "taskId": 6,
+        "rate": null
+    },
+    {
+        "id": 184,
+        "from": "2020-01-13 12:46:00",
+        "to": "2020-01-13 12:55:08",
+        "comment": null,
+        "userId": 1,
+        "taskId": 9,
+        "rate": null
+    },
+    {
+        "id": 185,
+        "from": "2020-01-13 13:07:00",
+        "to": "2020-01-13 14:08:00",
+        "comment": null,
+        "userId": 1,
+        "taskId": 9,
+        "rate": null
+    },
+    {
+        "id": 186,
+        "from": "2020-01-13 14:08:00",
+        "to": "2020-01-13 14:40:00",
+        "comment": "Resa till möte med SJ",
+        "userId": 1,
+        "taskId": 7,
+        "rate": null
+    },
+    {
+        "id": 187,
+        "from": "2020-01-13 14:40:00",
+        "to": "2020-01-13 15:01:00",
+        "comment": null,
+        "userId": 1,
+        "taskId": 9,
+        "rate": null
+    },
+    {
+        "id": 188,
+        "from": "2020-01-13 15:01:00",
+        "to": "2020-01-13 16:19:00",
+        "comment": "Möte med SJ",
+        "userId": 1,
+        "taskId": 6,
+        "rate": null
+    },
+    {
+        "id": 189,
+        "from": "2020-01-13 16:19:00",
+        "to": "2020-01-13 16:39:34",
+        "comment": "Resa från möte med SJ till kontoret",
+        "userId": 1,
+        "taskId": 7,
+        "rate": null
+    },
+    {
+        "id": 190,
+        "from": "2020-01-13 16:19:00",
+        "to": "2020-01-13 16:39:00",
+        "comment": "Deploy av fix till ver för test",
+        "userId": 1,
+        "taskId": 9,
+        "rate": null
+    },
+    {
+        "id": 191,
+        "from": "2020-01-13 16:39:00",
+        "to": "2020-01-13 18:09:00",
+        "comment": null,
+        "userId": 1,
+        "taskId": 9,
+        "rate": null
+    },
+    {
+        "id": 192,
+        "from": "2020-01-13 18:21:00",
+        "to": "2020-01-13 18:35:04",
+        "comment": null,
+        "userId": 1,
+        "taskId": 9,
+        "rate": null
+    },
+    {
+        "id": 193,
+        "from": "2020-01-14 10:15:00",
+        "to": "2020-01-14 11:06:00",
+        "comment": "Bygg av backend och deploy",
+        "userId": 1,
+        "taskId": 9,
+        "rate": null
+    },
+    {
+        "id": 194,
+        "from": "2020-01-14 11:06:00",
+        "to": "2020-01-14 12:36:00",
+        "comment": "estimering och specificering av kravlista från kund",
+        "userId": 1,
+        "taskId": 6,
+        "rate": null
+    },
+    {
+        "id": 195,
+        "from": "2020-01-14 12:36:00",
+        "to": "2020-01-14 13:47:00",
+        "comment": "Dokumentation av estimering",
+        "userId": 1,
+        "taskId": 7,
+        "rate": null
+    },
+    {
+        "id": 196,
+        "from": "2020-01-14 14:18:00",
+        "to": "2020-01-14 16:06:25",
+        "comment": "Releasehantering",
+        "userId": 1,
+        "taskId": 5,
+        "rate": null
+    },
+    {
+        "id": 197,
+        "from": "2020-01-14 23:02:00",
+        "to": "2020-01-14 23:16:58",
+        "comment": "Deploy till prod",
+        "userId": 1,
+        "taskId": 9,
+        "rate": null
+    },
+    {
+        "id": 198,
+        "from": "2020-01-14 23:16:00",
+        "to": "2020-01-15 00:04:42",
+        "comment": "Läsa på om gitflow",
+        "userId": 1,
+        "taskId": 7,
+        "rate": null
+    },
+    {
+        "id": 199,
+        "from": "2020-01-15 00:10:00",
+        "to": "2020-01-15 00:23:00",
+        "comment": "Verifiering av deploy",
+        "userId": 1,
+        "taskId": 9,
+        "rate": null
+    },
+    {
+        "id": 200,
+        "from": "2020-01-16 10:15:00",
+        "to": "2020-01-16 12:58:43",
+        "comment": null,
+        "userId": 1,
+        "taskId": 5,
+        "rate": null
+    },
+    {
+        "id": 201,
+        "from": "2020-01-16 13:23:00",
+        "to": "2020-01-16 17:08:07",
+        "comment": null,
+        "userId": 1,
+        "taskId": 5,
+        "rate": null
+    },
+    {
+        "id": 202,
+        "from": "2020-01-17 10:12:00",
+        "to": "2020-01-17 13:37:20",
+        "comment": null,
+        "userId": 1,
+        "taskId": 5,
+        "rate": null
+    },
+    {
+        "id": 203,
+        "from": "2020-01-17 13:55:00",
+        "to": "2020-01-17 16:50:11",
+        "comment": null,
+        "userId": 1,
+        "taskId": 5,
+        "rate": null
+    },
+    {
+        "id": 204,
+        "from": "2020-01-20 10:04:00",
+        "to": "2020-01-20 12:31:25",
+        "comment": "Uppdateringa av byggscript för att replikera gitflow bättre",
+        "userId": 1,
+        "taskId": 5,
+        "rate": null
+    },
+    {
+        "id": 205,
+        "from": "2020-01-20 12:31:00",
+        "to": "2020-01-20 12:57:32",
+        "comment": "Undersökning av rättigheter till team boards för att skapa separata upplevelser beroende på kund",
+        "userId": 1,
+        "taskId": 5,
+        "rate": null
+    },
+    {
+        "id": 206,
+        "from": "2020-01-20 13:24:00",
+        "to": "2020-01-20 18:01:48",
+        "comment": "Fortsatt vidare felsökning för att fixa rättigheter för olika login i Azure Devops",
+        "userId": 1,
+        "taskId": 5,
+        "rate": null
+    },
+    {
+        "id": 207,
+        "from": "2020-01-21 10:17:00",
+        "to": "2020-01-21 10:39:00",
+        "comment": "Nedladdning av front end kod",
+        "userId": 1,
+        "taskId": 5,
+        "rate": null
+    },
+    {
+        "id": 208,
+        "from": "2020-01-21 10:39:00",
+        "to": "2020-01-21 11:00:00",
+        "comment": "Synkmöte internt",
+        "userId": 1,
+        "taskId": 6,
+        "rate": null
+    },
+    {
+        "id": 209,
+        "from": "2020-01-21 11:00:00",
+        "to": "2020-01-21 13:50:33",
+        "comment": "Undersökning av front end",
+        "userId": 1,
+        "taskId": 5,
+        "rate": null
+    },
+    {
+        "id": 210,
+        "from": "2020-01-21 14:03:00",
+        "to": "2020-01-21 16:05:49",
+        "comment": "Uppdatering av pipelines",
+        "userId": 1,
+        "taskId": 5,
+        "rate": null
+    },
+    {
+        "id": 211,
+        "from": "2020-01-21 16:35:00",
+        "to": "2020-01-21 16:51:39",
+        "comment": "Uppdatering av pipelines",
+        "userId": 1,
+        "taskId": 5,
+        "rate": null
+    },
+    {
+        "id": 212,
+        "from": "2020-01-22 10:05:00",
+        "to": "2020-01-22 12:08:00",
+        "comment": "Uppföljning och felsökning av ärende MS-1932",
+        "userId": 1,
+        "taskId": 9,
+        "rate": null
+    },
+    {
+        "id": 213,
+        "from": "2020-01-22 12:08:00",
+        "to": "2020-01-22 12:37:45",
+        "comment": "Omskrivning av build-script",
+        "userId": 1,
+        "taskId": 5,
+        "rate": null
+    },
+    {
+        "id": 214,
+        "from": "2020-01-22 12:57:00",
+        "to": "2020-01-22 16:10:14",
+        "comment": "Omskrivning av build script",
+        "userId": 1,
+        "taskId": 5,
+        "rate": null
+    },
+    {
+        "id": 215,
+        "from": "2020-01-23 10:06:00",
+        "to": "2020-01-23 10:34:00",
+        "comment": "Justeringar av byggscript",
+        "userId": 1,
+        "taskId": 5,
+        "rate": null
+    },
+    {
+        "id": 216,
+        "from": "2020-01-23 10:34:00",
+        "to": "2020-01-23 10:50:00",
+        "comment": "Synkmöte",
+        "userId": 1,
+        "taskId": 6,
+        "rate": null
+    },
+    {
+        "id": 217,
+        "from": "2020-01-23 10:50:00",
+        "to": "2020-01-23 11:08:17",
+        "comment": "Justeringar av byggscript",
+        "userId": 1,
+        "taskId": 5,
+        "rate": null
+    },
+    {
+        "id": 218,
+        "from": "2020-01-23 22:45:00",
+        "to": "2020-01-24 01:24:05",
+        "comment": null,
+        "userId": 1,
+        "taskId": 5,
+        "rate": null
+    },
+    {
+        "id": 219,
+        "from": "2020-01-24 10:06:00",
+        "to": "2020-01-24 12:45:00",
+        "comment": "Utbildning med Ulf av sharepointarkitetur",
+        "userId": 1,
+        "taskId": 6,
+        "rate": null
+    },
+    {
+        "id": 220,
+        "from": "2020-01-24 12:45:00",
+        "to": "2020-01-24 13:17:13",
+        "comment": "Byggscript för Sync app",
+        "userId": 1,
+        "taskId": 5,
+        "rate": null
+    },
+    {
+        "id": 221,
+        "from": "2020-01-24 13:40:00",
+        "to": "2020-01-24 17:45:00",
+        "comment": "Byggscript för Sync app",
+        "userId": 1,
+        "taskId": 5,
+        "rate": null
+    },
+    {
+        "id": 223,
+        "from": "2020-01-24 19:57:00",
+        "to": "2020-01-24 20:20:00",
+        "comment": "Debugging för att få bygge i sync att fungera",
+        "userId": 1,
+        "taskId": 5,
+        "rate": null
+    },
+    {
+        "id": 224,
+        "from": "2020-01-25 20:55:00",
+        "to": "2020-01-25 21:08:53",
+        "comment": "Debugging av byggscript för Sync",
+        "userId": 1,
+        "taskId": 5,
+        "rate": null
+    },
+    {
+        "id": 225,
+        "from": "2020-01-26 23:56:00",
+        "to": "2020-01-27 00:24:31",
+        "comment": "Lagt till SKU på produktsida",
+        "userId": 1,
+        "taskId": 14,
+        "rate": null
+    },
+    {
+        "id": 226,
+        "from": "2020-01-27 00:27:00",
+        "to": "2020-01-27 00:41:06",
+        "comment": "Sista fixar med bygg script för sync app",
+        "userId": 1,
+        "taskId": 5,
+        "rate": null
+    },
+    {
+        "id": 227,
+        "from": "2020-01-27 00:41:00",
+        "to": "2020-01-27 01:01:11",
+        "comment": "Lagt till piplines för alla branches för Sync",
+        "userId": 1,
+        "taskId": 5,
+        "rate": null
+    },
+    {
+        "id": 229,
+        "from": "2020-01-27 10:16:00",
+        "to": "2020-01-27 13:00:00",
+        "comment": null,
+        "userId": 1,
+        "taskId": 5,
+        "rate": null
+    },
+    {
+        "id": 230,
+        "from": "2020-01-27 13:20:00",
+        "to": "2020-01-27 13:30:00",
+        "comment": null,
+        "userId": 1,
+        "taskId": 5,
+        "rate": null
+    },
+    {
+        "id": 231,
+        "from": "2020-01-27 13:30:00",
+        "to": "2020-01-27 14:20:00",
+        "comment": null,
+        "userId": 1,
+        "taskId": 6,
+        "rate": null
+    },
+    {
+        "id": 232,
+        "from": "2020-01-27 14:20:00",
+        "to": "2020-01-27 15:59:18",
+        "comment": null,
+        "userId": 1,
+        "taskId": 5,
+        "rate": null
+    },
+    {
+        "id": 233,
+        "from": "2020-01-28 10:12:00",
+        "to": "2020-01-28 10:30:00",
+        "comment": "MS-2157",
+        "userId": 1,
+        "taskId": 9,
+        "rate": null
+    },
+    {
+        "id": 234,
+        "from": "2020-01-28 10:30:00",
+        "to": "2020-01-28 11:45:00",
+        "comment": "Synkmöte",
+        "userId": 1,
+        "taskId": 6,
+        "rate": null
+    },
+    {
+        "id": 235,
+        "from": "2020-01-28 11:45:00",
+        "to": "2020-01-28 13:53:50",
+        "comment": "3197",
+        "userId": 1,
+        "taskId": 5,
+        "rate": null
+    },
+    {
+        "id": 236,
+        "from": "2020-01-28 14:04:00",
+        "to": "2020-01-28 14:25:00",
+        "comment": "3197",
+        "userId": 1,
+        "taskId": 5,
+        "rate": null
+    },
+    {
+        "id": 237,
+        "from": "2020-01-28 14:25:00",
+        "to": "2020-01-28 14:57:08",
+        "comment": "Resa till möte",
+        "userId": 1,
+        "taskId": 7,
+        "rate": null
+    },
+    {
+        "id": 238,
+        "from": "2020-01-28 14:25:00",
+        "to": "2020-01-28 14:57:00",
+        "comment": "Diskussion av Sharepoint med Sebbe",
+        "userId": 1,
+        "taskId": 13,
+        "rate": null
+    },
+    {
+        "id": 239,
+        "from": "2020-01-28 14:57:00",
+        "to": "2020-01-28 16:15:00",
+        "comment": null,
+        "userId": 1,
+        "taskId": 6,
+        "rate": null
+    },
+    {
+        "id": 240,
+        "from": "2020-01-28 20:59:00",
+        "to": "2020-01-28 23:19:07",
+        "comment": "3197",
+        "userId": 1,
+        "taskId": 5,
+        "rate": null
+    },
+    {
+        "id": 241,
+        "from": "2020-01-29 10:08:00",
+        "to": "2020-01-29 13:06:46",
+        "comment": "3197",
+        "userId": 1,
+        "taskId": 5,
+        "rate": null
+    },
+    {
+        "id": 242,
+        "from": "2020-01-29 14:01:00",
+        "to": "2020-01-29 16:48:16",
+        "comment": "3197",
+        "userId": 1,
+        "taskId": 5,
+        "rate": null
+    },
+    {
+        "id": 243,
+        "from": "2020-01-29 18:17:00",
+        "to": "2020-01-29 19:14:29",
+        "comment": "3197",
+        "userId": 1,
+        "taskId": 5,
+        "rate": null
+    },
+    {
+        "id": 244,
+        "from": "2020-01-30 10:13:00",
+        "to": "2020-01-30 11:05:00",
+        "comment": "3197",
+        "userId": 1,
+        "taskId": 5,
+        "rate": null
+    },
+    {
+        "id": 245,
+        "from": "2020-01-30 11:05:00",
+        "to": "2020-01-30 11:21:00",
+        "comment": "MS-2138",
+        "userId": 1,
+        "taskId": 9,
+        "rate": null
+    },
+    {
+        "id": 246,
+        "from": "2020-01-30 11:21:00",
+        "to": "2020-01-30 13:16:51",
+        "comment": "3197",
+        "userId": 1,
+        "taskId": 5,
+        "rate": null
+    },
+    {
+        "id": 247,
+        "from": "2020-01-30 13:36:00",
+        "to": "2020-01-30 16:45:04",
+        "comment": "3197",
+        "userId": 1,
+        "taskId": 5,
+        "rate": null
+    },
+    {
+        "id": 248,
+        "from": "2020-01-30 17:49:00",
+        "to": "2020-01-30 18:52:59",
+        "comment": "3197",
+        "userId": 1,
+        "taskId": 5,
+        "rate": null
+    },
+    {
+        "id": 249,
+        "from": "2020-01-30 20:00:00",
+        "to": "2020-01-30 23:00:00",
+        "comment": "3197",
+        "userId": 1,
+        "taskId": 5,
+        "rate": null
+    },
+    {
+        "id": 250,
+        "from": "2020-01-31 10:15:00",
+        "to": "2020-01-31 10:32:00",
+        "comment": "3197",
+        "userId": 1,
+        "taskId": 5,
+        "rate": null
+    },
+    {
+        "id": 251,
+        "from": "2020-01-31 10:32:00",
+        "to": "2020-01-31 10:58:00",
+        "comment": "Synkmöte",
+        "userId": 1,
+        "taskId": 6,
+        "rate": null
+    },
+    {
+        "id": 252,
+        "from": "2020-01-31 10:58:00",
+        "to": "2020-01-31 12:47:25",
+        "comment": "3197",
+        "userId": 1,
+        "taskId": 5,
+        "rate": null
+    },
+    {
+        "id": 253,
+        "from": "2020-01-31 13:49:00",
+        "to": "2020-01-31 14:10:59",
+        "comment": "3197",
+        "userId": 1,
+        "taskId": 5,
+        "rate": null
+    },
+    {
+        "id": 254,
+        "from": "2020-01-31 14:35:00",
+        "to": "2020-01-31 17:47:17",
+        "comment": "3197",
+        "userId": 1,
+        "taskId": 5,
+        "rate": null
+    },
+    {
+        "id": 255,
+        "from": "2020-02-03 10:12:00",
+        "to": "2020-02-03 13:29:43",
+        "comment": "3197 - Felsökning varför termer inte synkar till tjänstelagret från Sharepoint",
+        "userId": 1,
+        "taskId": 5,
+        "rate": null
+    },
+    {
+        "id": 256,
+        "from": "2020-02-03 13:56:00",
+        "to": "2020-02-03 14:16:00",
+        "comment": "3197 - Felsökning varför termer inte synkar till tjänstelagret från Sharepoint",
+        "userId": 1,
+        "taskId": 5,
+        "rate": null
+    },
+    {
+        "id": 257,
+        "from": "2020-02-03 14:16:00",
+        "to": "2020-02-03 17:33:38",
+        "comment": "3197 - Testning av script för att göra manuella pulls av termer från termstore för att se vad som synkas och vad som inte synkas",
+        "userId": 1,
+        "taskId": 5,
+        "rate": null
+    },
+    {
+        "id": 258,
+        "from": "2020-02-03 17:33:00",
+        "to": "2020-02-03 18:02:40",
+        "comment": "Lägga till SKU i epost för orderbekräftelse",
+        "userId": 1,
+        "taskId": 14,
+        "rate": null
+    },
+    {
+        "id": 259,
+        "from": "2020-02-03 18:42:00",
+        "to": "2020-02-03 18:57:00",
+        "comment": "Lägga till SKU i epost för orderbekräftelse",
+        "userId": 1,
+        "taskId": 14,
+        "rate": null
+    },
+    {
+        "id": 260,
+        "from": "2020-02-04 10:10:00",
+        "to": "2020-02-04 12:51:41",
+        "comment": "3197- Vidare utveckling av script för felsökning av termsynkning",
+        "userId": 1,
+        "taskId": 5,
+        "rate": null
+    },
+    {
+        "id": 261,
+        "from": "2020-02-04 13:11:00",
+        "to": "2020-02-04 15:47:11",
+        "comment": "3197 - Lyckas skapat replica av termstore i Typescript i ett försök att efterlikna det som sker i tjänstelagret.",
+        "userId": 1,
+        "taskId": 5,
+        "rate": null
+    },
+    {
+        "id": 262,
+        "from": "2020-02-04 17:22:00",
+        "to": "2020-02-04 18:15:00",
+        "comment": "3197 - Gått igenom termer som synkats med nya TS-scriptet och jämnfört med databasen och senaste synkjobb i tjänstelagret",
+        "userId": 1,
+        "taskId": 5,
+        "rate": null
+    },
+    {
+        "id": 263,
+        "from": "2020-02-05 10:09:00",
+        "to": "2020-02-05 12:30:00",
+        "comment": "3141 - Estimering av bolagsswitch",
+        "userId": 1,
+        "taskId": 7,
+        "rate": null
+    },
+    {
+        "id": 264,
+        "from": "2020-02-05 13:52:00",
+        "to": "2020-02-05 16:09:03",
+        "comment": "3205 - Test av olika deploy tasks i devops för att bygga och deploya korrekt till VER",
+        "userId": 1,
+        "taskId": 5,
+        "rate": null
+    },
+    {
+        "id": 265,
+        "from": "2020-02-05 12:30:00",
+        "to": "2020-02-05 13:36:00",
+        "comment": "3205 - Felsökning i varför jobb inte körs",
+        "userId": 1,
+        "taskId": 5,
+        "rate": null
+    },
+    {
+        "id": 266,
+        "from": "2020-02-05 19:56:00",
+        "to": "2020-02-05 20:30:01",
+        "comment": "3205 - Vidare test av tasks i devops för deploy",
+        "userId": 1,
+        "taskId": 5,
+        "rate": null
+    },
+    {
+        "id": 267,
+        "from": "2020-02-05 20:58:00",
+        "to": "2020-02-05 21:11:25",
+        "comment": "3205 - Testning i portalen för att se ytterligare fel om varför jobb inte kan starta",
+        "userId": 1,
+        "taskId": 5,
+        "rate": null
+    },
+    {
+        "id": 268,
+        "from": "2020-02-06 10:04:00",
+        "to": "2020-02-06 13:48:09",
+        "comment": "3205 - Fram och tillbaka med byggscript för att få deploy till ver att fungera",
+        "userId": 1,
+        "taskId": 5,
+        "rate": null
+    },
+    {
+        "id": 269,
+        "from": "2020-02-06 14:12:00",
+        "to": "2020-02-06 18:09:00",
+        "comment": "3205 - Fortsatt arbete med att få deploy till VER att fungera",
+        "userId": 1,
+        "taskId": 5,
+        "rate": null
+    },
+    {
+        "id": 270,
+        "from": "2020-02-07 10:03:00",
+        "to": "2020-02-07 12:50:26",
+        "comment": "3205 - Ytterligare rättningar av byggscript",
+        "userId": 1,
+        "taskId": 5,
+        "rate": null
+    },
+    {
+        "id": 271,
+        "from": "2020-02-07 13:13:00",
+        "to": "2020-02-07 17:30:00",
+        "comment": "3205 - En slutlig lösning som gjorde att byggscripten började funka med deploy till VER. Alla jobb körs",
+        "userId": 1,
+        "taskId": 5,
+        "rate": null
+    },
+    {
+        "id": 272,
+        "from": "2020-02-11 10:10:00",
+        "to": "2020-02-11 12:16:00",
+        "comment": "3205 - Fix av jobbyggen till Backend som inte bygger korrekt",
+        "userId": 1,
+        "taskId": 5,
+        "rate": null
+    },
+    {
+        "id": 273,
+        "from": "2020-02-11 12:45:00",
+        "to": "2020-02-11 15:05:51",
+        "comment": "3205 - Fix av jobbyggen till Backend som inte bygger korrekt",
+        "userId": 1,
+        "taskId": 5,
+        "rate": null
+    },
+    {
+        "id": 274,
+        "from": "2020-02-11 15:05:00",
+        "to": "2020-02-11 15:33:00",
+        "comment": "MS-2219",
+        "userId": 1,
+        "taskId": 9,
+        "rate": null
+    },
+    {
+        "id": 275,
+        "from": "2020-02-11 15:33:00",
+        "to": "2020-02-11 17:37:00",
+        "comment": "3205 - Fix av jobbyggen till Backend som inte bygger korrekt",
+        "userId": 1,
+        "taskId": 5,
+        "rate": null
+    },
+    {
+        "id": 276,
+        "from": "2020-02-12 10:05:00",
+        "to": "2020-02-12 10:47:00",
+        "comment": "MS-2224",
+        "userId": 1,
+        "taskId": 9,
+        "rate": null
+    },
+    {
+        "id": 277,
+        "from": "2020-02-12 10:47:00",
+        "to": "2020-02-12 12:50:05",
+        "comment": "3213 - Byggscript för front-end i Azure Devops",
+        "userId": 1,
+        "taskId": 5,
+        "rate": null
+    },
+    {
+        "id": 278,
+        "from": "2020-02-12 13:05:00",
+        "to": "2020-02-12 13:30:00",
+        "comment": "3213- Test av byggscript för Front-end applikation",
+        "userId": 1,
+        "taskId": 5,
+        "rate": null
+    },
+    {
+        "id": 279,
+        "from": "2020-02-12 13:30:00",
+        "to": "2020-02-12 14:30:00",
+        "comment": null,
+        "userId": 1,
+        "taskId": 6,
+        "rate": null
+    },
+    {
+        "id": 280,
+        "from": "2020-02-12 14:30:00",
+        "to": "2020-02-12 15:19:41",
+        "comment": "3197 - Undersökning av termer och hur de synkas från Sharepoint till databasen.",
+        "userId": 1,
+        "taskId": 5,
+        "rate": null
+    },
+    {
+        "id": 281,
+        "from": "2020-02-12 16:26:00",
+        "to": "2020-02-12 16:39:24",
+        "comment": "3197 - Undersökning av termer och hur de synkas från Sharepoint till databasen.",
+        "userId": 1,
+        "taskId": 5,
+        "rate": null
+    },
+    {
+        "id": 282,
+        "from": "2020-02-12 16:39:00",
+        "to": "2020-02-12 17:14:02",
+        "comment": null,
+        "userId": 1,
+        "taskId": 13,
+        "rate": null
+    },
+    {
+        "id": 283,
+        "from": "2020-02-14 10:21:00",
+        "to": "2020-02-14 10:30:00",
+        "comment": "3197 - Check om synkjobb synkar termer till VER (sj)",
+        "userId": 1,
+        "taskId": 5,
+        "rate": null
+    },
+    {
+        "id": 284,
+        "from": "2020-02-14 10:30:00",
+        "to": "2020-02-14 10:45:00",
+        "comment": null,
+        "userId": 1,
+        "taskId": 6,
+        "rate": null
+    },
+    {
+        "id": 285,
+        "from": "2020-02-14 10:45:00",
+        "to": "2020-02-14 11:57:00",
+        "comment": null,
+        "userId": 1,
+        "taskId": 13,
+        "rate": null
+    },
+    {
+        "id": 286,
+        "from": "2020-02-14 11:57:00",
+        "to": "2020-02-14 13:04:00",
+        "comment": "3193 - Felsökning tillsammans med Sebastian om varför nytt formulär inte synkats korrekt.",
+        "userId": 1,
+        "taskId": 5,
+        "rate": null
+    },
+    {
+        "id": 288,
+        "from": "2020-02-14 15:15:00",
+        "to": "2020-02-14 16:58:37",
+        "comment": "3193",
+        "userId": 1,
+        "taskId": 5,
+        "rate": null
+    },
+    {
+        "id": 289,
+        "from": "2020-02-16 21:00:00",
+        "to": "2020-02-16 21:09:08",
+        "comment": "3193 - Check av jobb för synkning av formulär. Hittade dock inget formulär kopplat till \"Bokning av tjänsteresa för dig utan mobilt bank-id\" i databasen. Har den tagits bort helt? Finns kvar i Azure Storage dock.",
+        "userId": 1,
+        "taskId": 5,
+        "rate": null
+    },
+    {
+        "id": 290,
+        "from": "2020-02-17 09:52:00",
+        "to": "2020-02-17 10:30:00",
+        "comment": "Estimate of rebooting the FinKno application",
+        "userId": 1,
+        "taskId": 18,
+        "rate": null
+    },
+    {
+        "id": 291,
+        "from": "2020-02-17 11:31:00",
+        "to": "2020-02-17 13:50:21",
+        "comment": "3197 - Byggscript för deploy till prod",
+        "userId": 1,
+        "taskId": 5,
+        "rate": null
+    },
+    {
+        "id": 292,
+        "from": "2020-02-17 14:18:00",
+        "to": "2020-02-17 17:47:19",
+        "comment": "3197 - Byggscript för deploy till prod",
+        "userId": 1,
+        "taskId": 5,
+        "rate": null
+    },
+    {
+        "id": 293,
+        "from": "2020-02-18 10:17:00",
+        "to": "2020-02-18 10:30:00",
+        "comment": "3197 - Testning av deploy-script till ver och prod",
+        "userId": 1,
+        "taskId": 5,
+        "rate": null
+    },
+    {
+        "id": 294,
+        "from": "2020-02-17 10:30:00",
+        "to": "2020-02-17 10:45:00",
+        "comment": null,
+        "userId": 1,
+        "taskId": 6,
+        "rate": null
+    },
+    {
+        "id": 295,
+        "from": "2020-02-17 10:30:00",
+        "to": "2020-02-17 11:27:00",
+        "comment": "Estimate of rebooting the FinKno application",
+        "userId": 1,
+        "taskId": 18,
+        "rate": null
+    },
+    {
+        "id": 296,
+        "from": "2020-02-18 10:30:00",
+        "to": "2020-02-18 10:45:00",
+        "comment": null,
+        "userId": 1,
+        "taskId": 6,
+        "rate": null
+    },
+    {
+        "id": 297,
+        "from": "2020-02-18 10:45:00",
+        "to": "2020-02-18 13:40:08",
+        "comment": "3162 - Uppdatering av ver-miljö till ny ver-intrant-backend från ver-backend",
+        "userId": 1,
+        "taskId": 5,
+        "rate": null
+    },
+    {
+        "id": 298,
+        "from": "2020-02-18 14:45:00",
+        "to": "2020-02-18 16:07:54",
+        "comment": "3162 - Fix för deploy av front-end miljö till sharepoint",
+        "userId": 1,
+        "taskId": 5,
+        "rate": null
+    },
+    {
+        "id": 299,
+        "from": "2020-02-18 14:05:00",
+        "to": "2020-02-18 14:45:00",
+        "comment": "MS-2015 - Fix av menystruktur i prod",
+        "userId": 1,
+        "taskId": 10,
+        "rate": null
+    },
+    {
+        "id": 300,
+        "from": "2020-02-19 10:00:00",
+        "to": "2020-02-19 10:15:00",
+        "comment": null,
+        "userId": 1,
+        "taskId": 6,
+        "rate": null
+    },
+    {
+        "id": 301,
+        "from": "2020-02-19 10:15:00",
+        "to": "2020-02-19 10:30:00",
+        "comment": "MS-2243, MS-2242 - Uppdatering och verifiering att intranätet (prod) inte längre är nere",
+        "userId": 1,
+        "taskId": 10,
+        "rate": null
+    },
+    {
+        "id": 302,
+        "from": "2020-02-19 10:30:00",
+        "to": "2020-02-19 11:15:00",
+        "comment": "3193, 3209 Test av synkning för formulärdata",
+        "userId": 1,
+        "taskId": 9,
+        "rate": null
+    },
+    {
+        "id": 303,
+        "from": "2020-02-19 11:15:00",
+        "to": "2020-02-19 12:23:41",
+        "comment": "3197 - Undersökande och testning av alternativa sätt att synka termer",
+        "userId": 1,
+        "taskId": 5,
+        "rate": null
+    },
+    {
+        "id": 304,
+        "from": "2020-02-19 13:37:00",
+        "to": "2020-02-19 15:12:49",
+        "comment": "3197 - Verifiera att termer synkar korrekt till VER-databasen",
+        "userId": 1,
+        "taskId": 5,
+        "rate": null
+    },
+    {
+        "id": 305,
+        "from": "2020-02-19 15:46:00",
+        "to": "2020-02-19 18:15:05",
+        "comment": "3197 - Felsökning",
+        "userId": 1,
+        "taskId": 5,
+        "rate": null
+    },
+    {
+        "id": 306,
+        "from": "2020-02-20 11:14:00",
+        "to": "2020-02-20 13:59:21",
+        "comment": "3197 - Utveckling och felsökning av termer i TermStore för Sharepoint och hur dessa synkas till Azure Storage och Databasen i tjänstelagret.",
+        "userId": 1,
+        "taskId": 7,
+        "rate": null
+    },
+    {
+        "id": 307,
+        "from": "2020-02-20 14:43:00",
+        "to": "2020-02-20 16:07:55",
+        "comment": "3197 - Initiering av release för SJ och förberedelsearbete för detta",
+        "userId": 1,
+        "taskId": 5,
+        "rate": null
+    },
+    {
+        "id": 308,
+        "from": "2020-02-21 10:13:00",
+        "to": "2020-02-21 10:30:00",
+        "comment": "3197 - Verifiering av deploy till VER",
+        "userId": 1,
+        "taskId": 5,
+        "rate": null
+    },
+    {
+        "id": 309,
+        "from": "2020-02-21 10:30:00",
+        "to": "2020-02-21 10:45:00",
+        "comment": null,
+        "userId": 1,
+        "taskId": 6,
+        "rate": null
+    },
+    {
+        "id": 310,
+        "from": "2020-02-21 10:45:00",
+        "to": "2020-02-21 12:15:00",
+        "comment": "3197 - Check och testning av release",
+        "userId": 1,
+        "taskId": 5,
+        "rate": null
+    },
+    {
+        "id": 311,
+        "from": "2020-02-21 12:15:00",
+        "to": "2020-02-21 12:45:00",
+        "comment": "Refinement tillsammans med Tommy, Madeleine och Adam",
+        "userId": 1,
+        "taskId": 6,
+        "rate": null
+    },
+    {
+        "id": 312,
+        "from": "2020-02-21 12:45:00",
+        "to": "2020-02-21 13:06:00",
+        "comment": "Eftersnack med Tommy",
+        "userId": 1,
+        "taskId": 6,
+        "rate": null
+    },
+    {
+        "id": 313,
+        "from": "2020-02-21 18:08:00",
+        "to": "2020-02-21 21:11:55",
+        "comment": "Tidrapportering",
+        "userId": 1,
+        "taskId": 13,
+        "rate": null
+    },
+    {
+        "id": 314,
+        "from": "2020-02-24 10:17:00",
+        "to": "2020-02-24 10:30:00",
+        "comment": "3197 - Release till Prod",
+        "userId": 1,
+        "taskId": 5,
+        "rate": null
+    },
+    {
+        "id": 315,
+        "from": "2020-02-24 10:30:00",
+        "to": "2020-02-24 10:37:00",
+        "comment": null,
+        "userId": 1,
+        "taskId": 6,
+        "rate": null
+    },
+    {
+        "id": 316,
+        "from": "2020-02-24 10:37:00",
+        "to": "2020-02-24 11:56:00",
+        "comment": "3197 - Release till Prod",
+        "userId": 1,
+        "taskId": 5,
+        "rate": null
+    },
+    {
+        "id": 317,
+        "from": "2020-02-24 11:56:00",
+        "to": "2020-02-24 12:56:09",
+        "comment": "3214 - Fixar för deployment",
+        "userId": 1,
+        "taskId": 5,
+        "rate": null
+    },
+    {
+        "id": 318,
+        "from": "2020-02-24 13:16:00",
+        "to": "2020-02-24 13:30:00",
+        "comment": "3214 - Verifiering av deployment",
+        "userId": 1,
+        "taskId": 5,
+        "rate": null
+    },
+    {
+        "id": 319,
+        "from": "2020-02-24 13:30:00",
+        "to": "2020-02-24 14:00:00",
+        "comment": null,
+        "userId": 1,
+        "taskId": 6,
+        "rate": null
+    },
+    {
+        "id": 320,
+        "from": "2020-02-24 14:00:00",
+        "to": "2020-02-24 18:35:35",
+        "comment": "3216 - Felsökning av deploy från azure devops till Carnegie",
+        "userId": 1,
+        "taskId": 5,
+        "rate": null
+    },
+    {
+        "id": 321,
+        "from": "2020-02-25 10:17:00",
+        "to": "2020-02-25 10:30:00",
+        "comment": "3216 - Felsökning av deploy från azure devops till Carnegie",
+        "userId": 1,
+        "taskId": 5,
+        "rate": null
+    },
+    {
+        "id": 322,
+        "from": "2020-02-25 10:30:00",
+        "to": "2020-02-25 10:45:00",
+        "comment": null,
+        "userId": 1,
+        "taskId": 6,
+        "rate": null
+    },
+    {
+        "id": 323,
+        "from": "2020-02-25 10:45:00",
+        "to": "2020-02-25 11:15:00",
+        "comment": "3216 - Felsökning av deploy från azure devops till Carnegie",
+        "userId": 1,
+        "taskId": 5,
+        "rate": null
+    },
+    {
+        "id": 324,
+        "from": "2020-02-25 11:15:00",
+        "to": "2020-02-25 11:36:00",
+        "comment": "3197 - Felsökning av prod-synkning tillsammans med Sebastian",
+        "userId": 1,
+        "taskId": 5,
+        "rate": null
+    },
+    {
+        "id": 325,
+        "from": "2020-02-25 11:36:00",
+        "to": "2020-02-25 12:24:00",
+        "comment": "3216 - Felsökning av deploy från azure devops till Carnegie",
+        "userId": 1,
+        "taskId": 5,
+        "rate": null
+    },
+    {
+        "id": 326,
+        "from": "2020-02-25 13:02:00",
+        "to": "2020-02-25 16:11:00",
+        "comment": "3216 - Felsökning av deploy från azure devops till Carnegie",
+        "userId": 1,
+        "taskId": 5,
+        "rate": null
+    },
+    {
+        "id": 327,
+        "from": "2020-02-25 16:11:00",
+        "to": "2020-02-25 16:35:00",
+        "comment": "Möte med Vikesh ang. flytt av källkod till FortV's TFS",
+        "userId": 1,
+        "taskId": 20,
+        "rate": null
+    },
+    {
+        "id": 328,
+        "from": "2020-02-25 16:35:00",
+        "to": "2020-02-25 17:48:04",
+        "comment": "3216 - Felsökning av deploy från azure devops till Carnegie. Sätter upp pipelines för bygge och deploy",
+        "userId": 1,
+        "taskId": 5,
+        "rate": null
+    },
+    {
+        "id": 329,
+        "from": "2020-02-26 10:10:00",
+        "to": "2020-02-26 10:30:00",
+        "comment": "Synk med Anna ang. MockingJay, FortV, etc. efter att hon kommit tillbaka från semester",
+        "userId": 1,
+        "taskId": 20,
+        "rate": null
+    },
+    {
+        "id": 330,
+        "from": "2020-02-26 10:30:00",
+        "to": "2020-02-26 10:40:00",
+        "comment": null,
+        "userId": 1,
+        "taskId": 6,
+        "rate": null
+    },
+    {
+        "id": 331,
+        "from": "2020-02-26 10:40:00",
+        "to": "2020-02-26 13:03:23",
+        "comment": "Tidrapportering",
+        "userId": 1,
+        "taskId": 13,
+        "rate": null
+    },
+    {
+        "id": 332,
+        "from": "2020-02-26 13:32:00",
+        "to": "2020-02-26 13:49:00",
+        "comment": "3197 - Estimering av termsync",
+        "userId": 1,
+        "taskId": 7,
+        "rate": null
+    },
+    {
+        "id": 333,
+        "from": "2020-02-26 13:49:00",
+        "to": "2020-02-26 14:20:00",
+        "comment": "Sittning med Anna för kravspec och utredning av ny beställning (loggning, flytt av källkod, nya användarnivåer, filvy)",
+        "userId": 1,
+        "taskId": 20,
+        "rate": null
+    },
+    {
+        "id": 334,
+        "from": "2020-02-26 14:20:00",
+        "to": "2020-02-26 15:37:00",
+        "comment": "3197 - Estimering av termsync",
+        "userId": 1,
+        "taskId": 7,
+        "rate": null
+    },
+    {
+        "id": 335,
+        "from": "2020-02-27 10:15:00",
+        "to": "2020-02-27 10:30:00",
+        "comment": "3216 - Städning av kod i csproj filer för att kunna bygga och deploya till ver/prod",
+        "userId": 1,
+        "taskId": 5,
+        "rate": null
+    },
+    {
+        "id": 336,
+        "from": "2020-02-27 10:30:00",
+        "to": "2020-02-27 10:36:00",
+        "comment": null,
+        "userId": 1,
+        "taskId": 6,
+        "rate": null
+    },
+    {
+        "id": 337,
+        "from": "2020-02-27 10:36:00",
+        "to": "2020-02-27 13:36:20",
+        "comment": "3216 - Städning av kod i csproj filer för att kunna bygga och deploya till ver/prod",
+        "userId": 1,
+        "taskId": 5,
+        "rate": null
+    },
+    {
+        "id": 338,
+        "from": "2020-02-27 14:00:00",
+        "to": "2020-02-27 16:05:00",
+        "comment": "3216 - Städning av kod i csproj filer för att kunna bygga och deploya till ver/prod",
+        "userId": 1,
+        "taskId": 5,
+        "rate": null
+    },
+    {
+        "id": 339,
+        "from": "2020-02-27 21:13:00",
+        "to": "2020-02-28 00:46:36",
+        "comment": "3216 - Städning av kod i csproj filer för att kunna bygga och deploya till ver/prod",
+        "userId": 1,
+        "taskId": 5,
+        "rate": null
+    },
+    {
+        "id": 340,
+        "from": "2020-02-28 10:21:00",
+        "to": "2020-02-28 11:15:00",
+        "comment": "3219 - Estimering av nya termsync",
+        "userId": 1,
+        "taskId": 7,
+        "rate": null
+    },
+    {
+        "id": 341,
+        "from": "2020-02-28 13:49:00",
+        "to": "2020-02-28 14:41:00",
+        "comment": "3216 - Städning av kod i csproj filer för att kunna bygga och deploya till ver/prod",
+        "userId": 1,
+        "taskId": 5,
+        "rate": null
+    },
+    {
+        "id": 342,
+        "from": "2020-02-28 14:41:00",
+        "to": "2020-02-28 17:05:00",
+        "comment": "Tidrapportering",
+        "userId": 1,
+        "taskId": 13,
+        "rate": null
+    },
+    {
+        "id": 343,
+        "from": "2020-02-28 11:15:00",
+        "to": "2020-02-28 11:25:00",
+        "comment": null,
+        "userId": 1,
+        "taskId": 6,
+        "rate": null
+    },
+    {
+        "id": 344,
+        "from": "2020-02-28 11:25:00",
+        "to": "2020-02-28 13:16:00",
+        "comment": "3219 - Estimering av nya termsync",
+        "userId": 1,
+        "taskId": 7,
+        "rate": null
+    },
+    {
+        "id": 345,
+        "from": "2020-03-01 21:05:00",
+        "to": "2020-03-01 22:46:40",
+        "comment": "Test av lite olika layouter och fonter för nya sidan",
+        "userId": 1,
+        "taskId": 22,
+        "rate": null
+    },
+    {
+        "id": 346,
+        "from": "2020-03-02 10:24:00",
+        "to": "2020-03-02 10:30:00",
+        "comment": "3220",
+        "userId": 1,
+        "taskId": 5,
+        "rate": null
+    },
+    {
+        "id": 347,
+        "from": "2020-03-02 10:30:00",
+        "to": "2020-03-02 10:45:00",
+        "comment": null,
+        "userId": 1,
+        "taskId": 6,
+        "rate": null
+    },
+    {
+        "id": 348,
+        "from": "2020-03-02 14:00:00",
+        "to": "2020-03-02 15:46:00",
+        "comment": "Förvaltningsmöte med SJ",
+        "userId": 1,
+        "taskId": 6,
+        "rate": null
+    },
+    {
+        "id": 349,
+        "from": "2020-03-02 10:45:00",
+        "to": "2020-03-02 12:55:00",
+        "comment": "Uppdatering av script för termsynkning",
+        "userId": 1,
+        "taskId": 5,
+        "rate": null
+    },
+    {
+        "id": 350,
+        "from": "2020-03-03 10:30:00",
+        "to": "2020-03-03 10:45:00",
+        "comment": null,
+        "userId": 1,
+        "taskId": 6,
+        "rate": null
+    },
+    {
+        "id": 351,
+        "from": "2020-03-04 10:07:00",
+        "to": "2020-03-04 10:30:00",
+        "comment": null,
+        "userId": 1,
+        "taskId": 5,
+        "rate": null
+    },
+    {
+        "id": 352,
+        "from": "2020-03-04 10:30:00",
+        "to": "2020-03-04 10:45:00",
+        "comment": null,
+        "userId": 1,
+        "taskId": 6,
+        "rate": null
+    },
+    {
+        "id": 353,
+        "from": "2020-03-04 10:45:00",
+        "to": "2020-03-04 12:45:32",
+        "comment": null,
+        "userId": 1,
+        "taskId": 5,
+        "rate": null
+    },
+    {
+        "id": 354,
+        "from": "2020-03-04 13:15:00",
+        "to": "2020-03-04 16:09:00",
+        "comment": null,
+        "userId": 1,
+        "taskId": 5,
+        "rate": null
+    },
+    {
+        "id": 355,
+        "from": "2020-03-05 10:08:00",
+        "to": "2020-03-05 10:30:00",
+        "comment": null,
+        "userId": 1,
+        "taskId": 5,
+        "rate": null
+    },
+    {
+        "id": 356,
+        "from": "2020-03-05 13:47:00",
+        "to": "2020-03-05 14:08:00",
+        "comment": null,
+        "userId": 1,
+        "taskId": 5,
+        "rate": null
+    },
+    {
+        "id": 357,
+        "from": "2020-03-05 14:08:00",
+        "to": "2020-03-05 14:40:00",
+        "comment": "Möte ang. fakturerarde timmar för SJ",
+        "userId": 1,
+        "taskId": 12,
+        "rate": null
+    },
+    {
+        "id": 358,
+        "from": "2020-03-05 14:40:00",
+        "to": "2020-03-05 17:37:00",
+        "comment": null,
+        "userId": 1,
+        "taskId": 5,
+        "rate": null
+    },
+    {
+        "id": 359,
+        "from": "2020-03-05 20:52:00",
+        "to": "2020-03-05 21:56:07",
+        "comment": null,
+        "userId": 1,
+        "taskId": 17,
+        "rate": null
+    },
+    {
+        "id": 360,
+        "from": "2020-03-06 10:45:00",
+        "to": "2020-03-06 13:00:00",
+        "comment": null,
+        "userId": 1,
+        "taskId": 5,
+        "rate": null
+    },
+    {
+        "id": 361,
+        "from": "2020-03-06 13:21:00",
+        "to": "2020-03-06 16:25:00",
+        "comment": null,
+        "userId": 1,
+        "taskId": 5,
+        "rate": null
+    },
+    {
+        "id": 362,
+        "from": "2020-03-09 09:27:00",
+        "to": "2020-03-09 10:30:00",
+        "comment": "Utveckling av term-sync job i Typescript",
+        "userId": 1,
+        "taskId": 5,
+        "rate": null
+    },
+    {
+        "id": 364,
+        "from": "2020-03-09 10:30:00",
+        "to": "2020-03-09 10:35:00",
+        "comment": null,
+        "userId": 1,
+        "taskId": 6,
+        "rate": null
+    },
+    {
+        "id": 365,
+        "from": "2020-03-09 10:54:00",
+        "to": "2020-03-09 13:00:00",
+        "comment": "Utveckling av term-sync job i Typescript",
+        "userId": 1,
+        "taskId": 5,
+        "rate": null
+    },
+    {
+        "id": 366,
+        "from": "2020-03-09 13:00:00",
+        "to": "2020-03-09 13:25:00",
+        "comment": null,
+        "userId": 1,
+        "taskId": 6,
+        "rate": null
+    },
+    {
+        "id": 367,
+        "from": "2020-03-09 13:25:00",
+        "to": "2020-03-09 14:58:00",
+        "comment": "Utveckling av term-sync job i Typescript",
+        "userId": 1,
+        "taskId": 5,
+        "rate": null
+    },
+    {
+        "id": 368,
+        "from": "2020-03-09 16:00:00",
+        "to": "2020-03-09 19:09:20",
+        "comment": "Utveckling av term-sync job i Typescript",
+        "userId": 1,
+        "taskId": 5,
+        "rate": null
+    },
+    {
+        "id": 369,
+        "from": "2020-03-05 10:30:00",
+        "to": "2020-03-05 10:45:00",
+        "comment": null,
+        "userId": 1,
+        "taskId": 5,
+        "rate": null
+    },
+    {
+        "id": 370,
+        "from": "2020-03-05 10:45:00",
+        "to": "2020-03-05 13:31:00",
+        "comment": null,
+        "userId": 1,
+        "taskId": 5,
+        "rate": null
+    },
+    {
+        "id": 371,
+        "from": "2020-03-06 10:01:00",
+        "to": "2020-03-06 10:30:00",
+        "comment": null,
+        "userId": 1,
+        "taskId": 5,
+        "rate": null
+    },
+    {
+        "id": 372,
+        "from": "2020-03-06 10:30:00",
+        "to": "2020-03-06 10:45:00",
+        "comment": null,
+        "userId": 1,
+        "taskId": 6,
+        "rate": null
+    },
+    {
+        "id": 373,
+        "from": "2020-03-10 09:54:00",
+        "to": "2020-03-10 10:30:00",
+        "comment": "Tidrapportering för Infozone's räkning",
+        "userId": 1,
+        "taskId": 26,
+        "rate": null
+    },
+    {
+        "id": 374,
+        "from": "2020-03-10 10:30:00",
+        "to": "2020-03-10 10:45:00",
+        "comment": null,
+        "userId": 1,
+        "taskId": 6,
+        "rate": null
+    },
+    {
+        "id": 375,
+        "from": "2020-03-10 10:45:00",
+        "to": "2020-03-10 11:43:00",
+        "comment": "Tidrapportering för Infozone's räkning",
+        "userId": 1,
+        "taskId": 26,
+        "rate": null
+    },
+    {
+        "id": 376,
+        "from": "2020-03-10 11:43:00",
+        "to": "2020-03-10 14:23:57",
+        "comment": "Nytt estimat för bolagsswitch",
+        "userId": 1,
+        "taskId": 7,
+        "rate": null
+    },
+    {
+        "id": 377,
+        "from": "2020-03-10 14:48:00",
+        "to": "2020-03-10 16:15:28",
+        "comment": "Bygge av term-sync job i Typescript",
+        "userId": 1,
+        "taskId": 5,
+        "rate": null
+    },
+    {
+        "id": 378,
+        "from": "2020-03-11 09:55:00",
+        "to": "2020-03-11 10:10:00",
+        "comment": null,
+        "userId": 1,
+        "taskId": 6,
+        "rate": null
+    },
+    {
+        "id": 379,
+        "from": "2020-03-11 10:10:00",
+        "to": "2020-03-11 12:58:24",
+        "comment": "Felsökning och fix av nyheter som inte renderas när det finns dubbletter av artiklar",
+        "userId": 1,
+        "taskId": 9,
+        "rate": null
+    },
+    {
+        "id": 380,
+        "from": "2020-03-11 13:23:00",
+        "to": "2020-03-11 13:40:00",
+        "comment": "Test av dubbla artiklar i ver",
+        "userId": 1,
+        "taskId": 9,
+        "rate": null
+    },
+    {
+        "id": 381,
+        "from": "2020-03-11 13:40:00",
+        "to": "2020-03-11 17:50:00",
+        "comment": "Automatiserad deploy för ver och prod gällande Carnegie",
+        "userId": 1,
+        "taskId": 5,
+        "rate": null
+    },
+    {
+        "id": 382,
+        "from": "2020-03-12 10:06:00",
+        "to": "2020-03-12 10:30:00",
+        "comment": "Påbörja deploy till Prod",
+        "userId": 1,
+        "taskId": 9,
+        "rate": null
+    },
+    {
+        "id": 383,
+        "from": "2020-03-12 10:30:00",
+        "to": "2020-03-12 10:45:00",
+        "comment": null,
+        "userId": 1,
+        "taskId": 6,
+        "rate": null
+    },
+    {
+        "id": 384,
+        "from": "2020-03-12 10:45:00",
+        "to": "2020-03-12 13:51:09",
+        "comment": "Deploy till Prod",
+        "userId": 1,
+        "taskId": 9,
+        "rate": null
+    },
+    {
+        "id": 385,
+        "from": "2020-03-12 14:11:00",
+        "to": "2020-03-12 15:53:00",
+        "comment": "Felsökning av ärende",
+        "userId": 1,
+        "taskId": 9,
+        "rate": null
+    },
+    {
+        "id": 386,
+        "from": "2020-03-12 15:53:00",
+        "to": "2020-03-12 17:38:00",
+        "comment": "Automatiserad deploy för ver och prod gällande Carnegie",
+        "userId": 1,
+        "taskId": 5,
+        "rate": null
+    },
+    {
+        "id": 387,
+        "from": "2020-03-13 09:22:00",
+        "to": "2020-03-13 10:30:00",
+        "comment": "Utveckling av term-sync job i Typescript",
+        "userId": 1,
+        "taskId": 5,
+        "rate": null
+    },
+    {
+        "id": 388,
+        "from": "2020-03-13 10:30:00",
+        "to": "2020-03-13 10:45:00",
+        "comment": null,
+        "userId": 1,
+        "taskId": 6,
+        "rate": null
+    },
+    {
+        "id": 389,
+        "from": "2020-03-13 10:45:00",
+        "to": "2020-03-13 14:00:00",
+        "comment": "Utveckling av term-sync job i Typescript",
+        "userId": 1,
+        "taskId": 5,
+        "rate": null
+    },
+    {
+        "id": 390,
+        "from": "2020-03-13 15:00:00",
+        "to": "2020-03-13 17:00:00",
+        "comment": "Utveckling av term-sync job i Typescript",
+        "userId": 1,
+        "taskId": 5,
+        "rate": null
+    },
+    {
+        "id": 391,
+        "from": "2020-03-16 09:22:00",
+        "to": "2020-03-16 10:30:00",
+        "comment": "Tidrapportering för Infozone",
+        "userId": 1,
+        "taskId": 26,
+        "rate": null
+    },
+    {
+        "id": 392,
+        "from": "2020-03-16 10:30:00",
+        "to": "2020-03-16 10:40:00",
+        "comment": null,
+        "userId": 1,
+        "taskId": 6,
+        "rate": null
+    },
+    {
+        "id": 393,
+        "from": "2020-03-16 10:40:00",
+        "to": "2020-03-16 13:00:00",
+        "comment": "Felsökning och test gällande stick news",
+        "userId": 1,
+        "taskId": 9,
+        "rate": null
+    },
+    {
+        "id": 394,
+        "from": "2020-03-16 14:01:00",
+        "to": "2020-03-16 16:07:06",
+        "comment": "Felsökning i ärende",
+        "userId": 1,
+        "taskId": 9,
+        "rate": null
+    },
+    {
+        "id": 395,
+        "from": "2020-03-16 16:07:00",
+        "to": "2020-03-16 17:00:00",
+        "comment": null,
+        "userId": 1,
+        "taskId": 5,
+        "rate": null
+    },
+    {
+        "id": 396,
+        "from": "2020-03-18 10:04:00",
+        "to": "2020-03-18 11:36:00",
+        "comment": "Vidare felsökning",
+        "userId": 1,
+        "taskId": 9,
+        "rate": null
+    },
+    {
+        "id": 397,
+        "from": "2020-03-18 12:26:00",
+        "to": "2020-03-18 14:04:22",
+        "comment": "Löst",
+        "userId": 1,
+        "taskId": 9,
+        "rate": null
+    },
+    {
+        "id": 398,
+        "from": "2020-03-19 09:24:00",
+        "to": "2020-03-19 09:54:00",
+        "comment": "Dokumentation gällande attribut för intranätet",
+        "userId": 1,
+        "taskId": 7,
+        "rate": null
+    },
+    {
+        "id": 399,
+        "from": "2020-03-19 09:54:00",
+        "to": "2020-03-19 10:17:00",
+        "comment": "Estimering och uppdatering av JIRA-ärenden med tidsestimat",
+        "userId": 1,
+        "taskId": 13,
+        "rate": null
+    },
+    {
+        "id": 400,
+        "from": "2020-03-19 10:17:00",
+        "to": "2020-03-19 10:31:00",
+        "comment": "Dokumentation gällande attribut för intranätet",
+        "userId": 1,
+        "taskId": 5,
+        "rate": null
+    },
+    {
+        "id": 401,
+        "from": "2020-03-19 10:31:00",
+        "to": "2020-03-19 10:36:00",
+        "comment": null,
+        "userId": 1,
+        "taskId": 5,
+        "rate": null
+    },
+    {
+        "id": 402,
+        "from": "2020-03-19 10:36:00",
+        "to": "2020-03-19 10:57:17",
+        "comment": "Dokumentation gällande attribut för intranätet",
+        "userId": 1,
+        "taskId": 5,
+        "rate": null
+    },
+    {
+        "id": 403,
+        "from": "2020-03-19 14:14:00",
+        "to": "2020-03-19 18:15:00",
+        "comment": null,
+        "userId": 1,
+        "taskId": 5,
+        "rate": null
+    },
+    {
+        "id": 404,
+        "from": "2020-03-20 10:08:00",
+        "to": "2020-03-20 10:30:00",
+        "comment": "Dokumentation av entiteter",
+        "userId": 1,
+        "taskId": 7,
+        "rate": null
+    },
+    {
+        "id": 405,
+        "from": "2020-03-20 10:30:00",
+        "to": "2020-03-20 10:45:00",
+        "comment": null,
+        "userId": 1,
+        "taskId": 6,
+        "rate": null
+    },
+    {
+        "id": 406,
+        "from": "2020-03-20 10:45:00",
+        "to": "2020-03-20 11:00:00",
+        "comment": "Dokumentation av entiteter",
+        "userId": 1,
+        "taskId": 7,
+        "rate": null
+    },
+    {
+        "id": 407,
+        "from": "2020-03-20 11:00:00",
+        "to": "2020-03-20 11:21:00",
+        "comment": "Möte med SJ",
+        "userId": 1,
+        "taskId": 6,
+        "rate": null
+    },
+    {
+        "id": 408,
+        "from": "2020-03-20 11:45:00",
+        "to": "2020-03-20 13:00:00",
+        "comment": "Dokumentation av entiteter",
+        "userId": 1,
+        "taskId": 7,
+        "rate": null
+    },
+    {
+        "id": 409,
+        "from": "2020-03-20 13:20:00",
+        "to": "2020-03-20 16:21:00",
+        "comment": null,
+        "userId": 1,
+        "taskId": 5,
+        "rate": null
+    },
+    {
+        "id": 410,
+        "from": "2020-03-23 08:26:00",
+        "to": "2020-03-23 10:30:00",
+        "comment": null,
+        "userId": 1,
+        "taskId": 5,
+        "rate": null
+    },
+    {
+        "id": 411,
+        "from": "2020-03-24 11:19:00",
+        "to": "2020-03-24 11:50:40",
+        "comment": "Möte med Anna gällande FortV och vidareutveckling av Sören",
+        "userId": 1,
+        "taskId": 20,
+        "rate": null
+    },
+    {
+        "id": 412,
+        "from": "2020-03-24 09:30:00",
+        "to": "2020-03-24 10:30:00",
+        "comment": null,
+        "userId": 1,
+        "taskId": 5,
+        "rate": null
+    },
+    {
+        "id": 413,
+        "from": "2020-03-24 10:30:00",
+        "to": "2020-03-24 10:45:00",
+        "comment": null,
+        "userId": 1,
+        "taskId": 6,
+        "rate": null
+    },
+    {
+        "id": 414,
+        "from": "2020-03-24 10:45:00",
+        "to": "2020-03-24 11:19:00",
+        "comment": null,
+        "userId": 1,
+        "taskId": 5,
+        "rate": null
+    },
+    {
+        "id": 415,
+        "from": "2020-03-24 13:01:00",
+        "to": "2020-03-24 13:19:00",
+        "comment": "Möte med Anna och Sebastian gällande google tasks",
+        "userId": 1,
+        "taskId": 6,
+        "rate": null
+    },
+    {
+        "id": 416,
+        "from": "2020-03-24 20:24:00",
+        "to": "2020-03-24 22:36:00",
+        "comment": "Downloading repos and trying to build project locally",
+        "userId": 1,
+        "taskId": 18,
+        "rate": null
+    },
+    {
+        "id": 417,
+        "from": "2020-03-25 09:30:00",
+        "to": "2020-03-25 10:15:00",
+        "comment": null,
+        "userId": 1,
+        "taskId": 5,
+        "rate": null
+    },
+    {
+        "id": 418,
+        "from": "2020-03-25 10:15:00",
+        "to": "2020-03-25 10:30:00",
+        "comment": "Möte med Sebastian ang. estimering för Carnegie kopiering av prod till ver",
+        "userId": 1,
+        "taskId": 5,
+        "rate": null
+    },
+    {
+        "id": 419,
+        "from": "2020-03-25 10:30:00",
+        "to": "2020-03-25 10:44:00",
+        "comment": null,
+        "userId": 1,
+        "taskId": 6,
+        "rate": null
+    },
+    {
+        "id": 420,
+        "from": "2020-03-23 10:30:00",
+        "to": "2020-03-23 10:45:00",
+        "comment": null,
+        "userId": 1,
+        "taskId": 6,
+        "rate": null
+    },
+    {
+        "id": 421,
+        "from": "2020-03-23 10:45:00",
+        "to": "2020-03-23 13:00:00",
+        "comment": null,
+        "userId": 1,
+        "taskId": 5,
+        "rate": null
+    },
+    {
+        "id": 422,
+        "from": "2020-03-23 14:00:00",
+        "to": "2020-03-23 17:37:00",
+        "comment": null,
+        "userId": 1,
+        "taskId": 5,
+        "rate": null
+    },
+    {
+        "id": 423,
+        "from": "2020-03-25 10:44:00",
+        "to": "2020-03-25 11:18:00",
+        "comment": "Test av termsynk i ver och deploy",
+        "userId": 1,
+        "taskId": 5,
+        "rate": null
+    },
+    {
+        "id": 424,
+        "from": "2020-03-25 13:15:00",
+        "to": "2020-03-25 16:16:00",
+        "comment": "Testning och fixar av fel i ver",
+        "userId": 1,
+        "taskId": 5,
+        "rate": null
+    },
+    {
+        "id": 425,
+        "from": "2020-03-26 15:12:00",
+        "to": "2020-03-26 15:57:53",
+        "comment": "Identified server on AWS. Trying to run it locally and fixing the issue with DB error in production",
+        "userId": 1,
+        "taskId": 18,
+        "rate": null
+    },
+    {
+        "id": 426,
+        "from": "2020-03-27 09:11:00",
+        "to": "2020-03-27 10:33:00",
+        "comment": "Working on local env to debug database errors in prod",
+        "userId": 1,
+        "taskId": 18,
+        "rate": null
+    },
+    {
+        "id": 427,
+        "from": "2020-03-27 10:33:00",
+        "to": "2020-03-27 10:43:00",
+        "comment": null,
+        "userId": 1,
+        "taskId": 6,
+        "rate": null
+    },
+    {
+        "id": 428,
+        "from": "2020-03-27 10:43:00",
+        "to": "2020-03-27 11:20:18",
+        "comment": null,
+        "userId": 1,
+        "taskId": 5,
+        "rate": null
+    },
+    {
+        "id": 429,
+        "from": "2020-03-27 13:23:00",
+        "to": "2020-03-27 15:58:20",
+        "comment": "Felsökning varför jobb inte startar och körs",
+        "userId": 1,
+        "taskId": 5,
+        "rate": null
+    },
+    {
+        "id": 430,
+        "from": "2020-03-27 17:35:00",
+        "to": "2020-03-27 18:30:57",
+        "comment": "Fick igång ver-miljö igen samt application insight för azure functions",
+        "userId": 1,
+        "taskId": 5,
+        "rate": null
+    },
+    {
+        "id": 431,
+        "from": "2020-03-27 20:57:00",
+        "to": "2020-03-27 23:17:21",
+        "comment": "Integrering av custom properties",
+        "userId": 1,
+        "taskId": 5,
+        "rate": null
+    },
+    {
+        "id": 432,
+        "from": "2020-03-28 10:27:00",
+        "to": "2020-03-28 11:28:11",
+        "comment": "Synkning av customProperties",
+        "userId": 1,
+        "taskId": 5,
+        "rate": null
+    },
+    {
+        "id": 433,
+        "from": "2020-03-28 15:40:00",
+        "to": "2020-03-28 16:13:35",
+        "comment": "Synkning av customProperties",
+        "userId": 1,
+        "taskId": 5,
+        "rate": null
+    },
+    {
+        "id": 434,
+        "from": "2020-03-29 12:20:00",
+        "to": "2020-03-29 12:56:51",
+        "comment": "Felsökning av sys_ custom properties. Varför de inte hittas i scriptet",
+        "userId": 1,
+        "taskId": 5,
+        "rate": null
+    },
+    {
+        "id": 435,
+        "from": "2020-03-29 14:33:00",
+        "to": "2020-03-29 16:48:24",
+        "comment": "Lyckats ladda custom properties men felsöker varför getWebRelativeFriendlyUrl inte retunerar rätt värde",
+        "userId": 1,
+        "taskId": 5,
+        "rate": null
+    },
+    {
+        "id": 436,
+        "from": "2020-03-29 18:59:00",
+        "to": "2020-03-29 19:32:10",
+        "comment": "Löst problemet med friendlyUrl",
+        "userId": 1,
+        "taskId": 5,
+        "rate": null
+    },
+    {
+        "id": 437,
+        "from": "2020-03-29 23:07:00",
+        "to": "2020-03-30 01:39:53",
+        "comment": "Löst problem med custom properties och fixat synkning av dem till DB:n",
+        "userId": 1,
+        "taskId": 5,
+        "rate": null
+    },
+    {
+        "id": 439,
+        "from": "2020-03-30 10:16:00",
+        "to": "2020-03-30 10:35:00",
+        "comment": "Deploy av nya termsync till ver",
+        "userId": 1,
+        "taskId": 5,
+        "rate": null
+    },
+    {
+        "id": 440,
+        "from": "2020-03-30 11:45:00",
+        "to": "2020-03-30 12:53:00",
+        "comment": "Felsökning av ärende",
+        "userId": 1,
+        "taskId": 9,
+        "rate": null
+    },
+    {
+        "id": 441,
+        "from": "2020-03-30 13:08:00",
+        "to": "2020-03-30 13:42:22",
+        "comment": "Felsökning visar att verktygslådan inte visas när man har engelska som vyspråk i webbläsaren. Meddelarar detta till användaren",
+        "userId": 1,
+        "taskId": 9,
+        "rate": null
+    },
+    {
+        "id": 442,
+        "from": "2020-03-30 15:45:00",
+        "to": "2020-03-30 17:54:18",
+        "comment": "Uppdatering av custom properties som inte synkar rätt (tas inte bort och skapas dubletter). Work in progress",
+        "userId": 1,
+        "taskId": 5,
+        "rate": null
+    },
+    {
+        "id": 443,
+        "from": "2020-03-30 21:54:00",
+        "to": "2020-03-31 00:54:29",
+        "comment": "Felsökning av termsynkning gällande custom properties och info-värden. För department list finns det flera list item per term med olika info världen. Hur löser man detta? Custom properties synkar dock korrekt nu.",
+        "userId": 1,
+        "taskId": 5,
+        "rate": null
+    },
+    {
+        "id": 444,
+        "from": "2020-03-31 10:16:00",
+        "to": "2020-03-31 10:38:00",
+        "comment": "Verifiering av termsynkning",
+        "userId": 1,
+        "taskId": 5,
+        "rate": null
+    },
+    {
+        "id": 445,
+        "from": "2020-03-31 11:30:00",
+        "to": "2020-03-31 11:43:47",
+        "comment": null,
+        "userId": 1,
+        "taskId": 6,
+        "rate": null
+    },
+    {
+        "id": 446,
+        "from": "2020-04-01 10:47:00",
+        "to": "2020-04-01 10:54:00",
+        "comment": "Möte med Sebastian ang. estimering av MS-2325",
+        "userId": 1,
+        "taskId": 6,
+        "rate": null
+    },
+    {
+        "id": 447,
+        "from": "2020-04-01 10:54:00",
+        "to": "2020-04-01 11:02:02",
+        "comment": "Kommentera på ärende vad som behövas göras i front-end",
+        "userId": 1,
+        "taskId": 7,
+        "rate": null
+    },
+    {
+        "id": 448,
+        "from": "2020-04-01 11:30:00",
+        "to": "2020-04-01 11:42:00",
+        "comment": null,
+        "userId": 1,
+        "taskId": 6,
+        "rate": null
+    },
+    {
+        "id": 449,
+        "from": "2020-04-01 15:22:00",
+        "to": "2020-04-01 16:03:10",
+        "comment": "Samtal med Anna ang. release till ver",
+        "userId": 1,
+        "taskId": 7,
+        "rate": null
+    },
+    {
+        "id": 450,
+        "from": "2020-04-02 10:43:00",
+        "to": "2020-04-02 10:50:00",
+        "comment": "Kollat på estimering av backloggen",
+        "userId": 1,
+        "taskId": 7,
+        "rate": null
+    },
+    {
+        "id": 451,
+        "from": "2020-04-02 10:50:00",
+        "to": "2020-04-02 10:57:12",
+        "comment": null,
+        "userId": 1,
+        "taskId": 5,
+        "rate": null
+    },
+    {
+        "id": 452,
+        "from": "2020-04-02 10:57:00",
+        "to": "2020-04-02 11:30:00",
+        "comment": "Estimering och undersökning",
+        "userId": 1,
+        "taskId": 7,
+        "rate": null
+    },
+    {
+        "id": 453,
+        "from": "2020-04-02 11:30:00",
+        "to": "2020-04-02 11:52:00",
+        "comment": null,
+        "userId": 1,
+        "taskId": 6,
+        "rate": null
+    },
+    {
+        "id": 454,
+        "from": "2020-04-02 11:52:00",
+        "to": "2020-04-02 13:47:50",
+        "comment": "Testning i VER",
+        "userId": 1,
+        "taskId": 7,
+        "rate": null
+    },
+    {
+        "id": 455,
+        "from": "2020-04-02 15:36:00",
+        "to": "2020-04-02 19:38:11",
+        "comment": "Strukturering av kod för projekt",
+        "userId": 1,
+        "taskId": 5,
+        "rate": null
+    },
+    {
+        "id": 456,
+        "from": "2020-04-02 21:06:00",
+        "to": "2020-04-02 22:41:10",
+        "comment": "Läsa på om \"dotnet build\" vs \"msbuild\" vs \"dotnet msbuild\"",
+        "userId": 1,
+        "taskId": 5,
+        "rate": null
+    },
+    {
+        "id": 457,
+        "from": "2020-04-03 11:30:00",
+        "to": "2020-04-03 11:50:00",
+        "comment": null,
+        "userId": 1,
+        "taskId": 6,
+        "rate": null
+    },
+    {
+        "id": 458,
+        "from": "2020-04-03 12:10:00",
+        "to": "2020-04-03 13:00:00",
+        "comment": "Genomgång av estimering av bolagsswitchen med Anna, Sebastian och Sebbe",
+        "userId": 1,
+        "taskId": 6,
+        "rate": null
+    },
+    {
+        "id": 459,
+        "from": "2020-04-03 15:00:00",
+        "to": "2020-04-03 15:41:41",
+        "comment": "Återkoppling med Adam och Madeleine tillsammans med Tommy, Sebastian och Anna",
+        "userId": 1,
+        "taskId": 6,
+        "rate": null
+    },
+    {
+        "id": 460,
+        "from": "2020-04-03 15:56:00",
+        "to": "2020-04-03 17:16:16",
+        "comment": "Felsökning och åtgärdat problem med långsamt intranät",
+        "userId": 1,
+        "taskId": 9,
+        "rate": null
+    },
+    {
+        "id": 461,
+        "from": "2020-04-03 17:16:00",
+        "to": "2020-04-03 18:17:51",
+        "comment": "Estimering av bolagsswitch tillsammans med Anna",
+        "userId": 1,
+        "taskId": 6,
+        "rate": null
+    },
+    {
+        "id": 462,
+        "from": "2020-04-06 10:27:00",
+        "to": "2020-04-06 11:30:00",
+        "comment": "Flytt av källkod för backend, sync och shared",
+        "userId": 1,
+        "taskId": 5,
+        "rate": null
+    },
+    {
+        "id": 463,
+        "from": "2020-04-06 11:30:00",
+        "to": "2020-04-06 11:50:00",
+        "comment": null,
+        "userId": 1,
+        "taskId": 6,
+        "rate": null
+    },
+    {
+        "id": 464,
+        "from": "2020-04-06 11:50:00",
+        "to": "2020-04-06 13:30:00",
+        "comment": "Uppdatering av byggscript för SJ",
+        "userId": 1,
+        "taskId": 5,
+        "rate": null
+    },
+    {
+        "id": 465,
+        "from": "2020-04-06 13:30:00",
+        "to": "2020-04-06 14:10:00",
+        "comment": null,
+        "userId": 1,
+        "taskId": 6,
+        "rate": null
+    },
+    {
+        "id": 466,
+        "from": "2020-04-06 14:10:00",
+        "to": "2020-04-06 14:30:00",
+        "comment": "Vidare fix av repo och byggscript",
+        "userId": 1,
+        "taskId": 5,
+        "rate": null
+    },
+    {
+        "id": 467,
+        "from": "2020-04-06 16:40:00",
+        "to": "2020-04-06 19:21:35",
+        "comment": null,
+        "userId": 1,
+        "taskId": 5,
+        "rate": null
+    },
+    {
+        "id": 468,
+        "from": "2020-04-06 20:30:00",
+        "to": "2020-04-07 01:00:00",
+        "comment": "Modifiering av byggscript",
+        "userId": 1,
+        "taskId": 5,
+        "rate": null
+    },
+    {
+        "id": 470,
+        "from": "2020-04-07 11:30:00",
+        "to": "2020-04-07 11:45:00",
+        "comment": null,
+        "userId": 1,
+        "taskId": 6,
+        "rate": null
+    },
+    {
+        "id": 471,
+        "from": "2020-04-07 15:00:00",
+        "to": "2020-04-07 16:00:00",
+        "comment": "Förberedelser för överlämning",
+        "userId": 1,
+        "taskId": 7,
+        "rate": null
+    },
+    {
+        "id": 472,
+        "from": "2020-04-07 16:00:00",
+        "to": "2020-04-07 17:05:00",
+        "comment": "Överlämningsmöte",
+        "userId": 1,
+        "taskId": 6,
+        "rate": null
+    },
+    {
+        "id": 473,
+        "from": "2020-04-07 12:00:00",
+        "to": "2020-04-07 14:00:00",
+        "comment": "Dokumentation för överlämning",
+        "userId": 1,
+        "taskId": 7,
+        "rate": null
+    },
+    {
+        "id": 474,
+        "from": "2020-04-09 10:19:00",
+        "to": "2020-04-09 11:07:00",
+        "comment": "Felsökning av ärende från Madeline gällande synkning av termer",
+        "userId": 1,
+        "taskId": 5,
+        "rate": null
+    },
+    {
+        "id": 475,
+        "from": "2020-04-09 11:07:00",
+        "to": "2020-04-09 11:24:59",
+        "comment": "Undersökning av azure functions att specificera miljövariabler för enskild funktion. Verkar inte finnas stöd för detta i dagsläget.",
+        "userId": 1,
+        "taskId": 5,
+        "rate": null
+    },
+    {
+        "id": 476,
+        "from": "2020-04-09 11:30:00",
+        "to": "2020-04-09 11:51:52",
+        "comment": null,
+        "userId": 1,
+        "taskId": 6,
+        "rate": null
+    },
+    {
+        "id": 477,
+        "from": "2020-04-09 11:57:00",
+        "to": "2020-04-09 12:10:26",
+        "comment": "Telefonsamtal med Sebastian Pavez angånde Madelines återkoppling av termsynkning",
+        "userId": 1,
+        "taskId": 6,
+        "rate": null
+    }
+]

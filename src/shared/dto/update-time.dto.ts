@@ -1,5 +1,7 @@
 import { jsonType } from "@agilearchitects/server";
-import { DTO } from "./dto";
+
+// DTO's
+import { IDictionaryDTO } from "./dictionary.dto";
 
 export interface IUpdateTimeDTO {
   id: number;
@@ -13,18 +15,15 @@ export interface IUpdateTimeDTO {
 }
 
 export class UpdateTimeDTO implements IUpdateTimeDTO {
-  public static parseFromRequest(object: jsonType): UpdateTimeDTO {
-    object = DTO.parseFromRequest(object);
+  public static parseFromRequest(object: IDictionaryDTO<jsonType>): UpdateTimeDTO {
     if (typeof object.id !== "number" ||
       typeof object.taskId !== "number" ||
       typeof object.from !== "string" ||
-      (typeof object.to !== "string" && object.to !== undefined) ||
+      (typeof object.to !== "string" || object.to !== undefined) ||
       typeof object.comment !== "string" ||
       typeof object.userId !== "number" ||
-      (object.tags !== undefined &&
-        !(object.tags instanceof Array)) ||
-      (object.rate !== undefined &&
-        typeof object.rate !== "number")
+      (object.tags !== undefined && !(object.tags instanceof Array)) ||
+      (object.rate !== undefined && typeof object.rate !== "number")
     ) {
       throw new Error("Unable to parse");
     }

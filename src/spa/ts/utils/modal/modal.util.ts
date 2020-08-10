@@ -1,4 +1,3 @@
-import Promise = require("bluebird");
 import Vue from "vue";
 
 import { i18n } from "../../locale";
@@ -50,7 +49,7 @@ export class ModalInstance<T, R> {
   private constructor(vue: typeof Vue, component: typeof Vue, data?: T) {
     this.modalComponent = new (vue.extend(ModalComponent))({
       props: {
-        data,
+        ...(data !== undefined ? { data } : undefined),
         component,
       },
       el: document.createElement("div"),
@@ -86,13 +85,15 @@ export class ModalInstance<T, R> {
     this.modalComponent.$on("hide", callTriggerEvents("hide"));
   }
 
-  public open(before?: modalInterceptorCallback<T, R>): Promise<R> {
+  public open(before?: modalInterceptorCallback<T, R>): Promise<R | undefined> {
     return new Promise((resolve, reject) => {
       // If before event is provided register it
       if (before !== undefined) { this.on(modalEventType.BEFORE_OPEN, before); }
 
       // Register listner to when modal closes
-      this.on(modalEventType.CLOSED, (component: Vue, payload: { result: R }) => resolve(payload.result));
+      this.on(modalEventType.CLOSED, (_?: Vue, payload?: { result?: R }) => resolve(payload !== undefined ? payload.result : undefined));
+
+      // Emit open
       this.modalComponent.$emit("open");
     });
   }

@@ -1,0 +1,20 @@
+<div name="messageBodySection">
+  <div dir="auto">
+    <%- body %>
+  </div>
+</div>
+<% if(typeof signature !== "undefined") { %>
+<div name="messageSignatureSection"><br />
+  <div class="matchFont"><%= signature %></div>
+</div>
+<% } %>
+<% if(typeof nextMessage !== "undefined") { %>
+<div name="messageReplySection">
+  on <%= nextMessage.date %>,
+  <%= typeof nextMessage.fromName !== "undefined" ? `${nextMessage.fromName} &lt;${nextMessage.fromEmail}&gt;` : nextMessage.fromEmail %>,
+  wrote:<br />
+  <blockquote type="cite">
+    <%- nextMessage.content %>
+  </blockquote>
+</div>
+<% } %>

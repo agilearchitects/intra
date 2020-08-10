@@ -1,5 +1,5 @@
 <template>
-  <div class="container">
+  <div>
     <div class="d-flex justify-content-between">
       <div>
         <button-component
@@ -95,15 +95,12 @@ import TimeDateComponent from "./time-date.component.vue";
 import PillComponent from "./layout/pill.component.vue";
 
 // Bootstrap
-import {
-  timeService as timeServiceInstance,
-  messageService as messageServiceInstance
-} from "../bootstrap";
+import { bootstrap } from "../bootstrap";
 
 import {
   ModalInstance,
   modalEventType,
-  modalSize
+  modalSize,
 } from "../utils/modal/modal.util";
 
 class TaskViewModel {
@@ -205,12 +202,9 @@ export class TimeViewModel {
 }
 
 @Component({
-  components: { ButtonComponent, TimeDateComponent, PillComponent }
+  components: { ButtonComponent, TimeDateComponent, PillComponent },
 })
 export default class TimeReportComponent extends Vue {
-  private readonly timeService: TimeService = timeServiceInstance;
-  private readonly messageService: MessageService = messageServiceInstance;
-
   @Watch("date") onDateChange() {
     this.getReports();
   }
@@ -256,58 +250,67 @@ export default class TimeReportComponent extends Vue {
   }
 
   public nextDay() {
-    this.date = moment(this.date)
-      .add(1, "days")
-      .toDate();
+    this.date = moment(this.date).add(1, "days").toDate();
   }
   public previousDay() {
-    this.date = moment(this.date)
-      .subtract(1, "days")
-      .toDate();
+    this.date = moment(this.date).subtract(1, "days").toDate();
   }
   public setToday() {
     this.date = new Date();
   }
 
   public async getReports() {
-    this.times = ((await this.timeService.index(
-      TimeQueryDTO.parse({
-        date: moment(this.date).format("YYYY-MM-DD")
-      })
-    )) as TimeDTO[])
-      .map(
-        (time: TimeDTO) =>
-          new TimeViewModel(
-            time.id,
-            {
-              id: time.task!.id,
-              name: time.task!.name,
-              project: {
-                id: time.task!.project!.id,
-                name: time.task!.project!.name,
-                customer: {
-                  id: time.task!.project!.customer!.id,
-                  name: time.task!.project!.customer!.name
-                }
-              }
-            },
-            moment(time.from),
-            time.to !== undefined ? moment(time.to) : undefined,
-            time.tags !== undefined
-              ? time.tags.map((tag: TagDTO) => ({ id: tag.id, name: tag.name }))
-              : [],
-            time.comment
-          )
-      )
-      .sort((a: TimeViewModel, b: TimeViewModel) =>
-        a.to !== undefined && a.from.toDate() > a.from.toDate() ? -1 : 1
+    try {
+      this.times = ((await bootstrap.timeService.index(
+        TimeQueryDTO.parse({
+          date: moment(this.date).format("YYYY-MM-DD"),
+        })
+      )) as TimeDTO[])
+        .map(
+          (time: TimeDTO) =>
+            new TimeViewModel(
+              time.id,
+              {
+                id: time.task!.id,
+                name: time.task!.name,
+                project: {
+                  id: time.task!.project!.id,
+                  name: time.task!.project!.name,
+                  customer: {
+                    id: time.task!.project!.customer!.id,
+                    name: time.task!.project!.customer!.name,
+                  },
+                },
+              },
+              moment(time.from),
+              time.to !== undefined ? moment(time.to) : undefined,
+              time.tags !== undefined
+                ? time.tags.map((tag: TagDTO) => ({
+                    id: tag.id,
+                    name: tag.name,
+                  }))
+                : [],
+              time.comment
+            )
+        )
+        .sort((a: TimeViewModel, b: TimeViewModel) =>
+          a.to !== undefined && a.from.toDate() > a.from.toDate() ? -1 : 1
+        );
+    } catch (error) {
+      bootstrap.messageService.showModal(
+        "error",
+        this.$t("time.error.get_report.header") as string,
+        this.$t("time.error.get_report.body", {
+          message: error.message,
+        }) as string
       );
+    }
   }
 
   private openModal(timeId?: number) {
     const modal = ModalInstance.create<any, any>(TimeReportFormComponent, {
       date: moment(this.date),
-      ...(timeId !== undefined ? { timeId } : undefined)
+      ...(timeId !== undefined ? { timeId } : undefined),
     }).options({ size: modalSize.LG });
     modal.open();
     modal.on([modalEventType.HIDDEN, modalEventType.CLOSED], () => {
@@ -317,15 +320,15 @@ export default class TimeReportComponent extends Vue {
 
   public async stop(timeId: number) {
     try {
-      await this.timeService.stop(
+      await bootstrap.timeService.stop(
         StopTimeDTO.parse({
           id: timeId,
-          to: moment().format("YYYY-MM-DD HH:mm:ss")
+          to: moment().format("YYYY-MM-DD HH:mm:ss"),
         })
       );
       this.getReports();
     } catch (error) {
-      this.messageService.showModal(
+      bootstrap.messageService.showModal(
         "error",
         this.$t("time.stop.error.header").toString(),
         this.$t("time.stop.error.message").toString()
@@ -335,6 +338,9 @@ export default class TimeReportComponent extends Vue {
 }
 </script>
 <style lang="scss" scoped>
+@import "../../scss/variables.scss";
+@import "~bootstrap/scss/bootstrap-grid";
+
 .time-report {
   &__date-placeholder {
     padding: 0% 1rem;

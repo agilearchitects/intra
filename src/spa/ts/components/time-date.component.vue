@@ -25,13 +25,16 @@ import { Vue, Component, Prop } from "vue-property-decorator";
 import ButtonComponent from "./layout/button.component.vue";
 
 @Component({
-  components: { ButtonComponent }
+  components: { ButtonComponent },
 })
 export default class TimeDateomponent extends Vue {
   @Prop({ default: "", type: String }) labelStyle!: string;
 }
 </script>
 <style lang="scss" scoped>
+@import "../../scss/variables.scss";
+@import "~bootstrap/scss/bootstrap-grid";
+
 .time-report {
   &__date-placeholder {
     padding: 0% 1rem;

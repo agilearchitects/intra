@@ -1,26 +1,29 @@
 import { jsonType } from "@agilearchitects/server";
-import { DTO } from "./dto";
+
+// DTO's
+import { IDictionaryDTO } from "./dictionary.dto";
 
 export interface ICreateTimeDTO {
   taskId: number;
   from: string;
-  to?: string | undefined;
+  to?: string;
   comment: string;
   userId: number;
   rate?: number;
   tags?: (string | number)[];
 }
 
-export class CreateTimeDTO implements ICreateTimeDTO {
-  public static parseFromRequest(object: jsonType): CreateTimeDTO {
-    object = DTO.parseFromRequest(object);
-    if (typeof object.taskId !== "number" ||
+export class CreateTimeDTO {
+  public static parseFromRequest(object: IDictionaryDTO<jsonType>): CreateTimeDTO {
+    if (
+      typeof object.taskId !== "number" ||
       typeof object.from !== "string" ||
       (object.to !== undefined && typeof object.to !== "string") ||
       typeof object.comment !== "string" ||
       typeof object.userId !== "number" ||
       (object.rate !== undefined && typeof object.rate !== "number") ||
-      (object.tags !== undefined && !(object.tags instanceof Array))) {
+      (object.tags !== undefined && !(object.tags instanceof Array))
+    ) {
       throw new Error("Unable to parse");
     }
     return new CreateTimeDTO(

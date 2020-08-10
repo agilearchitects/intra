@@ -1,4 +1,5 @@
 import { jsonType } from "@agilearchitects/server";
+import { IDictionaryDTO } from "./dictionary.dto";
 import { DTO } from "./dto";
 
 export interface ICreateCustomerDTO {
@@ -6,8 +7,7 @@ export interface ICreateCustomerDTO {
 }
 
 export class CreateCustomerDTO implements ICreateCustomerDTO {
-  public static parseFromRequest(object: jsonType): CreateCustomerDTO {
-    object = DTO.parseFromRequest(object);
+  public static parseFromRequest(object: IDictionaryDTO<jsonType>): CreateCustomerDTO {
     if (typeof object.name !== "string") {
       throw new Error("Unable to parse");
     }

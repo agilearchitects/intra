@@ -1,0 +1,150 @@
+[
+    {
+        "id": 1,
+        "name": "sprintplanering"
+    },
+    {
+        "id": 2,
+        "name": "retro"
+    },
+    {
+        "id": 3,
+        "name": "standup"
+    },
+    {
+        "id": 4,
+        "name": "s"
+    },
+    {
+        "id": 5,
+        "name": "refinement"
+    },
+    {
+        "id": 6,
+        "name": "demo"
+    },
+    {
+        "id": 7,
+        "name": "lunchmöte"
+    },
+    {
+        "id": 8,
+        "name": "de"
+    },
+    {
+        "id": 9,
+        "name": "fika"
+    },
+    {
+        "id": 10,
+        "name": "Resa"
+    },
+    {
+        "id": 11,
+        "name": "Lunch"
+    },
+    {
+        "id": 12,
+        "name": "överlämning"
+    },
+    {
+        "id": 13,
+        "name": "SSO"
+    },
+    {
+        "id": 14,
+        "name": "devops"
+    },
+    {
+        "id": 15,
+        "name": "SJ"
+    },
+    {
+        "id": 16,
+        "name": "Carnegie"
+    },
+    {
+        "id": 17,
+        "name": "dokumentation"
+    },
+    {
+        "id": 18,
+        "name": "tidrapportering"
+    },
+    {
+        "id": 19,
+        "name": "Finkno"
+    },
+    {
+        "id": 20,
+        "name": "internt"
+    },
+    {
+        "id": 21,
+        "name": "devmain"
+    },
+    {
+        "id": 22,
+        "name": "3197"
+    },
+    {
+        "id": 23,
+        "name": "termsync"
+    },
+    {
+        "id": 24,
+        "name": "3219"
+    },
+    {
+        "id": 25,
+        "name": "infozone"
+    },
+    {
+        "id": 26,
+        "name": "MS-2299"
+    },
+    {
+        "id": 27,
+        "name": "3216"
+    },
+    {
+        "id": 28,
+        "name": "3230"
+    },
+    {
+        "id": 29,
+        "name": "MS-2298"
+    },
+    {
+        "id": 30,
+        "name": "MS-2307"
+    },
+    {
+        "id": 31,
+        "name": "3220"
+    },
+    {
+        "id": 32,
+        "name": "MS-2325"
+    },
+    {
+        "id": 33,
+        "name": "3244"
+    },
+    {
+        "id": 34,
+        "name": "MS-2336"
+    },
+    {
+        "id": 35,
+        "name": "MS-2336"
+    },
+    {
+        "id": 36,
+        "name": "3238"
+    },
+    {
+        "id": 37,
+        "name": "3236"
+    }
+]

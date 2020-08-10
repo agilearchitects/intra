@@ -1,6 +1,6 @@
 <template>
-  <div class="mdo-form-group">
-    <div class="mdo-form-group__checkbox custom-control custom-checkbox">
+  <div class="form-group">
+    <div class="form-group__checkbox custom-control custom-checkbox">
       <input
         type="checkbox"
         class="custom-control-input"
@@ -8,9 +8,15 @@
         ref="checkbox"
         :disabled="disabled"
       />
-      <label class="custom-control-label" :for="id">
+      <label
+        class="custom-control-label"
+        :for="id"
+      >
         <template v-if="label != ''">{{ label }}</template>
-        <slot v-else name="label"></slot>
+        <slot
+          v-else
+          name="label"
+        ></slot>
       </label>
     </div>
   </div>
@@ -47,7 +53,7 @@ export default class CheckboxComponent extends Vue {
 }
 </script>
 <style lang="scss" scoped>
-.mdo-form-group {
+.form-group {
   display: flex;
   &__checkbox {
     margin-bottom: 0.5rem;

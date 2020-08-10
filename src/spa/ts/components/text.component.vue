@@ -1,5 +1,5 @@
 <template>
-  <div class="container">
+  <div>
     <div v-if="loading">LOADING!!!</div>
     <template v-else-if="text">
       <tiny-mce
@@ -22,31 +22,24 @@ import { Vue, Component, Prop, Watch } from "vue-property-decorator";
 import { TextDTO, ITextDTO } from "../../../shared/dto/text.dto";
 import { ITinyMCESettings, init as tinyMCEInit } from "../utils/tinymce";
 import { AuthService } from "../services/auth.service";
-import {
-  authService as authServiceInstance,
-  textService as textServiceInstance,
-  messageService as messageServiceInstance
-} from "../bootstrap";
+import { bootstrap } from "../bootstrap";
 import { TextService } from "../services/text.service";
 import { MessageService } from "../services/message.service";
 
 @Component({
-  components: { tinyMce: Editor }
+  components: { tinyMce: Editor },
 })
 export default class TextComponent extends Vue {
-  private readonly authService: AuthService = authServiceInstance;
-  private readonly textService: TextService = textServiceInstance;
-  private readonly messageService: MessageService = messageServiceInstance;
   @Prop(String) name!: string;
   @Watch("name") onNameChange() {
     this.getText();
   }
 
   public get isAdmin(): boolean {
-    return this.authService.isAdmin;
+    return bootstrap.authService.isAdmin;
   }
   public get editMode(): boolean {
-    return this.authService.editMode;
+    return bootstrap.authService.editMode;
   }
 
   public get textName(): string {
@@ -71,7 +64,7 @@ export default class TextComponent extends Vue {
         text: "Save",
         onAction: () => {
           this.save();
-        }
+        },
       });
     });
   }
@@ -80,7 +73,7 @@ export default class TextComponent extends Vue {
 
   public getText() {
     this.loading = true;
-    this.textService.show(this.textName).then((text: TextDTO) => {
+    bootstrap.textService.show(this.textName).then((text: TextDTO) => {
       this.loading = false;
       this.text = text.serialize();
       if (this.text.content === "") {
@@ -94,10 +87,10 @@ export default class TextComponent extends Vue {
       return;
     }
     this.saving = true;
-    this.textService
+    bootstrap.textService
       .update(TextDTO.parse(this.text))
       .then(() => {
-        this.messageService.showModal(
+        bootstrap.messageService.showModal(
           "success",
           this.$t("text.update.success.header").toString(),
           this.$t("text.update.success.message").toString(),
@@ -105,7 +98,7 @@ export default class TextComponent extends Vue {
         );
       })
       .catch((error: any) => {
-        this.messageService.showModal(
+        bootstrap.messageService.showModal(
           "success",
           this.$t("text.update.error.header").toString(),
           this.$t("text.update.error.message").toString(),
