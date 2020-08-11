@@ -7,11 +7,12 @@ import * as fs from "fs";
 import { EnvService } from "../../services/env.service";
 
 // Factories
+import { APIGatewayProxyResult } from "aws-lambda";
 import * as connectionManagerFactory from "../connection-manager.factory";
 import { lambdaEventHandler, lambdaHandlerFactory } from "../lambda-handler.factory";
 import { logFactory } from "../log.factory";
 
-export const lambdaFactory = async (stage: string, callback: (handler: lambdaEventHandler) => Promise<void>): Promise<void> => {
+export const lambdaFactory = async (stage: string, callback: (handler: lambdaEventHandler) => Promise<APIGatewayProxyResult>): Promise<APIGatewayProxyResult> => {
   // Creates envService
   const envService = new EnvService(stage, ".env", fs);
 
@@ -25,14 +26,15 @@ export const lambdaFactory = async (stage: string, callback: (handler: lambdaEve
       connectionManagerFactory.local(logHandler(log), false));
 
   try {
-    await callback(await lambdaHandlerFactory(
+    return await callback(await lambdaHandlerFactory(
       connection,
       log,
       envService,
       envService.get("API_HOST", "api.test.test"),
     ));
   } catch (error) {
-    log.error({ message: "Handler failed unexpectedly", data: error })
+    log.error({ message: "Handler failed unexpectedly", data: error });
+    throw error;
   } finally {
     connection.close();
   }

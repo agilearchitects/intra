@@ -7,7 +7,7 @@
  */
 
 // Libs
-import { APIGatewayProxyEvent, Context } from "aws-lambda";
+import { APIGatewayProxyEvent, APIGatewayProxyResult, Context } from "aws-lambda";
 
 // Factories
 import { MigrateService } from "@agilearchitects/typeorm-helper";
@@ -19,7 +19,7 @@ interface LambdaEvent {
   action: "up" | "down" | "show";
 }
 
-export const handler = async (event: LambdaEvent | APIGatewayProxyEvent, context: Context) => {
+export const handler = async (event: LambdaEvent | APIGatewayProxyEvent, context: Context): Promise<void | APIGatewayProxyResult> => {
   /* Check first if action event is specified in the event
   This means it's a migration action */
   if ("action" in event) {
@@ -36,9 +36,7 @@ export const handler = async (event: LambdaEvent | APIGatewayProxyEvent, context
     });
   } else {
     // Create lambda from lambda factory
-    await lambdaFactory(event.requestContext.stage, async (handler: lambdaEventHandler): Promise<void> => {
-      await handler(event);
-    });
+    return await lambdaFactory(event.requestContext.stage, (handler: lambdaEventHandler): Promise<APIGatewayProxyResult> => handler(event));
   }
   return;
 }
