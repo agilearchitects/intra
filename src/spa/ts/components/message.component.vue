@@ -23,7 +23,7 @@ import { Vue, Component, Prop } from "vue-property-decorator";
 
 // Components
 import LayoutButtonComponent, {
-  ButtonStyle
+  ButtonStyle,
 } from "./layout/button.component.vue";
 
 export type messageType = "success" | "error";
@@ -78,8 +78,6 @@ export default class MessageComponent extends Vue {
   &__header {
     padding-top: 1rem;
     border-bottom: 1px solid gray("500");
-  }
-  &__body {
   }
   &__footer {
     border-top: 1px solid gray("500");
