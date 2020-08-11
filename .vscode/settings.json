@@ -7,13 +7,11 @@
   "sqltools.connections": [
     {
       "database": "./storage/db.sqlite",
-      "dialect": "SQLite",
-      "name": "local"
+      "driver": "SQLite",
+      "name": "local",
+      "previewLimit": 50
     }
   ],
-  "files.exclude": {
-    "node_modules": true
-  },
   "launch": {
     "version": "0.2.0",
     "configurations": [
@@ -43,7 +41,6 @@
           "TS_NODE_IGNORE": "false"
         }
       }
-    ],
-    "compounds": []
-  }
+    ]
+  },
 }
