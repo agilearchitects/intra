@@ -25,7 +25,7 @@
     "@agilearchitects/mailingun": "^0.0.10",
     "@agilearchitects/server": "^0.5.4",
     "@agilearchitects/templategenerator": "^0.0.3",
-    "@agilearchitects/typeorm-helper": "^0.0.2",
+    "@agilearchitects/typeorm-helper": "^0.0.3",
     "@tinymce/tinymce-vue": "^3.2.2",
     "axios": "^0.19.2",
     "change-case": "^4.1.1",

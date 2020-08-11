@@ -80,10 +80,10 @@
     change-case "^3.1.0"
     ejs "^2.7.1"
 
-"@agilearchitects/typeorm-helper@^0.0.2":
-  version "0.0.2"
-  resolved "https://registry.yarnpkg.com/@agilearchitects/typeorm-helper/-/typeorm-helper-0.0.2.tgz#7cd8a0e175bbe21510014ddfaca4f635de4d1bfb"
-  integrity sha512-BIqS3b6amOYzcIH1KXobcN5hqsJI12jDzFZSqXgD+DLtuQGoDDh29XCeVCMruVrhXM2KxxCWcA/9sN5ThbmpMg==
+"@agilearchitects/typeorm-helper@^0.0.3":
+  version "0.0.3"
+  resolved "https://registry.yarnpkg.com/@agilearchitects/typeorm-helper/-/typeorm-helper-0.0.3.tgz#3153dd70787f700aa8b265ca79c731be4d281bac"
+  integrity sha512-A56+8hktdROLB4CUCuwOjk2QvtAH3BsBPH8TgnjyJ1Uh1p/J/F0yaWcJiXs6R2jq9kwE/q/K4/3YKCNetaH1BA==
   dependencies:
     "@agilearchitects/logmodule" "^0.0.9"
 
