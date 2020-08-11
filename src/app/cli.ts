@@ -78,6 +78,6 @@ import { cliFactory } from "./factories/apps/cli.factory";
   } finally {
     // Close env-service and connection;
     envService.close();
-    connection.close();
+    await connection.close();
   }
 })();
