@@ -8,9 +8,15 @@ import { RelationLoader } from "typeorm/query-builder/RelationLoader";
 // Entities
 import { BannedTokenEntity } from "../entities/banned-token.entity";
 import { ClaimEntity } from "../entities/claim.entity";
+import { CustomerEntity } from "../entities/customer.entity";
 import { GroupEntity } from "../entities/group.entity";
+import { ProjectEntity } from "../entities/project.entity";
 import { RoleEntity } from "../entities/role.entity";
+import { TagEntity } from "../entities/tag.entity";
+import { TaskUserEntity } from "../entities/task-user.entity";
+import { TaskEntity } from "../entities/task.entity";
 import { TextEntity } from "../entities/text.entity";
+import { TimeEntity } from "../entities/time.entity";
 import { UserEntity } from "../entities/user.entity";
 
 // SQLite migrations
@@ -18,14 +24,8 @@ import { _20200625_094039 } from "../migrations/sqlite/20200625_094039";
 import { _20200808_085953 } from "../migrations/sqlite/20200808_085953";
 
 // MySql migrations
-import { CustomerEntity } from "../entities/customer.entity";
-import { ProjectEntity } from "../entities/project.entity";
-import { TagEntity } from "../entities/tag.entity";
-import { TaskUserEntity } from "../entities/task-user.entity";
-import { TaskEntity } from "../entities/task.entity";
-import { TimeEntity } from "../entities/time.entity";
 import { _20200803_235421 } from "../migrations/mysql/20200803_235421";
-
+import { _20200811_114132 } from "../migrations/mysql/20200811_114132";
 
 export const entities: typeof BaseEntity[] = [
   BannedTokenEntity,
@@ -77,7 +77,8 @@ export const production = (envService: EnvService, logger: Logger, forMigration:
     entities,
     ...(forMigration ? {
       migrations: [
-        _20200803_235421
+        _20200803_235421,
+        _20200811_114132
       ],
     } : undefined)
   }
