@@ -27,6 +27,6 @@ export const MigrationFactory = async (stage: string, callback: (migrateService:
   } catch (error) {
     log.error({ message: "Migration failed unexpectedly", data: error })
   } finally {
-    connection.close();
+    await connection.close();
   }
 }

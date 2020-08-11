@@ -36,6 +36,6 @@ export const lambdaFactory = async (stage: string, callback: (handler: lambdaEve
     log.error({ message: "Handler failed unexpectedly", data: error });
     throw error;
   } finally {
-    connection.close();
+    await connection.close();
   }
 }
