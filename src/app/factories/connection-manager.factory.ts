@@ -45,6 +45,7 @@ export const entities: typeof BaseEntity[] = [
 export const local = (logger: Logger, withMigrations: boolean): ConnectionOptions => {
   return {
     type: "sqlite",
+    ...(withMigrations ? { name: "migrate" } : undefined), // Will use different connection name if is for migration
     database: "storage/db.sqlite",
     synchronize: false,
     logger,
@@ -65,6 +66,7 @@ export const production = (envService: EnvService, logger: Logger, forMigration:
   // Depending on environment different mysql connection is set
   return {
     type: "mysql",
+    ...(forMigration ? { name: "migrate" } : undefined), // Will use different connection name if is for migration
     host: envService.get("MYSQL_HOST", ""),
     port: parseInt(envService.get("MYSQL_PORT", ""), 10),
     username: envService.get(`MYSQL${prefixMysqlAuth}_USERNAME`, ""),
