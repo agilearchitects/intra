@@ -18,10 +18,10 @@
   resolved "https://registry.yarnpkg.com/@agilearchitects/cli/-/cli-2.0.1.tgz#267c58be635186e43c251c46f2b34f3784021d59"
   integrity sha512-NYYBsiKIzI6VsbmInT3LPGre9ifk/dp+eV9TGF25OgnqKZpxWbWqMP5+92HR9tM0XONV2e6cpjiEiO012KX8Nw==
 
-"@agilearchitects/env@^1.0.0":
-  version "1.0.0"
-  resolved "https://registry.yarnpkg.com/@agilearchitects/env/-/env-1.0.0.tgz#fae17b24f53def3e942f741c6e43c6123037880c"
-  integrity sha512-HCX9IniEbMICk3117eXBsHxhf9eVZGPJQ6hu1b2buPFu5ZF3/W9gj/44HfPmzgH5R9+bGMS340V4cae0lCl2kg==
+"@agilearchitects/env@^1.1.0":
+  version "1.1.0"
+  resolved "https://registry.yarnpkg.com/@agilearchitects/env/-/env-1.1.0.tgz#af2ea9e01b5f3d5e5eca7b8ace9ecd350134a1ee"
+  integrity sha512-y9pgTUz6CVEEwdOPzc/3IZECnptJPdWtQdlyPSnFVzggxgGqN84QK+a8xWybRSs750jrzj1Rz8J7XRIT9SJQsg==
 
 "@agilearchitects/event@^0.0.5":
   version "0.0.5"
@@ -80,10 +80,10 @@
     change-case "^3.1.0"
     ejs "^2.7.1"
 
-"@agilearchitects/typeorm-helper@^0.0.3":
-  version "0.0.3"
-  resolved "https://registry.yarnpkg.com/@agilearchitects/typeorm-helper/-/typeorm-helper-0.0.3.tgz#3153dd70787f700aa8b265ca79c731be4d281bac"
-  integrity sha512-A56+8hktdROLB4CUCuwOjk2QvtAH3BsBPH8TgnjyJ1Uh1p/J/F0yaWcJiXs6R2jq9kwE/q/K4/3YKCNetaH1BA==
+"@agilearchitects/typeorm-helper@^0.1.0":
+  version "0.1.0"
+  resolved "https://registry.yarnpkg.com/@agilearchitects/typeorm-helper/-/typeorm-helper-0.1.0.tgz#0142ecd96bafc4e1ceca85d89c1eb7bbdab5ad1a"
+  integrity sha512-4Pw3nElzxCBixukIJL2SkBnBUg5d6y0ENC8dIuVvv/H/Axk9AbzqZo+e1Xv2Rpf6RKDFK/FD/lVxkHTKj0e79w==
   dependencies:
     "@agilearchitects/logmodule" "^0.0.9"
 

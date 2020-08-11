@@ -1,17 +1,16 @@
 // Libs
 import { MigrateService } from "@agilearchitects/typeorm-helper";
 import * as fs from "fs";
-import { ConnectionOptions } from "typeorm";
+import { Connection } from "typeorm";
 
 // Factories
 import { connectionManagerModule } from "./connection-manager.factory";
 
 export const migrateServiceFactor = (
-  connectionOptions: ConnectionOptions,
+  connection: Connection,
 ) => {
   return new MigrateService(
-    connectionManagerModule(),
-    connectionOptions,
+    connection,
     fs,
   )
 }

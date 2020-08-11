@@ -10,7 +10,10 @@
 import { APIGatewayProxyEvent, Context } from "aws-lambda";
 
 // Factories
+import { MigrateService } from "@agilearchitects/typeorm-helper";
 import { lambdaFactory } from "./factories/apps/lambda.factory";
+import { MigrationFactory } from "./factories/apps/migration.factory";
+import { lambdaEventHandler } from "./factories/lambda-handler.factory";
 
 interface LambdaEvent {
   action: "up" | "down" | "show";
@@ -24,25 +27,18 @@ export const handler = async (event: LambdaEvent | APIGatewayProxyEvent, context
     const match = context.invokedFunctionArn.match(/^arn:aws:lambda:.+:.+:function:.+:(.+)/);
 
     // Create lambda from lambda factory
-    const lambda = await lambdaFactory(match !== null ? match[1] : "");
-
-    if (event.action === "up") {
-      await lambda.migrateService.migrate();
-    } else if (event.action === "down") {
-      await lambda.migrateService.rollback();
-    }
-
-    return true;
+    await MigrationFactory(match !== null ? match[1] : "", async (migrateService: MigrateService) => {
+      if (event.action === "up") {
+        await migrateService.migrate();
+      } else if (event.action === "down") {
+        await migrateService.rollback();
+      }
+    });
   } else {
     // Create lambda from lambda factory
-    const lambda = await lambdaFactory(event.requestContext.stage);
-
-    /* If not lambda event it's an API Gateway event. Call the
-    lambda handler */
-    try {
-      return await lambda.handler(event);
-    } catch (error) {
-      lambda.log.error({ message: "Handler failed unexpectedly", data: error })
-    }
+    await lambdaFactory(event.requestContext.stage, async (handler: lambdaEventHandler): Promise<void> => {
+      await handler(event);
+    });
   }
+  return;
 }

@@ -6,9 +6,12 @@ import { logHandler, MigrateService } from "@agilearchitects/typeorm-helper";
 import * as fs from "fs";
 import * as readline from "readline";
 
-// Factories
-import { RandomModule } from "../../modules/random.module";
+// Services
 import { CliTemplateService } from "../../services/cli-template.service";
+
+// Factories
+import { Connection } from "typeorm";
+import { RandomModule } from "../../modules/random.module";
 import { cliTemplateServiceFactory } from "../cli-template-service.factory";
 import * as connectionManagerFactory from "../connection-manager.factory";
 import { logFactory } from "../log.factory";
@@ -27,22 +30,29 @@ export const cliFactory = async (envPath: string = ".env"): Promise<{
   templateService: CliTemplateService,
   randomModule: typeof RandomModule,
   fsModule: IFsModule,
+  log: LogModule,
+  connection: Connection,
 }> => {
   const envService = new EnvService(envPath, fs);
-  const env = envService.get("ENV", "local");
 
   // Create log module
   const log: LogModule = logFactory("cli", envService);
+
+  const connection = await connectionManagerFactory.connect(
+    ["production", "staging", "development"].includes(envService.get("ENV", "local")) === true ?
+      connectionManagerFactory.production(envService, logHandler(log), true) :
+      connectionManagerFactory.local(logHandler(log), true));
+
 
   return {
     cli: new CliModule(readline, process, console),
     envService,
     // Create migrate service with connection and attached log
-    migrateService: migrateServiceFactor(["production", "staging", "development"].includes(env) === true ?
-      connectionManagerFactory.production(envService, logHandler(log), true) :
-      connectionManagerFactory.local(logHandler(log), true)),
+    migrateService: migrateServiceFactor(connection),
     templateService: cliTemplateServiceFactory(),
     randomModule: RandomModule,
     fsModule: fs,
+    log,
+    connection,
   }
 }

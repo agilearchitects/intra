@@ -1,8 +1,10 @@
 // Libs
 import { EnvService } from "@agilearchitects/env";
+import { LogModule } from "@agilearchitects/logmodule";
 import { method, ServerModule, staticContent, vhost } from "@agilearchitects/server";
 import * as http from "http";
 import * as stream from "stream";
+import { Connection } from "typeorm";
 
 // DTO's
 import { IDictionaryDTO } from "../../shared/dto/dictionary.dto";
@@ -10,11 +12,11 @@ import { IDictionaryDTO } from "../../shared/dto/dictionary.dto";
 // Factories
 import { handlerFactory } from "./handler.factory";
 
-export const httpHandlerFactory = async (envService: EnvService, apiHost: string, spaHost: string) => {
+export const httpHandlerFactory = async (connection: Connection, log: LogModule, envService: EnvService, apiHost: string, spaHost: string) => {
   // Register handlers
   const handlers = [
     // Attach API handlers
-    ...(await handlerFactory(envService, apiHost)),
+    ...(await handlerFactory(connection, log, envService, apiHost)),
     // Attach SPA handlers
     vhost(spaHost, staticContent("./build/spa")),
   ];

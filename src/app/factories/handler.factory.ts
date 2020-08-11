@@ -58,20 +58,9 @@ import { router } from "../router";
  * @param env Environment of application
  * @param apiHost Hostname of API
  */
-export const handlerFactory = async (envService: EnvService, apiHost: string): Promise<handlerMethod[]> => {
-  const env = envService.get("ENV", "local");
-
+export const handlerFactory = async (connection: typeorm.Connection, log: LogModule, envService: EnvService, apiHost: string): Promise<handlerMethod[]> => {
   // Get token from envService
   const token = envService.get("TOKEN", Math.random().toString());
-
-  // Create log
-  const log: LogModule = logFactory("server", envService);
-
-  // Connect to DB
-  const connection = await connectionManagerFactory.connect(
-    ["production", "staging", "development"].includes(env) === true ?
-      connectionManagerFactory.production(envService, logHandler(log), false) :
-      connectionManagerFactory.local(logHandler(log), true));
 
   // Entites
   const customerEntity = connection.getRepository(CustomerEntity);
