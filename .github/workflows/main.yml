@@ -29,12 +29,12 @@ jobs:
           node-version: 12.8.0
           
       - name: Set Yarn cache folder
-        run: yarn config set cache-folder ~./yarn/cache
+        run: yarn config set cache-folder ~/yarn/cache
       
       - name: Restore from cache
         uses: actions/cache@v2
         with:
-          path: ~./yarn/cache
+          path: ~/yarn/cache
           key: ${{ hashFiles('**/package-lock.json') }}
       
       - name: Install dependencies
