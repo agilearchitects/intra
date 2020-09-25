@@ -16,7 +16,6 @@ jobs:
   build:
     # The type of runner that the job will run on
     runs-on: ubuntu-latest
-    
 
     # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
@@ -28,11 +27,21 @@ jobs:
         uses: actions/setup-node@v1.4.3
         with:
           node-version: 12.8.0
+          
+      - name: Set Yarn cache folder
+        run: yarn config set cache-folder ~./yarn/cache
+      
+      - name: Restore from cache
+        uses: actions/cache@v2
+        with:
+          path: ~./yarn/cache
+          key: ${{ hashFiles('**/package-lock.json') }}
+      
+      - name: Install dependencies
+        run: yarn
 
-      # Runs a single command using the runners shell
       - name: Test
         run: |
-          yarn
           yarn lint
           yarn test
           
@@ -40,10 +49,14 @@ jobs:
         run: |
           NODE_ENV="development" BASE_API_URL="https://api.intra-development.agilearchitects.se" yarn build-spa
       
-      - uses: actions/upload-artifact@v2
+      - name: Save artifact
+        uses: actions/upload-artifact@v2
         with:
           name: spa
           path: dist
+          
+      - name: Reset node modules
+        run: rm -rf node_modules
       
       - name: Install production dependencies
         run: yarn --production
@@ -70,13 +83,16 @@ jobs:
         with:
           filename: app.zip
           directory: dist/app
+          
+      - name: Move archive to root
+        run: mv dist/app/app.zip ./
       
       - name: Save artifacts
         uses: actions/upload-artifact@v2
         with:
           name: app
           path: |
-            dist/app/app.zip
+            app.zip
             nodejs.zip
 
 
