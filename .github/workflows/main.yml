@@ -1,0 +1,84 @@
+# This is a basic workflow to help you get started with Actions
+
+name: Test and build
+
+# Controls when the action will run. Triggers the workflow on push or pull request
+# events but only for the dev branch
+on:
+  push:
+    branches: [ dev ]
+  pull_request:
+    branches: [ dev ]
+
+# A workflow run is made up of one or more jobs that can run sequentially or in parallel
+jobs:
+  # This workflow contains a single job called "build"
+  build:
+    # The type of runner that the job will run on
+    runs-on: ubuntu-latest
+    
+
+    # Steps represent a sequence of tasks that will be executed as part of the job
+    steps:
+      # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
+      - uses: actions/checkout@v2
+      
+      # Sets up Node.js
+      - name: Setup Node.js environment
+        uses: actions/setup-node@v1.4.3
+        with:
+          node-version: 12.8.0
+
+      # Runs a single command using the runners shell
+      - name: Test
+        run: |
+          yarn
+          yarn lint
+          yarn test
+          
+      - name: Build SPA
+        run: |
+          NODE_ENV="development" BASE_API_URL="https://api.intra-development.agilearchitects.se" yarn build-spa
+      
+      - uses: actions/upload-artifact@v2
+        with:
+          name: spa
+          path: dist
+      
+      - name: Install production dependencies
+        run: yarn --production
+      
+      - name: Move node_modules into nodejs
+        run: mkdir nodejs && mv node_modules nodejs
+      
+      - name: Zip node_modules
+        uses: TheDoctor0/zip-release@0.4.1
+        with:
+          filename: nodejs.zip
+          path: nodejs
+      
+      - name: Install build dependencies
+        run: yarn --production=false
+      
+      - name: Buld app
+        run: |
+          NODE_ENV="development" yarn build-app
+          echo "module.exports = require(\"./app/lambda\")" > dist/app/index.js
+      
+      - name: Zip app
+        uses: TheDoctor0/zip-release@0.4.1
+        with:
+          filename: app.zip
+          directory: dist/app
+      
+      - name: Save artifacts
+        uses: actions/upload-artifact@v2
+        with:
+          name: spa
+          path: |
+            app.zip
+            nodejs.zip
+
+
+          
+        
